@@ -1,29 +1,33 @@
-function ContainerContent() {
-  return (
-  <div className="ContainerLogo"><span>facebook</span></div>
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { showNotifications, logoutUser } from "./ClickFuncs";
 
-  )
+function ContainerLogo() {
+  return (
+    <div className="ContainerLogo">
+      <span>facebook</span>
+    </div>
+  );
 }
 
-function ContainerIcons(){
+function ContainerIcons() {
   return (
     <div className="ContainerEventIcons">
-      <div><i class="fa-solid fa-bell"></i></div>
-      <div>LO</div>
-
-      
+      <div onClick={showNotifications} >
+        <FontAwesomeIcon icon={faBell} className="ClickableHeaderIcons"/>
       </div>
-
-  )
+      <div onClick={logoutUser}  >
+        <FontAwesomeIcon icon={faRightFromBracket} className="ClickableHeaderIcons"/>
+      </div>
+    </div>
+  );
 }
-
-
 
 
 function Container() {
   return (
     <div className="Container">
-      <ContainerContent />
+      <ContainerLogo />
       <ContainerIcons />
     </div>
   );

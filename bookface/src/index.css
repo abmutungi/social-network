@@ -33,8 +33,6 @@ code {
 
 }
 
-
-
 .ContainerLogo{
   color:rgb(27,116,228);
   font-weight: 900;
@@ -55,5 +53,18 @@ code {
   justify-content: space-between;
   font-weight: bold;
   font-size: 150%;
-  width: 10%;
+  width: 6%;
+margin-right: 2%;
+}
+
+
+.ContainerEventIcons div{
+  position:relative;
+  top:30%;
+}
+
+.ClickableHeaderIcons{
+  cursor: pointer;
+  color:rgb(27,116,228);
+
 }
