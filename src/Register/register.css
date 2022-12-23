@@ -1,0 +1,74 @@
+.register-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 40vw;
+  height: 70vh;
+  left: 50vw;
+  top: 10vh;
+  border-radius: 5px;
+
+  background-color: #ffffff;
+}
+.register-form {
+  background-color: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.register-button {
+  background-color: #42b72a;
+  height: 7vh;
+  color: white;
+  font-weight: 600;
+  font-size: larger;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+.register-login-button {
+  height: 4vh;
+  background-color: #1877f2;
+  color: white;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: small;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+.register-form > input {
+  height: 6vh;
+  border-radius: 5px;
+  padding-bottom: 5;
+  margin-bottom: 10px;
+  font-size: large;
+  color: #1d2129;
+  background-color: #f5f6f7;
+}
+
+.register-form > textarea {
+  height: 8vh;
+  border-radius: 5px;
+  padding-bottom: 5;
+  margin-bottom: 10px;
+  font-size: large;
+  background-color: #f5f6f7;
+}
+
+.register-form > date {
+  background-color: #f5f6f7;
+}
+
+input:focus {
+  caret-color: #1b74e4;
+  outline-color: #1b74e4;
+  border-color: #1b74e4;
+  /* border: #1b74e4 solid 1px; */
+  outline-color: #1b74e4;
+}
