@@ -1,5 +1,7 @@
 import "./tbr.css"
 import ProfileBar  from "../Profile/ProfileBar";
+import AllChats from "../AllChats/AllChats";
+
 
 
 function LowerHeader(){
@@ -47,6 +49,7 @@ function MainBody(){
     return(
         <div className="MainBody">
         <LeftBodyDivs className="bd-side"/>
+        <AllChats /> 
         </div>
     )
 }
