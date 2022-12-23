@@ -4,57 +4,56 @@
     background-color: #F0F2F5;
 } */
 
-.Profile{
-    width: 100%;
-    height: 40rem;
-    display: flex;
-    border-radius: 1rem;
-    /* align-items: center; */
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+.Profile {
+  width: 100%;
+  height: 1rem;
+  display: flex;
+  border-radius: 1rem;
+  /* align-items: center; */
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
-.ProfileName{
-    padding: 1rem;
-    font-size: 2rem;
-    color: black;
-    font-weight: 700;
+.ProfileName {
+  padding: 1rem;
+  font-size: 2rem;
+  color: black;
+  font-weight: 700;
 }
 
-.ProfileFollowing{
-    padding-left: 1rem;
+.ProfileFollowing {
+  padding-left: 1rem;
 
-    color: darkgrey;
+  color: darkgrey;
 }
-.ProfileFollowers{
-    padding-left: 1rem;
+.ProfileFollowers {
+  padding-left: 1rem;
 
-    color: darkgrey;
+  color: darkgrey;
 }
 
-.btn{
-    display: flex;
-    flex-direction: row;
-    width: 7%;
-    background-color: #1877F2;
-    border: none;
-    box-sizing: border-box;
-    padding: 7.5px 16px;
-    justify-content: center;
-    margin: 4px 2px;
-    color: white;
-    border-radius: .5rem;
-    font-weight: 700;
+.btn {
+  display: flex;
+  flex-direction: row;
+  width: 7%;
+  background-color: #1877f2;
+  border: none;
+  box-sizing: border-box;
+  padding: 7.5px 16px;
+  justify-content: center;
+  margin: 4px 2px;
+  color: white;
+  border-radius: 0.5rem;
+  font-weight: 700;
 }
 
 .ProfilePic {
-    display: inline-block;
-    border-radius: .5rem;
-    width: 100px;
-    height: 100px;
-    background: url(https://www.facebook.com/images/fb_icon_325x325.png);
-    background-position: 50% 50%;
-    background-size: cover;
-    border-radius: 50%;
-  }
-
+  display: inline-block;
+  border-radius: 0.5rem;
+  width: 100px;
+  height: 100px;
+  background: url(https://www.facebook.com/images/fb_icon_325x325.png);
+  background-position: 50% 50%;
+  background-size: cover;
+  border-radius: 50%;
+}

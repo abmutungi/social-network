@@ -1,37 +1,34 @@
-.AllChats{
-    position: absolute;
-    left: 79%;
-    height: 40rem;
-    width: 21%;
-    flex-wrap: wrap;
-    /* background-color: antiquewhite; */
+.AllChats {
+  height: 40rem;
+  width: 25%;
+  flex-wrap: wrap;
+  /* background-color: antiquewhite; */
 }
 
-.ChatProfile{
+.ChatProfile {
   display: flex;
 }
 .ChatPic {
-    display: inline-block;
-    margin: .75rem;
-    border-radius: .5rem;
-    width: 25px;
-    height: 25px;
-    background-position: 50% 50%;
-    background-size: cover;
-    border-radius: 50%;
+  display: inline-block;
+  margin: 0.75rem;
+  border-radius: 0.5rem;
+  width: 25px;
+  height: 25px;
+  background-position: 50% 50%;
+  background-size: cover;
+  border-radius: 50%;
+}
 
-  }
+.ChatTitle {
+  padding: 1rem;
+  font-size: 1.2rem;
+  color: black;
+  font-weight: 700;
+}
 
-  .ChatTitle{
-    padding: 1rem;
-    font-size: 1.2rem;
-    color: black;
-    font-weight: 700;
-  }
-
-  .ChatName{
-    padding: .1rem;
-    font-size: .8rem;
-    color: black;
-    font-weight: 500;
-  }
+.ChatName {
+  padding: 0.1rem;
+  font-size: 0.8rem;
+  color: black;
+  font-weight: 500;
+}
