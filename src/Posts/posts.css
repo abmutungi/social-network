@@ -119,7 +119,7 @@ body {
 .post-container {
   background-color: white;
   /* border: 1px solid red; */
-  width: 60%;
+  width: 50%;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
