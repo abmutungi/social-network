@@ -1,25 +1,28 @@
 import ReactDOM from "react-dom/client";
 // import ProfileBar  from "./Profile/ProfileBar";
 // import AllChats from "./AllChats/AllChats";
-import Container from "./tb38r/Container";
-import { LowerHeader, MainBody } from "./tb38r/Leftside";
-import {ChatBox} from "./ChatBox/ChatBoxComponent"
-import {Login} from "./Login/LoginComponent"
-import {Register} from "./Register/RegistrationComponent"
+import TopHeader from "./tb38r/TopHeader";
+import {  LowerHeader, MainBody } from "./tb38r/Leftside";
+import "./index.css"
+
+
+// import {ChatBox} from "./ChatBox/ChatBoxComponent"
+// import {Login} from "./Login/LoginComponent"
+// import {Register} from "./Register/RegistrationComponent"
 
 
 
 const App = () => {
   return (
     <>
-      <Container />
+      <TopHeader />
       <LowerHeader />
       <MainBody />
       {/* <ProfileBar/>
        <AllChats /> */}
-       <ChatBox/>
+       {/* <ChatBox/>
        <Login/>
-       <Register/>
+       <Register/> */}
     </>
   );
 };

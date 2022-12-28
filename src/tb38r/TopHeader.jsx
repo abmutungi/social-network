@@ -27,13 +27,13 @@ function ContainerIcons() {
 
 
 
-function Container() {
+function TopHeader() {
   return (
-    <div className="Container">
+    <div className="TopHeader">
       <ContainerLogo />
       <ContainerIcons />
     </div>
   );
 }
 
-export default Container;
+export default TopHeader;
