@@ -18,11 +18,6 @@ const App = () => {
       <TopHeader />
       <LowerHeader />
       <MainBody />
-      {/* <ProfileBar/>
-       <AllChats /> */}
-       {/* <ChatBox/>
-       <Login/>
-       <Register/> */}
     </>
   );
 };
