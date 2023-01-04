@@ -9,7 +9,7 @@ const Post = () => {
   return (
     <div className="post-container">
       <div className="cp-pic-name">
-        <img className="cp-profile-pic" src="./man-utd.png" alt="img" />
+        <img className="cp-profile-pic" src="./Posts/man-utd.png" alt="img" />
         <div className="cp-name&viewer">
           <div className="cp-name cp-span">Lisandro Martinez</div>
           <span className="date">25 December at 12pm</span>

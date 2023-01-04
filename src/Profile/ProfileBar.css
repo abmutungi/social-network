@@ -42,11 +42,13 @@
 }
 
 .btn {
-  
-  width: 55px;
-  height: 55px;
+  display: flex;
+  width: 125px;
+  padding: 7.5px 16px;
+  height: fit-content;
   background-color: #1877f2;
   border: none;
+  margin: 32px 16px; 
   box-sizing: border-box;
   justify-content: center;
   color: white;
@@ -64,8 +66,7 @@
 .ProfileBtnContainer{
   display: flex;
   flex-direction: row ;
-  justify-content: space-between;
-  width: 125px;
+  justify-content: space-evenly;
 }
 
 
