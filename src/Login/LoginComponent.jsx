@@ -1,7 +1,9 @@
 import { useState } from "react";
 import "./login.css";
+import { Register } from "../Register/RegistrationComponent";
+import { Link, Route, Routes } from "react-router-dom";
 
-const Login = (props) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -32,16 +34,21 @@ const Login = (props) => {
             placeholder="Password"
           ></input>
 
-          <button type="submit" className="login-button">
-            LOG IN
-          </button>
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+            <button type="submit" className="login-button">
+              LOGIN
+            </button>
+          </Link>
 
-          <button
-            onClick={() => props.onFormSwitch("register")}
-            className="login-register-button"
+          <Link
+            to="/register"
+            style={{ textDecoration: "none", color: "white" }}
           >
-            REGISTER
-          </button>
+            <button className="login-register-button">Register</button>
+          </Link>
+          <Routes>
+            <Route path="/register" element={<Register />}></Route>
+          </Routes>
         </form>
       </div>
     </>

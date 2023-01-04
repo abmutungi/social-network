@@ -1,7 +1,9 @@
 import React from "react";
-import "./register.css"
+import "./register.css";
+import { Login } from "../Login/LoginComponent";
+import { Link, Route, Routes } from "react-router-dom";
 
-const Register = (props) => {
+const Register = () => {
   // State to store form values
   const [formValues, setFormValues] = React.useState({
     email: "",
@@ -105,13 +107,14 @@ const Register = (props) => {
             Create Account
           </button>
 
-          <button
-            onClick={() => props.onFormSwitch("login")}
-            className="register-login-button"
-            type="submit"
-          >
-            Already have an account? Click here to log in
-          </button>
+          <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
+            <button className="register-login-button" type="submit">
+              Already have an account? Click here to log in
+            </button>
+          </Link>
+          <Routes>
+            <Route path="/login" element={<Login />}></Route>
+          </Routes>
         </form>
       </div>
     </>

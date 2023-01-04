@@ -1,8 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-// import {  logoutUser } from "./ClickFuncs";
-import "./tbr.css"
+import { Login } from "../Login/LoginComponent";
+import { Link, Route, Routes } from "react-router-dom";
 
+// import {  logoutUser } from "./ClickFuncs";
+import "./tbr.css";
 
 function ContainerLogo() {
   return (
@@ -15,17 +17,24 @@ function ContainerLogo() {
 function ContainerIcons() {
   return (
     <div className="ContainerEventIcons">
-      <div  >
-        <FontAwesomeIcon icon={faBell} className="ClickableHeaderIcons"/>
+      <div>
+        <FontAwesomeIcon icon={faBell} className="ClickableHeaderIcons" />
       </div>
-      <div  >
-        <FontAwesomeIcon icon={faRightFromBracket} className="ClickableHeaderIcons"/>
-      </div>
+
+      <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
+        <div>
+          <FontAwesomeIcon
+            icon={faRightFromBracket}
+            className="ClickableHeaderIcons"
+          />
+        </div>
+      </Link>
+      <Routes>
+        <Route path="/login" element={<Login />}></Route>
+      </Routes>
     </div>
   );
 }
-
-
 
 function TopHeader() {
   return (
