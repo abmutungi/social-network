@@ -123,6 +123,7 @@ body {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  height: fit-content;
 }
 .post-container > * {
   /* border: 1px solid green; */
@@ -195,4 +196,37 @@ body {
 .post-icon {
   height: 18px;
   margin-right: 0.5rem;
+}
+
+.comments-container {
+  border-top: 1px solid #ced0d4;
+  padding: 0.5rem;
+  width: 90%;
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+}
+
+.write-comment {
+  display: flex;
+  align-items: center;
+}
+
+.comment-profile-pic {
+  height: 30px;
+  width: 30px;
+  margin-right: 0.3rem;
+}
+
+.comment-input {
+  border: none;
+  border-radius: 20px;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  padding: 0.6rem;
+  width: 88%;
+  font-size: 0.9rem;
+  background: #f0f2f5;
+  height: auto;
 }

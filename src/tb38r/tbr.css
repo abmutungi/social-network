@@ -65,10 +65,9 @@ code {
 }
 
 .LowerHeader {
-  height: 120px;
+  height: 200px;
   width: 100%;
   background-color: aliceblue;
-
 }
 
 .MainBody {
@@ -81,15 +80,14 @@ code {
 }
 
 .bd-side {
-  height:100%;
+  height: 100%;
   width: 25%;
-background-color: white;
-display: flex;
-flex-direction: column;
-justify-content: space-around;
-align-items: center;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
-
 
 .bd-middle {
   width: 60%;
@@ -140,8 +138,6 @@ align-items: center;
 }
 
 .AllUsers {
-
-
 }
 
 .AllUsersPic {
@@ -163,7 +159,6 @@ align-items: center;
   padding-right: 15px;
   background-color: white;
   height: 30%;
-
 }
 
 .GroupName {
