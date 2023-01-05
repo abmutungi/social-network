@@ -3,6 +3,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import "./posts.css";
+import Comments from "./Comments";
 library.add(faThumbsUp, faMessage);
 
 const Post = () => {
@@ -33,20 +34,7 @@ const Post = () => {
           <span>Comment</span>
         </button>
       </div>
-      <div className="comments-container">
-        <div className="write-comment">
-          <img
-            className="cp-profile-pic comment-profile-pic"
-            src="./Posts/man-utd.png"
-            alt="img"
-          />
-          <textarea
-            className="comment-input"
-            placeholder="Write a comment..."
-            rows={1}
-          ></textarea>
-        </div>
-      </div>
+      <Comments />
     </div>
   );
 };
