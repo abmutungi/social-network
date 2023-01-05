@@ -13,6 +13,54 @@ const Comments = () => {
           rows={1}
         ></textarea>
       </div>
+      <div className="single-comment">
+        <img
+          className="cp-profile-pic comment-profile-pic"
+          src="./Posts/man-utd.png"
+          alt="img"
+        />
+        <div className="comment">
+          <div className="comment-bubble">
+            <div className="comment-name">username</div>
+            <div className="comment-span">
+              Hello there this is text to fill comment, lets make the comment
+              longer to see what happens, what if we add more text?
+            </div>
+          </div>
+          <div className="comment-date">01/01</div>
+        </div>
+      </div>{" "}
+      <div className="single-comment">
+        <img
+          className="cp-profile-pic comment-profile-pic"
+          src="./Posts/man-utd.png"
+          alt="img"
+        />
+        <div className="comment">
+          <div className="comment-bubble">
+            <div className="comment-name">username</div>
+            <div className="comment-span">shorter comment</div>
+          </div>
+          <div className="comment-date">01/01</div>
+        </div>
+      </div>{" "}
+      <div className="single-comment">
+        <img
+          className="cp-profile-pic comment-profile-pic"
+          src="./Posts/man-utd.png"
+          alt="img"
+        />
+        <div className="comment">
+          <div className="comment-bubble">
+            <div className="comment-name">username</div>
+            <div className="comment-span">
+              Hello there this is text to fill comment, lets make the comment
+              longer to see what happens, what if we add more text?
+            </div>
+          </div>
+          <div className="comment-date">01/01</div>
+        </div>
+      </div>
     </div>
   );
 };

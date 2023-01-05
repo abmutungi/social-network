@@ -210,6 +210,7 @@ body {
 .write-comment {
   display: flex;
   align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 .comment-profile-pic {
@@ -229,4 +230,32 @@ body {
   font-size: 0.9rem;
   background: #f0f2f5;
   height: auto;
+}
+.single-comment {
+  display: flex;
+  margin-bottom: 0.6rem;
+}
+
+.comment-bubble {
+  background: #f0f2f5;
+  border-radius: 15px;
+  padding: 0.5rem;
+}
+
+.comment-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.comment-span {
+  font-size: 0.95rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #65676b;
+  margin-left: 0.4rem;
+  font-weight: 500;
 }
