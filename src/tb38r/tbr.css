@@ -76,12 +76,12 @@ code {
   background-color: whitesmoke;
   display: flex;
   flex-direction: row;
-  gap: 1px;
+  gap: 10px;
 }
 
 .bd-side {
   height: 100%;
-  width: 25%;
+  width: 35%;
   background-color: white;
   display: flex;
   flex-direction: column;

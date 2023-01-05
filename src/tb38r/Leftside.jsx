@@ -2,6 +2,7 @@ import "./tbr.css";
 import ProfileBar from "../Profile/ProfileBar";
 import AllChats from "../AllChats/AllChats";
 import Post from "../Posts/Post";
+import NavBar from "../NavBar/NavBar";
 
 function LowerHeader() {
   return (
@@ -36,7 +37,10 @@ function MainBody() {
   return (
     <div className="MainBody">
       <LeftBodyDivs className="bd-side" />
-      <Post />
+      <div className="nav-and-post">
+        <NavBar />
+        <Post />
+      </div>
       <AllChats />
     </div>
   );

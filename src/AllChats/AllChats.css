@@ -1,16 +1,15 @@
 .AllChats {
-  height:100%;
-  width: 25%;
-background-color: white;
-display: flex;
-flex-direction: column;
-justify-content: space-around;
+  height: 100%;
+  width: 35%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .ChatProfile {
   display: flex;
   flex-direction: row;
-
 }
 .ChatPic {
   display: inline-block;
@@ -37,10 +36,8 @@ justify-content: space-around;
   font-weight: 500;
 }
 
-.UserChats{
+.UserChats {
   height: 30%;
   display: flex;
   flex-direction: column;
-  
-
 }
