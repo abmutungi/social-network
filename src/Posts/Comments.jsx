@@ -22,10 +22,10 @@ const Comments = () => {
         <div className="comment">
           <div className="comment-bubble">
             <div className="comment-name">username</div>
-            <div className="comment-span">
+            <span className="comment-span">
               Hello there this is text to fill comment, lets make the comment
               longer to see what happens, what if we add more text?
-            </div>
+            </span>
           </div>
           <div className="comment-date">01/01</div>
         </div>
@@ -39,7 +39,7 @@ const Comments = () => {
         <div className="comment">
           <div className="comment-bubble">
             <div className="comment-name">username</div>
-            <div className="comment-span">shorter comment</div>
+            <span className="comment-span">shorter comment</span>
           </div>
           <div className="comment-date">01/01</div>
         </div>
@@ -53,10 +53,10 @@ const Comments = () => {
         <div className="comment">
           <div className="comment-bubble">
             <div className="comment-name">username</div>
-            <div className="comment-span">
+            <span className="comment-span">
               Hello there this is text to fill comment, lets make the comment
               longer to see what happens, what if we add more text?
-            </div>
+            </span>
           </div>
           <div className="comment-date">01/01</div>
         </div>
