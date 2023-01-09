@@ -30,7 +30,7 @@ func RunMigrationScript(db *sql.DB) error {
 		return fmt.Errorf("initialising db migration failed %s", err)
 	}
 
-	err = migration.Down()
+	err = migration.Up()
 
 	if err != nil && err != migrate.ErrNoChange {
 		return fmt.Errorf("migrating db failed %s", err)
