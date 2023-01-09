@@ -1,0 +1,14 @@
+DROP TABLE notifications;
+DROP TABLE invitees;
+DROP TABLE events;
+DROP TABLE privateMessages;
+DROP TABLE privateChats;
+DROP TABLE comments;
+DROP TABLE postAudience;
+DROP TABLE groupPosts;
+DROP TABLE wallPosts;
+DROP TABLE groupMessages;
+DROP TABLE groupMembers;
+DROP TABLE groups;
+DROP TABLE relationships;
+DROP TABLE users;
