@@ -4,7 +4,7 @@ import { Login } from "../Login/LoginComponent";
 import { Link, Route, Routes } from "react-router-dom";
 
 // import {  logoutUser } from "./ClickFuncs";
-import "./tbr.css";
+import "../index.css";
 
 function ContainerLogo() {
   return (

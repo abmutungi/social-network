@@ -1,18 +1,11 @@
-import "./tbr.css";
-import ProfileBar from "../Profile/ProfileBar";
+import "../index.css";
 import AllChats from "../AllChats/AllChats";
 import Post from "../Posts/Post";
 import NavBar from "../NavBar/NavBar";
 
-function LowerHeader() {
-  return (
-    <div className="LowerHeader">
-      <ProfileBar />
-    </div>
-  );
-}
 
-const LeftBodyDivs = ({ className = "" }) => {
+
+const LeftBodyDiv = ({ className = "" }) => {
   return (
     <div className={`${className}`}>
       <div className="AllUsers">
@@ -33,18 +26,6 @@ const LeftBodyDivs = ({ className = "" }) => {
   );
 };
 
-function MainBody() {
-  return (
-    <div className="MainBody">
-      <LeftBodyDivs className="bd-side" />
-      <div className="nav-and-post">
-        <NavBar />
-        <Post />
-      </div>
-      <AllChats />
-    </div>
-  );
-}
 
 ///////USERS////////////////////////////////////////////
 
@@ -97,4 +78,18 @@ const GroupNameAndPic = (props) => {
   );
 };
 
-export { LowerHeader, MainBody, LeftBodyDivs };
+
+function MainBody() {
+    return (
+      <div className="MainBody">
+        <LeftBodyDiv className="bd-side" />
+        <div className="nav-and-post">
+          <NavBar />
+          <Post />
+        </div>
+        <AllChats />
+      </div>
+    );
+  }
+
+export {  MainBody };
