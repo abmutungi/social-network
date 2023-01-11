@@ -7,9 +7,6 @@ import GroupChats from "./GroupChats";
 /*Key arg in map required, currently using arr index, 
 could/should use userID instead */
 const ChatUsers = ({ users, chatuserclass}) => {
-  console.log('sugh', chatuserclass);
-  
-
   return users.map((user, index) => {
     return <ChatProfile chatName={`${user}`} key={index} chatuserclass = {chatuserclass} />;
   });

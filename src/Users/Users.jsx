@@ -3,7 +3,6 @@ import "./Users.css";
 
 
 const NamedUser = ({ users, chatuserclass}) => {
-    console.log('sugh', chatuserclass);
     return users.map((user, index) => {
       return <ChatProfile chatName={`${user}`} key={index} chatuserclass = {chatuserclass} />;
     });
