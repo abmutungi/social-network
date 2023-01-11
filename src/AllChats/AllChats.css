@@ -11,6 +11,7 @@
 .ChatProfile {
   display: flex;
   flex-direction: row;
+  cursor: pointer;
 }
 
 
@@ -42,6 +43,7 @@
 .GroupProfile {
   display: flex;
   flex-direction: row;
+  cursor: pointer;
 }
 
 

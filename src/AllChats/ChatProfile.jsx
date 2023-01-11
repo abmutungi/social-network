@@ -5,6 +5,9 @@ import "./AllChats.css";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // library.add(faMessage);
 
+
+//this is currently being used for both Chats & Group chats, 
+//will need to tinker to allow variability
 const ChatProfile = (props) => {
     return (
         <div className={props.chatuserclass}>

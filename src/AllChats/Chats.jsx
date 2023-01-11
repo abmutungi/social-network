@@ -20,7 +20,7 @@ const Chats = ({ Users }) => {
   return (
     <div className={Users.ChatClasses.parent}>
       <div className="ChatTitle">{Users.Headers.chats}</div>
-      <ChatUsers users={Users.TestUsers} chatuserclass= {Users.ChatClasses.child} />
+      <ChatUsers users={Users.Chats} chatuserclass= {Users.ChatClasses.child} />
     </div>
   );
 };

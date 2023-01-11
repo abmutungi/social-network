@@ -2,103 +2,67 @@ import "../index.css";
 import AllChats from "../AllChats/Chats"
 import Post from "../Posts/Post";
 import NavBar from "../NavBar/NavBar";
+import Users from "../Users/Users";
+import Groups from "../Groups/Groups";
 
 
-
-const LeftBodyDiv = ({ className = "" }) => {
+const LeftBodyDiv = ({ props}) => {
   return (
-    <div className={`${className}`}>
-      <div className="AllUsers">
-        <AllUsersHeader />
-        <AllUsersBody name="tb38r" />
-        <AllUsersBody name="eternal17" />
-        <AllUsersBody name="abmutungi" />
-        <AllUsersBody name="nsymcoding" />
-      </div>
-      <div className="Groups">
-        <GroupsHeader />
-        <GroupNameAndPic group="Black & White Army" />
-        <GroupNameAndPic group="2011 Rashford Fan Club" />
-        <GroupNameAndPic group="Sanchnoooo Support Club:(" />
-        <GroupNameAndPic group="AirBnB crew" />
-      </div>
+    <div className= "bd-side">
+              <Users Users= {props} />
+
+      <Groups Users ={props}/>
     </div>
   );
 };
 
-
-///////USERS////////////////////////////////////////////
-
-function AllUsersHeader() {
-  return (
-    <div className="AllUsersHead">
-      <div className="LeftSideTitle">Users</div>
-      <input
-        type="search"
-        className="LeftSearch"
-        placeholder="&#128270; Search users"
-      ></input>
-    </div>
-  );
-}
-
-const AllUsersBody = (props) => {
-  return <NameAndPic name={props.name} />;
-};
-
-const NameAndPic = (props) => {
-  return (
-    <div className="NamePic">
-      <div className="AllUsersPic"></div>
-      <div className="AllUsersName">{props.name}</div>
-    </div>
-  );
-};
 
 ///////GROUPS////////////////////////////////////////////
 
-function GroupsHeader() {
-  return (
-    <div className="GroupsHead">
-      <div className="LeftSideTitle">Groups</div>
-      <input
-        type="search"
-        className="LeftSearch"
-        placeholder="&#128270; Search groups"
-      ></input>
-    </div>
-  );
-}
+// function GroupsHeader() {
+//   return (
+//     <div className="GroupsHead">
+//       <div className="LeftSideTitle">Groups</div>
+//       <input
+//         type="search"
+//         className="LeftSearch"
+//         placeholder="&#128270; Search groups"
+//       ></input>
+//     </div>
+//   );
+// }
 
-const GroupNameAndPic = (props) => {
-  return (
-    <div className="NamePic">
-      <div className="GroupName">{props.group}</div>
-    </div>
-  );
-};
+// const GroupNameAndPic = (props) => {
+//   return (
+//     <div className="NamePic">
+//       <div className="GroupName">{props.group}</div>
+//     </div>
+//   );
+// };
 
-const AllChatsProps = {
-
-  TestUsers :["Tolu", "Sarmad", "Arnold", "Yonas"],
+const DBData= {
+  
+  Headers : {chats: "Chats", groupchats: "Group Chats", users:"Users", Groups:"Groups"},
+  Chats :["Tolu", "Sarmad", "Arnold", "Yonas"],
   ChatClasses : {parent: "UserChats", child: "ChatProfile"},
   GroupChats : ["AgendaZone", "Ski Club", "Suya Society", "SuperEaglesSupporters"],
-  GroupChatClass :"GroupChats",
   GroupChatClasses : {parent: "GroupChats", child: "GroupProfile"},
-  Headers : {chats: "Chats", groupchats: "Group Chats", users:"Users", Groups:"Groups"},
-
+  Users :[ "Nate", "Keivon", "Ricky","Sarmad", "Tolu", "Arnold", "Yonas"],
+  UsersClasses :{parent:"AllUsers", child:"AUser"},
+  Groups: ["Black & White Army", "2011 Rashford Fan Club", "Sancho Support Club", "AirBnB crew"],
+GroupClasses:{parent:"AllGroups", child:"AGroup"},
 };
 
 
 function MainBody() {
     return (
       <div className="MainBody">
-        <LeftBodyDiv className="bd-side" />
+        <LeftBodyDiv props = {DBData} />
         <div className="nav-and-post">
           <NavBar />
           <Post />
         </div>
-        <AllChats props = {AllChatsProps}/>
+        <AllChats props = {DBData}/>
       </div>
     );
   }
