@@ -78,6 +78,16 @@ const GroupNameAndPic = (props) => {
   );
 };
 
+const AllChatsProps = {
+
+  TestUsers :["Tolu", "Sarmad", "Arnold", "Yonas"],
+  ChatClasses : {parent: "UserChats", child: "ChatProfile"},
+  GroupChats : ["AgendaZone", "Sewing Club", "Suya Society", "SuperEaglesSupporters"],
+  GroupChatClass :"GroupChats",
+  GroupChatClasses : {parent: "GroupChats", child: "GroupProfile"},
+
+}
+
 
 function MainBody() {
     return (
@@ -87,7 +97,7 @@ function MainBody() {
           <NavBar />
           <Post />
         </div>
-        <AllChats />
+        <AllChats props = {AllChatsProps}/>
       </div>
     );
   }

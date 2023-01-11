@@ -8,6 +8,8 @@ import { Register } from "./Register/RegistrationComponent";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import "./index.css";
 
+
+
 const App = () => {
   return (
     <>

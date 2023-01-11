@@ -7,7 +7,7 @@ import "./AllChats.css";
 
 const ChatProfile = (props) => {
     return (
-        <div className="ChatProfile">
+        <div className={props.chatuserclass}>
             <a className="ChatPic" href="https://www.facebook.com/">
                 <img
                     src="https://www.facebook.com/images/fb_icon_325x325.png"
