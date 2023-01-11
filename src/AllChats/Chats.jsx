@@ -1,8 +1,8 @@
 import React from "react";
 import ChatProfile from "./ChatProfile";
 import "./AllChats.css";
+import GroupChats from "./GroupChats";
 
-//const TestUsers = ["Tolu", "Sarmad", "Arnold", "Yonas"];
 
 /*Key arg in map required, currently using arr index, 
 could/should use userID instead */
@@ -16,10 +16,10 @@ const ChatUsers = ({ users, chatuserclass}) => {
 };
 
 
-const UserChats = ({ Users }) => {
+const Chats = ({ Users }) => {
   return (
     <div className={Users.ChatClasses.parent}>
-      <div className="ChatTitle">Chats</div>
+      <div className="ChatTitle">{Users.Headers.chats}</div>
       <ChatUsers users={Users.TestUsers} chatuserclass= {Users.ChatClasses.child} />
     </div>
   );
@@ -30,17 +30,13 @@ const UserChats = ({ Users }) => {
 const AllChats = ({props}) => {
   return (
     <div className="AllChats">
-      <UserChats Users={props} />
-
-      <div className="UserChats">
-        <div className="ChatTitle">Group Chats</div>
-        <ChatProfile chatName={"test1"} />
-        <ChatProfile chatName={"test2"} />
-        <ChatProfile chatName={"test3"} />
-        <ChatProfile chatName={"test4"} />
-      </div>
+      <Chats Users={props} />
+      <GroupChats Users={props}  />
     </div>
   );
 };
 
 export default AllChats;
+export{Chats, ChatUsers}
+
+

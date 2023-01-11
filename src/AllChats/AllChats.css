@@ -12,6 +12,8 @@
   display: flex;
   flex-direction: row;
 }
+
+
 .ChatPic {
   display: inline-block;
   margin: 0.75rem;
@@ -36,6 +38,19 @@
   color: black;
   font-weight: 500;
 }
+
+.GroupProfile {
+  display: flex;
+  flex-direction: row;
+}
+
+
+.GroupChats {
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
 
 .UserChats {
   height: 30%;

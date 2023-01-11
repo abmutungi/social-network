@@ -1,5 +1,5 @@
 import "../index.css";
-import AllChats from "../AllChats/AllChats";
+import AllChats from "../AllChats/Chats"
 import Post from "../Posts/Post";
 import NavBar from "../NavBar/NavBar";
 
@@ -82,11 +82,12 @@ const AllChatsProps = {
 
   TestUsers :["Tolu", "Sarmad", "Arnold", "Yonas"],
   ChatClasses : {parent: "UserChats", child: "ChatProfile"},
-  GroupChats : ["AgendaZone", "Sewing Club", "Suya Society", "SuperEaglesSupporters"],
+  GroupChats : ["AgendaZone", "Ski Club", "Suya Society", "SuperEaglesSupporters"],
   GroupChatClass :"GroupChats",
   GroupChatClasses : {parent: "GroupChats", child: "GroupProfile"},
+  Headers : {chats: "Chats", groupchats: "Group Chats", users:"Users", Groups:"Groups"},
 
-}
+};
 
 
 function MainBody() {
