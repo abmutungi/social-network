@@ -73,6 +73,23 @@ const PostsContainer = () => {
           commentsCount: "100",
         }}
       />
+       <SinglePost
+        postObj={{
+          imgPath: "./Posts/man-utd.png",
+          name: "Lisandro Martinez",
+          date: "01/01/23",
+          textContent: "Yooo not like that",
+          commentsCount: "100",
+        }}
+      /> <SinglePost
+      postObj={{
+        imgPath: "./Posts/man-utd.png",
+        name: "Lisandro Martinez",
+        date: "01/01/23",
+        textContent: "Yooo not like that",
+        commentsCount: "100",
+      }}
+    />
     </div>
   );
 };

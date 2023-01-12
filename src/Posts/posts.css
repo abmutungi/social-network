@@ -1,3 +1,4 @@
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, ".SFNSText-Regular",
     sans-serif;
@@ -261,4 +262,6 @@ body {
 
 .nav-and-post {
   width: 40%;
+  height: 100%;
+  overflow-y: auto;
 }

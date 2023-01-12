@@ -1,8 +1,6 @@
-#root {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+
+
+* { margin: 0; padding: 0; }
 
 /* css below was previously in a tb38r.css file which 
 seemed superfluous, added here instead for now*/
@@ -15,22 +13,28 @@ body {
   font-family: "Titillium Web", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 100%;
-  height: 100%;
+  /* width: 100%; */
+  height: 100vh;
+  
   overflow: hidden;
+
 }
+
+#root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-.App {
-  width: 100vw;
-  height: 100vh;
-}
 
 .TopHeader {
+    height: 30px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -73,13 +77,13 @@ code {
 }
 
 .LowerHeader {
-  height: 200px;
+  height: 150px;
   width: 100%;
   background-color: aliceblue;
 }
 
 .MainBody {
-  height: 100%;
+  height: 80%;
   width: 100%;
   background-color: whitesmoke;
   display: flex;
