@@ -6,20 +6,23 @@ import "./posts.css";
 import Comments from "./Comments";
 library.add(faThumbsUp, faMessage);
 
-const Post = () => {
+// SinglePost takes the props that come from the database
+const SinglePost = ({ postObj }) => {
   return (
     <div className="post-container">
       <div className="cp-pic-name">
-        <img className="cp-profile-pic" src="./Posts/man-utd.png" alt="img" />
+        <img className="cp-profile-pic" src={postObj.imgPath} alt="img" />
         <div className="cp-name&viewer">
-          <div className="cp-name cp-span">Lisandro Martinez</div>
-          <span className="date">25 December at 12pm</span>
+          <div className="cp-name cp-span">{postObj.name}</div>
+          <span className="date">{postObj.date}</span>
         </div>
       </div>
-      <span className="post-text-span">Bro...not like that!</span>
+      <span className="post-text-span">{postObj.textContent}</span>
       {/* this is where the image will go if there is one (<img src="./romero.png" alt="img" className="post-uploaded-img" />) */}
       <div className="post-details">
-        <button className="show-comments-button">100 comments</button>
+        <button className="show-comments-button">
+          {postObj.commentsCount} comments
+        </button>
       </div>
       <div className="post-actions">
         <button className="post-action-button">
@@ -39,4 +42,39 @@ const Post = () => {
   );
 };
 
-export default Post;
+// PostsContiner will map through the posts data from the database and fill up the container with the posts.
+const PostsContainer = () => {
+  return (
+    <div className="posts-container">
+      <SinglePost
+        postObj={{
+          imgPath: "./Posts/man-utd.png",
+          name: "Lisandro Martinez",
+          date: "01/01/23",
+          textContent: "Yooo not like that",
+          commentsCount: "100",
+        }}
+      />
+      <SinglePost
+        postObj={{
+          imgPath: "./Posts/man-utd.png",
+          name: "Lisandro Martinez",
+          date: "01/01/23",
+          textContent: "Yooo not like that",
+          commentsCount: "100",
+        }}
+      />
+      <SinglePost
+        postObj={{
+          imgPath: "./Posts/man-utd.png",
+          name: "Lisandro Martinez",
+          date: "01/01/23",
+          textContent: "Yooo not like that",
+          commentsCount: "100",
+        }}
+      />
+    </div>
+  );
+};
+
+export default PostsContainer;

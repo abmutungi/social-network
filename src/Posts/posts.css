@@ -122,6 +122,7 @@ body {
   display: flex;
   flex-direction: column;
   height: fit-content;
+  margin-bottom: 1.5rem;
 }
 .post-container > * {
   /* border: 1px solid green; */
@@ -256,4 +257,8 @@ body {
   color: #65676b;
   margin-left: 0.4rem;
   font-weight: 500;
+}
+
+.nav-and-post {
+  width: 40%;
 }
