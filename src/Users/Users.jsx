@@ -13,7 +13,9 @@ const NamedUser = ({ users, chatuserclass}) => {
     return (
       <div className={Users.UsersClasses.parent}>
         <div className="ChatTitle">{Users.Headers.users}</div>
+        <div className="AllCumulativeData">
         <NamedUser users={Users.Users} chatuserclass= {Users.UsersClasses.child} />
+        </div>
       </div>
     );
   };

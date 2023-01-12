@@ -14,7 +14,10 @@ const NamedGroupChats = ({ users, chatuserclass}) => {
     return (
       <div className={Users.GroupChatClasses.parent}>
         <div className="ChatTitle">{Users.Headers.groupchats}</div>
+        <div className="AllCumulativeData">
+
         <NamedGroupChats users={Users.GroupChats} chatuserclass= {Users.GroupChatClasses.child} />
+      </div>
       </div>
     );
   };

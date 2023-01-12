@@ -17,7 +17,9 @@ const Chats = ({ Users }) => {
   return (
     <div className={Users.ChatClasses.parent}>
       <div className="ChatTitle">{Users.Headers.chats}</div>
+      <div className="AllCumulativeData">
       <ChatUsers users={Users.Chats} chatuserclass= {Users.ChatClasses.child} />
+    </div>
     </div>
   );
 };

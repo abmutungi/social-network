@@ -14,7 +14,10 @@ const NamedGroup = ({ groups, groupclass}) => {
     return (
       <div className={Users.GroupClasses.parent}>
         <div className="ChatTitle">{Users.Headers.Groups}</div>
+        <div className="AllCumulativeData">
+
         <NamedGroup groups={Users.Groups} groupclass= {Users.GroupClasses.child} />
+        </div>
       </div>
     );
   };
