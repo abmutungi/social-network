@@ -32,6 +32,10 @@
   font-size: 1.2rem;
   color: rgb(27, 116, 228);
   font-weight: 700;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .ChatName {

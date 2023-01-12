@@ -30,7 +30,8 @@ const ProfileBar = () => {
           OptionB={<FontAwesomeIcon icon="fa-solid fa-users" />}
         />
         <ProfileBtn
-          btnName={<FontAwesomeIcon icon="fa-solid fa-circle-plus" />}
+          btnName={ <FontAwesomeIcon icon="fa-solid fa-circle-plus" />}
+          className={"add-post-btn"}
         />
       </div>
     </div>
