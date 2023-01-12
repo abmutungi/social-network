@@ -46,9 +46,11 @@ function MainBody() {
   return (
     <div className="MainBody">
       <LeftBodyDiv props={DBData} />
-      <div className="nav-and-post">
+      <div className="middle-div">
         <NavBar />
+      <div className="nav-and-post">
         <PostsContainer />
+      </div>
       </div>
       <AllChats props={DBData} />
     </div>
