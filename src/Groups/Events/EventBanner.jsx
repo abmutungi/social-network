@@ -5,11 +5,9 @@ import "./Events.css"
 const EventBanner =()=>{
     return(
         <div className="event-banner">
-            <ChatProfile chatuserclass="event-banner-head" chatName = "tb38r" />
-
-
-
+     <ChatProfile chatuserclass="event-banner-head" chatName = "tb38r" />        
         </div>
+        
 
     )
 }

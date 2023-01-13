@@ -54,7 +54,7 @@ const CreateEventModal = ({show, onClose}) => {
                   <div className="modal-titles">Event Name</div>
                     <input name="eventName"
             value={formValues.eventName}
-            onChange={handleChange} className="cg-input" type="text" placeholder="what's your event be called?" required></input>
+            onChange={handleChange} className="cg-input" type="text" placeholder="what's your event called?" required></input>
                               
                               <br></br>
 
