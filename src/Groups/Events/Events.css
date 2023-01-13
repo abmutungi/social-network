@@ -1,4 +1,4 @@
-input[type="date"]::-webkit-calendar-picker-indicator {
+/* input[type="date"]::-webkit-calendar-picker-indicator {
     background: transparent;
     bottom: 0;
     color: transparent;
@@ -9,7 +9,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     right: 0;
     top: 0;
     width: auto;
-}
+} */
 
 
 .cg-btn {
@@ -71,7 +71,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .cg-form > input {
-  height: 15%;
+  height: 12%;
 }
 
 .cg-form > input:focus {

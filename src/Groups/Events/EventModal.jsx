@@ -9,8 +9,11 @@ import "./Events.css"
 
 const CreateEventModal = ({show, onClose}) => {
   const [formValues, setFormValues] = useState({
-   groupName:"",
-   groupDescription:"",
+   eventName:"",
+   eventDescription:"",
+   eventStartDate:"",
+   eventEndDate:"",
+   
   });
 
 
@@ -48,20 +51,45 @@ const CreateEventModal = ({show, onClose}) => {
             </div>
             <div className="cg-modal-body">
                 <form className="cg-form" onSubmit={handleSubmit}>
-                    <input name="groupName"
-            value={formValues.groupName}
-            onChange={handleChange} className="cg-input" type="text" placeholder="enter group name" required></input>
-                    <input name="groupDescription"
-            value={formValues.groupDescription}
-            onChange={handleChange} className="cg-input" type="text" placeholder="enter group description" required></input>
-                         <label htmlFor="avatar">
-            Choose an image to be your group avatar (Optional)
-          </label>
-          <input
-            type="file"
-            name="group-avatar"
+                  <div className="modal-titles">Event Name</div>
+                    <input name="eventName"
+            value={formValues.eventName}
+            onChange={handleChange} className="cg-input" type="text" placeholder="what's your event be called?" required></input>
+                              
+                              <br></br>
+
+                              <div className="modal-titles">Event Description</div>
+                    <textarea name="eventDescription" style={{height:"60px"}}
+            value={formValues.eventDescription}
+            onChange={handleChange} className="cg-input" placeholder="what's it about?" required/>
+                        
+<br></br>
+                        <div className="event-form-group">
+        <label style={{marginRight:"0.5rem"}} htmlFor="startDate">Start Date</label>
+        <input  name="eventStartDate"style={{marginRight:"2rem"}}type ="date" 
+        min="2023-01-01"
+        value={formValues.eventStartDate}
+        onChange={handleChange}
+
+          className="event-form-control"
+          id="event-form-date-start"
+        />
            
-          />
+      
+      <label style={{marginRight:"0.5rem"}} htmlFor="endDate">End Date</label>
+        <input name="eventEndDate" type ="date" 
+        min="2023-01-01"
+        value={formValues.eventEndDate}
+        onChange={handleChange}
+
+          className="event-form-control"
+          id="event-form-date-end"
+        />
+</div>
+
+
+
+
             <div className="cg-modal-footer">
                     <button onSubmit={handleSubmit} className="cg-submit-button" type="submit">Submit</button>
                     </div>
