@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import TopHeader from "./Headers/TopHeader";
 import { LowerHeader } from "./Headers/LowerHeader";
 import { MainBody } from "./BodyComponents/BodyComps";
-import { CreateGroupModal } from "./Groups/CreateGroupComponent";
+
 // import {ChatBox} from "./ChatBox/ChatBoxComponent"
 import { Login } from "./Login/LoginComponent";
 import { Register } from "./Register/RegistrationComponent";
@@ -24,7 +24,7 @@ const App = () => {
               <TopHeader />
               <LowerHeader />
               <MainBody />
-            <CreateGroupModal/>
+            
             </>
           }
         ></Route>
