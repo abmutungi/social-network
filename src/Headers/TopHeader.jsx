@@ -5,6 +5,8 @@ import { Link, Route, Routes } from "react-router-dom";
 
 // import {  logoutUser } from "./ClickFuncs";
 import "../index.css";
+import { useState } from "react";
+import { NotificationsModal } from "../Notifications/notificationsModal";
 
 function ContainerLogo() {
   return (
@@ -15,12 +17,18 @@ function ContainerLogo() {
 }
 
 function ContainerIcons() {
+  const [showNotifModal, setShowNotifModal] = useState(false);
   return (
     <div className="ContainerEventIcons">
-      <div>
-        <FontAwesomeIcon icon={faBell} className="ClickableHeaderIcons" />
-      </div>
-
+      <FontAwesomeIcon
+        onClick={() => setShowNotifModal(true)}
+        icon={faBell}
+        className="ClickableHeaderIcons"
+      />
+      <NotificationsModal
+        onClose={() => setShowNotifModal(false)}
+        show={showNotifModal}
+      />
       <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
         <div>
           <FontAwesomeIcon
