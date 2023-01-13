@@ -3,24 +3,37 @@ import "./Groups.css";
 import { ProfileBtn } from "../Profile/ProfileBtn";
 import { useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
-// import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
+
 import {
   faLock,
   faUsers,
   faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { CreateGroupModal } from "./CreateGroupComponent";
+
 library.add(faCirclePlus, faLock, faUsers);
 
-import {
-  
-  
-  faXmark,
- 
-} from "@fortawesome/free-solid-svg-icons";
+import {faXmark,} from "@fortawesome/free-solid-svg-icons";
 
 const CreateGroupModal = ({show, onClose}) => {
+  const [formValues, setFormValues] = useState({
+   groupName:"",
+   groupDescription:"",
+  });
+
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
+    const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(formValues);
+  };
 
     if (!show) {
         return null
@@ -41,9 +54,13 @@ const CreateGroupModal = ({show, onClose}) => {
           />
             </div>
             <div className="cg-modal-body">
-                <form className="cg-form">
-                    <input className="cg-input" type="text" placeholder="enter group name"></input>
-                    <input className="cg-input" type="text" placeholder="enter group description"></input>
+                <form className="cg-form" onSubmit={handleSubmit}>
+                    <input name="groupName"
+            value={formValues.groupName}
+            onChange={handleChange} className="cg-input" type="text" placeholder="enter group name"></input>
+                    <input name="groupDescription"
+            value={formValues.groupDescription}
+            onChange={handleChange} className="cg-input" type="text" placeholder="enter group description"></input>
                          <label htmlFor="avatar">
             Choose an image to be your group avatar (Optional)
           </label>
@@ -52,11 +69,11 @@ const CreateGroupModal = ({show, onClose}) => {
             name="group-avatar"
            
           />
+            <div className="cg-modal-footer">
+                    <button onSubmit={handleSubmit} className="cg-submit-button" type="submit">Submit</button>
+                    </div>
                 </form>
             </div>
-            <div className="cg-modal-footer">
-                    <button className="cg-submit-button" type="submit">Submit</button>
-                    </div>
             </div>
         </div>
         </>
