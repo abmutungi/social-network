@@ -22,3 +22,19 @@
   overflow: auto;
 
 }
+
+.create-event-btn {
+  display: flex;
+  width: 20px;
+  padding: 7.5px 16px;
+  height: fit-content;
+  background-color: #fdfdfd;
+  border: none;
+  margin: 32px 16px;
+  box-sizing: border-box;
+  justify-content: center;
+  color: #1877f2;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}

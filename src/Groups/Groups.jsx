@@ -1,6 +1,5 @@
 import ChatProfile from "../AllChats/ChatProfile";
 import "./Groups.css";
-import { ProfileBtn } from "../Profile/ProfileBtn";
 import { library } from "@fortawesome/fontawesome-svg-core";
 // import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 import {
