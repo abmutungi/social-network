@@ -2,7 +2,7 @@ import ChatProfile from "../AllChats/ChatProfile";
 import "./Users.css";
 import { useState } from "react";
 
-import { CreateEventModal } from "../Groups/Events/EventModal";
+import { CreateEventModal } from "../Groups/Events/CreateEventModal";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faLock,

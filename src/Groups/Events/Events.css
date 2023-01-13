@@ -107,3 +107,15 @@
   left: 40vw;
   top: 60vh;
 }
+
+.event-banner{
+  background-color: lightgray;
+  display: flex;
+  flex-direction: column;
+  height: 80px;
+  width: 90%;
+}
+
+.event-banner-head{
+  background-color: white;
+}
