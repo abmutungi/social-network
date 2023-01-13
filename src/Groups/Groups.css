@@ -15,12 +15,12 @@
   align-items: center;
 }
 
-.create-group-btn {
+.cg-btn {
   display: flex;
   width: 20px;
-  padding: 7.5px 16px;
+  padding: 1px;
   height: fit-content;
-  background-color: #fdfdfd;
+  background-color: none;
   border: none;
   margin: 32px 16px;
   box-sizing: border-box;
@@ -29,4 +29,82 @@
   border-radius: 0.5rem;
   font-weight: 700;
   cursor: pointer;
+}
+
+.cg-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cg-modal {
+  border-radius: 15px;
+  height: 40%;
+  width: 500px;
+  background-color: #fdfdfd;
+}
+
+.cg-modal-header {
+  display: flex;
+  padding: 10px;
+  position: relative;
+  justify-content: center;
+}
+
+.cg-modal-body {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-top: 1px solid #eee;
+  border-bottom: #eee;
+}
+
+.cg-form {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cg-form > input {
+  height: 15%;
+}
+
+.cg-form > input:focus {
+  caret-color: #1b74e4;
+  outline-color: #1b74e4;
+  border-color: #1b74e4;
+  /* border: #1b74e4 solid 1px; */
+  outline-color: #1b74e4;
+}
+
+.cg-modal-close {
+  background: #e4e6eb;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  position: relative;
+  left: 30%;
+  color: #606770;
+  cursor: pointer;
+  padding: 0.4rem;
+}
+
+.cg-submit-button {
+  position: absolute;
+  background: #1c74e4;
+  border: none;
+  padding: 0.7rem;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  width: 40%;
+  left: 30vw;
+  top: 60vh;
 }
