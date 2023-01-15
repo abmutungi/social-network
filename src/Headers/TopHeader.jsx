@@ -19,28 +19,31 @@ function ContainerLogo() {
 function ContainerIcons() {
   const [showNotifModal, setShowNotifModal] = useState(false);
   return (
-    <div className="ContainerEventIcons">
-      <FontAwesomeIcon
-        onClick={() => setShowNotifModal(true)}
-        icon={faBell}
-        className="ClickableHeaderIcons"
-      />
+    <>
+      <div className="ContainerEventIcons">
+        <FontAwesomeIcon
+          onClick={() => setShowNotifModal(true)}
+          icon={faBell}
+          className="ClickableHeaderIcons"
+        />
+
+        <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
+          <div>
+            <FontAwesomeIcon
+              icon={faRightFromBracket}
+              className="ClickableHeaderIcons"
+            />
+          </div>
+        </Link>
+        <Routes>
+          <Route path="/login" element={<Login />}></Route>
+        </Routes>
+      </div>
       <NotificationsModal
         onClose={() => setShowNotifModal(false)}
         show={showNotifModal}
       />
-      <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
-        <div>
-          <FontAwesomeIcon
-            icon={faRightFromBracket}
-            className="ClickableHeaderIcons"
-          />
-        </div>
-      </Link>
-      <Routes>
-        <Route path="/login" element={<Login />}></Route>
-      </Routes>
-    </div>
+    </>
   );
 }
 

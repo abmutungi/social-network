@@ -16,8 +16,16 @@ const NotificationsModal = ({ show, onClose }) => {
         <div className="notifs-modal-header"></div>
         <div className="notifs-modal-title">Notifications</div>
         <div className="notifs-modal-body">
-          add some content here
-          {/* this is where each notification component will go */}
+          <SingleNotificationComponent />
+          <SingleNotificationComponent />
+          <SingleNotificationComponent />
+          <SingleNotificationComponent />
+          <SingleNotificationComponent />
+          <SingleNotificationComponent />
+          <SingleNotificationComponent />
+          <SingleNotificationComponent />
+          <SingleNotificationComponent />
+          <SingleNotificationComponent />
         </div>
       </div>
     </div>
@@ -25,5 +33,27 @@ const NotificationsModal = ({ show, onClose }) => {
 };
 
 // single notifications component
-
+const SingleNotificationComponent = () => {
+  return (
+    <div className="notification-container">
+      <div className="notifs-profile-content">
+        <img
+          className="notifs-profile cp-profile-pic"
+          src="./Posts/man-utd.png"
+          alt="img"
+        />
+        <div className="notifs-content-date">
+          <div className="notifs-content">
+            Cristiano Ronaldo sent you a friend request
+          </div>
+          <div className="notifs-date">a week ago</div>
+        </div>
+      </div>
+      <div className="notifs-action">
+        <button className="confirm-button">Confirm</button>
+        <button>Remove</button>
+      </div>
+    </div>
+  );
+};
 export { NotificationsModal };
