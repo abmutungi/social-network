@@ -43,6 +43,9 @@
   font-size: 0.8rem;
   color: black;
   font-weight: 500;
+
+  display: flex;
+  align-items: center;
 }
 
 .GroupProfile {
@@ -60,6 +63,11 @@
   flex-direction: column;
   gap: 1px;
   overflow: auto;
+}
+
+.group-event-text{
+  color: gray;
+  margin-left: 0.4em;
 }
 
 .UserChats {

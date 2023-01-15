@@ -8,6 +8,7 @@ import "./AllChats.css";
 
 //this is currently being used for both Chats & Group chats, 
 //will need to tinker to allow variability
+//group-event-text css in AllChats.css 
 const ChatProfile = (props) => {
     return (
         <div className={props.chatuserclass}>
@@ -20,7 +21,7 @@ const ChatProfile = (props) => {
                 />
             </a>
             <p className="ChatName">
-                {props.chatName}
+                {props.chatName}<small className="group-event-text">{props.eventText}</small>
             </p>
             {/* <p className="ChatName"><FontAwesomeIcon icon="fa-regular fa-message" /></p> */}
         </div>
