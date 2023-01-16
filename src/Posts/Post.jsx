@@ -4,6 +4,8 @@ import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import "./posts.css";
 import Comments from "./Comments";
+
+
 library.add(faThumbsUp, faMessage);
 
 // SinglePost takes the props that come from the database
@@ -45,6 +47,7 @@ const SinglePost = ({ postObj }) => {
 // PostsContiner will map through the posts data from the database and fill up the container with the posts.
 const PostsContainer = () => {
   return (
+  <>
     <div className="posts-container">
       <SinglePost
         postObj={{
@@ -54,43 +57,9 @@ const PostsContainer = () => {
           textContent: "Yooo not like that",
           commentsCount: "100",
         }}
-      />
-      <SinglePost
-        postObj={{
-          imgPath: "./Posts/man-utd.png",
-          name: "Lisandro Martinez",
-          date: "01/01/23",
-          textContent: "Yooo not like that",
-          commentsCount: "100",
-        }}
-      />
-      <SinglePost
-        postObj={{
-          imgPath: "./Posts/man-utd.png",
-          name: "Lisandro Martinez",
-          date: "01/01/23",
-          textContent: "Yooo not like that",
-          commentsCount: "100",
-        }}
-      />
-       <SinglePost
-        postObj={{
-          imgPath: "./Posts/man-utd.png",
-          name: "Lisandro Martinez",
-          date: "01/01/23",
-          textContent: "Yooo not like that",
-          commentsCount: "100",
-        }}
-      /> <SinglePost
-      postObj={{
-        imgPath: "./Posts/man-utd.png",
-        name: "Lisandro Martinez",
-        date: "01/01/23",
-        textContent: "Yooo not like that",
-        commentsCount: "100",
-      }}
-    />
+        />
     </div>
+  </>
   );
 };
 

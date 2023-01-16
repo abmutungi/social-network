@@ -1,6 +1,6 @@
 .AllGroups {
   background-color: white;
-  height: 30%;
+  height: fit-content;
   width: 85%;
   display: flex;
   flex-direction: column;
@@ -24,9 +24,46 @@
   border: none;
   margin: 32px 16px;
   box-sizing: border-box;
-  justify-content: center;
+  justify-content:center;
   color: #1877f2;
   border-radius: 0.5rem;
   font-weight: 700;
   cursor: pointer;
+}
+
+.myGroups-container {
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  margin-bottom: 1.5rem;
+  padding: 2rem;
+
+}
+
+.myGroups-title{
+  font-weight: 600;
+  font-size: 1rem;
+  padding-bottom: 0.4rem;
+
+}
+
+.myGroups-all{
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows: 50% 50%;
+}
+
+.myGroup-each{
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.new{
+justify-content: fle;
 }

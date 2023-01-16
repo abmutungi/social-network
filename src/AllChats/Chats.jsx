@@ -15,13 +15,11 @@ const ChatUsers = ({ users, chatuserclass}) => {
 
 const Chats = ({ Users }) => {
   return (
-    <div className={Users.ChatClasses.parent}>
-      <div className="ChatTitle">{Users.Headers.chats}</div>
-      <div className="AllCumulativeData">
+     <div className="AllCumulativeData">
       <ChatUsers users={Users.Chats} chatuserclass= {Users.ChatClasses.child} />
     </div>
-    </div>
-  );
+
+);
 };
 
 
@@ -29,7 +27,11 @@ const Chats = ({ Users }) => {
 const AllChats = ({props}) => {
   return (
     <div className="AllChats">
+      <div className="ChatTitle">Chats
+    </div>
       <Chats Users={props} />
+      <div className="ChatTitle">Group Chats
+      </div>
       <GroupChats Users={props}  />
     </div>
   );

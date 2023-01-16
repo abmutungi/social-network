@@ -94,20 +94,31 @@ code {
   margin-bottom: 0.5rem;
 }
 
+
+
 .bd-side {
-  height: 100%;
-  width: 20%;
+  border-radius: 10px;
+  /* height: 100%;
+  width: 20%; */
   max-width: 350px;
   background-color: white;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   align-items: center;
+}
+
+.l-side{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 20%;
 }
 
 .bd-middle {
   width: 60%;
   background-color: white;
+  justify-content:end;
 }
 
 .NamePic {
