@@ -39,5 +39,5 @@ const NamedGroup = ({ groups, groupclass}) => {
     );
   };
   
-
-  export default Groups
+export {NamedGroup}
+export default Groups

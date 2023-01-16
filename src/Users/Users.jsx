@@ -36,4 +36,5 @@ const NamedUser = ({ users, chatuserclass}) => {
   };
   
 
+  export{ NamedUser, Users}
   export default Users

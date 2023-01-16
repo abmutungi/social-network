@@ -38,8 +38,8 @@ const CreateEventModal = ({show, onClose}) => {
     return(
         <>
 
-        <div className="cg-modal-container" onClick={onClose}>
-        <div className="cg-modal" onClick={e => e.stopPropagation()}>
+        <div role="presentation" className="cg-modal-container" onClick={onClose}>
+        <div role="presentation" className="cg-modal" onClick={e => e.stopPropagation()}>
             <div className="cg-modal-header">
                 <h3>Create Event</h3>     
           <FontAwesomeIcon

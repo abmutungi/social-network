@@ -1,0 +1,28 @@
+.about-container {
+  background-color: white;
+  border-radius: 10px;
+  width: 100%;
+  height: fit-content;
+  max-height: 20%;
+  margin-bottom: 1.5rem;
+}
+
+  .about-title{
+    font-weight: 600;
+    font-size: 1rem;
+    padding-bottom: 0.4rem;
+
+  }
+
+  .about-description{
+    font-size: 0.7rem;
+    border-bottom: 1px solid #e5e5e5;
+    padding-top: 0.4rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .about-content{
+    width: 90%;
+    padding: 0.8rem;
+  }
+

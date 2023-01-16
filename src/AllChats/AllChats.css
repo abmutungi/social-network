@@ -2,11 +2,12 @@
   height: 100%;
   width: 20%;
   max-width: 350px;
-  background-color: white;
+  /* background-color: white; */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  align-items: left;
+  border-radius: 10px;
 }
 
 .ChatProfile {
@@ -35,7 +36,9 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-content: center;
+  height: 10%;
 }
 
 .ChatName {
@@ -72,10 +75,24 @@
 
 .UserChats {
   background-color: white;
-  height: 40%;
+  /* height: 10%; */
   width: 85%;
   display: flex;
   flex-direction: column;
   gap: 1px;
   overflow: auto;
+}
+
+
+.UserChatsContainer{
+  background-color: white;
+  height: 40%;
+  border-radius: 10px;
+}
+
+
+.GroupChatsContainer{
+  background-color: white;
+  height: 40%;
+  border-radius: 10px;
 }
