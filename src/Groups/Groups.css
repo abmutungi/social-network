@@ -45,7 +45,7 @@
 
 .cg-modal {
   border-radius: 15px;
-  height: 40%;
+  height: 350px;
   width: 500px;
   background-color: #fdfdfd;
   color: black;
@@ -67,6 +67,13 @@
   border-bottom: #eee;
 }
 
+.cg-modal-footer {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .cg-form {
   height: 250px;
   display: flex;
@@ -74,7 +81,7 @@
 }
 
 .cg-form > input {
-  height: 15%;
+  height: 40px;
 }
 
 .cg-form > input:focus {
@@ -89,16 +96,16 @@
   background: #e4e6eb;
   height: 25px;
   width: 25px;
-  border-radius: 50%;
+  border-radius: 15px;
   position: relative;
-  left: 30%;
+  left: 140px;
   color: #606770;
   cursor: pointer;
   padding: 0.4rem;
 }
 
 .cg-submit-button {
-  position: absolute;
+  /* position: absolute; */
   background: #1c74e4;
   border: none;
   padding: 0.7rem;
@@ -106,7 +113,7 @@
   color: white;
   font-weight: 600;
   cursor: pointer;
-  width: 20%;
-  left: 40vw;
-  top: 60vh;
+  width: 380px;
+  /* left: 40vw;
+  top: 60vh; */
 }
