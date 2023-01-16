@@ -10,7 +10,7 @@
     top: 0;
     width: auto;
 } */
-
+/* 
 .cg-btn {
   display: flex;
   width: 20px;
@@ -78,34 +78,6 @@
   outline-color: #1b74e4;
   border-color: #1b74e4;
   /* border: #1b74e4 solid 1px; */
-  outline-color: #1b74e4;
-}
-
-.cg-modal-close {
-  background: #e4e6eb;
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
-  position: relative;
-  left: 140px;
-  color: #606770;
-  cursor: pointer;
-  padding: 0.4rem;
-}
-
-.cg-submit-button {
-  /* position: absolute; */
-  background: #1c74e4;
-  border: none;
-  padding: 0.7rem;
-  border-radius: 5px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  width: 380px;
-  /* left: 40vw;
-  top: 60vh; */
-}
 
 .event-banner {
   background-color: #f8f8f9;
@@ -159,4 +131,4 @@
   margin-left: 2.5%;
   font-size: small;
   width: 25%;
-}
+} */

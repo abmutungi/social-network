@@ -41,6 +41,7 @@ const CreateEventModal = ({show, onClose}) => {
         <div className="cg-modal-container" onClick={onClose}>
         <div className="cg-modal" onClick={e => e.stopPropagation()}>
             <div className="cg-modal-header">
+              <div></div>
                 <h3>Create Event</h3>     
           <FontAwesomeIcon
           onClick={ onClose}
@@ -66,7 +67,7 @@ const CreateEventModal = ({show, onClose}) => {
 <br></br>
                         <div className="event-form-group">
         <label style={{marginRight:"0.5rem"}} htmlFor="startDate">Date & Time</label>
-        <input  name="eventStartDate"style={{marginRight:"2rem"}}type ="datetime-local" 
+        <input  name="eventStartDate"type ="datetime-local" 
         min="2023-01-01"
         value={formValues.eventStartDate}
         onChange={handleChange}
