@@ -92,10 +92,10 @@ const CreateEventModal = ({show, onClose}) => {
 
 
 
+            </div>
             <div className="cg-modal-footer">
                     <button onSubmit={handleSubmit} className="cg-submit-button" type="submit">Submit</button>
                     </div>
-            </div>
                 </form>
             </div>
         </div>
