@@ -1,45 +1,42 @@
 .followers-container {
-    background-color: white;
-    border-radius: 10px;
-    display: grid;
-    /* flex-direction: column; */
-    /* max-height: 100px; */
-    height: fit-content;
-    margin-bottom: 1.5rem;
-    padding: 2rem;
-   
+  background-color: white;
+  border-radius: 10px;
+  display: grid;
+  /* flex-direction: column; */
+  /* max-height: 100px; */
+  height: fit-content;
+  margin-bottom: 1.5rem;
+  padding: 2rem;
+  overflow: auto;
 }
 
+.followers-title {
+  font-weight: 600;
+  font-size: 1rem;
+  padding-bottom: 0.4rem;
+}
 
+.followers-all {
+  display: grid;
+  /* display: flex; */
+  /* flex-direction:column; */
+  /* cursor: pointer; */
+  /* align-items: center; */
+  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-rows: 50% 50%;
+}
 
-  .followers-title{
-    font-weight: 600;
-    font-size: 1rem;
-    padding-bottom: 0.4rem;
-
-  }
-
-  .followers-all{
-    display: grid;
-    /* display: flex; */
-    /* flex-direction:column; */
-    /* cursor: pointer; */
-    /* align-items: center; */    
-    grid-template-columns: 20% 20% 20% 20% 20%;
-    grid-template-rows: 50% 50%;
-  }
-
-  .AFollower{
-    /* background-color: white;
+.AFollower {
+  /* background-color: white;
     height: fit-content;
     display: flex;
     flex-direction: column;
     gap: 1px; */
 
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
-    align-items: center;
-    width: fit-content;
-    cursor: pointer;
-  }
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+  width: fit-content;
+  cursor: pointer;
+}

@@ -24,7 +24,7 @@
   border: none;
   margin: 32px 16px;
   box-sizing: border-box;
-  justify-content:center;
+  justify-content: center;
   color: #1877f2;
   border-radius: 0.5rem;
   font-weight: 700;
@@ -127,23 +127,22 @@
   height: fit-content;
   margin-bottom: 1.5rem;
   padding: 2rem;
-
+  overflow: auto;
 }
 
-.myGroups-title{
+.myGroups-title {
   font-weight: 600;
   font-size: 1rem;
   padding-bottom: 0.4rem;
-
 }
 
-.myGroups-all{
+.myGroups-all {
   display: grid;
   grid-template-columns: 33% 33% 33%;
   grid-template-rows: 50% 50%;
 }
 
-.myGroup-each{
+.myGroup-each {
   display: flex;
   flex-direction: row;
   cursor: pointer;
@@ -152,6 +151,6 @@
   cursor: pointer;
 }
 
-.new{
-justify-content: fle;
+.new {
+  justify-content: fle;
 }
