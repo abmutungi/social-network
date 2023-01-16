@@ -24,6 +24,7 @@ const SingleNotificationComponent = ({ props }) => {
     </div>
   );
 };
+
 // notifications modal that holds single notifications
 const NotificationsModal = ({ show, onClose }) => {
   if (!show) {
