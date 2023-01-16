@@ -4,6 +4,7 @@ import NavBar from "../NavBar/NavBar";
 import Users from "../Users/Users";
 import Groups from "../Groups/Groups";
 import PostsContainer from "../Posts/Post";
+import EventBanner from "../Groups/Events/EventBanner";
 
 const DBData = {
   Headers: {
@@ -49,7 +50,13 @@ function MainBody() {
       <div className="middle-div">
         <NavBar />
       <div className="nav-and-post">
+    <EventBanner/>
+    <EventBanner/>
+
+    <EventBanner/>
+
         <PostsContainer />
+    
       </div>
       </div>
       <AllChats props={DBData} />

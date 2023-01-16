@@ -1,6 +1,5 @@
 import ChatProfile from "../AllChats/ChatProfile";
 import "./Groups.css";
-import { ProfileBtn } from "../Profile/ProfileBtn";
 import { useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { CreateGroupModal } from "./CreateGroupsComponent";
