@@ -11,7 +11,6 @@
     width: auto;
 } */
 
-
 .cg-btn {
   display: flex;
   width: 20px;
@@ -40,9 +39,9 @@
   justify-content: center;
 }
 
-.cg-modal {
+.ce-modal {
   border-radius: 15px;
-  height: 40%;
+  height: 450px;
   width: 500px;
   background-color: #fdfdfd;
   color: black;
@@ -88,14 +87,14 @@
   width: 25px;
   border-radius: 50%;
   position: relative;
-  left: 30%;
+  left: 140px;
   color: #606770;
   cursor: pointer;
   padding: 0.4rem;
 }
 
 .cg-submit-button {
-  position: absolute;
+  /* position: absolute; */
   background: #1c74e4;
   border: none;
   padding: 0.7rem;
@@ -103,28 +102,26 @@
   color: white;
   font-weight: 600;
   cursor: pointer;
-  width: 20%;
-  left: 40vw;
-  top: 60vh;
+  width: 380px;
+  /* left: 40vw;
+  top: 60vh; */
 }
 
-.event-banner{
-  background-color: #f8f8f9;;
+.event-banner {
+  background-color: #f8f8f9;
   display: flex;
   flex-direction: column;
   height: 100px;
   margin-bottom: 10px;
-
 }
 
-.event-banner-body{
+.event-banner-body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  
 }
 
-.event-banner-head{
+.event-banner-head {
   background-color: white;
   display: flex;
   flex-direction: row;
@@ -132,37 +129,34 @@
   height: 40%;
 }
 
-
-.event-body-date{
+.event-body-date {
   color: red;
   height: 30%;
   text-transform: uppercase;
   font-size: small;
   margin-top: 0.3em;
   display: flex;
-align-items: baseline;
-margin-left: 2.5%;
+  align-items: baseline;
+  margin-left: 2.5%;
 }
 
-.event-body-eventname{
-  color:black;
+.event-body-eventname {
+  color: black;
   height: 40%;
   text-transform: capitalize;
-  font-size:medium;
-display: flex;
-align-items: center;
-font-weight: 900;
-margin-left: 2.5%;
-
+  font-size: medium;
+  display: flex;
+  align-items: center;
+  font-weight: 900;
+  margin-left: 2.5%;
 }
 
-.event-body-attendance{
-display: flex;
-flex-direction: row;
-justify-content:space-between;
-color: gray;
-margin-left: 2.5%;
-font-size: small;
-width: 25%;
-
+.event-body-attendance {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: gray;
+  margin-left: 2.5%;
+  font-size: small;
+  width: 25%;
 }

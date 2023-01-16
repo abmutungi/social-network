@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {faXmark,} from "@fortawesome/free-solid-svg-icons";
-import "./Events.css"
+import "../Groups.css"
 
 
 
@@ -12,7 +12,7 @@ const CreateEventModal = ({show, onClose}) => {
    eventName:"",
    eventDescription:"",
    eventStartDate:"",
-   eventEndDate:"",
+
    
   });
 
@@ -49,8 +49,8 @@ const CreateEventModal = ({show, onClose}) => {
             size="lg"
           />
             </div>
-            <div className="cg-modal-body">
                 <form className="cg-form" onSubmit={handleSubmit}>
+            <div className="cg-modal-body">
                   <div className="modal-titles">Event Name</div>
                     <input name="eventName"
             value={formValues.eventName}
@@ -59,24 +59,25 @@ const CreateEventModal = ({show, onClose}) => {
                               <br></br>
 
                               <div className="modal-titles">Event Description</div>
-                    <textarea name="eventDescription" style={{height:"60px"}}
+                    <textarea name="eventDescription" style={{resize:"none"}}
             value={formValues.eventDescription}
             onChange={handleChange} className="cg-input" placeholder="what's it about?" required/>
                         
 <br></br>
                         <div className="event-form-group">
-        <label style={{marginRight:"0.5rem"}} htmlFor="startDate">Start Date</label>
-        <input  name="eventStartDate"style={{marginRight:"2rem"}}type ="date" 
+        <label style={{marginRight:"0.5rem"}} htmlFor="startDate">Date & Time</label>
+        <input  name="eventStartDate"style={{marginRight:"2rem"}}type ="datetime-local" 
         min="2023-01-01"
         value={formValues.eventStartDate}
         onChange={handleChange}
+        required
 
           className="event-form-control"
           id="event-form-date-start"
         />
            
       
-      <label style={{marginRight:"0.5rem"}} htmlFor="endDate">End Date</label>
+      {/* <label style={{marginRight:"0.5rem"}} htmlFor="endDate">End Date</label>
         <input name="eventEndDate" type ="date" 
         min="2023-01-01"
         value={formValues.eventEndDate}
@@ -84,7 +85,7 @@ const CreateEventModal = ({show, onClose}) => {
 
           className="event-form-control"
           id="event-form-date-end"
-        />
+        /> */}
 </div>
 
 
@@ -93,8 +94,8 @@ const CreateEventModal = ({show, onClose}) => {
             <div className="cg-modal-footer">
                     <button onSubmit={handleSubmit} className="cg-submit-button" type="submit">Submit</button>
                     </div>
-                </form>
             </div>
+                </form>
             </div>
         </div>
         </>

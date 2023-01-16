@@ -45,8 +45,8 @@ const CreateGroupModal = ({show, onClose}) => {
             size="lg"
           />
             </div>
-            <div className="cg-modal-body">
                 <form className="cg-form" onSubmit={handleSubmit}>
+            <div className="cg-modal-body">
                     <input name="groupName"
             value={formValues.groupName}
             onChange={handleChange} className="cg-input" type="text" placeholder="enter group name" required></input>
@@ -61,11 +61,11 @@ const CreateGroupModal = ({show, onClose}) => {
             name="group-avatar"
            
           />
+            </div>
             <div className="cg-modal-footer">
                     <button onSubmit={handleSubmit} className="cg-submit-button" type="submit">Submit</button>
                     </div>
                 </form>
-            </div>
             </div>
         </div>
         </>

@@ -45,10 +45,13 @@
 
 .cg-modal {
   border-radius: 15px;
-  height: 350px;
-  width: 500px;
+
+  width: 550px;
   background-color: #fdfdfd;
   color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .cg-modal-header {
