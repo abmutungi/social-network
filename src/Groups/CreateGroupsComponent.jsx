@@ -37,6 +37,7 @@ const CreateGroupModal = ({show, onClose}) => {
         <div className="cg-modal-container" onClick={onClose}>
         <div className="cg-modal" onClick={e => e.stopPropagation()}>
             <div className="cg-modal-header">
+             <div></div>
                 <h3>Create Group</h3>     
           <FontAwesomeIcon
           onClick={ onClose}
@@ -45,8 +46,8 @@ const CreateGroupModal = ({show, onClose}) => {
             size="lg"
           />
             </div>
-            <div className="cg-modal-body">
                 <form className="cg-form" onSubmit={handleSubmit}>
+            <div className="cg-modal-body">
                     <input name="groupName"
             value={formValues.groupName}
             onChange={handleChange} className="cg-input" type="text" placeholder="enter group name" required></input>
@@ -54,18 +55,18 @@ const CreateGroupModal = ({show, onClose}) => {
             value={formValues.groupDescription}
             onChange={handleChange} className="cg-input" type="text" placeholder="enter group description" required></input>
                          <label htmlFor="avatar">
-            Choose an image to be your group avatar (Optional)
+            Choose an image 
           </label>
           <input
             type="file"
             name="group-avatar"
            
           />
+            </div>
             <div className="cg-modal-footer">
                     <button onSubmit={handleSubmit} className="cg-submit-button" type="submit">Submit</button>
                     </div>
                 </form>
-            </div>
             </div>
         </div>
         </>
