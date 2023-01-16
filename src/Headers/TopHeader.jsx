@@ -5,6 +5,8 @@ import { Link, Route, Routes } from "react-router-dom";
 
 // import {  logoutUser } from "./ClickFuncs";
 import "../index.css";
+import { useState } from "react";
+import { NotificationsModal } from "../Notifications/notificationsModal";
 
 function ContainerLogo() {
   return (
@@ -15,24 +17,33 @@ function ContainerLogo() {
 }
 
 function ContainerIcons() {
+  const [showNotifModal, setShowNotifModal] = useState(false);
   return (
-    <div className="ContainerEventIcons">
-      <div>
-        <FontAwesomeIcon icon={faBell} className="ClickableHeaderIcons" />
-      </div>
+    <>
+      <div className="ContainerEventIcons">
+        <FontAwesomeIcon
+          onClick={() => setShowNotifModal(true)}
+          icon={faBell}
+          className="ClickableHeaderIcons"
+        />
 
-      <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
-        <div>
-          <FontAwesomeIcon
-            icon={faRightFromBracket}
-            className="ClickableHeaderIcons"
-          />
-        </div>
-      </Link>
-      <Routes>
-        <Route path="/login" element={<Login />}></Route>
-      </Routes>
-    </div>
+        <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
+          <div>
+            <FontAwesomeIcon
+              icon={faRightFromBracket}
+              className="ClickableHeaderIcons"
+            />
+          </div>
+        </Link>
+        <Routes>
+          <Route path="/login" element={<Login />}></Route>
+        </Routes>
+      </div>
+      <NotificationsModal
+        onClose={() => setShowNotifModal(false)}
+        show={showNotifModal}
+      />
+    </>
   );
 }
 

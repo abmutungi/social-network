@@ -1,6 +1,7 @@
-
-
-* { margin: 0; padding: 0; }
+* {
+  margin: 0;
+  padding: 0;
+}
 
 /* css below was previously in a tb38r.css file which 
 seemed superfluous, added here instead for now*/
@@ -15,26 +16,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
   /* width: 100%; */
   height: 100vh;
-  
-  overflow: hidden;
 
+  overflow: hidden;
 }
 
 #root {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-
 .TopHeader {
-    height: 30px;
+  height: 30px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -64,6 +63,7 @@ code {
   font-size: 150%;
   width: 64px;
   margin-right: 2%;
+  align-items: center;
 }
 
 /* .ContainerEventIcons div {
@@ -171,4 +171,10 @@ code {
   font-weight: bold;
   cursor: pointer;
   color: rgb(27, 116, 228);
+}
+
+.notif-bell {
+  border: none;
+  background-color: inherit;
+  font-size: 100%;
 }

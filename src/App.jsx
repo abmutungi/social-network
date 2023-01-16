@@ -9,14 +9,14 @@ import { Register } from "./Register/RegistrationComponent";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import "./index.css";
 
-
-
 const App = () => {
   return (
     <>
       <Routes>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        {/* <Route path="/notif" element={<NotificationsModal />}></Route> */}
+
         <Route
           path="/"
           element={

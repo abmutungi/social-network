@@ -1,0 +1,80 @@
+.notifs-modal {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.notifs-modal-content {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  position: absolute;
+  top: 5%;
+  right: 2%;
+  width: 365px;
+  max-height: 550px;
+  overflow: auto;
+}
+
+.notifs-modal-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.notifs-profile-content {
+  display: flex;
+  border-radius: 10px;
+  padding: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.notifs-action {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.notifs-action > button {
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.confirm-button {
+  color: white;
+  background-color: #267ef2;
+}
+
+.notification-container {
+  padding: 0.4rem;
+}
+
+.notifs-profile-content:hover {
+  background-color: #f4f4f4;
+}
+
+.notifs-profile {
+  margin-right: 0.5rem;
+}
+
+.notifs-date {
+  font-size: 0.8rem;
+  color: #267ef2;
+  font-weight: bolder;
+}
+
+.notifs-content-date {
+  margin-bottom: 1rem;
+}
+
+.notifs-content {
+  margin-bottom: 0.2rem;
+}
