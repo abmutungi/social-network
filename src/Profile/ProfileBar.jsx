@@ -14,27 +14,29 @@ library.add(faCirclePlus, faLock, faUsers);
 
 const ProfileBar = () => {
   return (
-    <div className="Profile">
-      <div className="ProfilePicContainer">
-        <div className="ProfilePic" />
-      </div>
+    <>
+      <div className="Profile">
+        <div className="ProfilePicContainer">
+          <div className="ProfilePic" />
+        </div>
 
-      <ProfileInfo
-        ProfileName="Arnold Mutungi"
-        Followers="1k followers"
-        Following="1.1k following"
-      />
-      <div className="ProfileBtnContainer">
-        <PrivateBtn
-          OptionA={<FontAwesomeIcon icon="fa-solid fa-lock" />}
-          OptionB={<FontAwesomeIcon icon="fa-solid fa-users" />}
+        <ProfileInfo
+          ProfileName="Arnold Mutungi"
+          Followers="1k followers"
+          Following="1.1k following"
         />
-        <ProfileBtn
-          btnName={ <FontAwesomeIcon icon="fa-solid fa-circle-plus" />}
-          className={"add-post-btn"}
-        />
+        <div className="ProfileBtnContainer">
+          <PrivateBtn
+            OptionA={<FontAwesomeIcon icon="fa-solid fa-lock" />}
+            OptionB={<FontAwesomeIcon icon="fa-solid fa-users" />}
+          />
+          <ProfileBtn
+            btnName={<FontAwesomeIcon icon="fa-solid fa-circle-plus" />}
+            className={"add-post-btn"}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 export default ProfileBar;
