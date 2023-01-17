@@ -45,10 +45,37 @@ const DBData = {
     "SuperEaglesSupporters",
   ],
   GroupChatClasses: { parent: "GroupChats", child: "GroupProfile" },
-  AllUsers:["Nate", "Keivon", "Ricky", "Sarmad", "Tolu", "Arnold", "Yonas"],
+  AllUsers: [
+    "Nate",
+    "Keivon",
+    "Ricky",
+    "Sarmad",
+    "Tolu",
+    "Arnold",
+    "Yonas",
+    "Nate",
+    "Keivon",
+    "Ricky",
+    "Sarmad",
+    "Tolu",
+    "Arnold",
+    "Yonas",
+    "Nate",
+    "Keivon",
+    "Ricky",
+    "Sarmad",
+    "Tolu",
+    "Arnold",
+    "Yonas",
+  ],
 
-  
-   UsersClasses: { users: "AllUsers", groups:"AllGroups", chats: "UserChats", groupchats:"GroupChats", child: "AUser" },
+  UsersClasses: {
+    users: "AllUsers",
+    groups: "AllGroups",
+    chats: "UserChats",
+    groupchats: "GroupChats",
+    child: "AUser",
+  },
   FollowersClasses: { parent: "AllFollowers", child: "AFollower" },
   Groups: [
     "Black & White Army",
@@ -59,40 +86,58 @@ const DBData = {
     "2011 Rashford Fan Club",
     "Sancho Support Club",
     "AirBnB crew",
+    "AgendaZone",
+    "Ski Club",
+    "Suya Society",
+    "SuperEaglesSupporters",
+    "AgendaZone",
+    "Ski Club",
+    "Suya Society",
+    "SuperEaglesSupporters",
+    "AgendaZone",
+    "Ski Club",
+    "Suya Society",
+    "SuperEaglesSupporters",
+    "AgendaZone",
+    "Ski Club",
+    "Suya Society",
+    "SuperEaglesSupporters",
   ],
   GroupClasses: { parent: "AllGroups", child: "AGroup" },
   AboutMe: {
     description:
       "Bienvenidos a la página de Facebook Oficial de Leo Messi. Welcome to the official Leo Messi Facebook.",
   },
-}
-
+};
 
 const LeftBodyDiv = () => {
   return (
     <>
       <div className="left-side">
         <AboutMe about={DBData.AboutMe} />
-  
-        <Users parentClass="AllUsers" headers="Users" data={DBData.AllUsers} childClass={DBData.UsersClasses.child}/>
-      
-        <Users parentClass="AllGroups" headers="Groups" data={DBData.Groups} childClass={DBData.GroupClasses.child}/>
-       
+
+        <Users
+          parentClass="AllUsers"
+          headers="Users"
+          data={DBData.AllUsers}
+          childClass={DBData.UsersClasses.child}
+        />
+
+        <Users
+          parentClass="AllGroups"
+          headers="Groups"
+          data={DBData.Groups}
+          childClass={DBData.GroupClasses.child}
+        />
       </div>
-     
     </>
   );
 };
 
-
-
-
-
 function MainBody() {
   return (
-    
     <div className="MainBody">
-      <LeftBodyDiv  />
+      <LeftBodyDiv />
       <div className="middle-div">
         <NavBar />
         <div className="nav-and-post">
@@ -107,7 +152,7 @@ function MainBody() {
           <MyGroups MyGroups={DBData} />
         </div>
       </div>
-      <AllChats  />
+      <AllChats />
     </div>
   );
 }

@@ -107,7 +107,6 @@
 }
 
 .cg-submit-button {
-  /* position: absolute; */
   background: #1c74e4;
   border: none;
   padding: 0.5rem 5rem;
@@ -139,7 +138,6 @@
 .myGroups-all {
   display: grid;
   grid-template-columns: 33% 33% 33%;
-  grid-template-rows: 50% 50%;
 }
 
 .myGroup-each {
@@ -151,6 +149,3 @@
   cursor: pointer;
 }
 
-.new {
-  justify-content: fle;
-}
