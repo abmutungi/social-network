@@ -45,8 +45,10 @@ const DBData = {
     "SuperEaglesSupporters",
   ],
   GroupChatClasses: { parent: "GroupChats", child: "GroupProfile" },
-  Users: ["Nate", "Keivon", "Ricky", "Sarmad", "Tolu", "Arnold", "Yonas"],
-  UsersClasses: { parent: "AllUsers", child: "AUser" },
+  AllUsers:["Nate", "Keivon", "Ricky", "Sarmad", "Tolu", "Arnold", "Yonas"],
+
+  
+   UsersClasses: { users: "AllUsers", groups:"AllGroups", chats: "UserChats", groupchats:"GroupChats", child: "AUser" },
   FollowersClasses: { parent: "AllFollowers", child: "AFollower" },
   Groups: [
     "Black & White Army",
@@ -63,33 +65,34 @@ const DBData = {
     description:
       "Bienvenidos a la página de Facebook Oficial de Leo Messi. Welcome to the official Leo Messi Facebook.",
   },
-};
+}
 
-const LeftBodyDiv = ({ props }) => {
+
+const LeftBodyDiv = () => {
   return (
     <>
       <div className="left-side">
         <AboutMe about={DBData.AboutMe} />
-        {/* <div className="bd-side"> */}
-        {/* <div className={"AllUsers"}> */}
-        {/* <div className="ChatTitle">Users</div> */}
-        <Users Users={props} />
-        {/* </div> */}
-        {/* <div className="AllGroups"> */}
-        {/* <div className="ChatTitle">Groups<FontAwesomeIcon className="create-group-btn"  icon="fa-solid fa-circle-plus" /> */}
-        {/* </div> */}
-        <Groups Users={props} />
-        {/* </div> */}
+  
+        <Users parentClass="AllUsers" headers="Users" data={DBData.AllUsers} childClass={DBData.UsersClasses.child}/>
+      
+        <Users parentClass="AllGroups" headers="Groups" data={DBData.Groups} childClass={DBData.GroupClasses.child}/>
+       
       </div>
-      {/* </div> */}
+     
     </>
   );
 };
 
+
+
+
+
 function MainBody() {
   return (
+    
     <div className="MainBody">
-      <LeftBodyDiv props={DBData} />
+      <LeftBodyDiv  />
       <div className="middle-div">
         <NavBar />
         <div className="nav-and-post">
@@ -104,9 +107,9 @@ function MainBody() {
           <MyGroups MyGroups={DBData} />
         </div>
       </div>
-      <AllChats props={DBData} />
+      <AllChats  />
     </div>
   );
 }
 
-export { MainBody };
+export { MainBody, DBData };

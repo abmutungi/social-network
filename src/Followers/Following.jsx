@@ -25,7 +25,7 @@ const Following = ({ Following }) => {
                  <div className="followers-title">Following
             </div>
             <div className='followers-all'>
-        <NamedUser users={Following.Users} chatuserclass= {Following.FollowersClasses.child} />
+        <NamedUser users={Following.AllUsers} chatuserclass= {Following.FollowersClasses.child} />
         </div>
         </div>
 

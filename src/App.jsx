@@ -9,6 +9,16 @@ import { Register } from "./Register/RegistrationComponent";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import "./index.css";
 
+
+/*
+utils.ts:874 You rendered descendant <Routes> (or called `useRoutes()`) at "/" 
+(under <Route path="/">) but the parent route path has no trailing "*". This means 
+if you navigate deeper, the parent won't match anymore and therefore the child 
+routes will never render.Please change the parent <Route path="/"> to <Route path="*">.
+
+hanged "/" Route to "*" in (tb38r)
+*/
+
 const App = () => {
   return (
     <>
@@ -18,7 +28,7 @@ const App = () => {
         {/* <Route path="/notif" element={<NotificationsModal />}></Route> */}
 
         <Route
-          path="/"
+          path="*"
           element={
             <>
               <TopHeader />

@@ -2,6 +2,10 @@ import React from "react";
 import ChatProfile from "./ChatProfile";
 import "./AllChats.css";
 import GroupChats from "./GroupChats";
+import Users from "../Users/Users";
+import { DBData } from "../BodyComponents/BodyComps";
+
+
 
 
 /*Key arg in map required, currently using arr index, 
@@ -23,21 +27,23 @@ const Chats = ({ Users }) => {
 };
 
 
+/*
+        <Users parentClass="AllGroups" headers="Groups" data= {DBData.Groups} childClass={DBData.GroupClasses.child}/>
 
-const AllChats = ({props}) => {
+                <Users parentClass="AllChats" headers="Chats" data= {DBData.Chats} childClass={DBData.GroupClasses.child}/>
+
+  */
+
+const AllChats = () => {
   return (
     <div className="AllChats">
-      <div className="UserChatsContainer">
-        <div className="ChatTitle">Chats
-        </div>
-        <Chats Users={props} />
-        </div>
+     
+        <Users parentClass="AllUsers" headers="Chats" data={DBData.AllUsers} childClass={DBData.UsersClasses.child}/>
+      
 
-      <div className="GroupChatsContainer">
-        <div className="ChatTitle">Group Chats
-        </div>
-        <GroupChats Users={props}  />
-      </div>
+     
+        <Users parentClass="AllUsers" headers="Users" data={DBData.GroupChats} childClass={DBData.UsersClasses.child}/>
+   
     </div>
   );
 };
