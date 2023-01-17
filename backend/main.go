@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/abmutungi/social-network/backend/pkg/db"
+	"github.com/abmutungi/social-network/backend/pkg/db/web"
 )
 
 func main() {
@@ -13,4 +14,9 @@ func main() {
 	}
 
 	log.Println("succesfully run migrations")
+
+	var s web.Server
+
+	s.OpenServer()
+
 }
