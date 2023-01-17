@@ -1,0 +1,134 @@
+/* input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+} */
+/* 
+.cg-btn {
+  display: flex;
+  width: 20px;
+  padding: 1px;
+  height: fit-content;
+  background-color: none;
+  border: none;
+  margin: 32px 16px;
+  box-sizing: border-box;
+  justify-content: center;
+  color: #1877f2;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cg-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ce-modal {
+  border-radius: 15px;
+  height: 450px;
+  width: 500px;
+  background-color: #fdfdfd;
+  color: black;
+}
+
+.cg-modal-header {
+  display: flex;
+  padding: 10px;
+  position: relative;
+  justify-content: center;
+  color: black;
+}
+
+.cg-modal-body {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-top: 1px solid #eee;
+  border-bottom: #eee;
+}
+
+.cg-form {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cg-form > input {
+  height: 12%;
+}
+
+.cg-form > input:focus {
+  caret-color: #1b74e4;
+  outline-color: #1b74e4;
+  border-color: #1b74e4;
+  /* border: #1b74e4 solid 1px; */
+
+.event-banner {
+  background-color: #f8f8f9;
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.event-banner-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.event-banner-head {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 40%;
+}
+
+.event-body-date {
+  color: red;
+  height: 30%;
+  text-transform: uppercase;
+  font-size: small;
+  margin-top: 0.3em;
+  display: flex;
+  align-items: baseline;
+  margin-left: 2.5%;
+}
+
+.event-body-eventname {
+  color: black;
+  height: 40%;
+  text-transform: capitalize;
+  font-size: medium;
+  display: flex;
+  align-items: center;
+  font-weight: 900;
+  margin-left: 2.5%;
+}
+
+.event-body-attendance {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: gray;
+  margin-left: 2.5%;
+  font-size: small;
+  width: 25%;
+} 

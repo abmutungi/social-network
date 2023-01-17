@@ -1,5 +1,5 @@
 
-import { CreateEventModal } from "../Groups/Events/CreateEventModal";
+import { CreateEventModal } from "../pages/home/components/CreateEventModal";
 import { useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {

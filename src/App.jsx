@@ -1,11 +1,11 @@
 import ReactDOM from "react-dom/client";
-import TopHeader from "./Headers/TopHeader";
-import { LowerHeader } from "./Headers/LowerHeader";
-import { MainBody } from "./BodyComponents/BodyComps";
+import TopHeader from "./pages/home/components/TopHeader";
+import { LowerHeader } from "./pages/home/components/LowerHeader";
+import { MainBody } from "./pages/home/components/BodyComps";
 
 // import {ChatBox} from "./ChatBox/ChatBoxComponent"
-import { Login } from "./Login/LoginComponent";
-import { Register } from "./Register/RegistrationComponent";
+import { Login } from "./pages/login/components/LoginComponent";
+import { Register } from "./pages/register/components/RegistrationComponent";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import "./index.css";
 
