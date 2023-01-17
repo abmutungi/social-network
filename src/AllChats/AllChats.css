@@ -1,13 +1,11 @@
 .AllChats {
-  height: 100%;
-  width: 20%;
-  max-width: 350px;
-  /* background-color: white; */
   display: flex;
   flex-direction: column;
+  max-width: 350px;
+  width: 20%;
+  height: 98%;
+  /* border: 1px solid red; */
   justify-content: space-around;
-  align-items: left;
-  border-radius: 10px;
 }
 
 .ChatProfile {

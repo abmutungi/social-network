@@ -23,7 +23,6 @@ const ChatProfile = (props) => {
             <p className="ChatName">
                 {props.chatName}<small className="group-event-text">{props.eventText}</small>
             </p>
-            {/* <p className="ChatName"><FontAwesomeIcon icon="fa-regular fa-message" /></p> */}
         </div>
     );
 };
