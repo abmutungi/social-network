@@ -1,5 +1,6 @@
 import './followers.css'
-import {NamedUser} from '../Users/Users'
+// import {NamedUser} from '../Users/Users'
+import { MultipleProfilesComponent } from '../components/MultipleProfilesComponent';
 
 
 
@@ -11,7 +12,7 @@ const Followers = ({ Followers }) => {
                  <div className="followers-title">Followers
             </div>
             <div className='followers-all'>
-        <NamedUser users={Followers.AllUsers} chatuserclass= {Followers.FollowersClasses.child} />
+        <MultipleProfilesComponent users={Followers.AllUsers} chatuserclass= {Followers.FollowersClasses.child} />
         </div>
         </div>
 

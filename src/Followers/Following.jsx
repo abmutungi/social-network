@@ -1,5 +1,6 @@
+import { MultipleProfilesComponent } from '../components/MultipleProfilesComponent';
 import './followers.css'
-import { NamedUser } from '../Users/Users';
+// import { NamedUser } from '../Users/Users';
 
 // const Following=({ Following })=>{
 
@@ -25,7 +26,7 @@ const Following = ({ Following }) => {
                  <div className="followers-title">Following
             </div>
             <div className='followers-all'>
-        <NamedUser users={Following.AllUsers} chatuserclass= {Following.FollowersClasses.child} />
+        <MultipleProfilesComponent users={Following.AllUsers} chatuserclass= {Following.FollowersClasses.child} />
         </div>
         </div>
 

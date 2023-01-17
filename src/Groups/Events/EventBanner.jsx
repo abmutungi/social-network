@@ -1,5 +1,5 @@
 import React from "react";
-import ChatProfile from "../../AllChats/ChatProfile";
+import ChatProfile from "../../components/SingleProfileComponent";
 import "./Events.css"
 
 const EventBannerBody =(props)=>{

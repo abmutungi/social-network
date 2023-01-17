@@ -1,6 +1,4 @@
-
-
-.AllUsers {
+.MultipleProfiles {
   background-color: white;
   height: 30%;
   /* width: 85%; */
@@ -11,7 +9,7 @@
 }
 
 
-.AUser {
+.SingleProfile {
   display: flex;
   flex-direction: row;
   cursor: pointer;

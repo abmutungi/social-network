@@ -1,5 +1,5 @@
 
-import ChatProfile from "./ChatProfile";
+import ChatProfile from "../components/SingleProfileComponent";
 import "./AllChats.css";
 
 

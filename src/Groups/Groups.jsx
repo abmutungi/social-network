@@ -1,4 +1,4 @@
-import ChatProfile from "../AllChats/ChatProfile";
+import ChatProfile from "../components/SingleProfileComponent";
 import "./Groups.css";
 import { useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";

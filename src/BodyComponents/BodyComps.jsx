@@ -1,8 +1,7 @@
 import "../index.css";
 import AllChats from "../AllChats/Chats";
 import NavBar from "../NavBar/NavBar";
-import Users from "../Users/Users";
-import Groups from "../Groups/Groups";
+// import Groups from "../Groups/Groups";
 import PostsContainer from "../Posts/Post";
 import EventBanner from "../Groups/Events/EventBanner";
 import { AboutMe } from "../About/About";
@@ -11,6 +10,8 @@ import { Following } from "../Followers/Following";
 import { MyGroups } from "../Groups/MyGroups";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../Followers/followers.css";
+import { SideProfileContainer } from "../components/SideProfileContainer";
+import "../assets/css/Users.css"
 
 const DBData = {
   Headers: {
@@ -116,15 +117,13 @@ const LeftBodyDiv = () => {
       <div className="left-side">
         <AboutMe about={DBData.AboutMe} />
 
-        <Users
-          parentClass="AllUsers"
+        <SideProfileContainer
           headers="Users"
           data={DBData.AllUsers}
           childClass={DBData.UsersClasses.child}
         />
 
-        <Users
-          parentClass="AllGroups"
+        <SideProfileContainer
           headers="Groups"
           data={DBData.Groups}
           childClass={DBData.GroupClasses.child}
