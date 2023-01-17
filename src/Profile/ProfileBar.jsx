@@ -10,12 +10,9 @@ import {
   faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import CreatePostModal from "../Posts/CreatePost";
-import { useState } from "react";
 library.add(faCirclePlus, faLock, faUsers);
 
 const ProfileBar = () => {
-  const [show, setShow] = useState(false);
   return (
     <>
       <div className="Profile">
@@ -34,22 +31,11 @@ const ProfileBar = () => {
             OptionB={<FontAwesomeIcon icon="fa-solid fa-users" />}
           />
           <ProfileBtn
-            btnName={
-              <FontAwesomeIcon
-                onClick={() => setShow(true)}
-                icon="fa-solid fa-circle-plus"
-              />
-            }
+            btnName={<FontAwesomeIcon icon="fa-solid fa-circle-plus" />}
             className={"add-post-btn"}
           />
         </div>
       </div>
-      <CreatePostModal
-        name="Bruno"
-        profileImg="./Posts/man-utd.png"
-        onClose={() => setShow(false)}
-        show={show}
-      />
     </>
   );
 };
