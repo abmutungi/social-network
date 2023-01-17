@@ -25,7 +25,7 @@ func RunMigrationScript(db *sql.DB) error {
 		return fmt.Errorf("error creating sqlite db driver %s", err)
 	}
 
-	migration, err := migrate.NewWithDatabaseInstance("file://backend/pkg/db/migrations/sqlite", "sqlite3", driver)
+	migration, err := migrate.NewWithDatabaseInstance("file://pkg/db/migrations/sqlite", "sqlite3", driver)
 	if err != nil {
 		return fmt.Errorf("initialising db migration failed %s", err)
 	}
