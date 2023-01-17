@@ -1,4 +1,4 @@
-module github.com/abmutungi/social-network
+module github.com/abmutungi/social-network/backend
 
 go 1.19
 
