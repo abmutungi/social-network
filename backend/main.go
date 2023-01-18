@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/abmutungi/social-network/backend/pkg/db"
-	"github.com/abmutungi/social-network/backend/pkg/db/web"
+	"github.com/abmutungi/social-network/backend/pkg/web"
 )
 
 func main() {
