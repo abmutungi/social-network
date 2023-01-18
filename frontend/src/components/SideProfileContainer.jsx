@@ -1,5 +1,6 @@
 
 import { CreateEventModal } from "../pages/home/components/CreateEventModal";
+import {CreateGroupModal} from "../pages/home/components/CreateGroupsComponent"
 import { useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -14,22 +15,41 @@ library.add(faCirclePlus, faLock, faUsers);
 const SideProfileContainer = (props) => {
   const [show, setShow] = useState(false);
 
-  return (
-    <div className="MultipleProfiles">
-      <div className="ChatTitle">
-        {props.headers}{" "}
-        <FontAwesomeIcon
+  if (props.headers === "Groups") {
+    return (
+      <div className="MultipleProfiles">
+      
+        <div className="ChatTitle">
+          {props.headers}{" "}  <FontAwesomeIcon onClick={() => setShow(true)} className="create-event-btn" icon="fa-solid fa-circle-plus" />
+        <CreateGroupModal onClose={() => setShow(false)} show={show} />
+        
+
+          {/* <FontAwesomeIcon
           onClick={() => setShow(true)}
           className="create-event-btn"
           icon="fa-solid fa-circle-plus"
         />
-        <CreateEventModal onClose={() => setShow(false)} show={show} />
+        <CreateEventModal onClose={() => setShow(false)} show={show} /> */}
+        </div>
+        <div className="AllCumulativeData">
+          <MultipleProfilesComponent users={props.data} />
+        </div>
       </div>
-      <div className="AllCumulativeData">
-        <MultipleProfilesComponent users={props.data} />
+    );
+  } else {
+
+    return (
+      <div className="MultipleProfiles">
+        <div className="ChatTitle">
+          {props.headers}{" "}
+        
+        </div>
+        <div className="AllCumulativeData">
+          <MultipleProfilesComponent users={props.data} />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export { SideProfileContainer };
