@@ -27,7 +27,22 @@ const Register = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formValues);
+   
+   fetch("http://localhost:8080/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "origin":"localhost:8080"
+          
+         
+
+          
+        },
+        body: JSON.stringify(formValues),
+    })
   };
+  
 
   return (
     <>

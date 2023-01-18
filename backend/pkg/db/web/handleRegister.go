@@ -20,7 +20,7 @@ type RegistrationData struct {
 }
 
 func (s *Server) HandleRegister(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Headers", "localhost:5173/register")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	data, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Println(err)
