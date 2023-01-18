@@ -20,7 +20,7 @@ type RegistrationData struct {
 }
 
 func (s *Server) HandleRegister(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	data, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Println(err)
@@ -37,5 +37,8 @@ func (s *Server) HandleRegister(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(rd.Email)
 	fmt.Println(rd.Password)
 	fmt.Println(rd.DOB)
+	fmt.Println(rd.Nickname)
+	fmt.Println(rd.AboutMe)
+	fmt.Println(rd.Avatar)
 
 }

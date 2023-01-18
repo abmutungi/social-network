@@ -29,16 +29,12 @@ const Register = () => {
     console.log(formValues);
    
    fetch("http://localhost:8080/register", {
-        method: "POST",
+     method: "POST",
+     mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "origin":"localhost:8080"
-          
          
-
-          
-        },
+      },
         body: JSON.stringify(formValues),
     })
   };
