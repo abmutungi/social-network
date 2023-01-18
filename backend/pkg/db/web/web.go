@@ -5,14 +5,21 @@ import (
 	"net/http"
 )
 
-func Home(w http.ResponseWriter, r *http.Request){
+func (s *Server) Home(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Hello")
+	fmt.Println("Server")
 }
 
 func (s *Server) OpenServer() {
+	srv := Server{
+		Serve: &http.Server{
+			Addr:    "localhost:8080",
+			Handler: &s.Router,
+		},
+	}
 
-	mux:= s.Router
-	
-	mux.Handle("/", Home)
-	http.ListenAndServe(":8080",mux)
+	s.Routes()
+
+	srv.Serve.ListenAndServe()
+
 }
