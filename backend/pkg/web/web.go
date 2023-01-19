@@ -24,3 +24,4 @@ func (s *Server) OpenServer() {
 	srv.Serve.ListenAndServe()
 
 }
+
