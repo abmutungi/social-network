@@ -1,6 +1,9 @@
 package web
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 type User struct {
 	UserID    int
@@ -53,16 +56,25 @@ var AllUsers = []User{
 	},
 }
 
-func (s *Server) HandleDummyUsers()http.HandlerFunc {
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
+func (s *Server) HandleDummyUsers() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		if r.Method == "GET"{
-			//logic
+		enableCors(&w)
 
-			
-			
+		AllUsers, err := json.Marshal(AllUsers)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-	
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(AllUsers)
+
+
 	}
 
 }
