@@ -35,6 +35,5 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.1"
   },
-
- "proxy":"http://localhost:5173"
+  "proxy": "http://localhost:5173"
 }
