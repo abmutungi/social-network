@@ -11,6 +11,8 @@ import { MyGroups } from "./MyGroups";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../assets/css/followers.css";
 import { SideProfileContainer } from "../../../components/SideProfileContainer";
+import { useState, useEffect } from "react";
+
 import "../../../assets/css/Users.css";
 
 const DBData = {
@@ -112,6 +114,28 @@ const DBData = {
 };
 
 const LeftBodyDiv = () => {
+
+  const[users, setUsers] = useState('');
+
+  async function fetchUsers(){
+    try{
+  const response = await  fetch("http://localhost:8080/dummyusers");
+  const data = await response.json();
+  setUsers(data)
+  
+  console.log('user data received', data);
+    }catch(e){
+      console.log('Error fetching users', e);
+    }
+  
+  
+  }
+  
+  useEffect(()=>{
+    fetchUsers()
+  },[])
+
+  
   return (
     <>
       <div className="left-side">
