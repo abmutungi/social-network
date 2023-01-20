@@ -115,11 +115,11 @@ const DBData = {
 
 const LeftBodyDiv = () => {
 
-  const[users, setUsers] = useState('');
+  const[users, setUsers] = useState([]);
 
   async function fetchUsers(){
     try{
-  const response = await  fetch("http://localhost:8080/dummyusers");
+  const response = await fetch("http://localhost:8080/dummyusers");
   const data = await response.json();
   setUsers(data)
   
@@ -130,6 +130,7 @@ const LeftBodyDiv = () => {
   
   
   }
+  //console.log('check users post fetch', users)
   
   useEffect(()=>{
     fetchUsers()
@@ -139,19 +140,21 @@ const LeftBodyDiv = () => {
   return (
     <>
       <div className="left-side">
-        <AboutMe about={DBData.AboutMe} />
+        {/* <AboutMe about={DBData.AboutMe} /> */}
 
         <SideProfileContainer
           headers="Users"
-          data={DBData.AllUsers}
-          childClass={DBData.UsersClasses.child}
+          data= {users}
+          childClass="AUser"
+          type ="AllUsers"
+            
         />
 
-        <SideProfileContainer
+        {/* <SideProfileContainer
           headers="Groups"
           data={DBData.Groups}
-          childClass={DBData.GroupClasses.child}
-        />
+          childClass="AGroup"
+        /> */}
       </div>
     </>
   );

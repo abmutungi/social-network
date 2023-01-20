@@ -36,7 +36,21 @@ const SideProfileContainer = (props) => {
   } else if (props.headers === "Users"){
   
 
-console.log('Add User logic');
+    console.log('Checking passed data SPC Users', props);
+    return (
+      <div className="MultipleProfiles">
+        <div className="ChatTitle">
+          {props.headers}{" "}
+        
+        </div>
+        <div className="AllCumulativeData">
+          <MultipleProfilesComponent users={props.data} type={props.type}/>
+        </div>
+      </div>
+
+    );
+    
+
 
 
   }else {

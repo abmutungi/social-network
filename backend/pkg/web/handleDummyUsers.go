@@ -46,7 +46,7 @@ var AllUsers = []User{
 		Following: 12,
 	},
 	{
-		UserID:    1,
+		UserID:    4,
 		Firstname: "Yonas",
 		Lastname:  "Million",
 		Nickname:  "nsym",
