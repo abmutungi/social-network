@@ -25,6 +25,21 @@ const ProfileBar = () => {
     useEffect (()=>{
       let i =1
       console.log('from loop', i, userID);
+
+      fetch('http://localhost:8080/getheaderid', {
+        mode:"no-cors",
+        
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userID)
+    })
+    .then((response)=>{
+      let resp = response.json();
+      console.log('response from fetch', resp);
+    })
     
 
     },[userID])

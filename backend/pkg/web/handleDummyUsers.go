@@ -2,6 +2,7 @@ package web
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -73,6 +74,19 @@ func (s *Server) HandleDummyUsers() http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(AllUsers)
+
+
+	}
+
+}
+
+func (s *Server) HandleProfileID() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.Body)
+
+		enableCors(&w)
+
+	
 
 
 	}
