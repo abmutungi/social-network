@@ -7,6 +7,7 @@ import { MainBody } from "./pages/home/components/BodyComps";
 import { Login } from "./pages/login/components/LoginComponent";
 import { Register } from "./pages/register/components/RegistrationComponent";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { LowerHeaderProvider } from "./context/lowerheadercontext";
 import "./index.css";
 
 
@@ -22,6 +23,7 @@ hanged "/" Route to "*" in (tb38r)
 const App = () => {
   return (
     <>
+        <LowerHeaderProvider>
       <Routes>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/login" element={<Login />}></Route>
@@ -41,6 +43,7 @@ const App = () => {
 
         {/* <ChatBox/> */}
       </Routes>
+      </LowerHeaderProvider>
     </>
   );
 };

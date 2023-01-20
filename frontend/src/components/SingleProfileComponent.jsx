@@ -2,7 +2,9 @@ import React from "react";
 import "../assets/css/AllChats.css"
 import "../assets/css/Users.css"
 
+
 const SingleProfileComponent = (props) => {
+
 
   console.log('props from singleprof', props);
   if(props.type ==='AllUsers'){

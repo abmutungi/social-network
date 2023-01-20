@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { ProfileBtn, PrivateBtn } from "./ProfileBtn";
 import ProfileInfo from "./ProfileInfo";
 import "../../..//assets/css/ProfileBar.css"
@@ -13,6 +13,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 library.add(faCirclePlus, faLock, faUsers);
 
 const ProfileBar = () => {
+
+  // const[profileHeader, setProfileHeader] = useState({name:"Tolu Lawal", followers:"10", following:"8", userID: 1});
+
+  // async function fetchProfileHeader(){
+  //   try{
+  // const response = await fetch("http://localhost:8080/dummyusers");
+  // const data = await response.json();
+  // setUsers(data)
+  
+  // console.log('user data received', data);
+  //   }catch(e){
+  //     console.log('Error fetching users', e);
+  //   }
+  
+  
+  // }
+  //console.log('check users post fetch', users)
+  
+  // useEffect(()=>{
+  //   fetchUsers()
+  // },[])
+
+
   return (
     <>
       <div className="Profile">
