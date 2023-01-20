@@ -1,12 +1,17 @@
 import React from "react";
 import "../assets/css/AllChats.css"
 import "../assets/css/Users.css"
-
+import { LowerHeaderContext } from "../context/lowerheadercontext";
+import { useContext } from "react";
 
 const SingleProfileComponent = (props) => {
 
+  const getID =()=>{
+    
+  }
 
-  console.log('props from singleprof', props);
+
+ // console.log('props from singleprof', props);
   if(props.type ==='AllUsers'){
     return (
       <div className="SingleProfile" id={props.id} >

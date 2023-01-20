@@ -14,6 +14,9 @@ import { SideProfileContainer } from "../../../components/SideProfileContainer";
 import { useState, useEffect } from "react";
 
 import "../../../assets/css/Users.css";
+import { LowerHeaderProvider } from "../../../context/lowerheadercontext";
+import { LowerHeaderContext } from '../../../context/lowerheadercontext';
+import { useContext } from 'react';
 
 const DBData = {
   Headers: {
@@ -113,7 +116,14 @@ const DBData = {
   },
 };
 
+
+
+
+
 const LeftBodyDiv = () => {
+
+  const {item}=useContext(LowerHeaderContext)
+  console.log('from BodyComps', item);
 
   const[users, setUsers] = useState([]);
 
@@ -162,6 +172,7 @@ const LeftBodyDiv = () => {
 
 function MainBody() {
   return (
+    <LowerHeaderProvider>
     <div className="MainBody">
       <LeftBodyDiv />
       <div className="middle-div">
@@ -173,13 +184,14 @@ function MainBody() {
           <EventBanner />
 
           <PostsContainer />
-          <Followers Followers={DBData} />
+          {/* <Followers Followers={DBData} />
           <Following Following={DBData} />
-          <MyGroups MyGroups={DBData} />
+          <MyGroups MyGroups={DBData} /> */}
         </div>
       </div>
       <AllChats />
     </div>
+    </LowerHeaderProvider>
   );
 }
 
