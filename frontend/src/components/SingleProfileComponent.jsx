@@ -6,15 +6,17 @@ import { useContext } from "react";
 
 const SingleProfileComponent = (props) => {
 
-  const getID =()=>{
-    
+  const getID =(e)=>{
+   return e.currentTarget.id;
   }
 
+  const {item}=useContext(LowerHeaderContext)
+  console.log('from singleProf', item);
 
  // console.log('props from singleprof', props);
   if(props.type ==='AllUsers'){
     return (
-      <div className="SingleProfile" id={props.id} >
+      <div  role="presentation" onClick ={getID} className="SingleProfile" id={props.id} >
         <div className="ChatPic">
           <img
             src="https://www.facebook.com/images/fb_icon_325x325.png"

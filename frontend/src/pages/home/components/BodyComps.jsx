@@ -122,8 +122,7 @@ const DBData = {
 
 const LeftBodyDiv = () => {
 
-  const {item}=useContext(LowerHeaderContext)
-  console.log('from BodyComps', item);
+
 
   const[users, setUsers] = useState([]);
 
