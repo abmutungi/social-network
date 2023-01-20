@@ -4,6 +4,7 @@ package posts
 type Posts struct {
 	PostID int `json:"postID"`
 	UserID int `json:"userID"`
+	Username string `json:"username"`
 	TextContent string `json:"textContent"`
 	ImageContent string `json:"imgPath"`
 	CreatedAt string `json:"createdAt"`
