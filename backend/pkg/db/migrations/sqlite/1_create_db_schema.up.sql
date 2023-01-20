@@ -46,8 +46,8 @@ CREATE TABLE wallPosts(
     userID INTEGER REFERENCES users(userID),
     createdAt INTEGER NOT NULL, 
     textContent CHAR(250),
-    imageContent CHAR(50),
-    privacy INTEGER NOT NULL
+    imagePath CHAR(50),
+    privacy CHAR NOT NULL
 );
 
 CREATE TABLE groupPosts(

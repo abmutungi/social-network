@@ -11,6 +11,7 @@ const CreatePostModal = (props) => {
   const [formValues, setFormValues] = useState({
     textContent: "",
     imgPath: "",
+    privacyOption: "public",
   });
 
   // for displaying the modal
@@ -29,16 +30,17 @@ const CreatePostModal = (props) => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(formValues);
+
+    fetch("http://localhost:8080/register", {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formValues),
+    });
   };
 
-  const handleFileSelected = (e) => {
-    console.log(e.target.files[0].name);
-  };
-
-  const handleChangeAndFileSelected = (e) => {
-    handleChange(e);
-    handleFileSelected(e);
-  };
   return (
     <div className="cp-modal" onClick={props.onClose} role="presentation">
       <div
@@ -61,13 +63,21 @@ const CreatePostModal = (props) => {
             <div className="cp-name&viewer">
               <div className="cp-name cp-span">{props.name}</div>
               <select
-                name="who-can-view"
+                name="privacyOption"
                 id="who-can-view"
                 className="cp-dropdown"
+                value={formValues.privacyOption}
+                onChange={handleChange}
               >
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-                <option value="custom">Custom</option>
+                <option name="privacy" value="public">
+                  Public
+                </option>
+                <option name="privacy" value="private">
+                  Private
+                </option>
+                <option name="privacy" value="custom">
+                  Custom
+                </option>
               </select>
             </div>
           </div>
@@ -91,9 +101,10 @@ const CreatePostModal = (props) => {
               id="file-input"
               type="file"
               style={{ display: "none" }}
-              onChange={handleChangeAndFileSelected}
+              onChange={(e) => {
+                formValues.imgPath = e.target.files[0].name;
+              }}
               name="imgPath"
-              value={formValues.imgPath}
             />
           </div>
           <button className="cp-button" type="submit">
