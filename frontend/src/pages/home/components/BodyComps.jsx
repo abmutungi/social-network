@@ -171,7 +171,6 @@ const LeftBodyDiv = () => {
 
 function MainBody() {
   return (
-    <LowerHeaderProvider>
     <div className="MainBody">
       <LeftBodyDiv />
       <div className="middle-div">
@@ -190,7 +189,6 @@ function MainBody() {
       </div>
       <AllChats />
     </div>
-    </LowerHeaderProvider>
   );
 }
 

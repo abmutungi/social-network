@@ -11,8 +11,27 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 library.add(faCirclePlus, faLock, faUsers);
+import { LowerHeaderContext } from '../../../context/lowerheadercontext';
+import { useContext } from 'react';
 
 const ProfileBar = () => {
+
+
+  const { userID } = useContext(LowerHeaderContext);
+
+  
+    console.log('propsclickuser', userID);
+    
+    useEffect (()=>{
+      let i =1
+      console.log('from loop', i, userID);
+    
+
+    },[userID])
+
+
+
+
 
   // const[profileHeader, setProfileHeader] = useState({name:"Tolu Lawal", followers:"10", following:"8", userID: 1});
 
@@ -45,7 +64,7 @@ const ProfileBar = () => {
 
         <ProfileInfo
           ProfileName="Arnold Mutungi"
-          Followers="1k followers"
+          Followers={userID}
           Following="1.1k following"
         />
         <div className="ProfileBtnContainer">

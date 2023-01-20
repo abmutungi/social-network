@@ -10,7 +10,7 @@ export function LowerHeaderProvider({children}){
     const [userID, setUserID]=useState(0);
 
     const updateUserID =(id)=>{
-        setUserID(()=> id, )
+        setUserID(()=> id )
     }
     console.log('User id from context', userID);
     
