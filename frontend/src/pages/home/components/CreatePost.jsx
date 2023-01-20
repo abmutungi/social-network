@@ -11,7 +11,7 @@ const CreatePostModal = (props) => {
   const [formValues, setFormValues] = useState({
     textContent: "",
     imgPath: "",
-    privacyOption: "public",
+    privacy: "public",
   });
 
   // for displaying the modal
@@ -30,8 +30,7 @@ const CreatePostModal = (props) => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(formValues);
-
-    fetch("http://localhost:8080/register", {
+    fetch("http://localhost:8080/", {
       method: "POST",
       mode: "no-cors",
       headers: {
@@ -39,6 +38,7 @@ const CreatePostModal = (props) => {
       },
       body: JSON.stringify(formValues),
     });
+    // setFormValues("");
   };
 
   return (
@@ -66,7 +66,7 @@ const CreatePostModal = (props) => {
                 name="privacyOption"
                 id="who-can-view"
                 className="cp-dropdown"
-                value={formValues.privacyOption}
+                value={formValues.privacy}
                 onChange={handleChange}
               >
                 <option name="privacy" value="public">

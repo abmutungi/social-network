@@ -1,6 +1,7 @@
 package web
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -22,10 +23,15 @@ func (s *Server) handleCreatePost() http.HandlerFunc {
 		fmt.Println(string(data), "here is the data before unmarshall")
 
 		// variable to hold json data after its unmarshalled
-		var createPostData posts.Posts
+		var cPD posts.Post
 
-		json.Unmarshal(data, &createPostData)
+		json.Unmarshal(data, &cPD)
 		
-		fmt.Println("createPostdata",createPostData)
+		fmt.Println("createPostdata",cPD)
+
+		// store post data in database
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		posts.CreatePost(s.Db, cPD.TextContent, cPD.Privacy,cPD.ImagePath)
+
 	}
 }
