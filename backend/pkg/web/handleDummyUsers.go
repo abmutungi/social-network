@@ -14,6 +14,7 @@ type User struct {
 	AboutText []string
 	Followers int
 	Following int
+	Privacy int
 }
 
 var AllUsers = []User{
@@ -26,6 +27,7 @@ var AllUsers = []User{
 		AboutText: []string{"Kang is inevitable"},
 		Followers: 10,
 		Following: 9,
+		Privacy: 1,
 	},
 
 	{
@@ -36,24 +38,30 @@ var AllUsers = []User{
 		AboutText: []string{"Museveni minion"},
 		Followers: 9,
 		Following: 8,
+		Privacy: 2,
+
 	},
 	{
 		UserID:    3,
 		Firstname: "Sarmad",
 		Lastname:  "Khatri",
-		Nickname:  "tb38r",
+		Nickname:  "eternal17",
 		AboutText: []string{"Toppest of Reds"},
 		Followers: 8,
 		Following: 12,
+		Privacy: 1,
+
 	},
 	{
 		UserID:    4,
 		Firstname: "Yonas",
 		Lastname:  "Million",
 		Nickname:  "nsym",
-		AboutText: []string{"I love Harold Kane <3"},
+		AboutText: []string{"I <3 Harold Kane"},
 		Followers: 9,
 		Following: 11,
+		Privacy: 2,
+
 	},
 }
 
