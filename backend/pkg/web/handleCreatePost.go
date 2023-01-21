@@ -10,9 +10,13 @@ import (
 	"github.com/abmutungi/social-network/backend/pkg/posts"
 )
 
+// func enableCors(w *http.ResponseWriter) {
+// 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+// }
+
 func (s *Server) handleCreatePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
+		// enableCors(&w)
 		// data recieved from frontend
 		data, err := io.ReadAll(r.Body)
 
@@ -32,6 +36,6 @@ func (s *Server) handleCreatePost() http.HandlerFunc {
 		// store post data in database
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 		posts.CreatePost(s.Db, cPD.TextContent, cPD.Privacy,cPD.ImagePath)
-
+		// w.Header().Set("Content-Type", "application/json")
 	}
 }

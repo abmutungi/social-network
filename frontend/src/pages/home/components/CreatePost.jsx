@@ -14,11 +14,16 @@ const CreatePostModal = (props) => {
     privacy: "public",
   });
 
+  // state for when image is uploaded
+  const [imgUpload, setImgUpload] = useState(false);
+  console.log(imgUpload);
+
   // for displaying the modal
   if (!props.show) {
     return null;
   }
 
+  // function to handle when form inputs are changed
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
@@ -27,18 +32,20 @@ const CreatePostModal = (props) => {
     });
   };
 
+  // functino to handle when form is submitted.
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(formValues);
     fetch("http://localhost:8080/", {
-      method: "POST",
       mode: "no-cors",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formValues),
     });
-    // setFormValues("");
+
+    setFormValues("");
   };
 
   return (
@@ -82,6 +89,7 @@ const CreatePostModal = (props) => {
             </div>
           </div>
           <textarea
+            required
             className="cp-text-content"
             placeholder="Write Something..."
             type="text"
@@ -89,6 +97,7 @@ const CreatePostModal = (props) => {
             value={formValues.textContent}
             onChange={handleChange}
           ></textarea>
+          <span className="cp-img-details">{formValues.imgPath}</span>
           <div className="cp-add-img">
             <div className="cp-span">Add image to your post</div>
             <label htmlFor="file-input">
@@ -103,6 +112,7 @@ const CreatePostModal = (props) => {
               style={{ display: "none" }}
               onChange={(e) => {
                 formValues.imgPath = e.target.files[0].name;
+                setImgUpload(true);
               }}
               name="imgPath"
             />
