@@ -123,14 +123,15 @@ const DBData = {
 const LeftBodyDiv = () => {
 
 
-
-  const[users, setUsers] = useState([]);
+  const { initialDBData, updateinitialDB } = useContext(LowerHeaderContext);
+  //const[users, setUsers] = useState([]);
 
   async function fetchUsers(){
     try{
   const response = await fetch("http://localhost:8080/dummyusers");
   const data = await response.json();
-  setUsers(data)
+  updateinitialDB(data)
+  //setUsers(data)
   
   console.log('user data received', data);
     }catch(e){
@@ -139,6 +140,10 @@ const LeftBodyDiv = () => {
   
   
   }
+
+  
+  
+  console.log('test', initialDBData);
   //console.log('check users post fetch', users)
   
   useEffect(()=>{
@@ -153,7 +158,7 @@ const LeftBodyDiv = () => {
 
         <SideProfileContainer
           headers="Users"
-          data= {users}
+          data= {initialDBData}
           childClass="AUser"
           type ="AllUsers"
             

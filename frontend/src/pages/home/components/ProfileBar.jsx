@@ -12,62 +12,45 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 library.add(faCirclePlus, faLock, faUsers);
 import { LowerHeaderContext } from '../../../context/lowerheadercontext';
-import { useContext } from 'react';
+import { useContext, usestate } from 'react';
 
 const ProfileBar = () => {
 
 
   const { userID } = useContext(LowerHeaderContext);
+  const { initialDBData } = useContext(LowerHeaderContext);
 
+  const [firstName, setfirstName]= useState('Tolu');
+  const [lastName, setlastName]= useState('Lawal');
+  const [followers, setfollowers]= useState(10);
+  const [following, setfollowing]= useState(8);
+
+
+const updateStates = (id)=>{
+  if(id>0){
+    for (const obj of initialDBData) {
+      if(obj.UserID ==id){
+        setfirstName(obj.Firstname)
+        setlastName(obj.Lastname)
+        setfollowers(obj.Followers)
+        setfollowing(obj.Following)
+      }
+    }
+  }else{
+    return
+  }
+}
+
+
+useEffect(()=>{
+  updateStates(userID)
   
-    console.log('propsclickuser', userID);
-    
-    useEffect (()=>{
-      let i =1
-      console.log('from loop', i, userID);
-
-      fetch('http://localhost:8080/getheaderid', {
-        mode:"no-cors",
-        
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userID)
-    })
-    .then((response)=>{
-      let resp = response.json();
-      console.log('response from fetch', resp);
-    })
-    
-
-    },[userID])
+},[userID])
 
 
 
-
-
-  // const[profileHeader, setProfileHeader] = useState({name:"Tolu Lawal", followers:"10", following:"8", userID: 1});
-
-  // async function fetchProfileHeader(){
-  //   try{
-  // const response = await fetch("http://localhost:8080/dummyusers");
-  // const data = await response.json();
-  // setUsers(data)
-  
-  // console.log('user data received', data);
-  //   }catch(e){
-  //     console.log('Error fetching users', e);
-  //   }
-  
-  
-  // }
-  //console.log('check users post fetch', users)
-  
-  // useEffect(()=>{
-  //   fetchUsers()
-  // },[])
+  console.log('from profileBar', initialDBData);
+    console.log('profilebarclickuser', userID);
 
 
   return (
@@ -78,9 +61,9 @@ const ProfileBar = () => {
         </div>
 
         <ProfileInfo
-          ProfileName="Arnold Mutungi"
-          Followers={userID}
-          Following="1.1k following"
+          ProfileName={`${firstName}${' '}${lastName}`}
+          Followers={`${followers} followers`}
+          Following={`${following} following`}
         />
         <div className="ProfileBtnContainer">
           <PrivateBtn
