@@ -2,7 +2,6 @@ package web
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -14,7 +13,7 @@ type User struct {
 	AboutText []string
 	Followers int
 	Following int
-	Privacy int
+	Privacy   int
 }
 
 var AllUsers = []User{
@@ -27,7 +26,7 @@ var AllUsers = []User{
 		AboutText: []string{"Kang is inevitable"},
 		Followers: 10,
 		Following: 9,
-		Privacy: 1,
+		Privacy:   1,
 	},
 
 	{
@@ -38,8 +37,7 @@ var AllUsers = []User{
 		AboutText: []string{"Museveni minion"},
 		Followers: 9,
 		Following: 8,
-		Privacy: 2,
-
+		Privacy:   2,
 	},
 	{
 		UserID:    3,
@@ -49,8 +47,7 @@ var AllUsers = []User{
 		AboutText: []string{"Toppest of Reds"},
 		Followers: 8,
 		Following: 12,
-		Privacy: 1,
-
+		Privacy:   1,
 	},
 	{
 		UserID:    4,
@@ -60,8 +57,7 @@ var AllUsers = []User{
 		AboutText: []string{"I <3 Harold Kane"},
 		Followers: 9,
 		Following: 11,
-		Privacy: 2,
-
+		Privacy:   2,
 	},
 }
 
@@ -82,20 +78,6 @@ func (s *Server) HandleDummyUsers() http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(Users)
-
-
-	}
-
-}
-
-func (s *Server) HandleProfileID() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println(r.Body)
-
-		enableCors(&w)
-
-	
-
 
 	}
 
