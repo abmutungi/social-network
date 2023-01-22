@@ -74,14 +74,14 @@ func (s *Server) HandleDummyUsers() http.HandlerFunc {
 
 		enableCors(&w)
 
-		AllUsers, err := json.Marshal(AllUsers)
+		Users, err := json.Marshal(AllUsers)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(AllUsers)
+		w.Write(Users)
 
 
 	}

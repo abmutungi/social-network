@@ -88,14 +88,7 @@ const DBData = {
     "2011 Rashford Fan Club",
     "Sancho Support Club",
     "AirBnB crew",
-    "Black & White Army",
-    "2011 Rashford Fan Club",
-    "Sancho Support Club",
-    "AirBnB crew",
-    "AgendaZone",
-    "Ski Club",
-    "Suya Society",
-    "SuperEaglesSupporters",
+
     "AgendaZone",
     "Ski Club",
     "Suya Society",
@@ -123,7 +116,8 @@ const DBData = {
 const LeftBodyDiv = () => {
 
 
-  const { initialDBData, updateinitialDB } = useContext(LowerHeaderContext);
+  const { initialDBData, updateinitialDB,AllGroupsData, updateAllGroupsData  } = useContext(LowerHeaderContext);
+
   //const[users, setUsers] = useState([]);
 
   async function fetchUsers(){
@@ -137,17 +131,32 @@ const LeftBodyDiv = () => {
     }catch(e){
       console.log('Error fetching users', e);
     }
+  }
+
+
+  async function fetchGroups(){
+    try{
+  const response = await fetch("http://localhost:8080/dummygroups");
+  const data = await response.json();
+  updateAllGroupsData(data)
+  //setUsers(data)
   
-  
+  console.log('group data received', data);
+    }catch(e){
+      console.log('Error fetching groups', e);
+    }
   }
 
   
   
-  console.log('test', initialDBData);
+  console.log('testinitialDB', initialDBData);
+  console.log('testAllGroupData', AllGroupsData);
+
   //console.log('check users post fetch', users)
   
   useEffect(()=>{
     fetchUsers()
+    fetchGroups()
   },[])
 
   
