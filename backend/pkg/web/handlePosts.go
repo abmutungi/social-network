@@ -39,3 +39,8 @@ func (s *Server) handleCreatePost() http.HandlerFunc {
 		// w.Header().Set("Content-Type", "application/json")
 	}
 }
+
+func (s *Server) TestDBfunctions() {
+	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+	fmt.Println(posts.GetAllUserPosts(s.Db, 1))
+}

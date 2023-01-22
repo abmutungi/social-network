@@ -17,8 +17,6 @@ type Post struct {
 
 
 func CreatePost(db *sql.DB, textContent string, postPrivacy string, imgPath string) {
-	//stmt, err := db.Prepare("INSERT INTO posts (username, postTitle, postContent, categories, creationDate) 
-	//VALUES (?, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
 	stmt, err := db.Prepare("INSERT INTO wallPosts (userID,textContent, privacy, imagePath, createdAt) VALUES (1, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
 
 	if err != nil {
@@ -35,4 +33,29 @@ func CreatePost(db *sql.DB, textContent string, postPrivacy string, imgPath stri
 	LastIns, _ := res.LastInsertId()
 	fmt.Println("rows affected: ", rowsAff)
 	fmt.Println("last inserted id: ", LastIns)
+}
+
+// get all posts that belong to a userID.
+// Need to add corresponding comments, when db comment function is done
+func GetAllUserPosts(db *sql.DB, userID int) []Post {
+	rows, err := db.Query("SELECT wallPostID, userID, createdAt, textContent, imagePath, privacy FROM wallPosts WHERE userID = ?", userID)
+
+	if err != nil {
+		fmt.Printf("error querying getAllUserPosts statement: %v", err)
+	}
+
+	posts := []Post{}
+
+	defer db.Close()
+	defer rows.Close()
+	for rows.Next() {
+		var p Post
+		err2 := rows.Scan(&p.PostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.Privacy)
+		if err2 != nil {
+			fmt.Printf("error scaning rows for posts: %v", err2)
+		}
+		posts = append(posts, p)
+	}
+
+	return posts
 }
