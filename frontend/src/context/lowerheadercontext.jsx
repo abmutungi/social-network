@@ -8,7 +8,7 @@ export const LowerHeaderContext = createContext();
 export function LowerHeaderProvider({children}){
 
     const [userID, setUserID]=useState(0);
-    const [initialDBData, setinitialDBData]=useState([]);
+    const [DBAllUsers, setDBAllUsers]=useState([]);
 
     const [GroupID, setGroupID]=useState(0);
     const [AllGroupsData, setAllGroupsData]=useState([]);
@@ -19,7 +19,7 @@ export function LowerHeaderProvider({children}){
     }
 
     const updateinitialDB =(data)=>{
-        setinitialDBData(()=> data)
+        setDBAllUsers(()=> data)
     }
 
 
@@ -34,11 +34,13 @@ export function LowerHeaderProvider({children}){
 
     
     console.log('User id from context', userID);
+    console.log('Groupid from context', GroupID);
+
     
     //value={{item:{name:"Tolu Lawal", userid:1}}}
 
     return(
-        <LowerHeaderContext.Provider value={{userID, initialDBData, updateUserID, updateinitialDB,GroupID,updateGroupID, AllGroupsData, updateAllGroupsData}}>
+        <LowerHeaderContext.Provider value={{userID, DBAllUsers, updateUserID, updateinitialDB,GroupID,updateGroupID, AllGroupsData, updateAllGroupsData}}>
             {children}
             </LowerHeaderContext.Provider>
     );

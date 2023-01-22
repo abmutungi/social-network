@@ -8,8 +8,8 @@ import { useContext } from 'react';
 
 function LowerHeader() {
 
-  const { userID } = useContext(LowerHeaderContext);
-  console.log('from lowerheader', userID);
+  // const { userID, GroupID } = useContext(LowerHeaderContext);
+  // console.log('from lowerheader', userID);
 
     return (
       <div className="LowerHeader">

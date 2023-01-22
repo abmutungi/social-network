@@ -19,6 +19,9 @@ const SideProfileContainer = (props) => {
 
 
   if (props.headers === "Groups") {
+    console.log('Checking passed data SPC Groups', props);
+
+
     return (
       <div className="MultipleProfiles">
       
@@ -29,14 +32,14 @@ const SideProfileContainer = (props) => {
 
         </div>
         <div className="AllCumulativeData">
-          <MultipleProfilesComponent users={props.data} />
+          <MultipleProfilesComponent users={props.data} type={props.type}/>
         </div>
       </div>
     );
   } else if (props.headers === "Users"){
   
 
-    console.log('Checking passed data SPC Users', props);
+    //console.log('Checking passed data SPC Users', props);
     return (
       <div className="MultipleProfiles">
         <div className="ChatTitle">

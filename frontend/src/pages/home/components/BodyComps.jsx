@@ -116,7 +116,7 @@ const DBData = {
 const LeftBodyDiv = () => {
 
 
-  const { initialDBData, updateinitialDB,AllGroupsData, updateAllGroupsData  } = useContext(LowerHeaderContext);
+  const { DBAllUsers, updateinitialDB,AllGroupsData, updateAllGroupsData  } = useContext(LowerHeaderContext);
 
   //const[users, setUsers] = useState([]);
 
@@ -149,7 +149,7 @@ const LeftBodyDiv = () => {
 
   
   
-  console.log('testinitialDB', initialDBData);
+  console.log('testDAllUsers', DBAllUsers);
   console.log('testAllGroupData', AllGroupsData);
 
   //console.log('check users post fetch', users)
@@ -167,17 +167,19 @@ const LeftBodyDiv = () => {
 
         <SideProfileContainer
           headers="Users"
-          data= {initialDBData}
+          data= {DBAllUsers}
           childClass="AUser"
           type ="AllUsers"
             
         />
 
-        {/* <SideProfileContainer
+        <SideProfileContainer
           headers="Groups"
-          data={DBData.Groups}
+          data={AllGroupsData}
           childClass="AGroup"
-        /> */}
+          type ="AllGroups"
+
+        />
       </div>
     </>
   );
