@@ -16,7 +16,7 @@ import { LowerHeaderContext } from '../../../context/lowerheadercontext';
 const ProfileBar = () => {
 
 
-  const {DBAllUsers, AllGroupsData , userID, updateUserID, GroupID, updateGroupID } = useContext(LowerHeaderContext);
+  const {DBAllUsers, AllGroupsData , userID, updateUserID, GroupID, updateGroupID, updateAboutText } = useContext(LowerHeaderContext);
 
   const [firstName, setfirstName]= useState('Tolu');
   const [lastName, setlastName]= useState('Lawal');
@@ -37,6 +37,7 @@ const updateProfileStates = (userid, groupid)=>{
         setlastName(obj.Lastname)
         setfollowers(`${obj.Followers} ${'followers'}`)
         setfollowing(`${obj.Following} ${'following'}`)
+        updateAboutText(obj.AboutText)
       }
     }
     updateGroupID(0)
@@ -47,6 +48,8 @@ const updateProfileStates = (userid, groupid)=>{
         setlastName("")
         setfollowing(`${obj.Members} ${'members'}`)
         setfollowers('')
+        updateAboutText(obj.AboutText)
+
       }
     }
   }
@@ -56,7 +59,7 @@ const updateProfileStates = (userid, groupid)=>{
 
 useEffect(()=>{
   updateProfileStates(userID, GroupID)
-  
+     // eslint-disable-next-line react-hooks/exhaustive-deps
 },[userID, GroupID])
 
 

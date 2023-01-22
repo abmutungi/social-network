@@ -13,6 +13,8 @@ export function LowerHeaderProvider({children}){
     const [GroupID, setGroupID]=useState(0);
     const [AllGroupsData, setAllGroupsData]=useState([]);
 
+    const [AboutText, setAboutText]=useState('About Text Placeholder');
+
 
     const updateUserID =(id)=>{
         setUserID(()=> id )
@@ -31,16 +33,14 @@ export function LowerHeaderProvider({children}){
         setAllGroupsData(()=> data)
     }
 
+    const updateAboutText=(data)=>{
+        setAboutText(()=> data)
+    }
 
-    
-    console.log('User id from context', userID);
-    console.log('Groupid from context', GroupID);
 
-    
-    //value={{item:{name:"Tolu Lawal", userid:1}}}
 
     return(
-        <LowerHeaderContext.Provider value={{userID, DBAllUsers, updateUserID, updateinitialDB,GroupID,updateGroupID, AllGroupsData, updateAllGroupsData}}>
+        <LowerHeaderContext.Provider value={{userID, DBAllUsers, updateUserID, updateinitialDB,GroupID,updateGroupID, AllGroupsData, updateAllGroupsData, AboutText, updateAboutText}}>
             {children}
             </LowerHeaderContext.Provider>
     );

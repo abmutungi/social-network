@@ -19,8 +19,6 @@ const SideProfileContainer = (props) => {
 
 
   if (props.headers === "Groups") {
-    console.log('Checking passed data SPC Groups', props);
-
 
     return (
       <div className="MultipleProfiles">

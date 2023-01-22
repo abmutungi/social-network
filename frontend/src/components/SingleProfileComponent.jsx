@@ -5,13 +5,8 @@ import { LowerHeaderContext } from "../context/lowerheadercontext";
 import { useContext } from "react";
 
 const SingleProfileComponent = (props) => {
-  const { userID,GroupID, updateUserID, updateGroupID } = useContext(LowerHeaderContext);
+  const { updateUserID, updateGroupID } = useContext(LowerHeaderContext);
 
-  // console.log("from singleProf", userID);
-  // console.log("from singleProf", GroupID);
-
-
-  // console.log('props from singleprof', props);
   if (props.type === "AllUsers") {
     return (
       <div

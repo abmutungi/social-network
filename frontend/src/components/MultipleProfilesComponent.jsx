@@ -1,7 +1,7 @@
 import SingleProfileComponent from "./SingleProfileComponent";
 
 const MultipleProfilesComponent = ({ users, type }) => {
-  console.log("checking props in MPC", users, type);
+ 
 
   if (type === "AllGroups") {
     return users.map((user, index) => {
