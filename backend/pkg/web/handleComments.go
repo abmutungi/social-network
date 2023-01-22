@@ -1,6 +1,7 @@
 package web
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -21,5 +22,8 @@ func (s *Server) handleComment() http.HandlerFunc {
 		json.Unmarshal(data, &cd)
 		
 		fmt.Println("comments json",cd)
+
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		comment.StoreComment(s.Db, cd.TextContent, cd.ImageContent)
 	}
 }
