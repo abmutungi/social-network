@@ -1,9 +1,0 @@
-CreatePosts
-
-- Currently if user chooses custom privacy, there is no logic. 
-Also on the backend, there is a field in the db for privacy,
-but if the option is custom with a set of friends, 
-how are we going to input the data
-
-- Routing for createPost hasnt been defined. Possible solution is that
-we use localhost:5173/createpost/{userId}
