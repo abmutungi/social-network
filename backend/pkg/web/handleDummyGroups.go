@@ -30,14 +30,14 @@ var AllGroups = []Group{
 		GroupName: "Black & White Army",
 		CreatorID: 1,
 		AboutText: []string{"For Fans of the Northern Football Giant"},
-		Members:   50000000,
+		Members:   497567554,
 	},
 
 	{
 		GroupID:   2,
 		GroupName: "2011 Rashford Fan Club",
 		CreatorID: 2,
-		AboutText: []string{"Where Rashford stans unite"},
+		AboutText: []string{"Rashford stans unite"},
 		Members:   2941,
 	},
 	{
@@ -51,7 +51,7 @@ var AllGroups = []Group{
 		GroupID:   5,
 		GroupName: "Ski Club",
 		CreatorID: 4,
-		AboutText: []string{"We love to ski"},
+		AboutText: []string{"We’re here to help you plan and enjoy your winter adventures, make the most of your time in the mountains, and ensure that you feel part of the UK’s largest snowsports community. "},
 		Members:   46540,
 	},
 }
