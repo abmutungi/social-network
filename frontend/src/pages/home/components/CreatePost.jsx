@@ -32,7 +32,7 @@ const CreatePostModal = (props) => {
     });
   };
 
-  // functino to handle when form is submitted.
+  // function to handle form submission.
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(formValues);

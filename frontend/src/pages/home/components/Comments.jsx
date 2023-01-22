@@ -1,5 +1,7 @@
 // This component returns a single comment.
 
+import { useState } from "react";
+
 const SingleComment = ({ commentObj }) => {
   return (
     <div className="single-comment">
@@ -22,6 +24,27 @@ const SingleComment = ({ commentObj }) => {
 // This is the comments container that will hold comment input and many single comments passed into it.
 
 const Comments = () => {
+  // state for comment input
+  const [comment, setComment] = useState("");
+
+  // function to handle form submission
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+
+    const formData = new FormData(form);
+    const commentJson = Object.fromEntries(formData.entries());
+    fetch("http://localhost:8080/", {
+      mode: "no-cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commentJson),
+    });
+    setComment("");
+  };
+
   return (
     <>
       <div className="comments-container">
@@ -31,11 +54,22 @@ const Comments = () => {
             src="../assets/img/ext/man-utd.png"
             alt="img"
           />
-          <textarea
-            className="comment-input"
-            placeholder="Write a comment..."
-            rows={1}
-          ></textarea>
+          <form
+            style={{ display: "contents" }}
+            onSubmit={handleCommentSubmit}
+            role="presentation"
+          >
+            <input
+              name="textContent"
+              value={comment}
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+              className="comment-input"
+              placeholder="Write a comment..."
+              rows={1}
+            ></input>
+          </form>
         </div>
         <SingleComment
           commentObj={{

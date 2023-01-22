@@ -24,8 +24,6 @@ func (s *Server) handleCreatePost() http.HandlerFunc {
 			fmt.Printf("error from createPost request: %v", err)
 		}
 
-		fmt.Println(string(data), "here is the data before unmarshall")
-
 		// variable to hold json data after its unmarshalled
 		var cPD posts.Post
 
