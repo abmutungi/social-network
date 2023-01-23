@@ -107,8 +107,8 @@ CREATE TABLE invitees(
 
 CREATE TABLE notifications(
     notificationID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    type CHAR(50) NOT NULL,
-    notifyee INTEGER REFERENCES users(userID),
+    notificationType CHAR(50) NOT NULL,
+    notifiyee INTEGER REFERENCES users(userID),
     notifier INTEGER REFERENCES users(userID),
     read INTEGER DEFAULT 0 NOT NULL,
     actioned INTEGER DEFAULT 0 NOT NULL
