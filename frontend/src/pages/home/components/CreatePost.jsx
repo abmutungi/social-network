@@ -8,43 +8,39 @@ library.add(faImage, faXmark);
 
 // All classNames start with cp(short for createpost)
 const CreatePostModal = (props) => {
-  const [formValues, setFormValues] = useState({
-    textContent: "",
-    imgPath: "",
-    privacy: "public",
-  });
+  // const [formValues, setFormValues] = useState({
+  //   textContent: "",
+  //   imgPath: "",
+  //   privacy: "public",
+  // });
+
+  const [textContent, setTextContent] = useState("");
+  const [img, setImg] = useState(null);
+  const [privacy, setPrivacy] = useState("public");
 
   // state for when image is uploaded
-  const [imgUpload, setImgUpload] = useState(null);
+  const [imgName, setImgName] = useState("");
 
   // for displaying the modal
   if (!props.show) {
     return null;
   }
 
-  // function to handle when form inputs are changed
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
-
   // function to handle form submission.
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:8080/", {
+    const formData = new FormData(e.target);
+    formData.append("imgName", imgName);
+    console.log("form data in obj", Object.fromEntries(formData.entries()));
+
+    fetch("http://localhost:8080/createpost", {
       mode: "no-cors",
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formValues),
+      body: formData,
     });
 
-    setFormValues("");
+    // setFormValues("");
   };
 
   return (
@@ -72,8 +68,10 @@ const CreatePostModal = (props) => {
                 name="privacyOption"
                 id="who-can-view"
                 className="cp-dropdown"
-                value={formValues.privacy}
-                onChange={handleChange}
+                value={privacy}
+                onChange={(e) => {
+                  setPrivacy(e.target.value);
+                }}
               >
                 <option name="privacy" value="public">
                   Public
@@ -93,12 +91,12 @@ const CreatePostModal = (props) => {
             placeholder="Write Something..."
             type="text"
             name="textContent"
-            value={formValues.textContent}
-            onChange={handleChange}
+            value={textContent}
+            onChange={(e) => {
+              setTextContent(e.target.value);
+            }}
           ></textarea>
-          <span className="cp-img-details" value={imgUpload}>
-            {formValues.imgPath}
-          </span>
+          {img && <span className="cp-img-details">{imgName}</span>}
           <div className="cp-add-img">
             <div className="cp-span">Add image to your post</div>
             <label htmlFor="file-input">
@@ -112,23 +110,10 @@ const CreatePostModal = (props) => {
               type="file"
               style={{ display: "none" }}
               onChange={(e) => {
-                formValues.imgPath = e.target.files[0].name;
-                const imgFormData = new FormData();
-                imgFormData.append("image", e.target.files[0]);
-                console.log(
-                  Object.fromEntries(imgFormData.entries()),
-                  "image form data"
-                );
-
-                fetch("http://localhost:8080/img", {
-                  mode: "no-cors",
-                  method: "POST",
-                  body: imgFormData,
-                });
-
-                setImgUpload(true);
+                setImg(e.target.files[0]);
+                setImgName(e.target.files[0].name);
               }}
-              name="imgPath"
+              name="uploadedPostImg"
             />
           </div>
           <button className="cp-button" type="submit">
