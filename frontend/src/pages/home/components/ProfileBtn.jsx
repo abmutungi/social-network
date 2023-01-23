@@ -22,7 +22,7 @@ const PrivateBtn = (props) => {
   const [isFunction, setIsFunction] = useState(true);
 
   return (
-    <button className="privacy-btn" onClick={() => setIsFunction(!isFunction)}>
+    <button className={props.className} onClick={() => setIsFunction(!isFunction)}>
       {isFunction ? props.OptionA : props.OptionB}
     </button>
   );

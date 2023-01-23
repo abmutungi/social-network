@@ -3,7 +3,7 @@ import TopHeader from "./pages/home/components/TopHeader";
 import { LowerHeader } from "./pages/home/components/LowerHeader";
 import { MainBody } from "./pages/home/components/BodyComps";
 
-// import {ChatBox} from "./ChatBox/ChatBoxComponent"
+// import { ChatBox } from "./pages/home/components/ChatBoxComponent";
 import { Login } from "./pages/login/components/LoginComponent";
 import { Register } from "./pages/register/components/RegistrationComponent";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
@@ -35,11 +35,11 @@ const App = () => {
               <LowerHeader />
               <MainBody />
             
+              {/* <ChatBox/> */}
             </>
           }
         ></Route>
 
-        {/* <ChatBox/> */}
       </Routes>
     </>
   );

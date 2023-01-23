@@ -34,7 +34,7 @@
 
 .privacy-btn {
   display: flex;
-  width: 125px;
+  width: 100px;
   padding: 7.5px 16px;
   height: fit-content;
   background-color: #1877f2;
@@ -50,7 +50,7 @@
 
 .add-post-btn {
   display: flex;
-  width: 125px;
+  width: 100px;
   padding: 7.5px 16px;
   height: fit-content;
   background-color: #1877f2;
@@ -99,4 +99,25 @@
 
 .Profile-follow {
   display: flex;
+}
+
+
+.followIcon {
+  display: flex;
+  width: 100px;
+  padding: 7.5px 16px;
+  height: fit-content;
+  background-color: #1877f2;
+  border: none;
+  margin: 32px 16px;
+  box-sizing: border-box;
+  justify-content: center;
+  color: white;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.icon-text {
+    margin-left: 10px;
 }
