@@ -1,20 +1,20 @@
 import React from "react";
-import { ProfileBtn, PrivateBtn } from "./ProfileBtn";
+import { ProfilePostBtn, PrivateBtn } from "./ProfilePostBtn";
 import ProfileInfo from "./ProfileInfo";
 import "../../..//assets/css/ProfileBar.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 // import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
+import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import {
   faLock,
   faUsers,
   faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { UserRequestBtn } from "../../../components/UserRequestBtn";
-library.add(faCirclePlus, faLock, faUsers);
+import { follow, UserRequestBtn } from "../../../components/UserRequestBtn";
+library.add(faCirclePlus, faUserGroup, faLock, faUsers);
 
 const ProfileBar = () => {
-  
   return (
     <>
       <div className="Profile">
@@ -43,7 +43,7 @@ const ProfileBar = () => {
               </>
             }
           />
-          <ProfileBtn
+          <ProfilePostBtn
             btnName={
               <>
                 <FontAwesomeIcon icon="fa-solid fa-circle-plus" />
@@ -52,9 +52,7 @@ const ProfileBar = () => {
             }
             className={"add-post-btn"}
           />
-          <UserRequestBtn
-            isPublic={false}
-          />
+          <UserRequestBtn isPublic={false} followStatus={followText} />
         </div>
       </div>
     </>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import CreatePostModal from "../../home/components/CreatePost"
+import CreatePostModal from "./CreatePost"
 
-const ProfileBtn = (props) => {
+const ProfilePostBtn = (props) => {
   const [show, setShow] = useState(false);
   return (
     <>
@@ -28,4 +28,4 @@ const PrivateBtn = (props) => {
   );
 };
 
-export { ProfileBtn, PrivateBtn };
+export { ProfilePostBtn, PrivateBtn };

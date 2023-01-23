@@ -6,15 +6,14 @@ import (
 	"log"
 )
 
-
-func StoreFollowing(db *sql.DB, userID, followerID int) {
-	stmt, err := db.Prepare("INSERT INTO relationships (userID, followerID) VALUES (?, ?)")
+func StoreFollowing(db *sql.DB, loggedInUser, userID int) {
+	stmt, err := db.Prepare("INSERT INTO relationships (followerID, userID) VALUES (?, ?)")
 	if err != nil {
 		fmt.Println("error adding relationship into db")
 		return
 	}
 
-	result, _ := stmt.Exec(userID, followerID)
+	result, _ := stmt.Exec(loggedInUser, userID)
 	rowsAff, _ := result.RowsAffected()
 	LastIns, _ := result.LastInsertId()
 	fmt.Println("rows affected:", rowsAff)
@@ -33,7 +32,6 @@ func FollowingMeCheck(db *sql.DB, userID, followerID int) bool {
 	for rows.Next() {
 		err := rows.Scan(&user, &follower)
 		if err != sql.ErrNoRows {
-			log.Println("With FollowingMeCheck fn()", err)
 			log.Println("User already follows me")
 			return true
 		}
@@ -42,7 +40,7 @@ func FollowingMeCheck(db *sql.DB, userID, followerID int) bool {
 	return false
 }
 
-// checking if loggedInUser follows user 
+// checking if loggedInUser follows user
 func FollowingYouCheck(db *sql.DB, userID, followerID int) bool {
 	rows, err := db.Query(`SELECT userID, followerID FROM relationships WHERE userID = ? AND followerID = ?;`, followerID, userID)
 	if err != nil {
@@ -55,11 +53,23 @@ func FollowingYouCheck(db *sql.DB, userID, followerID int) bool {
 	for rows.Next() {
 		err := rows.Scan(&user, &follower)
 		if err != sql.ErrNoRows {
-			log.Println("With FollowingYouCheck fn()", err)
 			log.Println("I already follow this user")
 			return true
 		}
 	}
 	log.Println("I'm not following this user")
 	return false
+}
+
+func UnfollowUser(db *sql.DB, loggedInUser, userID int) {
+	res, err := db.Exec(`DELETE FROM relationships WHERE followerID = ? AND userID = ?;`, loggedInUser, userID)
+	if err != nil {
+		panic(err)
+	}
+	count, err := res.RowsAffected()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(count)
+	fmt.Println("UNFOLLOWED USER")
 }
