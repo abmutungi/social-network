@@ -15,8 +15,7 @@ const CreatePostModal = (props) => {
   });
 
   // state for when image is uploaded
-  const [imgUpload, setImgUpload] = useState(false);
-  console.log(imgUpload);
+  const [imgUpload, setImgUpload] = useState(null);
 
   // for displaying the modal
   if (!props.show) {
@@ -97,7 +96,9 @@ const CreatePostModal = (props) => {
             value={formValues.textContent}
             onChange={handleChange}
           ></textarea>
-          <span className="cp-img-details">{formValues.imgPath}</span>
+          <span className="cp-img-details" value={imgUpload}>
+            {formValues.imgPath}
+          </span>
           <div className="cp-add-img">
             <div className="cp-span">Add image to your post</div>
             <label htmlFor="file-input">
