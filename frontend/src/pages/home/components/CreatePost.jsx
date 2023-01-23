@@ -34,7 +34,7 @@ const CreatePostModal = (props) => {
   // function to handle form submission.
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log(formValues);
+
     fetch("http://localhost:8080/", {
       mode: "no-cors",
       method: "POST",
@@ -113,6 +113,19 @@ const CreatePostModal = (props) => {
               style={{ display: "none" }}
               onChange={(e) => {
                 formValues.imgPath = e.target.files[0].name;
+                const imgFormData = new FormData();
+                imgFormData.append("image", e.target.files[0]);
+                console.log(
+                  Object.fromEntries(imgFormData.entries()),
+                  "image form data"
+                );
+
+                fetch("http://localhost:8080/img", {
+                  mode: "no-cors",
+                  method: "POST",
+                  body: imgFormData,
+                });
+
                 setImgUpload(true);
               }}
               name="imgPath"

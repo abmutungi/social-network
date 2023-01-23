@@ -6,4 +6,5 @@ func (s *Server) Routes() {
 	// s.Router.HandleFunc("/", s.handleCreatePost())
 	s.Router.HandleFunc("/", s.handleComment())
 	// s.TestDBfunctions()
+	s.Router.HandleFunc("/img", s.HandleImage())
 }

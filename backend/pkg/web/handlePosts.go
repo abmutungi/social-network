@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/abmutungi/social-network/backend/pkg/posts"
 )
@@ -41,4 +42,29 @@ func (s *Server) handleCreatePost() http.HandlerFunc {
 func (s *Server) TestDBfunctions() {
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 	fmt.Println(posts.GetAllUserPosts(s.Db, 1))
+}
+
+func (s *Server) HandleImage() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		// 10MB max file size
+		r.ParseMultipartForm(10 << 20) 
+		file, fileInfo, err:= r.FormFile("image")
+
+		if err != nil {
+			fmt.Printf("failed to get image: %v", err)
+			return
+		}
+		defer file.Close()
+
+		// creating the file in the specific path needed
+		dst, err := os.Create("../frontend/src/assets/" + fileInfo.Filename)
+		if err != nil {
+			fmt.Printf("error creating file: %v", err)
+			return 
+		}
+		defer dst.Close()
+
+		io.Copy(dst, file)
+	}
 }
