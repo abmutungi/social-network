@@ -8,12 +8,7 @@ library.add(faImage, faXmark);
 
 // All classNames start with cp(short for createpost)
 const CreatePostModal = (props) => {
-  // const [formValues, setFormValues] = useState({
-  //   textContent: "",
-  //   imgPath: "",
-  //   privacy: "public",
-  // });
-
+  // set inital states for form inputs
   const [textContent, setTextContent] = useState("");
   const [img, setImg] = useState(null);
   const [privacy, setPrivacy] = useState("public");
@@ -28,7 +23,9 @@ const CreatePostModal = (props) => {
 
   // function to handle form submission.
   const handleFormSubmit = (e) => {
-    e.preventDefault();
+    // currently not preventing submit default action as need page to reload after submission.
+    // eventually will redirect to home after the create post route is known.
+    // e.preventDefault();
 
     const formData = new FormData(e.target);
     formData.append("imgName", imgName);
@@ -40,7 +37,10 @@ const CreatePostModal = (props) => {
       body: formData,
     });
 
-    // setFormValues("");
+    // reset state for inputs on submit
+    setTextContent("");
+    setImg(null);
+    setPrivacy("public");
   };
 
   return (
