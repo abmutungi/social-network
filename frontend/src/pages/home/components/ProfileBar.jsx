@@ -1,5 +1,5 @@
 import { ProfilePostBtn, PrivateBtn } from "./ProfilePostBtn";
-import React, {useState, useEffect,useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ProfileInfo from "./ProfileInfo";
 import "../../..//assets/css/ProfileBar.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -13,72 +13,81 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { followText, UserRequestBtn } from "../../../components/UserRequestBtn";
 library.add(faCirclePlus, faUserGroup, faLock, faUsers);
-import { LowerHeaderContext } from '../../../context/lowerheadercontext';
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { ProfilePhoto } from "./ProfilePhoto";
+const ProfileBar = (
+  // pbPhoto,
+  // pbProfileInfo,
+  // pbPrivacyBtn,
+  // pbPostBtn,
+  // pbFollowBtn,
+  // pbInviteBtn
+) => {
+  const {
+    DBAllUsers,
+    AllGroupsData,
+    userID,
+    updateUserID,
+    GroupID,
+    updateGroupID,
+    updateAboutText,
+    ProfilePhotoBackground,
+  } = useContext(LowerHeaderContext);
 
-const ProfileBar = () => {
+  const [firstName, setfirstName] = useState("Tolu");
+  const [lastName, setlastName] = useState("Lawal");
+  const [followers, setfollowers] = useState("10 Followers");
+  const [following, setfollowing] = useState("8 Following");
 
-
-  const {DBAllUsers, AllGroupsData , userID, updateUserID, GroupID, updateGroupID, updateAboutText } = useContext(LowerHeaderContext);
-
-  const [firstName, setfirstName]= useState('Tolu');
-  const [lastName, setlastName]= useState('Lawal');
-  const [followers, setfollowers]= useState('10 Followers');
-  const [following, setfollowing]= useState('8 Following');
-
-
-/*
+  /*
 {GroupID: 2, GroupName: '2011 Rashford Fan Club', CreatorID: 2, 
 AboutText: Array(1), Members: 2941}
 
 */
-const updateProfileStates = (userid, groupid)=>{
-  if(userid>0){
-    for (const obj of DBAllUsers) {
-      if(obj.UserID ==userid){
-        setfirstName(obj.Firstname)
-        setlastName(obj.Lastname)
-        setfollowers(`${obj.Followers} ${'followers'}`)
-        setfollowing(`${obj.Following} ${'following'}`)
-        updateAboutText(obj.AboutText)
+  const updateProfileStates = (userid, groupid) => {
+    if (userid > 0) {
+      for (const obj of DBAllUsers) {
+        if (obj.UserID == userid) {
+          setfirstName(obj.Firstname);
+          setlastName(obj.Lastname);
+          setfollowers(`${obj.Followers} ${"followers"}`);
+          setfollowing(`${obj.Following} ${"following"}`);
+          updateAboutText(obj.AboutText);
+        }
+      }
+      updateGroupID(0);
+    } else if (GroupID > 0) {
+      for (const obj of AllGroupsData) {
+        if (obj.GroupID == groupid) {
+          setfirstName(obj.GroupName);
+          setlastName("");
+          setfollowing(`${obj.Members} ${"members"}`);
+          setfollowers("");
+          updateAboutText(obj.AboutText);
+        }
       }
     }
-    updateGroupID(0)
-  }else if(GroupID>0){
-    for (const obj of AllGroupsData) {
-      if(obj.GroupID ==groupid){
-        setfirstName(obj.GroupName)
-        setlastName("")
-        setfollowing(`${obj.Members} ${'members'}`)
-        setfollowers('')
-        updateAboutText(obj.AboutText)
+    updateUserID(0);
+  };
 
-      }
-    }
-  }
-  updateUserID(0)
-}
-
-
-useEffect(()=>{
-  updateProfileStates(userID, GroupID)
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-},[userID, GroupID])
-
-
+  useEffect(() => {
+    updateProfileStates(userID, GroupID);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userID, GroupID]);
 
   // console.log('from profileBar', DBAllUsers);
   //   console.log('profilebarclickuser', userID);
-
 
   return (
     <>
       <div className="Profile">
         <div className="ProfilePicContainer">
-          <div className="ProfilePic" />
+          {/* <div className="ProfilePic" /> */}
         </div>
+        <ProfilePhoto background={ProfilePhotoBackground} />
 
         <ProfileInfo
-          ProfileName={`${firstName}${' '}${lastName}`}
+          ProfileName={`${firstName}${" "}${lastName}`}
           Followers={followers}
           Following={following}
         />

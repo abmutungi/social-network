@@ -1,56 +1,61 @@
 import { createContext, useState } from "react";
 
-
 export const LowerHeaderContext = createContext();
 
+export function LowerHeaderProvider({ children }) {
+  const [userID, setUserID] = useState(0);
+  const [DBAllUsers, setDBAllUsers] = useState([]);
 
+  const [GroupID, setGroupID] = useState(0);
+  const [AllGroupsData, setAllGroupsData] = useState([]);
 
-export function LowerHeaderProvider({children}){
+  const [AboutText, setAboutText] = useState("About Text Placeholder");
 
-    const [userID, setUserID]=useState(0);
-    const [DBAllUsers, setDBAllUsers]=useState([]);
+  const [ProfilePhotoBackground, setProfilePhotoBackground] =
+    useState("man-utd.png");
 
-    const [GroupID, setGroupID]=useState(0);
-    const [AllGroupsData, setAllGroupsData]=useState([]);
+  const updateUserID = (id) => {
+    setUserID(() => id);
+  };
 
-    const [AboutText, setAboutText]=useState('About Text Placeholder');
+  const updateinitialDB = (data) => {
+    setDBAllUsers(() => data);
+  };
 
+  const updateGroupID = (id) => {
+    setGroupID(() => id);
+  };
 
-    const updateUserID =(id)=>{
-        setUserID(()=> id )
-    }
+  const updateAllGroupsData = (data) => {
+    setAllGroupsData(() => data);
+  };
 
-    const updateinitialDB =(data)=>{
-        setDBAllUsers(()=> data)
-    }
+  const updateAboutText = (data) => {
+    setAboutText(() => data);
+  };
 
+  const updateProfilePhotoBackground = (data) => {
+    setProfilePhotoBackground(() => data);
+  };
 
-    const updateGroupID =(id)=>{
-        setGroupID(()=> id )
-    }
-
-    const updateAllGroupsData =(data)=>{
-        setAllGroupsData(()=> data)
-    }
-
-    const updateAboutText=(data)=>{
-        setAboutText(()=> data)
-    }
-
-
-
-    return(
-        <LowerHeaderContext.Provider value={{userID, DBAllUsers, updateUserID, updateinitialDB,GroupID,updateGroupID, AllGroupsData, updateAllGroupsData, AboutText, updateAboutText}}>
-            {children}
-            </LowerHeaderContext.Provider>
-    );
+  return (
+    <LowerHeaderContext.Provider
+      value={{
+        userID,
+        DBAllUsers,
+        updateUserID,
+        updateinitialDB,
+        GroupID,
+        updateGroupID,
+        AllGroupsData,
+        updateAllGroupsData,
+        AboutText,
+        updateAboutText,
+        ProfilePhotoBackground,
+        updateProfilePhotoBackground,
+      }}
+    >
+      {children}
+    </LowerHeaderContext.Provider>
+  );
 }
-
-
-
-
-
-
-
-
-
