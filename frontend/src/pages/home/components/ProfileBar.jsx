@@ -11,7 +11,7 @@ import {
   faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { follow, UserRequestBtn } from "../../../components/UserRequestBtn";
+import { followText, UserRequestBtn } from "../../../components/UserRequestBtn";
 library.add(faCirclePlus, faUserGroup, faLock, faUsers);
 
 const ProfileBar = () => {
@@ -52,7 +52,7 @@ const ProfileBar = () => {
             }
             className={"add-post-btn"}
           />
-          <UserRequestBtn isPublic={false} followStatus={followText} />
+          <UserRequestBtn isPublic={true} followStatus={followText} />
         </div>
       </div>
     </>
