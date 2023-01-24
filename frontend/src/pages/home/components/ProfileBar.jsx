@@ -52,7 +52,7 @@ const ProfileBar = () => {
             }
             className={"add-post-btn"}
           />
-          <UserRequestBtn isPublic={true} followStatus={followText} />
+          <UserRequestBtn isPublic={false} followStatus={followText} />
         </div>
       </div>
     </>

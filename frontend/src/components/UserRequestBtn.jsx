@@ -1,9 +1,9 @@
 import { React, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUserGroup, faUserLock } from "@fortawesome/free-solid-svg-icons";
+import { faUserGroup, faUserLock , faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 // import { UseIdFromUrl} from '../hooks/UseIdFromUrl'
-library.add(faUserGroup, faUserLock);
+library.add(faUserGroup, faUserLock, faCircleXmark);
 
 import "../assets/css/ProfileBar.css";
 
@@ -14,10 +14,10 @@ const followText = (
   </>
 );
 
-const followingText = (
+const unfollowText = (
   <>
-    <FontAwesomeIcon icon={faUserGroup} />
-    <span className="icon-text"> Following</span>
+    <FontAwesomeIcon icon={faCircleXmark} />
+    <span className="icon-text"> Unfollow</span>
   </>
 );
 
@@ -34,7 +34,7 @@ const UserRequestBtn = (props) => {
   const handleClick = () => {
     if (props.isPublic) {
       if (status === followText) {
-        setStatus(followingText);
+        setStatus(unfollowText);
 
         fetch("http://localhost:8080/follow", {
           method: "POST",
@@ -45,7 +45,7 @@ const UserRequestBtn = (props) => {
         });
         //.then((document.getElementById("profileFollowBtn").disabled = true));
         console.log("...now following Arnold Mutungi");
-      } else if (status === followingText) {
+      } else if (status === unfollowText) {
         setStatus(followText);
         fetch("http://localhost:8080/unfollow", {
           method: "POST",
@@ -68,7 +68,7 @@ const UserRequestBtn = (props) => {
           }),
         });
         console.log("...follow request sent to Arnold Mutungi");
-      } else if (status === followingText) {
+      } else if (status === unfollowText) {
         setStatus(followText);
         fetch("http://localhost:8080/unfollow", {
           method: "POST",
