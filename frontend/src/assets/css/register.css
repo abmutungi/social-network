@@ -40,6 +40,7 @@
   cursor: pointer;
   outline: none;
   border: none;
+  width: auto;
 }
 
 .register-form > input {
@@ -71,4 +72,20 @@ input:focus {
   border-color: #1b74e4;
   /* border: #1b74e4 solid 1px; */
   outline-color: #1b74e4;
+}
+
+.errorMsg {
+  color: red;
+  position: absolute;
+  left: 1000px;
+  top: 55px;
+  font-size: large;
+}
+
+.successMsg {
+  color: green;
+  position: absolute;
+  left: 1000px;
+  top: 60px;
+  font-size: large;
 }

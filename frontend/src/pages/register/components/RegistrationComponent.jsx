@@ -1,11 +1,18 @@
 import React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../../assets/css/register.css";
 import { Login } from "../../login/components/LoginComponent";
 import { Link, Route, Routes } from "react-router-dom";
 
 const Register = () => {
+  //State to hold errors
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
+
   // State to store form values
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = useState({
     email: "",
     password: "",
     firstName: "",
@@ -17,6 +24,7 @@ const Register = () => {
   });
 
   const handleChange = (event) => {
+    setErrorMessage("");
     const { name, value } = event.target;
     setFormValues({
       ...formValues,
@@ -26,23 +34,42 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     console.log(formValues);
 
-    fetch("http://localhost:8080/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        origin: "localhost:8080",
-      },
-      mode: "no-cors",
-      body: JSON.stringify(formValues),
-    });
+    async function sendRegistrationData() {
+      const response = await fetch("http://localhost:8080/register", {
+        method: "POST",
+        body: JSON.stringify(formValues),
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        setErrorMessage(data.regMsg);
+      } else {
+        setSuccessMessage(
+          "You have successfully registered and are now being redirected to the log in page!"
+        );
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
+    }
+
+    sendRegistrationData();
+  };
+
+  const printData = (data) => {
+    console.log(data);
   };
 
   return (
     <>
       <div className="login-logo">LOGO FOR THE SOCIAL NETWORK</div>
+      {errorMessage && <div className="errorMsg">{errorMessage}</div>}
+      {successMessage && <div className="successMsg">{successMessage}</div>}
       <div className="register-container">
         <form className="register-form" onSubmit={handleSubmit}>
           <input

@@ -1,11 +1,14 @@
 package web
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/abmutungi/social-network/backend/pkg/register"
 )
 
 type RegistrationData struct {
@@ -19,15 +22,30 @@ type RegistrationData struct {
 	Avatar   string `json:"avatar"`
 }
 
+type RegistrationResponse struct {
+	Message     string `json:"regMsg"`
+	ErrorExists bool   `json:"error"`
+}
+
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Accept, Content-Length, Authorization")
+	(*w).Header().Set("Access-Control-Allow-Method", "POST, GET, OPTIONS, DELETE")
+
+}
+
 func (s *Server) HandleRegister() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
+		enableCors(&w)
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		var regResp RegistrationResponse
 		data, err := io.ReadAll(r.Body)
 		if err != nil {
 			log.Println(err)
 		}
 
-		fmt.Println(string(data))
+		fmt.Println("checking data --> ", string(data))
 
 		var rd RegistrationData
 
@@ -41,6 +59,40 @@ func (s *Server) HandleRegister() http.HandlerFunc {
 		fmt.Println(rd.Nickname)
 		fmt.Println(rd.AboutMe)
 		fmt.Println(rd.Avatar)
+
+		fmt.Println("Checking if email exists --> ", register.CheckEmailExists(s.Db, rd.Email))
+		if register.CheckEmailExists(s.Db, rd.Email) {
+			sendRegistrationMessage(w, regResp, true, "Email already exists, please log in using it!")
+			return
+		}
+		fmt.Println("Checking if domain used is valid --> ", register.ValidEmailDomainCheck(rd.Email))
+		fmt.Println("Checking password is valid --> ", register.CheckPasswordValid(rd.Password))
+		if register.CheckPasswordValid(rd.Password) {
+			fmt.Println(register.EncryptPassword(rd.Password))
+			sendRegistrationMessage(w, regResp, false, "Registration valid")
+			register.StoreNewUserInDatabase(s.Db, rd.Email, register.EncryptPassword(rd.Password), rd.FName, rd.LName, rd.DOB, rd.Avatar, rd.Nickname, rd.AboutMe, 0)
+		} else if !register.CheckPasswordValid(rd.Password) {
+			sendRegistrationMessage(w, regResp, true, "Password invalid, make sure it satisfies all requirements!")
+			return
+		}
+
 	}
 
+<<<<<<< HEAD
 }
+=======
+}
+
+func sendRegistrationMessage(w http.ResponseWriter, regResp RegistrationResponse, errExists bool, msg string) {
+	regResp.Message = msg
+	regResp.ErrorExists = errExists
+	fmt.Println("rr check -> ", regResp)
+	resp, err := json.Marshal(regResp)
+	if err != nil {
+		fmt.Println("Error marshalling error message struct --> ", err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(resp))
+
+}
+>>>>>>> yonasLRSTuesday
