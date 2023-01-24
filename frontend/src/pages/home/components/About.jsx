@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAddressCard } from '@fortawesome/free-regular-svg-icons';
 
 
-function AboutMe({about}) {
+function AboutMe({text}) {
 
     return(
         <div className="about-container">
@@ -13,7 +13,7 @@ function AboutMe({about}) {
             </div>
             <FontAwesomeIcon icon={faAddressCard} /> 
             <div className="about-description">
-            {about.description}
+            {text}
             </div>
             </div>
         </div>

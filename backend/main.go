@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/abmutungi/social-network/backend/pkg/db"
@@ -14,6 +15,11 @@ func main() {
 	}
 
 	log.Println("succesfully run migrations")
+
+	for key, value := range web.AllUsers {
+
+		fmt.Println(key, value)
+	}
 
 	var s web.Server
 

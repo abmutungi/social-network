@@ -5,6 +5,9 @@ import "../../../index.css";
 
 
 function LowerHeader() {
+
+
+
     return (
       <div className="LowerHeader">
         <ProfileBar />

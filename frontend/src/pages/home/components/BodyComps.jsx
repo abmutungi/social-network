@@ -5,36 +5,18 @@ import NavBar from "./NavBar";
 import PostsContainer from "./Post";
 import EventBanner from "./EventBanner";
 import { AboutMe } from "./About";
-import { Followers } from "./Followers";
-import { Following } from "./Following";
-import { MyGroups } from "./MyGroups";
+
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../assets/css/followers.css";
 import { SideProfileContainer } from "../../../components/SideProfileContainer";
+import {  useEffect } from "react";
+
 import "../../../assets/css/Users.css";
+import { LowerHeaderContext } from '../../../context/lowerheadercontext';
+import { useContext } from 'react';
 
 const DBData = {
-  Headers: {
-    chats: "Chats",
-    groupchats: "Group Chats",
-    users: "Users",
-    Groups: "Groups",
-  },
-  Chats: [
-    "Tolu",
-    "Sarmad",
-    "Arnold",
-    "Yonas",
-    "Tolu",
-    "Sarmad",
-    "Arnold",
-    "Yonas",
-    "Tolu",
-    "Sarmad",
-    "Arnold",
-    "Yonas",
-  ],
-  ChatClasses: { parent: "UserChats", child: "ChatProfile" },
+
   GroupChats: [
     "AgendaZone",
     "Ski Club",
@@ -73,55 +55,71 @@ const DBData = {
     child: "AUser",
   },
   FollowersClasses: { parent: "AllFollowers", child: "AFollower" },
-  Groups: [
-    "Black & White Army",
-    "2011 Rashford Fan Club",
-    "Sancho Support Club",
-    "AirBnB crew",
-    "Black & White Army",
-    "2011 Rashford Fan Club",
-    "Sancho Support Club",
-    "AirBnB crew",
-    "AgendaZone",
-    "Ski Club",
-    "Suya Society",
-    "SuperEaglesSupporters",
-    "AgendaZone",
-    "Ski Club",
-    "Suya Society",
-    "SuperEaglesSupporters",
-    "AgendaZone",
-    "Ski Club",
-    "Suya Society",
-    "SuperEaglesSupporters",
-    "AgendaZone",
-    "Ski Club",
-    "Suya Society",
-    "SuperEaglesSupporters",
-  ],
-  GroupClasses: { parent: "AllGroups", child: "AGroup" },
-  AboutMe: {
-    description:
-      "Bienvenidos a la página de Facebook Oficial de Leo Messi. Welcome to the official Leo Messi Facebook.",
-  },
+
 };
 
+
+
+
+
 const LeftBodyDiv = () => {
+
+
+  const { DBAllUsers, updateinitialDB,AllGroupsData, updateAllGroupsData, AboutText } = useContext(LowerHeaderContext);
+
+
+  async function fetchUsers(){
+    try{
+  const response = await fetch("http://localhost:8080/dummyusers");
+  const data = await response.json();
+  updateinitialDB(data)
+  
+  console.log('user data received', data);
+    }catch(e){
+      console.log('Error fetching users', e);
+    }
+  }
+
+
+  async function fetchGroups(){
+    try{
+  const response = await fetch("http://localhost:8080/dummygroups");
+  const data = await response.json();
+  updateAllGroupsData(data)
+  
+  console.log('group data received', data);
+    }catch(e){
+      console.log('Error fetching groups', e);
+    }
+  }
+
+  
+  useEffect(()=>{
+    fetchUsers()
+    fetchGroups()
+       // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
+  
   return (
     <>
       <div className="left-side">
-        <AboutMe about={DBData.AboutMe} />
+        <AboutMe text={AboutText} />
 
         <SideProfileContainer
           headers="Users"
-          data={DBData.AllUsers}
-          childClass={DBData.UsersClasses.child}
+          data= {DBAllUsers}
+          childClass="AUser"
+          type ="AllUsers"
+            
         />
 
         <SideProfileContainer
           headers="Groups"
-          data={DBData.Groups}
-          childClass={DBData.GroupClasses.child}
+          data={AllGroupsData}
+          childClass="AGroup"
+          type ="AllGroups"
+
         />
       </div>
     </>
@@ -141,9 +139,9 @@ function MainBody() {
           <EventBanner />
 
           <PostsContainer />
-          <Followers Followers={DBData} />
+          {/* <Followers Followers={DBData} />
           <Following Following={DBData} />
-          <MyGroups MyGroups={DBData} />
+          <MyGroups MyGroups={DBData} /> */}
         </div>
       </div>
       <AllChats />

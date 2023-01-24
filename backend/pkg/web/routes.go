@@ -6,4 +6,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/follow", s.HandlePublicFollow())
 	s.Router.HandleFunc("/followRequest", s.HandlePrivateFollow())
 	s.Router.HandleFunc("/unfollow", s.HandleUnfollow())
+	s.Router.HandleFunc("/dummyusers", s.HandleDummyUsers())
+	s.Router.HandleFunc("/dummygroups", s.HandleDummyGroups())
+
 }
