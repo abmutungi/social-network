@@ -65,6 +65,7 @@ const PostsContainer = () => {
     setPosts(data);
   }
 
+  // make a network request on component render.
   useEffect(() => {
     fetchPosts();
   });
