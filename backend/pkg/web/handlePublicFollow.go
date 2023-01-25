@@ -16,9 +16,7 @@ type FollowerPublicData struct {
 	Follower int `json:"followerID"`
 }
 
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}
+
 
 func (s *Server) HandlePublicFollow() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

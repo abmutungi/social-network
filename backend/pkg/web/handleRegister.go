@@ -78,10 +78,8 @@ func (s *Server) HandleRegister() http.HandlerFunc {
 
 	}
 
-<<<<<<< HEAD
 }
-=======
-}
+
 
 func sendRegistrationMessage(w http.ResponseWriter, regResp RegistrationResponse, errExists bool, msg string) {
 	regResp.Message = msg
@@ -95,4 +93,3 @@ func sendRegistrationMessage(w http.ResponseWriter, regResp RegistrationResponse
 	w.Write([]byte(resp))
 
 }
->>>>>>> yonasLRSTuesday
