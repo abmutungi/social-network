@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import CreatePostModal from "./CreatePost"
+import CreatePostModal from "./CreatePost";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ProfilePostBtn = (props) => {
+
+const ProfilePostBtn = () => {
   const [show, setShow] = useState(false);
   return (
     <>
-      <button onClick={() => setShow(true)} className={props.className}>
-        {props.btnName}
+      <button onClick={() => setShow(true)} className={"add-post-btn"}>
+        <FontAwesomeIcon icon="fa-solid fa-circle-plus" />
+        <span className="icon-text">Post</span>
       </button>
       <CreatePostModal
         name="Bruno"
@@ -22,7 +25,10 @@ const PrivateBtn = (props) => {
   const [isFunction, setIsFunction] = useState(true);
 
   return (
-    <button className={props.className} onClick={() => setIsFunction(!isFunction)}>
+    <button
+      className={props.className}
+      onClick={() => setIsFunction(!isFunction)}
+    >
       {isFunction ? props.OptionA : props.OptionB}
     </button>
   );
