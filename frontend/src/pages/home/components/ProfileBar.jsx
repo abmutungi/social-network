@@ -1,10 +1,13 @@
-import { ProfilePostBtn, PrivateBtn } from "./ProfilePostBtn";
+import { ProfilePostBtn } from "./ProfilePostBtn";
+import { PrivateBtn } from "./PrivateBtn";
 import React, { useState, useEffect, useContext } from "react";
 import ProfileInfo from "./ProfileInfo";
 import "../../..//assets/css/ProfileBar.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 // import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
+import { fetchRelationship } from '../../../components/SingleProfileComponent'
+  
 import {
   faLock,
   faUsers,
@@ -16,6 +19,9 @@ library.add(faCirclePlus, faUserGroup, faLock, faUsers);
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { ProfilePhoto } from "./ProfilePhoto";
 import { ProfileEventBtn } from "./ProfileEventBtn";
+import { GroupRequestBtn } from "./GroupRequestBtn";
+import { StaticBtn } from "./StaticBtn";
+import { GroupInviteBtn } from "./GroupInviteBtn";
 const ProfileBar = () =>
   // pbPhoto,
   // pbProfileInfo,
@@ -33,6 +39,7 @@ const ProfileBar = () =>
       updateGroupID,
       updateAboutText,
       ProfilePhotoBackground,
+      LoggedInUserID
     } = useContext(LowerHeaderContext);
 
     const [firstName, setfirstName] = useState("Tolu");
@@ -73,6 +80,8 @@ AboutText: Array(1), Members: 2941}
 
     useEffect(() => {
       updateProfileStates(userID, GroupID);
+      fetchRelationship(LoggedInUserID, userID);
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userID, GroupID]);
 
@@ -109,8 +118,11 @@ AboutText: Array(1), Members: 2941}
               }
             />
             <ProfilePostBtn />
-            <UserRequestBtn isPublic={false} followStatus={followText} />
+            <UserRequestBtn isPublic={true} followStatus={followText} />
             <ProfileEventBtn />
+            <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
+            <StaticBtn status={"Private"} />
+            <GroupInviteBtn />
           </div>
         </div>
       </>

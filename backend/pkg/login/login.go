@@ -106,7 +106,8 @@ func GetAllUserData(db *sql.DB) []User {
 		AllUsers = append(AllUsers, a)
 
 		if err != sql.ErrNoRows {
-			log.Println("Error getting all users", err)
+			//fmt.Println(AllUsers)
+			log.Println("Is it this error", err)
 
 		}
 

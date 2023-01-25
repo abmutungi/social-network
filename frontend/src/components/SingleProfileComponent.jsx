@@ -4,14 +4,31 @@ import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
 import { useContext } from "react";
 
+export async function fetchRelationship(lgInUser, userProfile){
+  try {
+    const response = await fetch("http://localhost:8080/followCheck", {
+      method: "POST",
+      body: JSON.stringify({
+        userID: lgInUser,
+        toFollowerID: userProfile,
+      }),
+    });
+    const data = response.json()
+    console.log("*************DATA RECIEVED************************",data)
+  } catch (e) {
+    console.log("error fetching relationshiip", e);
+  }
+}
+
 const SingleProfileComponent = (props) => {
   const { updateUserID, updateGroupID } = useContext(LowerHeaderContext);
-
+  
   if (props.type === "AllUsers") {
     return (
       <div
         role="presentation"
-        onClick={(e)=>updateUserID(e.currentTarget.id)}
+        onClick={(e) => updateUserID(e.currentTarget.id)
+        }
         className="SingleProfile"
         id={props.id}
       >

@@ -1,5 +1,4 @@
 import { createContext, useState } from "react";
-
 export const LowerHeaderContext = createContext();
 
 export function LowerHeaderProvider({ children }) {
@@ -13,6 +12,8 @@ export function LowerHeaderProvider({ children }) {
 
   const [ProfilePhotoBackground, setProfilePhotoBackground] =
     useState("man-utd.png");
+
+  const [LoggedInUserID] = useState(1);
 
   const updateUserID = (id) => {
     setUserID(() => id);
@@ -53,6 +54,7 @@ export function LowerHeaderProvider({ children }) {
         updateAboutText,
         ProfilePhotoBackground,
         updateProfilePhotoBackground,
+        LoggedInUserID,
       }}
     >
       {children}
