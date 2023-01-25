@@ -9,14 +9,13 @@ import { AboutMe } from "./About";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../assets/css/followers.css";
 import { SideProfileContainer } from "../../../components/SideProfileContainer";
-import {  useEffect } from "react";
+import { useEffect } from "react";
 
 import "../../../assets/css/Users.css";
-import { LowerHeaderContext } from '../../../context/lowerheadercontext';
-import { useContext } from 'react';
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { useContext } from "react";
 
 const DBData = {
-
   GroupChats: [
     "AgendaZone",
     "Ski Club",
@@ -28,24 +27,8 @@ const DBData = {
     "SuperEaglesSupporters",
   ],
   GroupChatClasses: { parent: "GroupChats", child: "GroupProfile" },
-  AllUsers: [
-    "Nate",
-    "Keivon",
-    "Ricky",
-    "Sarmad",
-    "Tolu",
-    "Arnold",
-    "Yonas",
-  ],
-  Followers: [
-    "Nate",
-    "Keivon",
-    "Ricky",
-    "Sarmad",
-    "Tolu",
-    "Arnold",
-    "Yonas",
-  ],
+  AllUsers: ["Nate", "Keivon", "Ricky", "Sarmad", "Tolu", "Arnold", "Yonas"],
+  Followers: ["Nate", "Keivon", "Ricky", "Sarmad", "Tolu", "Arnold", "Yonas"],
 
   UsersClasses: {
     users: "AllUsers",
@@ -55,52 +38,48 @@ const DBData = {
     child: "AUser",
   },
   FollowersClasses: { parent: "AllFollowers", child: "AFollower" },
-
 };
 
-
-
-
-
 const LeftBodyDiv = () => {
+  const {
+    DBAllUsers,
+    updateinitialDB,
+    AllGroupsData,
+    updateAllGroupsData,
+    AboutText,
+  } = useContext(LowerHeaderContext);
 
+  async function fetchUsers() {
+    try {
+      const response = await fetch("http://localhost:8080/dummyusers");
+      const data = await response.json();
 
-  const { DBAllUsers, updateinitialDB,AllGroupsData, updateAllGroupsData, AboutText } = useContext(LowerHeaderContext);
+      updateinitialDB(data);
 
-
-  async function fetchUsers(){
-    try{
-  const response = await fetch("http://localhost:8080/dummyusers");
-  const data = await response.json();
-  updateinitialDB(data)
-  
-  console.log('user data received', data);
-    }catch(e){
-      console.log('Error fetching users', e);
+      console.log("user data received", data);
+    } catch (e) {
+      console.log("Error fetching users", e);
     }
   }
 
+  async function fetchGroups() {
+    try {
+      const response = await fetch("http://localhost:8080/dummygroups");
+      const data = await response.json();
+      updateAllGroupsData(data);
 
-  async function fetchGroups(){
-    try{
-  const response = await fetch("http://localhost:8080/dummygroups");
-  const data = await response.json();
-  updateAllGroupsData(data)
-  
-  console.log('group data received', data);
-    }catch(e){
-      console.log('Error fetching groups', e);
+      console.log("group data received", data);
+    } catch (e) {
+      console.log("Error fetching groups", e);
     }
   }
 
-  
-  useEffect(()=>{
-    fetchUsers()
-    fetchGroups()
-       // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  useEffect(() => {
+    fetchUsers();
+    fetchGroups();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  
   return (
     <>
       <div className="left-side">
@@ -108,18 +87,16 @@ const LeftBodyDiv = () => {
 
         <SideProfileContainer
           headers="Users"
-          data= {DBAllUsers}
+          data={DBAllUsers}
           childClass="AUser"
-          type ="AllUsers"
-            
+          type="AllUsers"
         />
 
         <SideProfileContainer
           headers="Groups"
           data={AllGroupsData}
           childClass="AGroup"
-          type ="AllGroups"
-
+          type="AllGroups"
         />
       </div>
     </>

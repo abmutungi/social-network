@@ -2,7 +2,7 @@ package web
 
 import (
 	"database/sql"
-	"fmt"
+	"encoding/json"
 	"net/http"
 
 	"github.com/abmutungi/social-network/backend/pkg/login"
@@ -72,21 +72,19 @@ type User struct {
 
 func (s *Server) HandleDummyUsers() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		enableCors(&w)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-fmt.Println("databaseusers", login.GetAllUserData(s.Db))
-		// Users, err := json.Marshal(AllUsers)
-		// if err != nil {
-		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-		// 	return
-		// }
+		databaseusers := login.GetAllUserData(s.Db)
 
-		// w.Header().Set("Content-Type", "application/json")
-		// w.Write(Users)
+		Users, err := json.Marshal(databaseusers)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(Users)
 	}
-
 }
