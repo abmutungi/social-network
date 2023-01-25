@@ -25,7 +25,7 @@ const SingleComment = ({ commentObj }) => {
 
 const Comments = () => {
   // state for comment input
-  const [comment, setComment] = useState("");
+  const [commentInput, setCommentInput] = useState("");
 
   // function to handle form submission
   const handleCommentSubmit = (e) => {
@@ -42,7 +42,7 @@ const Comments = () => {
       },
       body: JSON.stringify(commentJson),
     });
-    setComment("");
+    setCommentInput("");
   };
 
   return (
@@ -61,9 +61,9 @@ const Comments = () => {
           >
             <input
               name="textContent"
-              value={comment}
+              value={commentInput}
               onChange={(e) => {
-                setComment(e.target.value);
+                setCommentInput(e.target.value);
               }}
               className="comment-input"
               placeholder="Write a comment..."

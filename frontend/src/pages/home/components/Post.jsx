@@ -78,7 +78,7 @@ const PostsContainer = () => {
             key={post.postID}
             postObj={{
               imgPath: "../assets/img/ext/man-utd.png",
-              name: "Casemiro",
+              name: post.name,
               date: post.createdAt,
               textContent: post.textContent,
               commentsCount: 100,

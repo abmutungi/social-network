@@ -13,6 +13,7 @@ type Post struct {
 	ImagePath string `json:"imgPath"`
 	CreatedAt string `json:"createdAt"`
 	Privacy string `json:"privacy"`
+	FName string `json:"name"`
 }
 
 
@@ -38,7 +39,10 @@ func CreatePost(db *sql.DB, textContent string, postPrivacy string, imgPath stri
 // get all posts that belong to a userID.
 // Need to add corresponding comments, when db comment function is done
 func GetAllUserPosts(db *sql.DB, userID int) []Post {
-	rows, err := db.Query("SELECT wallPostID, userID, createdAt, textContent, imagePath, privacy FROM wallPosts WHERE userID = ?", userID)
+	rows, err := db.Query(`SELECT wallPostID, wallPosts.userID, wallPosts.createdAt, textContent, imagePath, wallPosts.privacy, users.firstName
+	FROM wallPosts
+	INNER JOIN users ON users.userID = wallPosts.userID 
+	WHERE wallPosts.userID = ?`, userID)
 
 	if err != nil {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
@@ -50,7 +54,7 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 	defer rows.Close()
 	for rows.Next() {
 		var p Post
-		err2 := rows.Scan(&p.PostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.Privacy)
+		err2 := rows.Scan(&p.PostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.Privacy, &p.FName)
 		if err2 != nil {
 			fmt.Printf("error scaning rows for posts: %v", err2)
 		}

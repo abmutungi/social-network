@@ -35,3 +35,4 @@ func StoreComment(db *sql.DB, textContent string, imgPath string) {
 	fmt.Println("rows affected: ", rowsAff)
 	fmt.Println("last inserted id: ", LastIns)
 }
+
