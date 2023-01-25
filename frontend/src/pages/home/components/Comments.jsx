@@ -34,7 +34,7 @@ const Comments = () => {
 
     const formData = new FormData(form);
     const commentJson = Object.fromEntries(formData.entries());
-    fetch("http://localhost:8080/", {
+    fetch("http://localhost:8080/storecomment", {
       mode: "no-cors",
       method: "POST",
       headers: {

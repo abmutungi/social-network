@@ -2,9 +2,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
+import { useEffect, useState } from "react";
 import "../../../assets/css/posts.css";
 import Comments from "./Comments";
-
 
 library.add(faThumbsUp, faMessage);
 
@@ -46,20 +46,46 @@ const SinglePost = ({ postObj }) => {
 
 // PostsContiner will map through the posts data from the database and fill up the container with the posts.
 const PostsContainer = () => {
+  // set initial state for posts
+  const [posts, setPosts] = useState([]);
+
+  // fetch home posts for the logged in user
+  const userForm = new FormData();
+
+  // the user id would have to be taken from somewhere (contet data for user)
+  userForm.append("userID", "1");
+
+  async function fetchPosts() {
+    const resp = await fetch("http://localhost:8080/myposts", {
+      method: "POST",
+      body: userForm,
+    });
+
+    const data = await resp.json();
+    setPosts(data);
+  }
+
+  useEffect(() => {
+    fetchPosts();
+  });
+
   return (
-  <>
-    <div className="posts-container">
-      <SinglePost
-        postObj={{
-          imgPath: '../assets/img/ext/man-utd.png',
-          name: "Lisandro Martinez",
-          date: "01/01/23",
-          textContent: "Yooo not like that",
-          commentsCount: "100",
-        }}
-        />
-    </div>
-  </>
+    <>
+      <div className="posts-container">
+        {posts.map((post) => (
+          <SinglePost
+            key={post.postID}
+            postObj={{
+              imgPath: "../assets/img/ext/man-utd.png",
+              name: "Casemiro",
+              date: post.createdAt,
+              textContent: post.textContent,
+              commentsCount: 100,
+            }}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 

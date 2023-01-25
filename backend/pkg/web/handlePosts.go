@@ -2,39 +2,28 @@ package web
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/abmutungi/social-network/backend/pkg/posts"
 )
 
-// func enableCors(w *http.ResponseWriter) {
-// 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-// }
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
+}
 
-func (s *Server) handleCreatePost() http.HandlerFunc {
+
+func (s *Server) HandleCreatePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// enableCors(&w)
-		// data recieved from frontend
-		// data, err := io.ReadAll(r.Body)
-
-		// if err != nil {
-		// 	fmt.Printf("error from createPost request: %v", err)
-		// }
-
-		// // variable to hold json data after its unmarshalled
-		// var cPD posts.Post
-
-		// json.Unmarshal(data, &cPD)
-		
-		// fmt.Println("createPostdata",cPD)
-
-		// // store post data in database
-		// s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-		// posts.CreatePost(s.Db, cPD.TextContent, cPD.Privacy,cPD.ImagePath)
 		// // w.Header().Set("Content-Type", "application/json")
+
+		// data recieved from frontend
 		err := r.ParseMultipartForm(10 << 20)
 
 		if err != nil {
@@ -43,7 +32,8 @@ func (s *Server) handleCreatePost() http.HandlerFunc {
 
 		fmt.Println(r.Form.Get("textContent"), "text content here")
 		fmt.Println(r.Form.Get("imgName"))
-		// if file name is not empty handle saving the file
+		
+		// if file is added in form 
 		if r.Form.Get("imgName") != ""{
 			s.HandleImage(r)
 		}
@@ -79,4 +69,32 @@ func (s *Server) HandleImage(r *http.Request) {
 
 		io.Copy(dst, file)
 	
+}
+
+func (s *Server) HandleSendUserPosts() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCors(&w)
+		
+		// use the form to get the userID
+		err := r.ParseMultipartForm(10 << 20)
+
+		if err != nil {
+			fmt.Printf("error parsing userID form: %v", err)
+		}
+		
+		// conver id to int
+		userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
+		
+		// getall posts from db
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		
+
+		var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
+
+		marshalledPosts, _ := json.Marshal(postsToSend)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(marshalledPosts)
+		
+	}
 }
