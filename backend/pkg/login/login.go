@@ -3,9 +3,27 @@ package login
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	"golang.org/x/crypto/bcrypt"
 )
+
+type User struct {
+	UserID    int
+	Email     string
+	Password  string
+	Firstname string
+	Lastname  string
+	DOB       string
+	Nickname  string
+	Avatar    string
+	AboutText string
+	Privacy   int
+	Created   string
+
+	// Followers int
+	// Following int
+}
 
 // check email exists
 func EmailExists(db *sql.DB, email string) bool {
@@ -71,4 +89,28 @@ func GetUserFullName(db *sql.DB, email string) []string {
 	userFullName = append(userFullName, userLName)
 
 	return userFullName
+}
+
+// checking if user follows loggedInUser
+func GetAllUserData(db *sql.DB) []User {
+	rows, err := db.Query(`SELECT * FROM users ;`)
+	if err != nil {
+		fmt.Println("Error from GetAllUserData fn()", err, "-----------")
+	}
+
+	var AllUsers []User
+	defer rows.Close()
+	for rows.Next() {
+		var a User
+		err := rows.Scan(&a.UserID, &a.Email,&a.Password, &a.Firstname, &a.Lastname, &a.DOB, &a.Avatar, &a.Nickname, &a.AboutText, &a.Privacy, &a.Created)
+		AllUsers = append(AllUsers, a)
+
+		if err != sql.ErrNoRows {
+			log.Println("Error getting all users", err)
+
+		}
+
+	}
+	log.Println("User is not following me")
+	return AllUsers
 }

@@ -60,17 +60,17 @@ func ValidEmailDomainCheck(email string) bool {
 // Need to check password is valid
 func CheckPasswordValid(password string) bool {
 
-	lowerCaseChecker := regexp.MustCompile(`[a-z]+`)
-	upperCaseChecker := regexp.MustCompile(`[A-Z]+`)
+	// lowerCaseChecker := regexp.MustCompile(`[a-z]+`)
+	// upperCaseChecker := regexp.MustCompile(`[A-Z]+`)
 	numChecker := regexp.MustCompile(`[\d]`)
 
 	switch {
 	case len(password) < 5:
 		return false
-	case !lowerCaseChecker.MatchString(password):
-		return false
-	case !upperCaseChecker.MatchString(password):
-		return false
+	// case !lowerCaseChecker.MatchString(password):
+	// 	return false
+	// case !upperCaseChecker.MatchString(password):
+	// 	return false
 	case !numChecker.MatchString(password):
 		return false
 
