@@ -9,21 +9,27 @@ import Comments from "./Comments";
 library.add(faThumbsUp, faMessage);
 
 // SinglePost takes the props that come from the database
-const SinglePost = ({ postObj }) => {
+const SinglePost = (props) => {
+  // if there is an image add the img div
+  const imageExists = props.postImg;
+
   return (
     <div className="post-container">
       <div className="cp-pic-name">
-        <img className="cp-profile-pic" src={postObj.imgPath} alt="img" />
+        <img className="cp-profile-pic" src={props.profileImgPath} alt="img" />
         <div className="cp-name&viewer">
-          <div className="cp-name cp-span">{postObj.name}</div>
-          <span className="date">{postObj.date}</span>
+          <div className="cp-name cp-span">{props.name}</div>
+          <span className="date">{props.date}</span>
         </div>
       </div>
-      <span className="post-text-span">{postObj.textContent}</span>
+      <span className="post-text-span">{props.textContent}</span>
       {/* this is where the image will go if there is one (<img src="./romero.png" alt="img" className="post-uploaded-img" />) */}
+      {imageExists && (
+        <img src={props.postImg} alt="img" className="post-uploaded-img" />
+      )}
       <div className="post-details">
         <button className="show-comments-button">
-          {postObj.commentsCount} comments
+          {props.commentsCount} comments
         </button>
       </div>
       <div className="post-actions">
@@ -70,19 +76,19 @@ const PostsContainer = () => {
     fetchPosts();
   });
 
+  console.log(posts);
   return (
     <>
       <div className="posts-container">
         {posts.map((post) => (
           <SinglePost
             key={post.postID}
-            postObj={{
-              imgPath: "../assets/img/ext/man-utd.png",
-              name: post.name,
-              date: post.createdAt,
-              textContent: post.textContent,
-              commentsCount: 100,
-            }}
+            profileImgPath={"../assets/img/ext/man-utd.png"}
+            name={post.name}
+            date={post.createdAt}
+            textContent={post.textContent}
+            commentsCount={100}
+            postImg={post.postImg}
           />
         ))}
       </div>

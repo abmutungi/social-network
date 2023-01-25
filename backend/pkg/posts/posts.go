@@ -10,10 +10,11 @@ type Post struct {
 	PostID int `json:"postID"`
 	UserID int `json:"userID"`
 	TextContent string `json:"textContent"`
-	ImagePath string `json:"imgPath"`
+	ImagePath string `json:"postImg"`
 	CreatedAt string `json:"createdAt"`
 	Privacy string `json:"privacy"`
 	FName string `json:"name"`
+	UserProfilePic string `json:"profilePic"`
 }
 
 
