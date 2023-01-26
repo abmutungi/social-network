@@ -1,15 +1,14 @@
 package web
 
 import (
-	"fmt"
 	"net/http"
 )
 
-func (s *Server) Home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello")
-	fmt.Println("Server")
+// func (s *Server) Home(w http.ResponseWriter, r *http.Request) {
+// 	fmt.Fprint(w, "Hello")
+// 	fmt.Println("Server")
 
-}
+// }
 
 func (s *Server) OpenServer() {
 	srv := Server{

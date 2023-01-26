@@ -4,7 +4,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
  
 
   if (type === "AllGroups") {
-    return users.map((user, index) => {
+    return users?.map((user, index) => {
       return (
         <SingleProfileComponent
           chatName={`${user.GroupName}`}
@@ -19,7 +19,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
   }
 
   if (type === "AllUsers") {
-    return users.map((user, index) => {
+    return users?.map((user, index) => {
       return (
         <SingleProfileComponent
           chatName={`${user.Firstname}`}

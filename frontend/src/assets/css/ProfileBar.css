@@ -65,7 +65,7 @@
 }
 
 .add-event-btn {
-  display: none;
+  display: block;
   width: 100px;
   padding: 7.5px 16px;
   height: fit-content;
@@ -81,24 +81,8 @@
 }
 
 .group-request-btn {
-  display: none;
-  width: fit-content;
-  padding: 7.5px 16px;
-  height: fit-content;
-  background-color: #1877f2;
-  border: none;
-  margin: 32px 16px;
-  box-sizing: border-box;
-  justify-content: center;
-  color: white;
-  border-radius: 0.5rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.group-request-btn {
-  display: none;
-  width: 100px;
+  display: block;
+  width: 120px;
   padding: 7.5px 16px;
   height: fit-content;
   background-color: #1877f2;
@@ -113,7 +97,7 @@
 }
 
 .static-status-btn {
-  display: none;
+  display: block;
   width: 100px;
   padding: 7.5px 16px;
   height: fit-content;
@@ -165,8 +149,8 @@
 }
 
 .followIcon {
-  display: none;
-  width: 100px;
+  display: block;
+  width: 120px;
   padding: 7.5px 16px;
   height: fit-content;
   background-color: #1877f2;
