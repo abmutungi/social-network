@@ -76,6 +76,7 @@ const PostsContainer = () => {
   // make a network request on component render.
   useEffect(() => {
     fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
