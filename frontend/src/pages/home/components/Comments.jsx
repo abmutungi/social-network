@@ -26,7 +26,6 @@ const Comments = (props) => {
   // state for comment input
   const [commentInput, setCommentInput] = useState("");
 
-  console.log(props.postID, "post id in comments component");
   // function to handle form submission
   const handleCommentSubmit = (e) => {
     e.preventDefault();
