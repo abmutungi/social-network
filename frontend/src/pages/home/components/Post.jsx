@@ -79,6 +79,11 @@ const PostsContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // if there is no image return "" else return img path as prop
+  const handlePostImgPath = (strImgPath) => {
+    return strImgPath === "" ? "" : `../assets/img/ext/${strImgPath}`;
+  };
+
   return (
     <>
       <div className="posts-container">
@@ -90,7 +95,7 @@ const PostsContainer = () => {
             date={post.createdAt}
             textContent={post.textContent}
             commentsCount={100}
-            postImg={`../assets/img/ext/${post.postImg}`}
+            postImg={handlePostImgPath(post.postImg)}
             commentsArray={post.comments}
             postID={post.postID}
           />
