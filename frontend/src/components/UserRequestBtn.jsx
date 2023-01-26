@@ -89,4 +89,4 @@ const UserRequestBtn = (props) => {
   );
 };
 
-export { followText, UserRequestBtn };
+export { followText, unfollowText, UserRequestBtn };
