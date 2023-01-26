@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 export const LowerHeaderContext = createContext();
 
 export function LowerHeaderProvider({ children }) {
-  const [userID, setUserID] = useState(0);
+  const [userID, setUserID] = useState("***********the number********");
   const [DBAllUsers, setDBAllUsers] = useState([]);
 
   const [GroupID, setGroupID] = useState(0);
@@ -17,6 +17,7 @@ export function LowerHeaderProvider({ children }) {
 
   const updateUserID = (id) => {
     setUserID(() => id);
+    // fetchRelationship(LoggedInUserID, userID);
   };
 
   const updateinitialDB = (data) => {

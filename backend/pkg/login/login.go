@@ -93,25 +93,23 @@ func GetUserFullName(db *sql.DB, email string) []string {
 
 // checking if user follows loggedInUser
 func GetAllUserData(db *sql.DB) []User {
-	rows, err := db.Query(`SELECT * FROM users ;`)
-	if err != nil {
-		fmt.Println("Error from GetAllUserData fn()", err, "-----------")
-	}
+    rows, err := db.Query(`SELECT * FROM users ;`)
+    if err != nil {
+        log.Println("Error from GetAllUserData fn():", err)
+        return nil
+    }
+    defer rows.Close()
 
-	var AllUsers []User
-	defer rows.Close()
-	for rows.Next() {
-		var a User
-		err := rows.Scan(&a.UserID, &a.Email,&a.Password, &a.Firstname, &a.Lastname, &a.DOB, &a.Avatar, &a.Nickname, &a.AboutText, &a.Privacy, &a.Created)
-		AllUsers = append(AllUsers, a)
+    var AllUsers []User
+    for rows.Next() {
+        var a User
+        err := rows.Scan(&a.UserID, &a.Email,&a.Password, &a.Firstname, &a.Lastname, &a.DOB, &a.Avatar, &a.Nickname, &a.AboutText, &a.Privacy, &a.Created)
+        if err != nil {
+            log.Println("Error scanning rows:", err)
+            continue
+        }
+        AllUsers = append(AllUsers, a)
+    }
 
-		if err != sql.ErrNoRows {
-			//fmt.Println(AllUsers)
-			log.Println("Is it this error", err)
-
-		}
-
-	}
-	log.Println("User is not following me")
-	return AllUsers
+    return AllUsers
 }

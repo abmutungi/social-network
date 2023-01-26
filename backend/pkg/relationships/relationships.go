@@ -75,22 +75,16 @@ func UnfollowUser(db *sql.DB, loggedInUser, userID int) {
 }
 
 func FollowRequestCheck(db *sql.DB, loggedInUser, userID int) bool {
-	rows, err := db.Query(`SELECT notifiyee, notifier FROM notifications WHERE notifiyee = ? AND notifier = ? AND notificationType = 'followRequest';`, userID, loggedInUser)
+	var count int
+	err := db.QueryRow(`SELECT COUNT(*) FROM notifications WHERE notifiyee = ? AND notifier = ? AND notificationType = 'followRequest';`, userID, loggedInUser).Scan(&count)
 	if err != nil {
-		fmt.Println("error from followRequestCheck fn()", err)
+		log.Println("Error from FollowRequestCheck fn():", err)
+		return false
 	}
-
-	var user int
-	var toFollow int
-
-	defer rows.Close()
-	for rows.Next() {
-		err := rows.Scan(&user, &toFollow)
-		if err != sql.ErrNoRows {
-			log.Println("I've sent this user a follow request, pending response")
-			return true
-		}
+	if count > 0 {
+		fmt.Println("I've sent this user a follow request, pending response")
+		return true
 	}
-	log.Println("I'm not awaiting response from follow request, I can send a request")
+	fmt.Println("I'm not awaiting response from follow request, I can send a request")
 	return false
 }

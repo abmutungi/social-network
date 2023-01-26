@@ -4,7 +4,7 @@ import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
 import { useContext } from "react";
 
-export async function fetchRelationship(lgInUser, userProfile){
+export  async function fetchRelationship(lgInUser, userProfile){
   try {
     const response = await fetch("http://localhost:8080/followCheck", {
       method: "POST",
@@ -13,8 +13,8 @@ export async function fetchRelationship(lgInUser, userProfile){
         toFollowerID: userProfile,
       }),
     });
-    const data = response.json()
-    console.log("*************DATA RECIEVED************************",data)
+    const data = await response.json()
+    console.log("*************DATA SENT************************",data)
   } catch (e) {
     console.log("error fetching relationshiip", e);
   }

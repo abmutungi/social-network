@@ -6,8 +6,8 @@ import "../../..//assets/css/ProfileBar.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 // import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
-import { fetchRelationship } from '../../../components/SingleProfileComponent'
-  
+import { fetchRelationship } from "../../../components/SingleProfileComponent";
+
 import {
   faLock,
   faUsers,
@@ -34,12 +34,12 @@ const ProfileBar = () =>
       DBAllUsers,
       AllGroupsData,
       userID,
-      updateUserID,
+      // updateUserID,
       GroupID,
-      updateGroupID,
+      // updateGroupID,
       updateAboutText,
       ProfilePhotoBackground,
-      LoggedInUserID
+      LoggedInUserID,
     } = useContext(LowerHeaderContext);
 
     const [firstName, setfirstName] = useState("Tolu");
@@ -63,7 +63,7 @@ AboutText: Array(1), Members: 2941}
             updateAboutText(obj.AboutText);
           }
         }
-        updateGroupID(0);
+        // updateGroupID(0);
       } else if (GroupID > 0) {
         for (const obj of AllGroupsData) {
           if (obj.GroupID == groupid) {
@@ -75,19 +75,26 @@ AboutText: Array(1), Members: 2941}
           }
         }
       }
-      updateUserID(0);
+      // updateUserID(0);
     };
 
     useEffect(() => {
-      updateProfileStates(userID, GroupID);
+      updateProfileStates(userID, 0);
       fetchRelationship(LoggedInUserID, userID);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userID, GroupID]);
-
+    }, [userID]);
     // console.log('from profileBar', DBAllUsers);
     //   console.log('profilebarclickuser', userID);
 
+    useEffect(() => {
+      updateProfileStates(0, GroupID);
+      // fetchRelationship(LoggedInUserID, userID);
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [GroupID]);
+  
+  
     return (
       <>
         <div className="Profile">
