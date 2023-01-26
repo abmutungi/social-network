@@ -3,18 +3,21 @@ package posts
 import (
 	"database/sql"
 	"fmt"
+
+	comment "github.com/abmutungi/social-network/backend/pkg/comments"
 )
 
 // can change the name of imageContent in db to imgPath
 type Post struct {
-	PostID         int    `json:"postID"`
-	UserID         int    `json:"userID"`
-	TextContent    string `json:"textContent"`
-	ImagePath      string `json:"postImg"`
-	CreatedAt      string `json:"createdAt"`
-	Privacy        string `json:"privacy"`
-	FName          string `json:"name"`
-	UserProfilePic string `json:"profilePic"`
+	PostID         int               `json:"postID"`
+	UserID         int               `json:"userID"`
+	TextContent    string            `json:"textContent"`
+	ImagePath      string            `json:"postImg"`
+	CreatedAt      string            `json:"createdAt"`
+	Privacy        string            `json:"privacy"`
+	FName          string            `json:"name"`
+	UserProfilePic string            `json:"profilePic"`
+	Comments       []comment.Comment `json:"comments"`
 }
 
 func CreatePost(db *sql.DB, textContent string, postPrivacy string, imgPath string) {
@@ -58,6 +61,7 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 		if err2 != nil {
 			fmt.Printf("error scaning rows for posts: %v", err2)
 		}
+		p.Comments = comment.GetAllComments(db, p.PostID)
 		posts = append(posts, p)
 	}
 

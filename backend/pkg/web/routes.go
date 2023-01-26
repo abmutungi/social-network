@@ -7,5 +7,5 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/storecomment", s.handleComment())
 	s.Router.HandleFunc("/myposts", s.HandleSendUserPosts())
 	// s.TestDBfunctions()
-	
+
 }

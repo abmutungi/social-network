@@ -72,12 +72,12 @@ const Comments = (props) => {
           </form>
         </div>
         {/* map through passed down comments for each post */}
-        {props.comments.map((comment) => (
+        {props.comments?.map((comment) => (
           <SingleComment
             key={comment.commentID}
             commentData={{
               name: comment.name,
-              content: comment.content,
+              content: comment.textContent,
               date: comment.date,
               imgPath: comment.imgPath,
             }}

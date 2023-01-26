@@ -47,6 +47,7 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 func (s *Server) TestDBfunctions() {
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 	fmt.Println(posts.GetAllUserPosts(s.Db, 1))
+	// fmt.Println(comment.GetAllComments(s.Db, 1))
 }
 
 func (s *Server) HandleImage(r *http.Request) {
@@ -88,7 +89,7 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
-
+		// fmt.Println(postsToSend)
 		marshalledPosts, _ := json.Marshal(postsToSend)
 
 		w.Header().Set("Content-Type", "application/json")
