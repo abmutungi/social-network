@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	"github.com/abmutungi/social-network/backend/pkg/posts"
+	uuid "github.com/gofrs/uuid"
 )
 
 func enableCors(w *http.ResponseWriter) {
@@ -32,14 +33,16 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		fmt.Println(r.Form.Get("textContent"), "text content here")
 		fmt.Println(r.Form.Get("imgName"))
 
-		// if file is added in form
+		var newFileName string
+		// if file is added in form, create file for image and return filename
 		if r.Form.Get("imgName") != "" {
-			s.HandleImage(r)
+			newFileName = s.HandleImage(r)
 		}
 
+		fmt.Println("new file name", newFileName)
 		// adding post to the db
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-		posts.CreatePost(s.Db, r.Form.Get("textContent"), r.Form.Get("privacy"), r.Form.Get("imgName"))
+		posts.CreatePost(s.Db, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
 
 	}
 }
@@ -50,25 +53,33 @@ func (s *Server) TestDBfunctions() {
 	// fmt.Println(comment.GetAllComments(s.Db, 1))
 }
 
-func (s *Server) HandleImage(r *http.Request) {
+func (s *Server) HandleImage(r *http.Request) string {
 	file, fileInfo, err := r.FormFile("uploadedPostImg")
 
 	if err != nil {
 		fmt.Printf("failed to get image: %v", err)
-		return
 	}
 	defer file.Close()
 
 	// creating the file in the specific path needed
-	dst, err := os.Create("../frontend/src/assets/img/" + fileInfo.Filename)
+
+	// create a randomly generated string using the uuid package. Add to filename so its unique.
+	randomID, _ := uuid.NewV4()
+
+	randomIDToString := randomID.String()[:10]
+
+	dst, err := os.Create("../frontend/src/assets/img/ext/" + randomIDToString + "-" + fileInfo.Filename)
+
+	newFileName := randomIDToString + "-" + fileInfo.Filename
 	if err != nil {
 		fmt.Printf("error creating file: %v", err)
-		return
 	}
 	defer dst.Close()
 
 	io.Copy(dst, file)
 
+	// return string to be passed on as image file name in db
+	return newFileName
 }
 
 func (s *Server) HandleSendUserPosts() http.HandlerFunc {

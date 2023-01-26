@@ -12,8 +12,9 @@ library.add(faThumbsUp, faMessage);
 const SinglePost = (props) => {
   // if there is an image add the img div
   const imageExists = props.postImg;
+
+  // comments passed down from posts component
   const commentsToPass = props.commentsArray;
-  console.log("comments array", commentsToPass);
   return (
     <div className="post-container">
       <div className="cp-pic-name">
@@ -55,31 +56,7 @@ const SinglePost = (props) => {
 const PostsContainer = () => {
   // set initial state for incoming posts data
   const [posts, setPosts] = useState([]);
-  // const dummyComments = [
-  //   {
-  //     name: "Wout Weghorst",
-  //     content: "changing this data being passed down",
-  //     date: "01/01",
-  //     imgPath: "../assets/img/ext/man-utd.png",
-  //     commentID: "1",
-  //   },
-  //   {
-  //     name: "Wout Weghopost",
-  //     content: "this is the comment text content",
-  //     date: "01/01",
-  //     imgPath: "../assets/img/ext/man-utd.png",
-  //     commentID: "2",
-  //   },
-  //   {
-  //     name: "Wout Weghorst",
-  //     content: "this is the comment text content",
-  //     date: "01/01",
-  //     imgPath: "../assets/img/ext/man-utd.png",
-  //     commentID: "3",
-  //   },
-  // ];
-  // set inital state for comments
-  // const [comments, setComments] = useState([]);
+
   // fetch home posts for the logged in user
   const userForm = new FormData();
 
@@ -112,7 +89,7 @@ const PostsContainer = () => {
             date={post.createdAt}
             textContent={post.textContent}
             commentsCount={100}
-            postImg={post.postImg}
+            postImg={`../assets/img/ext/${post.postImg}`}
             commentsArray={post.comments}
             postID={post.postID}
           />
