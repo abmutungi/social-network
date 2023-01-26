@@ -2,28 +2,23 @@ package web
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
+	"strconv"
 
 	comment "github.com/abmutungi/social-network/backend/pkg/comments"
 )
 
 func (s *Server) handleComment() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		data, err := io.ReadAll(r.Body)
+
+		err := r.ParseMultipartForm(10 << 20)
 		if err != nil {
-			fmt.Printf("error from create comment request: %v", err)
+			fmt.Printf("error parsing comment form: %v", err)
 		}
 
-		var cd comment.Comment
-
-		json.Unmarshal(data, &cd)
-		
-		fmt.Println("comments json",cd)
-
+		postIDtoInt, _ := strconv.Atoi(r.Form.Get("postID"))
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-		comment.StoreComment(s.Db, cd.TextContent, cd.ImageContent)
+		comment.StoreComment(s.Db, postIDtoInt, r.Form.Get("textContent"), r.Form.Get("imageContent"))
 	}
 }

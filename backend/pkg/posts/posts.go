@@ -7,16 +7,15 @@ import (
 
 // can change the name of imageContent in db to imgPath
 type Post struct {
-	PostID int `json:"postID"`
-	UserID int `json:"userID"`
-	TextContent string `json:"textContent"`
-	ImagePath string `json:"postImg"`
-	CreatedAt string `json:"createdAt"`
-	Privacy string `json:"privacy"`
-	FName string `json:"name"`
+	PostID         int    `json:"postID"`
+	UserID         int    `json:"userID"`
+	TextContent    string `json:"textContent"`
+	ImagePath      string `json:"postImg"`
+	CreatedAt      string `json:"createdAt"`
+	Privacy        string `json:"privacy"`
+	FName          string `json:"name"`
 	UserProfilePic string `json:"profilePic"`
 }
-
 
 func CreatePost(db *sql.DB, textContent string, postPrivacy string, imgPath string) {
 	stmt, err := db.Prepare("INSERT INTO wallPosts (userID,textContent, privacy, imagePath, createdAt) VALUES (1, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
@@ -30,7 +29,7 @@ func CreatePost(db *sql.DB, textContent string, postPrivacy string, imgPath stri
 	if err2 != nil {
 		fmt.Printf("error adding post into database: %v", err2)
 	}
-	
+
 	rowsAff, _ := res.RowsAffected()
 	LastIns, _ := res.LastInsertId()
 	fmt.Println("rows affected: ", rowsAff)

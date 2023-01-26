@@ -12,7 +12,7 @@ library.add(faThumbsUp, faMessage);
 const SinglePost = (props) => {
   // if there is an image add the img div
   const imageExists = props.postImg;
-
+  const commentsToPass = props.commentsArray;
   return (
     <div className="post-container">
       <div className="cp-pic-name">
@@ -45,20 +45,44 @@ const SinglePost = (props) => {
           <span>Comment</span>
         </button>
       </div>
-      <Comments />
+      <Comments comments={commentsToPass} postID={props.postID} />
     </div>
   );
 };
 
 // PostsContiner will map through the posts data from the database and fill up the container with the posts.
 const PostsContainer = () => {
-  // set initial state for posts
+  // set initial state for incoming posts data
   const [posts, setPosts] = useState([]);
-
+  const dummyComments = [
+    {
+      name: "Wout Weghorst",
+      content: "changing this data being passed down",
+      date: "01/01",
+      imgPath: "../assets/img/ext/man-utd.png",
+      commentID: "1",
+    },
+    {
+      name: "Wout Weghopost",
+      content: "this is the comment text content",
+      date: "01/01",
+      imgPath: "../assets/img/ext/man-utd.png",
+      commentID: "2",
+    },
+    {
+      name: "Wout Weghorst",
+      content: "this is the comment text content",
+      date: "01/01",
+      imgPath: "../assets/img/ext/man-utd.png",
+      commentID: "3",
+    },
+  ];
+  // set inital state for comments
+  // const [comments, setComments] = useState([]);
   // fetch home posts for the logged in user
   const userForm = new FormData();
 
-  // the user id would have to be taken from somewhere (contet data for user)
+  // the user id would have to be taken from somewhere (context data for user)
   userForm.append("userID", "1");
 
   async function fetchPosts() {
@@ -74,9 +98,8 @@ const PostsContainer = () => {
   // make a network request on component render.
   useEffect(() => {
     fetchPosts();
-  });
+  }, []);
 
-  console.log(posts);
   return (
     <>
       <div className="posts-container">
@@ -89,6 +112,8 @@ const PostsContainer = () => {
             textContent={post.textContent}
             commentsCount={100}
             postImg={post.postImg}
+            commentsArray={dummyComments}
+            postID={post.postID}
           />
         ))}
       </div>
