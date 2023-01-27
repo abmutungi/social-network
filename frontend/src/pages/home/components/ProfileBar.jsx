@@ -53,7 +53,7 @@ const ProfileBar = () =>
 AboutText: Array(1), Members: 2941}
 
 */
-    const updateProfileStates = (userid, groupid) => {
+    const updateProfileStates = (userid) => {
       if (userid > 0) {
         for (const obj of DBAllUsers) {
           if (obj.UserID == userid) {
@@ -64,8 +64,11 @@ AboutText: Array(1), Members: 2941}
             updateAboutText(obj.AboutText);
           }
         }
-        // updateGroupID(0);
-      } else if (GroupID > 0) {
+      }
+    };
+
+    const updateGroupProfileStates = (groupid) => {
+      if (groupid > 0) {
         for (const obj of AllGroupsData) {
           if (obj.GroupID == groupid) {
             setfirstName(obj.GroupName);
@@ -76,11 +79,10 @@ AboutText: Array(1), Members: 2941}
           }
         }
       }
-      // updateUserID(0);
     };
 
     useEffect(() => {
-      updateProfileStates(userID, 0);
+      updateProfileStates(userID);
       fetchRelationship(LoggedInUserID, userID);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,7 +91,7 @@ AboutText: Array(1), Members: 2941}
     //   console.log('profilebarclickuser', userID);
 
     useEffect(() => {
-      updateProfileStates(0, GroupID);
+      updateGroupProfileStates(GroupID);
       // fetchRelationship(LoggedInUserID, userID);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
