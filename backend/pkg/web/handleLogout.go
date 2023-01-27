@@ -18,6 +18,7 @@ type LogoutInfo struct {
 	User      users.User
 	Message   string `json:"logoutMsg"`
 	Success   bool   `json:"success"`
+	CookieID  string `json:"CookieID"`
 }
 
 type UserCheck struct {
@@ -79,6 +80,7 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		d, _ := io.ReadAll(r.Body)
 		fmt.Println("checking d from login -> ", string(d))
 		json.Unmarshal(d, &lrData)
+		// fmt.Println("Checking lrData struct in feLogin: ", lrData)
 		if len(r.Cookies()) == 0 {
 
 			lrData.Success = true
@@ -87,7 +89,10 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		} else {
 			fmt.Println(lrData)
 			lrData.Success = false
-			lrData.User = CurrentUser
+			email := users.GetEmailFromUserID(s.Db, lrData.CookieID)
+			lrData.User = users.ReturnSingleUser(s.Db, email)
+			fmt.Println("Checking lrData struct in feLogin: ", lrData)
+
 			r, _ := json.Marshal(lrData)
 			w.Write(r)
 			fmt.Println("Logged in user went to log in frontend check")

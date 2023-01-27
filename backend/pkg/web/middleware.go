@@ -14,7 +14,7 @@ func LogInPageSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
 
 			HandlerFunc.ServeHTTP(w, r)
 		} else {
-			lr.User = CurrentUser
+			//lr.User = CurrentUser
 			sendLoginMessage(w, lr, true, "User is already logged in")
 			http.Redirect(w, r, "http://localhost:5173/", http.StatusSeeOther)
 		}

@@ -11,7 +11,7 @@ export function LowerHeaderProvider({ children }) {
   const [GroupID, setGroupID] = useState(0);
   const [AllGroupsData, setAllGroupsData] = useState([]);
 
-  const [AboutText, setAboutText] = useState(loggedInUser.AboutText);
+  const [AboutText, setAboutText] = useState("loggedInUser.AboutText");
 
   const [ProfilePhotoBackground, setProfilePhotoBackground] =
     useState("man-utd.png");

@@ -11,7 +11,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/dummyusers", s.HandleDummyUsers())
 	s.Router.HandleFunc("/dummygroups", s.HandleDummyGroups())
 
-	s.Router.HandleFunc("/login", LogInPageSessionChecker((s.HandleLogin())))
+	s.Router.HandleFunc("/login", (s.HandleLogin()))
 	s.Router.HandleFunc("/logout", s.HandleLogout())
 	s.Router.HandleFunc("/frontendlogin", s.frontendLogin())
 	s.Router.HandleFunc("/createpost", s.HandleCreatePost())

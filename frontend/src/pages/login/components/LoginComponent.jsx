@@ -21,11 +21,17 @@ const Login = () => {
   const { updateAboutText, updateUserID } = useContext(LowerHeaderContext);
 
   async function loginCheck() {
+    console.log("cookie check => ", document.cookie);
+    console.log("cookie id check => ", document.cookie.charAt(0));
+
+    let userCookie = {
+      CookieID: document.cookie.charAt(0),
+    };
     console.log("CURRENT USER CHECK -> ", loggedInUser);
     const response = await fetch("http://localhost:8080/frontendlogin", {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(loggedInUser),
+      body: JSON.stringify(userCookie),
 
       headers: {
         "Content-Type": "application/json",
@@ -41,9 +47,13 @@ const Login = () => {
         Email: data.User.Email,
         FName: data.User.Firstname,
         LName: data.User.Lastname,
+        AboutText: data.User.AboutText,
       };
-      updateLoggedInUser(currentUser);
       console.log(currentUser);
+      updateLoggedInUser(currentUser);
+      updateAboutText(currentUser.AboutText);
+      updateUserID(currentUser.ID);
+
       navigate("/");
     } else {
       return;

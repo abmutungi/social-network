@@ -67,6 +67,17 @@ func ReturnSingleUser(db *sql.DB, email string) User {
 	return a
 }
 
+func GetEmailFromUserID(db *sql.DB, id string) string {
+	userStmt := "SELECT email from users WHERE userID = ?"
+	userRow := db.QueryRow(userStmt, id)
+	var e string
+	err := userRow.Scan(&e)
+	if err != nil {
+		fmt.Printf("Error in getting the email for this userID(%s): %v", id, err)
+	}
+	return e
+}
+
 // checking if user follows loggedInUser
 func GetAllUserData(db *sql.DB) []User {
 	rows, err := db.Query(`SELECT * FROM users ;`)
