@@ -84,10 +84,10 @@ const Login = () => {
       } else if (data.error) {
         setLoginErrorMessage(data.loginMsg);
       } else {
-        (currentUser.ID = data.currentUserID),
-          (currentUser.Email = data.currentUserEmail),
-          (currentUser.FName = data.currentUserFName),
-          (currentUser.LName = data.currentUserLName),
+        (currentUser.ID = data.User.UserID),
+          (currentUser.Email = data.User.Email),
+          (currentUser.FName = data.User.Firstname),
+          (currentUser.LName = data.User.Lastname),
           console.log(currentUser);
         navigate("/");
       }
