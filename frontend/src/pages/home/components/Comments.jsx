@@ -1,4 +1,8 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+library.add(faImage);
 
 // This component returns a single comment.
 const SingleComment = ({ commentData }) => {
@@ -54,7 +58,7 @@ const Comments = (props) => {
             alt="img"
           />
           <form
-            style={{ display: "contents" }}
+            className="comment-form"
             onSubmit={handleCommentSubmit}
             role="presentation"
           >
@@ -68,6 +72,9 @@ const Comments = (props) => {
               placeholder="Write a comment..."
               rows={1}
             ></input>
+            <button className="comment-upload-btn">
+              <FontAwesomeIcon icon="fa-solid fa-image" />
+            </button>
           </form>
         </div>
         {/* map through passed down comments for each post */}
