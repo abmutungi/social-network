@@ -4,6 +4,7 @@ export const LowerHeaderContext = createContext();
 
 export function LowerHeaderProvider({ children }) {
   const { loggedInUser } = useContext(loggedInUserContext);
+  console.log("logged in check===> ", loggedInUser);
   const [userID, setUserID] = useState("***********the number********");
   const [DBAllUsers, setDBAllUsers] = useState([]);
 
@@ -15,7 +16,7 @@ export function LowerHeaderProvider({ children }) {
   const [ProfilePhotoBackground, setProfilePhotoBackground] =
     useState("man-utd.png");
 
-  const [LoggedInUserID] = useState(1);
+  const [LoggedInUserID] = useState(0);
 
   const updateUserID = (id) => {
     setUserID(() => id);

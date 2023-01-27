@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Register } from "../../register/components/RegistrationComponent";
 import { Link, Route, Routes } from "react-router-dom";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import "../../../assets/css/login.css";
 
 // let currentUser = {
@@ -17,6 +18,7 @@ import "../../../assets/css/login.css";
 
 const Login = () => {
   const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
+  const { updateAboutText, updateUserID } = useContext(LowerHeaderContext);
 
   async function loginCheck() {
     console.log("CURRENT USER CHECK -> ", loggedInUser);
@@ -100,6 +102,9 @@ const Login = () => {
         };
         console.log(currentUser);
         updateLoggedInUser(currentUser);
+        updateAboutText(currentUser.AboutText);
+        updateUserID(currentUser.ID);
+
         navigate("/");
       }
     }
