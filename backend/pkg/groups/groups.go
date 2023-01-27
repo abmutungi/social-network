@@ -8,20 +8,20 @@ import (
 
 
 func CreateGroup(db *sql.DB, groupname string,  creatorid int, desc string) {
-	stmt, err := db.Prepare("INSERT INTO groups (userID,textContent, privacy, imagePath, createdAt) VALUES (1, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
+	stmt, err := db.Prepare("INSERT INTO groups (name, creator, about) VALUES ( ?, ?, ?)")
 
 	if err != nil {
-		fmt.Printf("error preparing create post statement: %v", err)
+		fmt.Printf("error preparing create group statement: %v", err)
 	}
 
-	res, err2 := stmt.Exec(textContent, postPrivacy, imgPath)
+	res, err2 := stmt.Exec(groupname, creatorid, desc)
 
 	if err2 != nil {
-		fmt.Printf("error adding post into database: %v", err2)
+		fmt.Printf("error adding group into database: %v", err2)
 	}
 
 	rowsAff, _ := res.RowsAffected()
 	LastIns, _ := res.LastInsertId()
-	fmt.Println("rows affected: ", rowsAff)
-	fmt.Println("last inserted id: ", LastIns)
+	fmt.Println("groups rows affected: ", rowsAff)
+	fmt.Println("group last inserted id: ", LastIns)
 }

@@ -7,6 +7,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"github.com/abmutungi/social-network/backend/pkg/groups"
+
 )
 
 type NewGroup struct {
@@ -28,11 +30,13 @@ func (s *Server) HandleCreateGroup() http.HandlerFunc {
 		var ng NewGroup
 
 		json.Unmarshal(data, &ng)
+		
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		groups.CreateGroup(s.Db, ng.GroupName, ng.CreatorID, ng.GroupDescription)
 
 		fmt.Println("Post Marsh Group", ng)
 		// fmt.Println(f.Follower)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		// if !relationships.FollowingYouCheck(s.Db, f.User, f.Follower) {
 		// 	relationships.StoreFollowing(s.Db, f.User, f.Follower)
