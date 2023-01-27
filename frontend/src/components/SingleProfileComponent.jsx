@@ -4,7 +4,7 @@ import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
 import { useContext } from "react";
 
-export  async function fetchRelationship(lgInUser, userProfile){
+export async function fetchRelationship(lgInUser, userProfile) {
   try {
     const response = await fetch("http://localhost:8080/followCheck", {
       method: "POST",
@@ -13,8 +13,8 @@ export  async function fetchRelationship(lgInUser, userProfile){
         toFollowerID: userProfile,
       }),
     });
-    const data = await response.json()
-    console.log("*************DATA SENT************************",data)
+    const data = await response.json();
+    console.log("*************DATA SENT************************", data);
   } catch (e) {
     console.log("error fetching relationshiip", e);
   }
@@ -22,13 +22,12 @@ export  async function fetchRelationship(lgInUser, userProfile){
 
 const SingleProfileComponent = (props) => {
   const { updateUserID, updateGroupID } = useContext(LowerHeaderContext);
-  
+
   if (props.type === "AllUsers") {
     return (
       <div
         role="presentation"
-        onClick={(e) => updateUserID(e.currentTarget.id)
-        }
+        onClick={(e) => updateUserID(Number(e.currentTarget.id))}
         className="SingleProfile"
         id={props.id}
       >
@@ -46,16 +45,16 @@ const SingleProfileComponent = (props) => {
         </p>
       </div>
     );
-  };
+  }
 
   if (props.type === "AllGroups") {
     return (
       <div
         role="presentation"
-        onClick={(e)=>updateGroupID(e.currentTarget.id)}
+        onClick={(e) => updateGroupID(e.currentTarget.id)}
         className="SingleProfile"
         id={props.id}
-       // creatorid = {props.creator}   - custom html tags??
+        // creatorid = {props.creator}   - custom html tags??
       >
         <div className="ChatPic">
           <img
