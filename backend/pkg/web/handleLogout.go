@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+
+	"github.com/abmutungi/social-network/backend/pkg/users"
 )
 
 type LogoutInfo struct {
@@ -13,6 +15,7 @@ type LogoutInfo struct {
 	Email     string `json:"Email"`
 	UserFName string `json:"FName"`
 	UserLName string `json:"LName"`
+	User      users.User
 	Message   string `json:"logoutMsg"`
 	Success   bool   `json:"success"`
 }
@@ -59,7 +62,7 @@ func (s *Server) HandleLogout() http.HandlerFunc {
 func sendLogoutMessage(w http.ResponseWriter, logoutResp LogoutInfo, success bool, msg string) {
 	logoutResp.Message = msg
 	logoutResp.Success = success
-	fmt.Println("rr check -> ", logoutResp)
+	fmt.Println("logout message check -> ", logoutResp)
 	resp, err := json.Marshal(logoutResp)
 	if err != nil {
 		fmt.Println("Error marshalling error message struct --> ", err)
@@ -84,6 +87,7 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		} else {
 			fmt.Println(lrData)
 			lrData.Success = false
+			lrData.User = CurrentUser
 			r, _ := json.Marshal(lrData)
 			w.Write(r)
 			fmt.Println("Logged in user went to log in frontend check")

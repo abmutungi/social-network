@@ -9,7 +9,7 @@ import { Register } from "./pages/register/components/RegistrationComponent";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { LowerHeaderProvider } from "./context/lowerheadercontext";
 import "./index.css";
-
+import { LoggedInUserProvider } from "./context/loggedInUserContext";
 
 /*
 utils.ts:874 You rendered descendant <Routes> (or called `useRoutes()`) at "/" 
@@ -23,27 +23,28 @@ hanged "/" Route to "*" in (tb38r)
 const App = () => {
   return (
     <>
+      <LoggedInUserProvider>
         <LowerHeaderProvider>
-      <Routes>
-        <Route path="/register" element={<Register />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        {/* <Route path="/notif" element={<NotificationsModal />}></Route> */}
+          <Routes>
+            <Route path="/register" element={<Register />}></Route>
+            <Route path="/login" element={<Login />}></Route>
+            {/* <Route path="/notif" element={<NotificationsModal />}></Route> */}
 
-        <Route
-          path="*"
-          element={
-            <>
-              <TopHeader />
-              <LowerHeader />
-              <MainBody />
-            
-              {/* <ChatBox/> */}
-            </>
-          }
-        ></Route>
+            <Route
+              path="*"
+              element={
+                <>
+                  <TopHeader />
+                  <LowerHeader />
+                  <MainBody />
 
-      </Routes>
-      </LowerHeaderProvider>
+                  {/* <ChatBox/> */}
+                </>
+              }
+            ></Route>
+          </Routes>
+        </LowerHeaderProvider>
+      </LoggedInUserProvider>
     </>
   );
 };

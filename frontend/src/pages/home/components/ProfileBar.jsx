@@ -7,7 +7,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 // import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { fetchRelationship } from "../../../components/SingleProfileComponent";
-
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import {
   faLock,
   faUsers,
@@ -41,9 +41,10 @@ const ProfileBar = () =>
       ProfilePhotoBackground,
       LoggedInUserID,
     } = useContext(LowerHeaderContext);
+    const { loggedInUser } = useContext(loggedInUserContext);
 
-    const [firstName, setfirstName] = useState("Tolu");
-    const [lastName, setlastName] = useState("Lawal");
+    const [firstName, setfirstName] = useState(loggedInUser.FName);
+    const [lastName, setlastName] = useState(loggedInUser.LName);
     const [followers, setfollowers] = useState("10 Followers");
     const [following, setfollowing] = useState("8 Following");
 
@@ -93,8 +94,7 @@ AboutText: Array(1), Members: 2941}
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [GroupID]);
-  
-  
+
     return (
       <>
         <div className="Profile">

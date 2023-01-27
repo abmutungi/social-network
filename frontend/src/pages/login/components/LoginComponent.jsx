@@ -1,26 +1,29 @@
 import React from "react";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Register } from "../../register/components/RegistrationComponent";
 import { Link, Route, Routes } from "react-router-dom";
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import "../../../assets/css/login.css";
 
-let currentUser = {
-  ID: "",
-  Email: "",
-  FName: "",
-  LName: "",
-};
+// let currentUser = {
+//   ID: "",
+//   Email: "",
+//   FName: "",
+//   LName: "",
+// };
 
 const Login = () => {
+  const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
+
   async function loginCheck() {
-    console.log("CURRENT USER CHECK -> ", currentUser);
+    console.log("CURRENT USER CHECK -> ", loggedInUser);
     const response = await fetch("http://localhost:8080/frontendlogin", {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(currentUser),
+      body: JSON.stringify(loggedInUser),
 
       headers: {
         "Content-Type": "application/json",
@@ -31,11 +34,15 @@ const Login = () => {
     const data = await response.json();
     console.log("Data check -> ", data);
     if (!data.success) {
-      (currentUser.ID = data.ID),
-        (currentUser.Email = data.Email),
-        (currentUser.FName = data.FName),
-        (currentUser.LName = data.LName),
-        navigate("/");
+      const currentUser = {
+        ID: data.User.UserID,
+        Email: data.User.Email,
+        FName: data.User.Firstname,
+        LName: data.User.Lastname,
+      };
+      updateLoggedInUser(currentUser);
+      console.log(currentUser);
+      navigate("/");
     } else {
       return;
     }
@@ -84,11 +91,15 @@ const Login = () => {
       } else if (data.error) {
         setLoginErrorMessage(data.loginMsg);
       } else {
-        (currentUser.ID = data.User.UserID),
-          (currentUser.Email = data.User.Email),
-          (currentUser.FName = data.User.Firstname),
-          (currentUser.LName = data.User.Lastname),
-          console.log(currentUser);
+        const currentUser = {
+          ID: data.User.UserID,
+          Email: data.User.Email,
+          FName: data.User.Firstname,
+          LName: data.User.Lastname,
+          AboutText: data.User.AboutText,
+        };
+        console.log(currentUser);
+        updateLoggedInUser(currentUser);
         navigate("/");
       }
     }
@@ -143,4 +154,4 @@ const Login = () => {
   );
 };
 
-export { Login, currentUser };
+export { Login };

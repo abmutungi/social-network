@@ -41,6 +41,8 @@ func (lr *LoginResponse) PopulateLoginDataResponse(db *sql.DB, email string) {
 	lr.User.Created = u.Created
 }
 
+var CurrentUser users.User
+
 func (s *Server) HandleLogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
@@ -68,6 +70,7 @@ func (s *Server) HandleLogin() http.HandlerFunc {
 				return
 			} else {
 				loginResponse.PopulateLoginDataResponse(s.Db, ld.Email)
+				CurrentUser = users.ReturnSingleUser(s.Db, ld.Email)
 
 				giveUserCookieOnLogIn(w, r, users.ReturnSingleUser(s.Db, ld.Email).UserID, uuid.Must(uuid.NewV4()))
 				sendLoginMessage(w, loginResponse, false, "Successful log in")
