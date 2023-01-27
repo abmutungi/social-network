@@ -34,9 +34,9 @@ const ProfileBar = () =>
       DBAllUsers,
       AllGroupsData,
       userID,
-      // updateUserID,
+      updateUserID,
       GroupID,
-      // updateGroupID,
+      updateGroupID,
       updateAboutText,
       ProfilePhotoBackground,
       LoggedInUserID,
@@ -53,34 +53,38 @@ const ProfileBar = () =>
 AboutText: Array(1), Members: 2941}
 
 */
-    const updateProfileStates = (userid, groupid) => {
-      if (userid > 0) {
-        for (const obj of DBAllUsers) {
-          if (obj.UserID == userid) {
-            setfirstName(obj.Firstname);
-            setlastName(obj.Lastname);
-            setfollowers(`${obj.Followers} ${"followers"}`);
-            setfollowing(`${obj.Following} ${"following"}`);
-            updateAboutText(obj.AboutText);
-          }
+    const updateUserProfile = (userid) => {
+      //if (userid > 0) {
+      for (const obj of DBAllUsers) {
+        if (obj.UserID == userid) {
+          setfirstName(obj.Firstname);
+          setlastName(obj.Lastname);
+          setfollowers(`${obj.Followers} ${"followers"}`);
+          setfollowing(`${obj.Following} ${"following"}`);
+          updateAboutText(obj.AboutText);
         }
-        // updateGroupID(0);
-      } else if (GroupID > 0) {
-        for (const obj of AllGroupsData) {
-          if (obj.GroupID == groupid) {
-            setfirstName(obj.GroupName);
-            setlastName("");
-            setfollowing(`${obj.Members} ${"members"}`);
-            setfollowers("");
-            updateAboutText(obj.AboutText);
-          }
+        updateGroupID(0);
+      }
+      //}
+    };
+
+    const updateGroupProfile = (groupid) => {
+      // if (GroupID > 0) {
+      for (const obj of AllGroupsData) {
+        if (obj.GroupID == groupid) {
+          setfirstName(obj.GroupName);
+          setlastName("");
+          setfollowing(`${obj.Members} ${"members"}`);
+          setfollowers("");
+          updateAboutText(obj.AboutText);
         }
       }
-      // updateUserID(0);
+      //}
+      updateUserID(0);
     };
 
     useEffect(() => {
-      updateProfileStates(userID, 0);
+      updateUserProfile(userID);
       fetchRelationship(LoggedInUserID, userID);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,7 +93,7 @@ AboutText: Array(1), Members: 2941}
     //   console.log('profilebarclickuser', userID);
 
     useEffect(() => {
-      updateProfileStates(0, GroupID);
+      updateGroupProfile(GroupID);
       // fetchRelationship(LoggedInUserID, userID);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
