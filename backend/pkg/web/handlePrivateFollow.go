@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/abmutungi/social-network/backend/pkg/db/notifications"
+	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
 )
 

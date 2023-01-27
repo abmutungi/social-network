@@ -13,7 +13,7 @@ import (
 
 type FollowerPublicData struct {
 	User     int `json:"userID"`
-	Follower int `json:"followerID"`
+	Follower int `json:"loggedInUserID"`
 }
 
 
@@ -33,12 +33,12 @@ func (s *Server) HandlePublicFollow() http.HandlerFunc {
 
 		json.Unmarshal(data, &f)
 
-		fmt.Println(f.User)
-		fmt.Println(f.Follower)
+		fmt.Println("logged in user from followBtn:", f.Follower)
+		fmt.Println("user to follow from followBtn", f.User)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-		if !relationships.FollowingYouCheck(s.Db, f.User, f.Follower) {
+		if !relationships.FollowingYouCheck(s.Db,f.User, f.Follower) {
 			relationships.StoreFollowing(s.Db, f.User, f.Follower)
 		} else {
 			fmt.Println("Relationship not added to the db as already follow this user")

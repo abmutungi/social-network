@@ -13,7 +13,7 @@ import (
 
 type UnfollowData struct {
 	User     int `json:"userID"`
-	Follower int `json:"followerID"`
+	Follower int `json:"loggedInUserID"`
 }
 
 func (s *Server) HandleUnfollow() http.HandlerFunc {

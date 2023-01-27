@@ -12,8 +12,8 @@ import (
 )
 
 type FollowStatusCheck struct {
-	User     int `json:"user"`
-	ToFollow int `json:"toFollowID"`
+	User     int `json:"loggedInUserID"`
+	ToFollow int `json:"userID"`
 }
 
 type StatusCanFollow struct {
@@ -37,11 +37,15 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			log.Println(err)
 		}
 
-		fmt.Println("DATA******************",string(data))
+		fmt.Println("DATA FROM FollowCheck HFn() ******************", string(data))
 
 		var f FollowStatusCheck
 
 		json.Unmarshal(data, &f)
+
+		fmt.Println(f.ToFollow)
+
+		fmt.Println("FFFFFFFFFFFFFFFFFFFF")
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
