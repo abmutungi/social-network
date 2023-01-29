@@ -46,8 +46,12 @@ const CreateGroupModal = ({show, onClose}) => {
         console.log("Response froom CreateGroup -> ", data);
   
       }
-  
-      CreateGroup();
+  try{
+
+    CreateGroup();
+  }catch(e){
+    console.log('Error with the creategroup fn', e);
+  }
     console.log('Create group FormValues',
     formValues);
     
