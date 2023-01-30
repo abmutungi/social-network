@@ -4,6 +4,7 @@ import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
 import { useContext } from "react";
 import { followText, unfollowText } from "./UserRequestBtn";
+import { useNavigate } from "react-router-dom";
 
 const SingleProfileComponent = (props) => {
   const {
@@ -18,6 +19,7 @@ const SingleProfileComponent = (props) => {
     updateFollowText,
   } = useContext(LowerHeaderContext);
 
+  const navigate = useNavigate();
   async function FetchRelationship(lgInUser, userProfile) {
     console.log("*********IS THIS FUNCTION RUNNING*****************");
     try {
@@ -41,6 +43,10 @@ const SingleProfileComponent = (props) => {
 
       console.log("************************************", Following, userID);
       console.log(data);
+      if (data.msg) {
+        navigate("/login");
+        return;
+      }
       //   console.log("STATIC BUTTON RENDER *****************");
       // }
 
@@ -58,8 +64,9 @@ const SingleProfileComponent = (props) => {
     return (
       <div
         role="presentation"
-        onClick={(e) => updateUserID(Number(e.currentTarget.id),
-        updateFollowing(true))}
+        onClick={(e) =>
+          updateUserID(Number(e.currentTarget.id), updateFollowing(true))
+        }
         className="SingleProfile"
         id={props.id}
       >

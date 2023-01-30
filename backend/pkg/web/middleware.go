@@ -1,8 +1,25 @@
 package web
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
+	"time"
 )
+
+type Session struct {
+	UserID string
+	Expiry time.Time
+}
+
+type ClientMessage struct {
+	Msg string `json:"msg"`
+}
+
+// we'll use this method later to determine if the session has expired
+func (s Session) isExpired() bool {
+	return s.Expiry.Before(time.Now())
+}
 
 func LogInPageSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -22,5 +39,42 @@ func LogInPageSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
+func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCors(&w)
+		c, err := r.Cookie("session_cookie")
+		if err != nil {
+			if err == http.ErrNoCookie {
+				//handle there being no cookie
+				var cm ClientMessage
+				cm.Msg = "No cookie, send back to login"
+				d, _ := json.Marshal(cm)
+				w.Write([]byte(d))
+			}
+			return
+		}
+		sessionToken := c.Value
+
+		userSession, exists := SessionsStructMap[sessionToken]
+		if !exists {
+			//handle there not being a session
+			var cm ClientMessage
+			cm.Msg = "Invalid session, send back to login"
+			d, _ := json.Marshal(cm)
+			w.Write([]byte(d))
+
+			return
+		}
+		if userSession.isExpired() {
+			fmt.Println("SESSION HAS EXPIRED")
+			delete(SessionsStructMap, sessionToken)
+			var cm ClientMessage
+			cm.Msg = "No cookie, send back to login"
+			d, _ := json.Marshal(cm)
+			w.Write([]byte(d))
+			return
+		}
+		HandlerFunc.ServeHTTP(w, r)
+
+	}
+}
