@@ -16,15 +16,9 @@ type FollowStatusCheck struct {
 	ToFollow int `json:"userID"`
 }
 
-type StatusCanFollow struct {
+type FollowStatus struct {
 	CanFollow bool `json:"canFollow"`
-}
-
-type StatusFollowing struct {
 	Following bool `json:"following"`
-}
-
-type StatusRequested struct {
 	Requested bool `json:"requested"`
 }
 
@@ -43,15 +37,15 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 
 		json.Unmarshal(data, &f)
 
-		fmt.Println(f.ToFollow)
-
-		fmt.Println("FFFFFFFFFFFFFFFFFFFF")
+		fmt.Printf("****LOGGED IN USER: %v\n****USER TO FOLLOW:%v\n", f.User, f.ToFollow)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-		if !relationships.FollowRequestCheck(s.Db, f.User, f.ToFollow) {
-			var s StatusCanFollow
+		if !relationships.FollowingYouCheck(s.Db,f.ToFollow, f.User) && !relationships.FollowRequestCheck(s.Db, f.User, f.ToFollow) {
+			var s FollowStatus
 			s.CanFollow = true
+			s.Following = false
+			s.Requested = false
 
 			sendFollowStatus, err := json.Marshal(s)
 			if err != nil {
@@ -64,9 +58,11 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			return
 
 		} else if relationships.FollowRequestCheck(s.Db, f.User, f.ToFollow) {
-			var s StatusRequested
+			var s FollowStatus
 
 			s.Requested = true
+			s.CanFollow = false
+			s.Following = false
 
 			sendFollowStatus, err := json.Marshal(s)
 			if err != nil {
@@ -77,10 +73,12 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(sendFollowStatus)
 			return
-		} else if relationships.FollowingYouCheck(s.Db, f.User, f.ToFollow) {
-			var s StatusFollowing
+		} else if relationships.FollowingYouCheck(s.Db, f.ToFollow, f.User) {
+			var s FollowStatus
 
 			s.Following = true
+			s.CanFollow = false
+			s.Requested = false
 
 			sendFollowStatus, err := json.Marshal(s)
 			if err != nil {

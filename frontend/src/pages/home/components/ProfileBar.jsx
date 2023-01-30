@@ -25,7 +25,8 @@ import { ProfileEventBtn } from "./ProfileEventBtn";
 import { GroupRequestBtn } from "./GroupRequestBtn";
 import { StaticBtn } from "./StaticBtn";
 import { GroupInviteBtn } from "./GroupInviteBtn";
-import { FetchRelationship } from "../../../components/SingleProfileComponent";
+
+// import { FetchRelationship } from "../../../components/SingleProfileComponent";
 const ProfileBar = () =>
   // pbPrivacyBtn,
   // pbPostBtn,
@@ -45,10 +46,11 @@ const ProfileBar = () =>
       updatePrivacyStatus,
       PrivacyStatus,
       Following,
+
     } = useContext(LowerHeaderContext);
 
-    const [firstName, setfirstName] = useState("Tolu");
-    const [lastName, setlastName] = useState("Lawal");
+    const [firstName, setfirstName] = useState();
+    const [lastName, setlastName] = useState();
     const [followers, setfollowers] = useState("10 Followers");
     const [following, setfollowing] = useState("8 Following");
 
@@ -88,18 +90,8 @@ AboutText: Array(1), Members: 2941}
 
     useEffect(() => {
       updateProfileStates(userID);
-      FetchRelationship(LoggedInUserID, userID);
-
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userID]);
-    // console.log('from profileBar', DBAllUsers);
-    //   console.log('profilebarclickuser', userID);
-
-    // useEffect(() => {
-    //   updateProfileStates(0, GroupID);
-
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [GroupID]);
 
     return (
       <>
@@ -134,10 +126,10 @@ AboutText: Array(1), Members: 2941}
             {userID != LoggedInUserID ? (
               <UserRequestBtn
                 isPublic={true}
-                followStatus={!Following ? followText : unfollowText}
+                followStatus={Following ? unfollowText : followText}
               />
             ) : null}
-            {console.log("********FOLLOWING**************", Following)}
+            {console.log("**FOLOWING IS**", Following)}
             <ProfileEventBtn />
             <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
             {console.log(PrivacyStatus)}

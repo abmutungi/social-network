@@ -1,43 +1,65 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../assets/css/AllChats.css";
 import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
 import { useContext } from "react";
-
-export async function FetchRelationship(lgInUser, userProfile) {
-  console.log("*********IS THIS FUNCTION RUNNING*****************");
-  const { updateFollowing } = useContext(LowerHeaderContext);
-  // const { DBAllUsers, userID } = useContext(LowerHeaderContext);
-  // console.log(DBAllUsers);
-  try {
-    const response = await fetch("http://localhost:8080/followCheck", {
-      method: "POST",
-      body: JSON.stringify({
-        userID: lgInUser,
-        toFollowerID: userProfile,
-      }),
-    });
-    const data = await response.json();
-
-    if (data.canFollow) {
-      updateFollowing(true);
-      console.log("STATIC BUTTON RENDER *****************");
-    }
-
-    console.log("*************DATA SENT************************", data);
-  } catch (e) {
-    console.log("error fetching relationshiip", e);
-  }
-}
+import { followText, unfollowText } from "./UserRequestBtn";
 
 const SingleProfileComponent = (props) => {
-  const { updateUserID, updateGroupID } = useContext(LowerHeaderContext);
+  const {
+    updateUserID,
+    updateGroupID,
+    Following,
+    updateFollowing,
+    LoggedInUserID,
+    userID,
+    updateRequested,
+    //FollowText,
+    updateFollowText,
+  } = useContext(LowerHeaderContext);
+
+  async function FetchRelationship(lgInUser, userProfile) {
+    console.log("*********IS THIS FUNCTION RUNNING*****************");
+    try {
+      const response = await fetch("http://localhost:8080/followCheck", {
+        method: "POST",
+        body: JSON.stringify({
+          loggedInUserID: lgInUser,
+          userID: userProfile,
+        }),
+      });
+      const data = await response.json();
+
+      if (data.canFollow) {
+        updateFollowing(false);
+        updateFollowText(followText);
+      } else if (data.following) {
+        updateFollowing(true);
+        updateFollowText(unfollowText);
+      } else if (data.requested) updateRequested(true);
+      // updateFollowText(requestText);
+
+      console.log("************************************", Following, userID);
+      console.log(data);
+      //   console.log("STATIC BUTTON RENDER *****************");
+      // }
+
+      //console.log("*************DATA SENT************************", data);
+    } catch (e) {
+      console.log("error fetching relationshiip", e);
+    }
+  }
+
+  useEffect(() => {
+    FetchRelationship(LoggedInUserID, userID); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userID]);
 
   if (props.type === "AllUsers") {
     return (
       <div
         role="presentation"
-        onClick={(e) => updateUserID(e.currentTarget.id)}
+        onClick={(e) => updateUserID(Number(e.currentTarget.id),
+        updateFollowing(true))}
         className="SingleProfile"
         id={props.id}
       >

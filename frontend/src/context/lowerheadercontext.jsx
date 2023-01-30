@@ -16,12 +16,13 @@ export function LowerHeaderProvider({ children }) {
     useState("man-utd.png");
 
   const [LoggedInUserID] = useState(1);
-  const [Following, setFollowing] = useState(false);
+  const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);
   const [FollowText, setFollowText] = useState(followText);
 
   const updateUserID = (id) => {
     setUserID(() => id);
+    // if (!Following) updateFollowText(followText);
     // fetchRelationship(LoggedInUserID, userID);
   };
 
@@ -57,10 +58,9 @@ export function LowerHeaderProvider({ children }) {
     setFollowing(() => bool);
   };
 
-    const updateRequested = (bool) => {
-      setRequested(() => bool);
-    };
-
+  const updateRequested = (bool) => {
+    setRequested(() => bool);
+  };
 
   return (
     <LowerHeaderContext.Provider
@@ -85,7 +85,7 @@ export function LowerHeaderProvider({ children }) {
         Following,
         Requested,
         updateFollowing,
-        updateRequested
+        updateRequested,
       }}
     >
       {children}
