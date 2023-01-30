@@ -122,7 +122,7 @@ AboutText: Array(1), Members: 2941}
             {console.log("PrivacyBtnText****", PrivacyBtnText)}
             {console.log("PrivacyStatus****", PrivacyStatus)}
 
-            <ProfilePostBtn />
+            {userID == LoggedInUserID ? <ProfilePostBtn /> : null}
             {userID != LoggedInUserID ? (
               <UserRequestBtn
                 isPublic={true}

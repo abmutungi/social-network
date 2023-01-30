@@ -26,6 +26,7 @@ const Login = () => {
     updatePrivacyStatus,
     PrivacyStatus,
     updatePrivacyBtnText,
+
   } = useContext(LowerHeaderContext);
 
   async function loginCheck() {
@@ -134,6 +135,7 @@ const Login = () => {
         console.log(loggedInUser);
         navigate("/");
       }
+      
     }
 
     sendLoginData();
