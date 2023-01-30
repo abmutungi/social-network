@@ -10,19 +10,19 @@ type Group struct {
 	GroupID   int
 	GroupName string
 	CreatorID int
-	Avatar    string
+	Avatar    interface{}
 	AboutText string
 	Members   int
 }
 
-func CreateGroup(db *sql.DB, groupname string, creatorid int, desc string) {
-	stmt, err := db.Prepare("INSERT INTO groups (name, creator, about) VALUES ( ?, ?, ?)")
+func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc string)[]Group {
+	stmt, err := db.Prepare("INSERT INTO groups (name, creator, avatar, about) VALUES ( ?, ?,?, ?)")
 
 	if err != nil {
 		fmt.Printf("error preparing create group statement: %v", err)
 	}
 
-	res, err2 := stmt.Exec(groupname, creatorid, desc)
+	res, err2 := stmt.Exec(groupname, creatorid,file, desc)
 
 	if err2 != nil {
 		fmt.Printf("error adding group into database: %v", err2)
@@ -32,6 +32,8 @@ func CreateGroup(db *sql.DB, groupname string, creatorid int, desc string) {
 	LastIns, _ := res.LastInsertId()
 	fmt.Println("groups rows affected: ", rowsAff)
 	fmt.Println("group last inserted id: ", LastIns)
+
+	return GetAllGroupsData(db)
 }
 
 //add and increment members to group table

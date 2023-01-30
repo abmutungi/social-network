@@ -9,7 +9,7 @@ func (s *Server) Routes() {
 
 	s.Router.HandleFunc("/unfollow", s.HandleUnfollow())
 	s.Router.HandleFunc("/dummyusers", s.HandleDummyUsers())
-	s.Router.HandleFunc("/dummygroups", s.HandleDummyGroups())
+	s.Router.HandleFunc("/getgroupdata", s.HandleGroups())
 
 	s.Router.HandleFunc("/login", (s.HandleLogin()))
 	s.Router.HandleFunc("/logout", s.HandleLogout())

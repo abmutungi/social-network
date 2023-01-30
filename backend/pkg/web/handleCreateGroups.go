@@ -1,14 +1,12 @@
 package web
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
-	"io"
-	"log"
 	"net/http"
-	"github.com/abmutungi/social-network/backend/pkg/groups"
+	"strconv"
 
+	"github.com/abmutungi/social-network/backend/pkg/groups"
 )
 
 type NewGroup struct {
@@ -21,27 +19,36 @@ func (s *Server) HandleCreateGroup() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 
-		data, err := io.ReadAll(r.Body)
+		var fileName string
+
+
+		err := r.ParseMultipartForm(10 << 20)
 		if err != nil {
-			log.Println("erroring reading new group data", err)
+			fmt.Println("err parsing group image", err)
 		}
 
+		fmt.Println("Form Groups", r.Form)
 
-		var ng NewGroup
+		if r.Form.Get("group-avatar") != "" {
+			fileName = s.HandleImage(r)
+		}
 
-		json.Unmarshal(data, &ng)
-		
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-		groups.CreateGroup(s.Db, ng.GroupName, ng.CreatorID, ng.GroupDescription)
+		fmt.Println("FILE NAME", fileName)
 
-		fmt.Println("Post Marsh Group", ng)
-		// fmt.Println(f.Follower)
+		creatorid, err := strconv.Atoi(r.Form.Get("creatorID"))
+		if err != nil {
+			fmt.Println("Error converting string to int, HandleCreateGroup fn()")
+		}
 
+		// //adds a new group to the db, returns all groups after
+		var UpdatedGroups = groups.CreateGroup(s.Db, r.Form.Get("groupName"), creatorid, fileName, r.Form.Get("groupDescription"))
 
-		// if !relationships.FollowingYouCheck(s.Db, f.User, f.Follower) {
-		// 	relationships.StoreFollowing(s.Db, f.User, f.Follower)
-		// } else {
-		// 	fmt.Println("Relationship not added to the db as already follow this user")
-		// }
+		AllGroups, err := json.Marshal(UpdatedGroups)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Write([]byte(AllGroups))
+
 	}
 }
