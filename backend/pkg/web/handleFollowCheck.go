@@ -13,7 +13,7 @@ import (
 
 type FollowStatusCheck struct {
 	User     int `json:"loggedInUserID"`
-	ToFollow int `json:"userID"`
+	UserOfInterest int `json:"userID"`
 }
 
 type FollowStatus struct {
@@ -39,11 +39,11 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 
 		
 
-		fmt.Printf("****LOGGED IN USER: %v\n****USER TO FOLLOW:%v\n", f.User, f.ToFollow)
+		fmt.Printf("****LOGGED IN USER: %v\n****USER TO FOLLOW:%v\n", f.User, f.UserOfInterest)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-		if !relationships.FollowingYouCheck(s.Db,f.ToFollow, f.User) && !relationships.FollowRequestCheck(s.Db, f.User, f.ToFollow) {
+		if !relationships.FollowingYouCheck(s.Db,f.UserOfInterest, f.User) && !relationships.FollowRequestCheck(s.Db, f.User, f.UserOfInterest) {
 			var s FollowStatus
 			s.CanFollow = true
 			s.Following = false
@@ -59,7 +59,7 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			w.Write(sendFollowStatus)
 			return
 
-		} else if relationships.FollowRequestCheck(s.Db, f.User, f.ToFollow) {
+		} else if relationships.FollowRequestCheck(s.Db, f.User, f.UserOfInterest) {
 			var s FollowStatus
 
 			s.Requested = true
@@ -75,7 +75,7 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(sendFollowStatus)
 			return
-		} else if relationships.FollowingYouCheck(s.Db, f.ToFollow, f.User) {
+		} else if relationships.FollowingYouCheck(s.Db, f.UserOfInterest, f.User) {
 			var s FollowStatus
 
 			s.Following = true

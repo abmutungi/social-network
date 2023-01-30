@@ -43,10 +43,10 @@ const ProfileBar = () =>
       updateAboutText,
       ProfilePhotoBackground,
       LoggedInUserID,
-      // updatePrivacyStatus,
+      updatePrivacyStatus,
       PrivacyStatus,
+      PrivacyBtnText,
       Following,
-
     } = useContext(LowerHeaderContext);
     const { loggedInUser } = useContext(loggedInUserContext);
 
@@ -69,6 +69,7 @@ AboutText: Array(1), Members: 2941}
           setfollowers(`${obj.Followers} ${"followers"}`);
           setfollowing(`${obj.Following} ${"following"}`);
           updateAboutText(obj.AboutText);
+          updatePrivacyStatus(obj.Privacy);
         }
         updateGroupID(0);
       }
@@ -91,7 +92,6 @@ AboutText: Array(1), Members: 2941}
     };
 
     useEffect(() => {
-
       updateUserProfile(userID);
       //fetchRelationship(LoggedInUserID, userID);
 
@@ -119,21 +119,10 @@ AboutText: Array(1), Members: 2941}
             Following={following}
           />
           <div className="ProfileBtnContainer">
-            <PrivateBtn
-              className="privacy-btn"
-              OptionA={
-                <>
-                  <FontAwesomeIcon icon="fa-solid fa-lock" />
-                  <span className="icon-text">Private</span>
-                </>
-              }
-              OptionB={
-                <>
-                  <FontAwesomeIcon icon="fa-solid fa-users" />
-                  <span className="icon-text">Public</span>
-                </>
-              }
-            />
+            {userID == LoggedInUserID ? <PrivateBtn /> : null}
+            {console.log("PrivacyBtnText****", PrivacyBtnText)}
+            {console.log("PrivacyStatus****", PrivacyStatus)}
+
             <ProfilePostBtn />
             {userID != LoggedInUserID ? (
               <UserRequestBtn

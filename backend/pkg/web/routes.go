@@ -8,6 +8,8 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/followCheck", s.HandleFollowCheck())
 
 	s.Router.HandleFunc("/unfollow", s.HandleUnfollow())
+	s.Router.HandleFunc("/updatePrivacy", s.HandlePrivacyUpdate())
+	
 	s.Router.HandleFunc("/dummyusers", s.HandleDummyUsers())
 	s.Router.HandleFunc("/dummygroups", s.HandleDummyGroups())
 

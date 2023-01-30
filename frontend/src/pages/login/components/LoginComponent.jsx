@@ -18,7 +18,12 @@ import "../../../assets/css/login.css";
 
 const Login = () => {
   const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
-  const { updateAboutText, updateUserID, updateLoggedInUserID } = useContext(LowerHeaderContext);
+  const {
+    updateAboutText,
+    updateUserID,
+    updateLoggedInUserID,
+    updatePrivacyStatus,
+  } = useContext(LowerHeaderContext);
 
   async function loginCheck() {
     console.log("cookie check => ", document.cookie);
@@ -48,12 +53,14 @@ const Login = () => {
         FName: data.User.Firstname,
         LName: data.User.Lastname,
         AboutText: data.User.AboutText,
+        Privacy: data.User.Privacy,
       };
       console.log(currentUser);
       updateLoggedInUser(currentUser);
       updateAboutText(currentUser.AboutText);
       updateUserID(currentUser.ID);
       updateLoggedInUserID(currentUser.ID);
+      updatePrivacyStatus(currentUser.Privacy);
       console.log(loggedInUser);
       navigate("/");
     } else {
@@ -110,12 +117,14 @@ const Login = () => {
           FName: data.User.Firstname,
           LName: data.User.Lastname,
           AboutText: data.User.AboutText,
+          Privacy: data.User.Privacy,
         };
         console.log(currentUser);
         updateLoggedInUser(currentUser);
         updateAboutText(currentUser.AboutText);
         updateUserID(currentUser.ID);
         updateLoggedInUserID(currentUser.ID);
+        updatePrivacyStatus(currentUser.Privacy);
         console.log(loggedInUser);
         navigate("/");
       }

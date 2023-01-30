@@ -60,7 +60,6 @@ func ReturnSingleUser(db *sql.DB, email string) User {
 	userRow := db.QueryRow(userStmt, email)
 	var a User
 	err := userRow.Scan(&a.UserID, &a.Email, &a.Firstname, &a.Lastname, &a.DOB, &a.Avatar, &a.Nickname, &a.AboutText, &a.Privacy, &a.Created)
-
 	if err != nil {
 		fmt.Printf("Error in getting this users (%s) data: %v\n", email, err)
 	}
@@ -99,4 +98,17 @@ func GetAllUserData(db *sql.DB) []User {
 	}
 
 	return AllUsers
+}
+
+// update users set privacy = 1 where userID = 1;
+func UpdatePrivacy(db *sql.DB, privacy, userID int) {
+	res, err := db.Exec(`UPDATE users SET privacy = ? WHERE userID = ?`, privacy, userID)
+	if err != nil {
+		panic(err)
+	}
+
+	rowsAff, _ := res.RowsAffected()
+	LastIns, _ := res.LastInsertId()
+	fmt.Println("rows affected:", rowsAff)
+	fmt.Println("last inserted:", LastIns)
 }
