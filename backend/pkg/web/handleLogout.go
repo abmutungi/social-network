@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+
+	"github.com/abmutungi/social-network/backend/pkg/users"
 )
 
 type LogoutInfo struct {
@@ -13,8 +15,10 @@ type LogoutInfo struct {
 	Email     string `json:"Email"`
 	UserFName string `json:"FName"`
 	UserLName string `json:"LName"`
+	User      users.User
 	Message   string `json:"logoutMsg"`
 	Success   bool   `json:"success"`
+	CookieID  string `json:"CookieID"`
 }
 
 type UserCheck struct {
@@ -34,13 +38,11 @@ func (s *Server) HandleLogout() http.HandlerFunc {
 
 		if err != nil {
 			fmt.Println("Error looking for cookie on log out: ", err)
-			// http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
 
 		// delete the session
 		if c.Value == OnlineUsersSessionsMap[c.Name] {
-
 			delete(OnlineUsersSessionsMap, c.Name)
 		}
 		// remove the cookie
@@ -52,21 +54,18 @@ func (s *Server) HandleLogout() http.HandlerFunc {
 		http.SetCookie(w, c)
 		sendLogoutMessage(w, loInfo, true, "User cookie deleted and logged out")
 		fmt.Println("User logged out and redirected to the log-in page")
-		// http.Redirect(w, r, "/login", http.StatusSeeOther)
 	}
 }
 
 func sendLogoutMessage(w http.ResponseWriter, logoutResp LogoutInfo, success bool, msg string) {
 	logoutResp.Message = msg
 	logoutResp.Success = success
-	fmt.Println("rr check -> ", logoutResp)
+	fmt.Println("logout message check -> ", logoutResp)
 	resp, err := json.Marshal(logoutResp)
 	if err != nil {
 		fmt.Println("Error marshalling error message struct --> ", err)
 	}
-
 	(w).Write([]byte(resp))
-
 }
 
 func (s *Server) frontendLogin() http.HandlerFunc {
@@ -77,17 +76,18 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		fmt.Println("checking d from login -> ", string(d))
 		json.Unmarshal(d, &lrData)
 		if len(r.Cookies()) == 0 {
-
 			lrData.Success = true
 			r, _ := json.Marshal(lrData)
 			w.Write(r)
 		} else {
 			fmt.Println(lrData)
 			lrData.Success = false
+			email := users.GetEmailFromUserID(s.Db, lrData.CookieID)
+			lrData.User = users.ReturnSingleUser(s.Db, email)
+			fmt.Println("Checking lrData struct in feLogin: ", lrData)
 			r, _ := json.Marshal(lrData)
 			w.Write(r)
 			fmt.Println("Logged in user went to log in frontend check")
 		}
-
 	}
 }

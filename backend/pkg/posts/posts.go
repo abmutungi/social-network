@@ -53,7 +53,7 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 
 	posts := []Post{}
 
-	defer db.Close()
+	// defer db.Close()
 	defer rows.Close()
 	for rows.Next() {
 		var p Post

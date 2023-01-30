@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/abmutungi/social-network/backend/pkg/login"
+	"github.com/abmutungi/social-network/backend/pkg/users"
 )
 
 type User struct {
@@ -76,7 +76,7 @@ func (s *Server) HandleDummyUsers() http.HandlerFunc {
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-		databaseusers := login.GetAllUserData(s.Db)
+		databaseusers := users.GetAllUserData(s.Db)
 
 		Users, err := json.Marshal(databaseusers)
 		if err != nil {

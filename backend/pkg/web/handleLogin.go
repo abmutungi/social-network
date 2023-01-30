@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/abmutungi/social-network/backend/pkg/login"
+	"github.com/abmutungi/social-network/backend/pkg/users"
 	uuid "github.com/gofrs/uuid"
 )
 
@@ -21,25 +22,23 @@ type LoginData struct {
 }
 
 type LoginResponse struct {
-	Message          string `json:"loginMsg"`
-	ErrorExists      bool   `json:"error"`
-	CurrentUserID    int    `json:"currentUserID"`
-	CurrentUserEmail string `json:"currentUserEmail"`
-	CurrentUserFName string `json:"currentUserFName"`
-	CurrentUserLName string `json:"currentUserLName"`
+	Message     string `json:"loginMsg"`
+	ErrorExists bool   `json:"error"`
+	User        users.User
 }
 
-func (lr *LoginResponse) PopulateLoginDataResponse(userID int, userEmail, userFName, userLName string) {
-	lr.CurrentUserID = userID
-	lr.CurrentUserEmail = userEmail
-	lr.CurrentUserFName = userFName
-	lr.CurrentUserLName = userLName
-}
-
-func (lr *LoginResponse) GetCurrentUserID() string {
-
-	return strconv.Itoa(lr.CurrentUserID)
-
+func (lr *LoginResponse) PopulateLoginDataResponse(db *sql.DB, email string) {
+	var u = users.ReturnSingleUser(db, email)
+	lr.User.UserID = u.UserID
+	lr.User.Email = u.Email
+	lr.User.Firstname = u.Firstname
+	lr.User.Lastname = u.Lastname
+	lr.User.DOB = u.DOB
+	lr.User.Avatar = u.Avatar
+	lr.User.Nickname = u.Nickname
+	lr.User.AboutText = u.AboutText
+	lr.User.Privacy = u.Privacy
+	lr.User.Created = u.Created
 }
 
 func (s *Server) HandleLogin() http.HandlerFunc {
@@ -68,8 +67,9 @@ func (s *Server) HandleLogin() http.HandlerFunc {
 				sendLoginMessage(w, loginResponse, true, "Wrong password entered, try again!")
 				return
 			} else {
-				loginResponse.PopulateLoginDataResponse(login.GetUserID(s.Db, ld.Email), ld.Email, login.GetUserFullName(s.Db, ld.Email)[0], login.GetUserFullName(s.Db, ld.Email)[1])
-				giveUserCookieOnLogIn(w, r, login.GetUserID(s.Db, ld.Email), uuid.Must(uuid.NewV4()))
+				loginResponse.PopulateLoginDataResponse(s.Db, ld.Email)
+
+				giveUserCookieOnLogIn(w, r, users.ReturnSingleUser(s.Db, ld.Email).UserID, uuid.Must(uuid.NewV4()))
 				sendLoginMessage(w, loginResponse, false, "Successful log in")
 
 			}
@@ -80,7 +80,7 @@ func (s *Server) HandleLogin() http.HandlerFunc {
 func sendLoginMessage(w http.ResponseWriter, loginResp LoginResponse, errExists bool, msg string) {
 	loginResp.Message = msg
 	loginResp.ErrorExists = errExists
-	fmt.Println("rr check -> ", loginResp)
+	fmt.Println("loginresp struct check -> ", loginResp)
 	resp, err := json.Marshal(loginResp)
 	if err != nil {
 		fmt.Println("Error marshalling error message struct --> ", err)

@@ -1,14 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Login } from "../../../pages/login/components/LoginComponent";
-import { Link, Route, Routes } from "react-router-dom";
-import { currentUser } from "../../../pages/login/components/LoginComponent";
+// import { Login } from "../../../pages/login/components/LoginComponent";
+// import { Link, Route, Routes } from "react-router-dom";
+// import { currentUser } from "../../../pages/login/components/LoginComponent";
 import { useNavigate } from "react-router-dom";
 
 // import {  logoutUser } from "./ClickFuncs";
 import "../../../index.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NotificationsModal } from "../../../pages/home/components/notificationsModal";
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
 function ContainerLogo() {
   return (
@@ -19,6 +20,7 @@ function ContainerLogo() {
 }
 
 function ContainerIcons() {
+  const { loggedInUser } = useContext(loggedInUserContext);
   const navigate = useNavigate();
   /*On logout click,
   need to send info back to the log out handler
@@ -27,7 +29,7 @@ function ContainerIcons() {
     const response = await fetch("http://localhost:8080/logout", {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(currentUser),
+      body: JSON.stringify(loggedInUser),
 
       headers: {
         "Content-Type": "application/json",

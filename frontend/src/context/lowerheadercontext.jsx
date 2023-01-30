@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useContext} from "react";
 import { followText } from "../components/UserRequestBtn";
+import { loggedInUserContext } from "./loggedInUserContext";
 // import { UseIdFromUrl} from '../hooks/UseIdFromUrl'
 export const LowerHeaderContext = createContext();
 
@@ -10,12 +11,12 @@ export function LowerHeaderProvider({ children }) {
   const [GroupID, setGroupID] = useState(0);
   const [AllGroupsData, setAllGroupsData] = useState([]);
 
-  const [AboutText, setAboutText] = useState("About Text Placeholder");
+  const [AboutText, setAboutText] = useState("loggedInUser.AboutText");
 
   const [ProfilePhotoBackground, setProfilePhotoBackground] =
     useState("man-utd.png");
-
-  const [LoggedInUserID] = useState(1);
+  const { loggedInUser } = useContext(loggedInUserContext)
+  const [LoggedInUserID, setLoggedInUserID] = useState(loggedInUser.ID);
   const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);
   const [FollowText, setFollowText] = useState(followText);
@@ -62,6 +63,10 @@ export function LowerHeaderProvider({ children }) {
     setRequested(() => bool);
   };
 
+  const updateLoggedInUserID = (id) => {
+    setLoggedInUserID(() => id);
+  };
+
   return (
     <LowerHeaderContext.Provider
       value={{
@@ -77,7 +82,6 @@ export function LowerHeaderProvider({ children }) {
         updateAboutText,
         ProfilePhotoBackground,
         updateProfilePhotoBackground,
-        LoggedInUserID,
         PrivacyStatus,
         updatePrivacyStatus,
         FollowText,
@@ -86,6 +90,8 @@ export function LowerHeaderProvider({ children }) {
         Requested,
         updateFollowing,
         updateRequested,
+        LoggedInUserID,
+        updateLoggedInUserID,
       }}
     >
       {children}

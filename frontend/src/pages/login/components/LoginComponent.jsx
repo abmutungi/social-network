@@ -1,26 +1,37 @@
 import React from "react";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Register } from "../../register/components/RegistrationComponent";
 import { Link, Route, Routes } from "react-router-dom";
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import "../../../assets/css/login.css";
 
-let currentUser = {
-  ID: "",
-  Email: "",
-  FName: "",
-  LName: "",
-};
+// let currentUser = {
+//   ID: "",
+//   Email: "",
+//   FName: "",
+//   LName: "",
+// };
 
 const Login = () => {
+  const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
+  const { updateAboutText, updateUserID, updateLoggedInUserID } = useContext(LowerHeaderContext);
+
   async function loginCheck() {
-    console.log("CURRENT USER CHECK -> ", currentUser);
+    console.log("cookie check => ", document.cookie);
+    console.log("cookie id check => ", document.cookie.charAt(0));
+
+    let userCookie = {
+      CookieID: document.cookie.charAt(0),
+    };
+    console.log("CURRENT USER CHECK -> ", loggedInUser);
     const response = await fetch("http://localhost:8080/frontendlogin", {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(currentUser),
+      body: JSON.stringify(userCookie),
 
       headers: {
         "Content-Type": "application/json",
@@ -31,11 +42,20 @@ const Login = () => {
     const data = await response.json();
     console.log("Data check -> ", data);
     if (!data.success) {
-      (currentUser.ID = data.ID),
-        (currentUser.Email = data.Email),
-        (currentUser.FName = data.FName),
-        (currentUser.LName = data.LName),
-        navigate("/");
+      const currentUser = {
+        ID: data.User.UserID,
+        Email: data.User.Email,
+        FName: data.User.Firstname,
+        LName: data.User.Lastname,
+        AboutText: data.User.AboutText,
+      };
+      console.log(currentUser);
+      updateLoggedInUser(currentUser);
+      updateAboutText(currentUser.AboutText);
+      updateUserID(currentUser.ID);
+      updateLoggedInUserID(currentUser.ID);
+      console.log(loggedInUser);
+      navigate("/");
     } else {
       return;
     }
@@ -84,11 +104,19 @@ const Login = () => {
       } else if (data.error) {
         setLoginErrorMessage(data.loginMsg);
       } else {
-        (currentUser.ID = data.currentUserID),
-          (currentUser.Email = data.currentUserEmail),
-          (currentUser.FName = data.currentUserFName),
-          (currentUser.LName = data.currentUserLName),
-          console.log(currentUser);
+        const currentUser = {
+          ID: data.User.UserID,
+          Email: data.User.Email,
+          FName: data.User.Firstname,
+          LName: data.User.Lastname,
+          AboutText: data.User.AboutText,
+        };
+        console.log(currentUser);
+        updateLoggedInUser(currentUser);
+        updateAboutText(currentUser.AboutText);
+        updateUserID(currentUser.ID);
+        updateLoggedInUserID(currentUser.ID);
+        console.log(loggedInUser);
         navigate("/");
       }
     }
@@ -143,4 +171,4 @@ const Login = () => {
   );
 };
 
-export { Login, currentUser };
+export { Login };

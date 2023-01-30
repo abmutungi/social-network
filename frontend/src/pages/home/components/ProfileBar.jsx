@@ -6,7 +6,7 @@ import "../../..//assets/css/ProfileBar.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 // import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
-
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import {
   faLock,
   faUsers,
@@ -35,22 +35,23 @@ const ProfileBar = () =>
   {
     const {
       DBAllUsers,
-      // AllGroupsData,
+      AllGroupsData,
       userID,
-      // updateUserID,
-      // GroupID,
-      // updateGroupID,
+      updateUserID,
+      GroupID,
+      updateGroupID,
       updateAboutText,
       ProfilePhotoBackground,
       LoggedInUserID,
-      updatePrivacyStatus,
+      // updatePrivacyStatus,
       PrivacyStatus,
       Following,
 
     } = useContext(LowerHeaderContext);
+    const { loggedInUser } = useContext(loggedInUserContext);
 
-    const [firstName, setfirstName] = useState();
-    const [lastName, setlastName] = useState();
+    const [firstName, setfirstName] = useState(loggedInUser.FName);
+    const [lastName, setlastName] = useState(loggedInUser.LName);
     const [followers, setfollowers] = useState("10 Followers");
     const [following, setfollowing] = useState("8 Following");
 
@@ -59,39 +60,50 @@ const ProfileBar = () =>
 AboutText: Array(1), Members: 2941}
 
 */
-    const updateProfileStates = (userid) => {
-      // let profObj = {}
-      if (userid > 0) {
-        for (const obj of DBAllUsers) {
-          console.log(obj);
-          if (obj.UserID == userid) {
-            setfirstName(obj.Firstname);
-            setlastName(obj.Lastname);
-            setfollowers(`${obj.Followers} ${"followers"}`);
-            setfollowing(`${obj.Following} ${"following"}`);
-            updateAboutText(obj.AboutText);
-            updatePrivacyStatus(obj.Privacy);
-          }
+    const updateUserProfile = (userid) => {
+      //if (userid > 0) {
+      for (const obj of DBAllUsers) {
+        if (obj.UserID == userid) {
+          setfirstName(obj.Firstname);
+          setlastName(obj.Lastname);
+          setfollowers(`${obj.Followers} ${"followers"}`);
+          setfollowing(`${obj.Following} ${"following"}`);
+          updateAboutText(obj.AboutText);
         }
-        // updateGroupID(0);
-        // } else if (GroupID > 0) {
-        //   for (const obj of AllGroupsData) {
-        //     if (obj.GroupID == groupid) {
-        //       setfirstName(obj.GroupName);
-        //       setlastName("");
-        //       setfollowing(`${obj.Members} ${"members"}`);
-        //       setfollowers("");
-        //       updateAboutText(obj.AboutText);
-        //     }
-        //   }
+        updateGroupID(0);
       }
-      // updateUserID(0);
+      //}
+    };
+
+    const updateGroupProfile = (groupid) => {
+      // if (GroupID > 0) {
+      for (const obj of AllGroupsData) {
+        if (obj.GroupID == groupid) {
+          setfirstName(obj.GroupName);
+          setlastName("");
+          setfollowing(`${obj.Members} ${"members"}`);
+          setfollowers("");
+          updateAboutText(obj.AboutText);
+        }
+      }
+      //}
+      updateUserID(0);
     };
 
     useEffect(() => {
-      updateProfileStates(userID);
+
+      updateUserProfile(userID);
+      //fetchRelationship(LoggedInUserID, userID);
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userID]);
+
+    useEffect(() => {
+      updateGroupProfile(GroupID);
+      // fetchRelationship(LoggedInUserID, userID);
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [GroupID]);
 
     return (
       <>
@@ -132,7 +144,8 @@ AboutText: Array(1), Members: 2941}
             {console.log("**FOLOWING IS**", Following)}
             <ProfileEventBtn />
             <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
-            {console.log(PrivacyStatus)}
+            {/* {console.log(PrivacyStatus)} */}
+            {console.log(LoggedInUserID)}
             {userID != LoggedInUserID ? (
               <StaticBtn status={!PrivacyStatus ? "Public" : "Private"} />
             ) : null}

@@ -37,6 +37,8 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 
 		json.Unmarshal(data, &f)
 
+		
+
 		fmt.Printf("****LOGGED IN USER: %v\n****USER TO FOLLOW:%v\n", f.User, f.ToFollow)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
