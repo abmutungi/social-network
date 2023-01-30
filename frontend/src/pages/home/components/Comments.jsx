@@ -5,20 +5,25 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 library.add(faImage);
 
 // This component returns a single comment.
-const SingleComment = ({ commentData }) => {
+const SingleComment = (props) => {
+  // if there is an image add the img div
+  const imageExists = props.commentImage;
   return (
     <div className="single-comment">
       <img
         className="cp-profile-pic comment-profile-pic"
-        src={commentData.imgPath}
+        src={props.imgPath}
         alt="img"
       />
       <div className="comment">
         <div className="comment-bubble">
-          <div className="comment-name">{commentData.name}</div>
-          <span className="comment-span">{commentData.content}</span>
+          <div className="comment-name">{props.name}</div>
+          <span className="comment-span">{props.content}</span>
         </div>
-        <div className="comment-date">{commentData.date}</div>
+        {imageExists && (
+          <img className="comment-img" src={props.commentImage} alt="img" />
+        )}
+        <div className="comment-date">{props.date}</div>
       </div>
     </div>
   );
@@ -29,23 +34,38 @@ const SingleComment = ({ commentData }) => {
 const Comments = (props) => {
   // state for comment input
   const [commentInput, setCommentInput] = useState("");
+  const [img, setImg] = useState(null);
+  const [imgName, setImgName] = useState("");
 
   // function to handle form submission
   const handleCommentSubmit = (e) => {
     e.preventDefault();
-    const form = e.target;
-
+    const form = e.target.form;
     const formData = new FormData(form);
     formData.append("postID", props.postID);
-
-    const commentJson = Object.fromEntries(formData.entries());
-    console.log(commentJson);
+    formData.append("imgName", imgName);
+    // const commentJson = Object.fromEntries(formData.entries());
+    // console.log(commentJson);
     fetch("http://localhost:8080/storecomment", {
       mode: "no-cors",
       method: "POST",
       body: formData,
     });
     setCommentInput("");
+    setImg(null);
+  };
+
+  // submit comment form on enter key being pressed
+  const submitOnEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      return handleCommentSubmit(e);
+    }
+  };
+
+  // if there is no image return "" else return img path as prop
+  const handlePostImgPath = (strImgPath) => {
+    return strImgPath === "" ? "" : `../assets/img/ext/${strImgPath}`;
   };
 
   return (
@@ -57,12 +77,8 @@ const Comments = (props) => {
             src="../assets/img/ext/man-utd.png"
             alt="img"
           />
-          <form
-            className="comment-form"
-            onSubmit={handleCommentSubmit}
-            role="presentation"
-          >
-            <input
+          <form className="comment-form" role="presentation">
+            <textarea
               name="textContent"
               value={commentInput}
               onChange={(e) => {
@@ -71,22 +87,36 @@ const Comments = (props) => {
               className="comment-input"
               placeholder="Write a comment..."
               rows={1}
-            ></input>
-            <button className="comment-upload-btn">
+              onKeyDown={submitOnEnter}
+            />
+            {img && <span className="cp-img-details">{imgName}</span>}
+            <label
+              htmlFor="file-upl"
+              type="button"
+              className="comment-upload-btn"
+            >
               <FontAwesomeIcon icon="fa-solid fa-image" />
-            </button>
+            </label>
+            <input
+              id="file-upl"
+              type="file"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                setImg(e.target.files[0]);
+                setImgName(e.target.files[0].name);
+              }}
+              name="uploadedCommentImg"
+            />
           </form>
         </div>
         {/* map through passed down comments for each post */}
         {props.comments?.map((comment) => (
           <SingleComment
             key={comment.commentID}
-            commentData={{
-              name: comment.name,
-              content: comment.textContent,
-              date: comment.date,
-              imgPath: comment.imgPath,
-            }}
+            name={comment.name}
+            content={comment.textContent}
+            date={comment.date}
+            commentImage={handlePostImgPath(comment.imageContent)}
           />
         ))}
       </div>

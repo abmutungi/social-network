@@ -301,8 +301,13 @@ body {
   cursor: pointer;
   font-size: 1.2rem;
   color: #606770;
-  top: 0;
+  top: 8px;
   right: 0;
   position: absolute;
   height: 100%;
+}
+
+.comment-img {
+  height: 200px;
+  width: 200px;
 }
