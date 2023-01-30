@@ -7,6 +7,7 @@ import { Register } from "../../register/components/RegistrationComponent";
 import { Link, Route, Routes } from "react-router-dom";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { PublicText, PrivateText } from "../../home/components/PrivateBtn";
 import "../../../assets/css/login.css";
 
 // let currentUser = {
@@ -23,6 +24,8 @@ const Login = () => {
     updateUserID,
     updateLoggedInUserID,
     updatePrivacyStatus,
+    PrivacyStatus,
+    updatePrivacyBtnText,
   } = useContext(LowerHeaderContext);
 
   async function loginCheck() {
@@ -61,6 +64,9 @@ const Login = () => {
       updateUserID(currentUser.ID);
       updateLoggedInUserID(currentUser.ID);
       updatePrivacyStatus(currentUser.Privacy);
+      if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
+      if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
+
       console.log(loggedInUser);
       navigate("/");
     } else {

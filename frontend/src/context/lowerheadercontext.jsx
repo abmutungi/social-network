@@ -1,6 +1,5 @@
 import { createContext, useState, useContext } from "react";
 import { followText } from "../components/UserRequestBtn";
-import { PublicText } from "../pages/home/components/PrivateBtn";
 import { loggedInUserContext } from "./loggedInUserContext";
 // import { UseIdFromUrl} from '../hooks/UseIdFromUrl'
 export const LowerHeaderContext = createContext();
@@ -17,7 +16,7 @@ export function LowerHeaderProvider({ children }) {
     useState("man-utd.png");
   const { loggedInUser } = useContext(loggedInUserContext);
   const [LoggedInUserID, setLoggedInUserID] = useState(loggedInUser.ID);
-  const [PrivacyBtnText, setPrivacyBtnText] = useState(PublicText);
+  const [PrivacyBtnText, setPrivacyBtnText] = useState();
   const [PrivacyStatus, setPrivacyStatus] = useState(loggedInUser.Privacy);
   const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);

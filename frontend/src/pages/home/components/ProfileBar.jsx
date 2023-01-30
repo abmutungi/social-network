@@ -12,7 +12,6 @@ import {
   faUsers,
   faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   followText,
   unfollowText,
