@@ -64,6 +64,14 @@ func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.Handle
 			//handle there not being a session
 			var cm ClientMessage
 			cm.Msg = "Invalid session, send back to login"
+			c = &http.Cookie{
+				Name:   "session_cookie",
+				Value:  "",
+				Path:   "/",
+				MaxAge: -1,
+			}
+			http.SetCookie(w, c)
+			fmt.Println("MAP AFTER MSG SENT --> ", SessionsStructMap)
 			d, _ := json.Marshal(cm)
 			w.Write([]byte(d))
 
@@ -73,6 +81,7 @@ func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.Handle
 			fmt.Println("SESSION HAS EXPIRED")
 			delete(SessionsStructMap, sessionToken)
 			var cm ClientMessage
+
 			cm.Msg = "No cookie, send back to login"
 			d, _ := json.Marshal(cm)
 			w.Write([]byte(d))

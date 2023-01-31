@@ -20,7 +20,10 @@ const Login = () => {
   const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
   const { updateAboutText, updateUserID, updateLoggedInUserID } =
     useContext(LowerHeaderContext);
-
+  /**
+   * Commented the below function out for now because it doesn't work
+   * when redirected back to log in after session is ended
+   */
   // async function loginCheck() {
   //   console.log("cookie check => ", document.cookie);
   //   console.log(
