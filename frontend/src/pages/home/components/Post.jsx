@@ -3,7 +3,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import "../../../assets/css/posts.css";
 import Comments from "./Comments";
 
@@ -56,8 +56,8 @@ const SinglePost = (props) => {
 // PostsContiner will map through the posts data from the database and fill up the container with the posts.
 const PostsContainer = () => {
   // set initial state for incoming posts data
-  const [posts, setPosts] = useState([]);
-  const { DynamicID } = useContext(LowerHeaderContext);
+  // const [posts, setPosts] = useState([]);
+  const { DynamicID, posts, updatePosts } = useContext(LowerHeaderContext);
 
   // fetch home posts for the logged in user
   const userForm = new FormData();
@@ -72,7 +72,7 @@ const PostsContainer = () => {
     });
 
     const data = await resp.json();
-    setPosts(data);
+    updatePosts(data);
   }
 
   // make a network request on component render.

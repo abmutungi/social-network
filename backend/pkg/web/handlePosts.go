@@ -16,7 +16,7 @@ import (
 
 func (s *Server) HandleCreatePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// enableCors(&w)
+		enableCors(&w)
 		// // w.Header().Set("Content-Type", "application/json")
 
 		// data recieved from frontend
@@ -44,6 +44,13 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 		posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
 
+		sendPosts, err := json.Marshal(posts.GetAllUserPosts(s.Db, userIDToInt))
+		if err != nil {
+			fmt.Println("error marshalling posts", sendPosts)
+		}
+
+		fmt.Println("sent posts ======>", string(sendPosts))
+		w.Write(sendPosts)
 	}
 }
 

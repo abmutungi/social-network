@@ -13,11 +13,10 @@ const CreatePostModal = (props) => {
   const [textContent, setTextContent] = useState("");
   const [img, setImg] = useState(null);
   const [privacy, setPrivacy] = useState("public");
-
   // state for when image is uploaded
   const [imgName, setImgName] = useState("");
 
-  const { LoggedInUserID } = useContext(LowerHeaderContext);
+  const { LoggedInUserID, updatePosts } = useContext(LowerHeaderContext);
 
   // for displaying the modal
   if (!props.show) {
@@ -37,10 +36,14 @@ const CreatePostModal = (props) => {
     console.log("form data in obj", Object.fromEntries(formData.entries()));
 
     fetch("http://localhost:8080/createpost", {
-      mode: "no-cors",
+      credentials: "include",
       method: "POST",
       body: formData,
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        updatePosts(data);
+      });
 
     // reset state for inputs on submit
     setTextContent("");
