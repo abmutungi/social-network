@@ -125,7 +125,6 @@ AboutText: Array(1), Members: 2941}
             {userID == LoggedInUserID ? <ProfilePostBtn /> : null}
             {userID != LoggedInUserID ? (
               <UserRequestBtn
-                isPublic={true}
                 followStatus={Following ? unfollowText : followText}
               />
             ) : null}

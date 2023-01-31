@@ -3,7 +3,7 @@ import "../assets/css/AllChats.css";
 import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
 import { useContext } from "react";
-import { followText, unfollowText } from "./UserRequestBtn";
+import { followText, unfollowText, requestText } from "./UserRequestBtn";
 
 const SingleProfileComponent = (props) => {
   const {
@@ -14,7 +14,6 @@ const SingleProfileComponent = (props) => {
     LoggedInUserID,
     userID,
     updateRequested,
-    //FollowText,
     updateFollowText,
   } = useContext(LowerHeaderContext);
 
@@ -23,6 +22,7 @@ const SingleProfileComponent = (props) => {
     try {
       const response = await fetch("http://localhost:8080/followCheck", {
         method: "POST",
+        credentials: "include",
         body: JSON.stringify({
           loggedInUserID: lgInUser,
           userID: userProfile,
@@ -36,8 +36,10 @@ const SingleProfileComponent = (props) => {
       } else if (data.following) {
         updateFollowing(true);
         updateFollowText(unfollowText);
-      } else if (data.requested) updateRequested(true);
-      // updateFollowText(requestText);
+      } else if (data.requested) {
+        updateRequested(true);
+        updateFollowText(requestText);
+      }
 
       console.log("************************************", Following, userID);
       console.log(data);
@@ -58,8 +60,9 @@ const SingleProfileComponent = (props) => {
     return (
       <div
         role="presentation"
-        onClick={(e) => updateUserID(Number(e.currentTarget.id),
-        updateFollowing(true))}
+        onClick={(e) =>
+          updateUserID(Number(e.currentTarget.id), updateFollowing(true))
+        }
         className="SingleProfile"
         id={props.id}
       >

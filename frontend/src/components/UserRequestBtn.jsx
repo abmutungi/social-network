@@ -26,12 +26,12 @@ const unfollowText = (
   </>
 );
 
-// const requestText = (
-//   <>
-//     <FontAwesomeIcon icon={faUserLock} />{" "}
-//     <span className="icon-text">Requested</span>
-//   </>
-// );
+const requestText = (
+  <>
+    <FontAwesomeIcon icon={faUserLock} />{" "}
+    <span className="icon-text">Pending</span>
+  </>
+);
 
 const UserRequestBtn = () => {
   // const [status, setStatus] = useState(props.followStatus);
@@ -42,58 +42,68 @@ const UserRequestBtn = () => {
     LoggedInUserID,
     userID,
     updateFollowing,
+    PrivacyStatus,
+    updateRequested,
   } = useContext(LowerHeaderContext);
 
   const handleClick = () => {
-    // if (props.isPublic) {
-    if (FollowText === followText) {
-      fetch("http://localhost:8080/follow", {
-        method: "POST",
-        body: JSON.stringify({
-          userID: userID,
-          loggedInUserID: LoggedInUserID,
-        }),
-      });
-      //.then((document.getElementById("profileFollowBtn").disabled = true));
-      updateFollowText(unfollowText);
-      updateFollowing(true);
-      console.log(`...now following ${userID}`);
-    } else if (FollowText === unfollowText) {
-      fetch("http://localhost:8080/unfollow", {
-        method: "POST",
-        body: JSON.stringify({
-          userID: userID,
-          loggedInUserID: LoggedInUserID,
-        }),
-      });
-      updateFollowText(followText);
-      updateFollowing(false);
-      console.log(`...unfollowing ${userID}`);
+    if (!PrivacyStatus) {
+      if (FollowText === followText) {
+        fetch("http://localhost:8080/follow", {
+          method: "POST",
+          body: JSON.stringify({
+            userID: userID,
+            loggedInUserID: LoggedInUserID,
+          }),
+        });
+        //.then((document.getElementById("profileFollowBtn").disabled = true));
+        updateFollowText(unfollowText);
+        updateFollowing(true);
+        console.log(`...now following ${userID}`);
+      } else if (FollowText === unfollowText) {
+        fetch("http://localhost:8080/unfollow", {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({
+            userID: userID,
+            loggedInUserID: LoggedInUserID,
+          }),
+        });
+        updateFollowText(followText);
+        updateFollowing(false);
+        console.log(`...unfollowing ${userID}`);
+      }
+    } else {
+      if (FollowText == followText) {
+        updateFollowText(requestText);
+        fetch("http://localhost:8080/followRequest", {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({
+            notificationType: "followRequest",
+            notifiyee: userID,
+            notifier: LoggedInUserID,
+          }),
+        });
+        updateFollowText(requestText);
+        updateRequested(true);
+        //updateFollowing(false);
+        console.log(`...follow request sent to ${userID}`);
+      } else if (FollowText === unfollowText) {
+        updateFollowText(followText);
+        fetch("http://localhost:8080/unfollow", {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({
+            userID: userID,
+            loggedInUserID: LoggedInUserID,
+          }),
+        });
+        updateFollowText(followText);
+        updateRequested(false);
+        console.log(`...unfollowing ${userID}`);
+      }
     }
-
-    //   if (FollowText == followText) {
-    //     updateFollowText(requestText);
-    //     fetch("http://localhost:8080/followRequest", {
-    //       method: "POST",
-    //       body: JSON.stringify({
-    //         notificationType: "followRequest",
-    //         notifiyee: 1,
-    //         notifier: 3,
-    //       }),
-    //     });
-    //     console.log("...follow request sent to Arnold Mutungi");
-    //   } else if (FollowText === unfollowText) {
-    //     updateFollowText(followText);
-    //     fetch("http://localhost:8080/unfollow", {
-    //       method: "POST",
-    //       body: JSON.stringify({
-    //         userID: 3,
-    //         followerID: 1,
-    //       }),
-    //     });
-    //     console.log("...unfollowing Arnold Mutungi");
-    //   }
-    // }
   };
 
   return (
@@ -103,4 +113,4 @@ const UserRequestBtn = () => {
   );
 };
 
-export { followText, unfollowText, UserRequestBtn };
+export { followText, unfollowText, requestText, UserRequestBtn };
