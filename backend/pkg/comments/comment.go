@@ -16,15 +16,15 @@ type Comment struct {
 }
 
 // eventually need to add postId and userId as arguements
-func StoreComment(db *sql.DB, postID int, textContent string, imgPath string) {
+func StoreComment(db *sql.DB, postID int, userID int, textContent string, imgPath string) {
 	stmt, err := db.Prepare(`INSERT INTO comments (postID, userID, textContent, imageContent, createdAt) 
-	VALUES (?, 1, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))`)
+	VALUES (?, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))`)
 
 	if err != nil {
 		fmt.Printf("error with storecomment insert statement:%v", err)
 	}
 
-	res, err2 := stmt.Exec(postID, textContent, imgPath)
+	res, err2 := stmt.Exec(postID, userID, textContent, imgPath)
 
 	if err2 != nil {
 		fmt.Printf("error adding comment into database: %v", err2)

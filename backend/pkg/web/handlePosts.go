@@ -49,7 +49,6 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			fmt.Println("error marshalling posts", sendPosts)
 		}
 
-		fmt.Println("sent posts ======>", string(sendPosts))
 		w.Write(sendPosts)
 	}
 }
