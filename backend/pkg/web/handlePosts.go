@@ -26,13 +26,13 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			fmt.Printf("error parsing createPost form: %v", err)
 		}
 
-		fmt.Println(r.Form.Get("textContent"), "text content here")
-		fmt.Println(r.Form.Get("imgName"))
+		// fmt.Println(r.Form.Get("textContent"), "text content here")
+		// fmt.Println(r.Form.Get("imgName"))
 
 		var newFileName string
 		// if file is added in form, create file for image and return filename
 		if r.Form.Get("imgName") != "" {
-			newFileName = s.HandleImage(r)
+			newFileName = s.HandleImage(r, "uploadedPostImg")
 		}
 
 		fmt.Println("new file name", newFileName)
@@ -49,8 +49,8 @@ func (s *Server) TestDBfunctions() {
 	// fmt.Println(comment.GetAllComments(s.Db, 1))
 }
 
-func (s *Server) HandleImage(r *http.Request) string {
-	file, fileInfo, err := r.FormFile("uploadedPostImg")
+func (s *Server) HandleImage(r *http.Request, formImageName string) string {
+	file, fileInfo, err := r.FormFile(formImageName)
 
 	if err != nil {
 		fmt.Printf("failed to get image: %v", err)

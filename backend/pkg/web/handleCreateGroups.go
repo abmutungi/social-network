@@ -28,12 +28,18 @@ func (s *Server) HandleCreateGroup() http.HandlerFunc {
 		}
 
 		fmt.Println("Form Groups", r.Form)
+		// fmt.Println("Reqest Body", r.Body)
 
-		if r.Form.Get("group-avatar") != "" {
-			fileName = s.HandleImage(r)
+		// fmt.Println("R.Form.Get", r.Form.Get("group-avatar"))
+
+
+		if r.Form.Get("imgName") != "" {
+			fileName = s.HandleImage(r, "group-avatar")
 		}
 
 		fmt.Println("FILE NAME", fileName)
+
+
 
 		creatorid, err := strconv.Atoi(r.Form.Get("creatorID"))
 		if err != nil {
@@ -48,6 +54,7 @@ func (s *Server) HandleCreateGroup() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		
 		w.Write([]byte(AllGroups))
 
 	}

@@ -64,7 +64,7 @@ const LeftBodyDiv = () => {
 
   async function fetchGroups() {
     try {
-      const response = await fetch("http://localhost:8080/dummygroups");
+      const response = await fetch("http://localhost:8080/getgroupdata");
       const data = await response.json();
       updateAllGroupsData(data);
 
