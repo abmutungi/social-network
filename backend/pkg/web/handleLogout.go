@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strconv"
 
 	"github.com/abmutungi/social-network/backend/pkg/users"
 )
@@ -34,7 +33,7 @@ func (s *Server) HandleLogout() http.HandlerFunc {
 		json.Unmarshal(data1, &loInfo)
 		fmt.Println("checking struct -> ", loInfo)
 		fmt.Println("Checking string data -> ", string(data1))
-		c, err := r.Cookie(strconv.Itoa(loInfo.UserID))
+		c, err := r.Cookie("session_cookie")
 
 		if err != nil {
 			fmt.Println("Error looking for cookie on log out: ", err)
