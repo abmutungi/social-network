@@ -20,14 +20,14 @@ type Post struct {
 	Comments       []comment.Comment `json:"comments"`
 }
 
-func CreatePost(db *sql.DB, textContent string, postPrivacy string, imgPath string) {
-	stmt, err := db.Prepare("INSERT INTO wallPosts (userID,textContent, privacy, imagePath, createdAt) VALUES (1, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
+func CreatePost(db *sql.DB, userID int, textContent string, postPrivacy string, imgPath string) {
+	stmt, err := db.Prepare("INSERT INTO wallPosts (userID,textContent, privacy, imagePath, createdAt) VALUES (?, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
 
 	if err != nil {
 		fmt.Printf("error preparing create post statement: %v", err)
 	}
 
-	res, err2 := stmt.Exec(textContent, postPrivacy, imgPath)
+	res, err2 := stmt.Exec(userID, textContent, postPrivacy, imgPath)
 
 	if err2 != nil {
 		fmt.Printf("error adding post into database: %v", err2)

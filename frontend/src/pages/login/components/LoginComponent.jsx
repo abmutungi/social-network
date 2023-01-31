@@ -26,6 +26,7 @@ const Login = () => {
     updatePrivacyStatus,
     PrivacyStatus,
     updatePrivacyBtnText,
+    updateDynamicID,
   } = useContext(LowerHeaderContext);
 
   async function loginCheck() {
@@ -70,6 +71,7 @@ const Login = () => {
       if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
       if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
 
+      updateDynamicID(currentUser.ID);
       console.log(loggedInUser);
       navigate("/");
     } else {

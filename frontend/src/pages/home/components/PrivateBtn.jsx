@@ -34,6 +34,7 @@ const PrivateBtn = () => {
       updatePrivacyStatus(false);
       fetch("http://localhost:8080/updatePrivacy", {
         method: "POST",
+        credentials: "include",
         body: JSON.stringify({
           loggedInUserID: LoggedInUserID,
           privacyStatus: false,
@@ -44,6 +45,7 @@ const PrivateBtn = () => {
       updatePrivacyStatus(true);
       fetch("http://localhost:8080/updatePrivacy", {
         method: "POST",
+        credentials: "include",
         body: JSON.stringify({
           loggedInUserID: LoggedInUserID,
           privacyStatus: true,

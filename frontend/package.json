@@ -36,6 +36,5 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.1"
   },
-
- "proxy":"http://localhost:8080"
+  "proxy": "http://localhost:8080"
 }

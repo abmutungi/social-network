@@ -16,6 +16,7 @@ const SingleProfileComponent = (props) => {
     userID,
     updateRequested,
     updateFollowText,
+    updateDynamicID,
   } = useContext(LowerHeaderContext);
 
   const navigate = useNavigate();
@@ -72,6 +73,7 @@ const SingleProfileComponent = (props) => {
           // updateUserID(Number(e.currentTarget.id), updateFollowing(true))
           handleClick(e);
           console.log(e.currentTarget.id);
+          updateDynamicID(e.currentTarget.id);
         }}
         className="SingleProfile"
         id={props.id}

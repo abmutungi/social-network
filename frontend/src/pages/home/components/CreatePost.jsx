@@ -2,8 +2,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import "../../../assets/css/posts.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 library.add(faImage, faXmark);
 
 // All classNames start with cp(short for createpost)
@@ -12,9 +13,10 @@ const CreatePostModal = (props) => {
   const [textContent, setTextContent] = useState("");
   const [img, setImg] = useState(null);
   const [privacy, setPrivacy] = useState("public");
-
   // state for when image is uploaded
   const [imgName, setImgName] = useState("");
+
+  const { LoggedInUserID, updatePosts } = useContext(LowerHeaderContext);
 
   // for displaying the modal
   if (!props.show) {
@@ -25,22 +27,37 @@ const CreatePostModal = (props) => {
   const handleFormSubmit = (e) => {
     // currently not preventing submit default action as need page to reload after submission.
     // eventually will redirect to home after the create post route is known.
-    // e.preventDefault();
+    e.preventDefault();
 
     const formData = new FormData(e.target);
     formData.append("imgName", imgName);
+    formData.append("userID", LoggedInUserID);
+
     console.log("form data in obj", Object.fromEntries(formData.entries()));
 
     fetch("http://localhost:8080/createpost", {
-      mode: "no-cors",
+      credentials: "include",
       method: "POST",
       body: formData,
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        updatePosts(data);
+      });
 
     // reset state for inputs on submit
     setTextContent("");
     setImg(null);
     setPrivacy("public");
+    props.onClose();
+  };
+
+  const handleCustomPrivacy = (e) => {
+    console.log(e.target.value);
+
+    if (e.target.value === "custom") {
+      console.log("custom clicked");
+    }
   };
 
   return (
@@ -71,6 +88,7 @@ const CreatePostModal = (props) => {
                 value={privacy}
                 onChange={(e) => {
                   setPrivacy(e.target.value);
+                  handleCustomPrivacy(e);
                 }}
               >
                 <option name="privacy" value="public">

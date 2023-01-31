@@ -1,7 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 library.add(faImage);
 
 // This component returns a single comment.
@@ -36,7 +37,7 @@ const Comments = (props) => {
   const [commentInput, setCommentInput] = useState("");
   const [img, setImg] = useState(null);
   const [imgName, setImgName] = useState("");
-
+  const { updatePosts, DynamicID } = useContext(LowerHeaderContext);
   // function to handle form submission
   const handleCommentSubmit = (e) => {
     e.preventDefault();
@@ -44,13 +45,19 @@ const Comments = (props) => {
     const formData = new FormData(form);
     formData.append("postID", props.postID);
     formData.append("imgName", imgName);
+    formData.append("userID", DynamicID);
     // const commentJson = Object.fromEntries(formData.entries());
     // console.log(commentJson);
     fetch("http://localhost:8080/storecomment", {
-      mode: "no-cors",
+      credentials: "include",
       method: "POST",
       body: formData,
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        updatePosts(data);
+      });
     setCommentInput("");
     setImg(null);
   };

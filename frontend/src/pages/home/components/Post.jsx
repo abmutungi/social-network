@@ -2,7 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
-import { useEffect, useState } from "react";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { useEffect, useContext } from "react";
 import "../../../assets/css/posts.css";
 import Comments from "./Comments";
 
@@ -55,14 +56,15 @@ const SinglePost = (props) => {
 // PostsContiner will map through the posts data from the database and fill up the container with the posts.
 const PostsContainer = () => {
   // set initial state for incoming posts data
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
+  const { DynamicID, posts, updatePosts } = useContext(LowerHeaderContext);
 
   // fetch home posts for the logged in user
   const userForm = new FormData();
 
   // the user id would have to be taken from somewhere (context data for user)
-  userForm.append("userID", "1");
-
+  userForm.append("userID", DynamicID);
+  console.log("dynamicID", typeof DynamicID);
   async function fetchPosts() {
     const resp = await fetch("http://localhost:8080/myposts", {
       method: "POST",
@@ -70,14 +72,14 @@ const PostsContainer = () => {
     });
 
     const data = await resp.json();
-    setPosts(data);
+    updatePosts(data);
   }
 
   // make a network request on component render.
   useEffect(() => {
     fetchPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [DynamicID]);
 
   // if there is no image return "" else return img path as prop
   const handlePostImgPath = (strImgPath) => {
