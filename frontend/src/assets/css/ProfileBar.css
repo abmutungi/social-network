@@ -81,7 +81,7 @@
 }
 
 .group-request-btn {
-  display: none;
+  display: block;
   width: 120px;
   padding: 7.5px 16px;
   height: fit-content;

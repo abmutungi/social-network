@@ -54,6 +54,7 @@ const ProfileBar = () =>
     const [lastName, setlastName] = useState(loggedInUser.LName);
     const [followers, setfollowers] = useState("10 Followers");
     const [following, setfollowing] = useState("8 Following");
+    const [groupNotUser, setgroupNotUser] = useState(true);
 
     /*
 {GroupID: 2, GroupName: '2011 Rashford Fan Club', CreatorID: 2, 
@@ -71,7 +72,7 @@ AboutText: Array(1), Members: 2941}
           updateAboutText(obj.AboutText);
           updatePrivacyStatus(obj.Privacy);
         }
-        updateGroupID(0);
+        setgroupNotUser(false);
       }
       //}
     };
@@ -89,6 +90,7 @@ AboutText: Array(1), Members: 2941}
       }
       //}
       updateUserID(LoggedInUserID);
+      setgroupNotUser(true);
     };
 
     useEffect(() => {
@@ -119,25 +121,28 @@ AboutText: Array(1), Members: 2941}
             Following={following}
           />
           <div className="ProfileBtnContainer">
-            {userID == LoggedInUserID ? <PrivateBtn /> : null}
+            {userID === LoggedInUserID && groupNotUser ? <PrivateBtn /> : null}
             {console.log("PrivacyBtnText****", PrivacyBtnText)}
             {console.log("PrivacyStatus****", PrivacyStatus)}
 
-            {userID == LoggedInUserID ? <ProfilePostBtn /> : null}
-            {userID != LoggedInUserID ? (
+            {userID === LoggedInUserID && groupNotUser ? (
+              <ProfilePostBtn />
+            ) : null}
+            {userID !== LoggedInUserID ? (
               <UserRequestBtn
                 followStatus={Following ? unfollowText : followText}
               />
             ) : null}
             {console.log("**FOLOWING IS**", Following)}
             <ProfileEventBtn />
-            <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
-            {/* {console.log(PrivacyStatus)} */}
+            {!groupNotUser ? (
+              <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
+            ) : null}
             {console.log(LoggedInUserID)}
             {userID != LoggedInUserID ? (
               <StaticBtn status={!PrivacyStatus ? "Public" : "Private"} />
             ) : null}
-            <GroupInviteBtn />
+            {!groupNotUser ? <GroupInviteBtn /> : null}
           </div>
         </div>
       </>
