@@ -36,7 +36,7 @@ const ProfileBar = () =>
       DBAllUsers,
       AllGroupsData,
       userID,
-      updateUserID,
+      // updateUserID,
       GroupID,
       updateGroupID,
       updateAboutText,
@@ -54,7 +54,7 @@ const ProfileBar = () =>
     const [lastName, setlastName] = useState(loggedInUser.LName);
     const [followers, setfollowers] = useState("10 Followers");
     const [following, setfollowing] = useState("8 Following");
-    const [groupNotUser, setgroupNotUser] = useState(true);
+    const [groupNotUser, setgroupNotUser] = useState(false);
 
     /*
 {GroupID: 2, GroupName: '2011 Rashford Fan Club', CreatorID: 2, 
@@ -62,6 +62,7 @@ AboutText: Array(1), Members: 2941}
 
 */
     const updateUserProfile = (userid) => {
+      setgroupNotUser(false);
       //if (userid > 0) {
       for (const obj of DBAllUsers) {
         if (obj.UserID == userid) {
@@ -72,13 +73,14 @@ AboutText: Array(1), Members: 2941}
           updateAboutText(obj.AboutText);
           updatePrivacyStatus(obj.Privacy);
         }
-        setgroupNotUser(false);
+        updateGroupID(0)
       }
       //}
     };
 
     const updateGroupProfile = (groupid) => {
-      // if (GroupID > 0) {
+      if (GroupID > 0) {
+      setgroupNotUser(true);
       for (const obj of AllGroupsData) {
         if (obj.GroupID == groupid) {
           setfirstName(obj.GroupName);
@@ -88,9 +90,8 @@ AboutText: Array(1), Members: 2941}
           updateAboutText(obj.AboutText);
         }
       }
-      //}
-      updateUserID(LoggedInUserID);
-      setgroupNotUser(true);
+      }
+      // updateUserID(LoggedInUserID);
     };
 
     useEffect(() => {
@@ -100,7 +101,7 @@ AboutText: Array(1), Members: 2941}
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userID]);
 
-    useEffect(() => {
+  useEffect(() => {
       updateGroupProfile(GroupID);
       // fetchRelationship(LoggedInUserID, userID);
 
@@ -121,28 +122,33 @@ AboutText: Array(1), Members: 2941}
             Following={following}
           />
           <div className="ProfileBtnContainer">
-            {userID === LoggedInUserID && groupNotUser ? <PrivateBtn /> : null}
+            {userID === LoggedInUserID && !groupNotUser ? <PrivateBtn /> : null}
             {console.log("PrivacyBtnText****", PrivacyBtnText)}
             {console.log("PrivacyStatus****", PrivacyStatus)}
 
-            {userID === LoggedInUserID && groupNotUser ? (
+            {userID === LoggedInUserID && !groupNotUser ? (
               <ProfilePostBtn />
             ) : null}
-            {userID !== LoggedInUserID ? (
+            {userID !== LoggedInUserID && !groupNotUser ? (
               <UserRequestBtn
                 followStatus={Following ? unfollowText : followText}
               />
             ) : null}
             {console.log("**FOLOWING IS**", Following)}
             <ProfileEventBtn />
-            {!groupNotUser ? (
+            {groupNotUser ? (
               <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
             ) : null}
             {console.log(LoggedInUserID)}
-            {userID != LoggedInUserID ? (
+            {userID != LoggedInUserID && !groupNotUser ? (
               <StaticBtn status={!PrivacyStatus ? "Public" : "Private"} />
             ) : null}
-            {!groupNotUser ? <GroupInviteBtn /> : null}
+            {groupNotUser ? <GroupInviteBtn /> : null}
+            {console.log(
+              "***************groupNotUser******************",
+              groupNotUser
+            )}
+            {console.log("****GroupID*****", GroupID)}
           </div>
         </div>
       </>

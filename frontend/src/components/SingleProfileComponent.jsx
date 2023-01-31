@@ -20,9 +20,9 @@ const SingleProfileComponent = (props) => {
   } = useContext(LowerHeaderContext);
 
   const navigate = useNavigate();
-  const handleClick = (e) => {
+  const handleClick = () => {
     async function FetchRelationship(lgInUser, userProfile) {
-      console.log("*********IS THIS FUNCTION RUNNING*****************");
+      console.log("userProfile*********", userProfile);
       try {
         const response = await fetch("http://localhost:8080/followCheck", {
           method: "POST",
@@ -59,7 +59,7 @@ const SingleProfileComponent = (props) => {
         console.log("error fetching relationshiip", e);
       }
     }
-    FetchRelationship(LoggedInUserID, updateUserID(Number(e.currentTarget.id)));
+    FetchRelationship(LoggedInUserID, userID);
   };
   // useEffect(() => {
   //   FetchRelationship(LoggedInUserID, userID) // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,9 +71,10 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           // updateUserID(Number(e.currentTarget.id), updateFollowing(true))
-          handleClick(e);
+          updateUserID(Number(e.currentTarget.id))
           console.log(e.currentTarget.id);
           updateDynamicID(e.currentTarget.id);
+          handleClick();
         }}
         className="SingleProfile"
         id={props.id}
