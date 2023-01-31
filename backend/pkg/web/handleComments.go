@@ -18,7 +18,14 @@ func (s *Server) handleComment() http.HandlerFunc {
 		}
 
 		postIDtoInt, _ := strconv.Atoi(r.Form.Get("postID"))
+
+		var newFileName string
+		// if file is added in form, create file for image and return filename
+		if r.Form.Get("imgName") != "" {
+			newFileName = s.HandleImage(r, "uploadedCommentImg")
+		}
+
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-		comment.StoreComment(s.Db, postIDtoInt, r.Form.Get("textContent"), r.Form.Get("imageContent"))
+		comment.StoreComment(s.Db, postIDtoInt, r.Form.Get("textContent"), newFileName)
 	}
 }

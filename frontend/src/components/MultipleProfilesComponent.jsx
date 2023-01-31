@@ -1,4 +1,4 @@
-import SingleProfileComponent from "./SingleProfileComponent";
+import SingleProfileComponent  from "./SingleProfileComponent";
 
 const MultipleProfilesComponent = ({ users, type }) => {
  

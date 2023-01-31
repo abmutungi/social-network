@@ -9,10 +9,10 @@ import (
 	"os"
 	"strconv"
 
+	comment "github.com/abmutungi/social-network/backend/pkg/comments"
 	"github.com/abmutungi/social-network/backend/pkg/posts"
 	uuid "github.com/gofrs/uuid"
 )
-
 
 func (s *Server) HandleCreatePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -45,8 +45,8 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 
 func (s *Server) TestDBfunctions() {
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-	fmt.Println(posts.GetAllUserPosts(s.Db, 1))
-	// fmt.Println(comment.GetAllComments(s.Db, 1))
+	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
+	fmt.Println(comment.GetAllComments(s.Db, 1))
 }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {

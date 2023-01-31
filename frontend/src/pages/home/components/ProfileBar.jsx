@@ -6,15 +6,17 @@ import "../../..//assets/css/ProfileBar.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 // import { faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
-import { fetchRelationship } from "../../../components/SingleProfileComponent";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import {
   faLock,
   faUsers,
   faCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { followText, UserRequestBtn } from "../../../components/UserRequestBtn";
+import {
+  followText,
+  unfollowText,
+  UserRequestBtn,
+} from "../../../components/UserRequestBtn";
 library.add(faCirclePlus, faUserGroup, faLock, faUsers);
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { ProfilePhoto } from "./ProfilePhoto";
@@ -22,9 +24,9 @@ import { ProfileEventBtn } from "./ProfileEventBtn";
 import { GroupRequestBtn } from "./GroupRequestBtn";
 import { StaticBtn } from "./StaticBtn";
 import { GroupInviteBtn } from "./GroupInviteBtn";
+
+// import { FetchRelationship } from "../../../components/SingleProfileComponent";
 const ProfileBar = () =>
-  // pbPhoto,
-  // pbProfileInfo,
   // pbPrivacyBtn,
   // pbPostBtn,
   // pbFollowBtn,
@@ -34,12 +36,16 @@ const ProfileBar = () =>
       DBAllUsers,
       AllGroupsData,
       userID,
-      // updateUserID,
+      updateUserID,
       GroupID,
-      // updateGroupID,
+      updateGroupID,
       updateAboutText,
       ProfilePhotoBackground,
       LoggedInUserID,
+      updatePrivacyStatus,
+      PrivacyStatus,
+      PrivacyBtnText,
+      Following,
     } = useContext(LowerHeaderContext);
     const { loggedInUser } = useContext(loggedInUserContext);
 
@@ -53,45 +59,46 @@ const ProfileBar = () =>
 AboutText: Array(1), Members: 2941}
 
 */
-    const updateProfileStates = (userid) => {
-      if (userid > 0) {
-        for (const obj of DBAllUsers) {
-          if (obj.UserID == userid) {
-            setfirstName(obj.Firstname);
-            setlastName(obj.Lastname);
-            setfollowers(`${obj.Followers} ${"followers"}`);
-            setfollowing(`${obj.Following} ${"following"}`);
-            updateAboutText(obj.AboutText);
-          }
+    const updateUserProfile = (userid) => {
+      //if (userid > 0) {
+      for (const obj of DBAllUsers) {
+        if (obj.UserID == userid) {
+          setfirstName(obj.Firstname);
+          setlastName(obj.Lastname);
+          setfollowers(`${obj.Followers} ${"followers"}`);
+          setfollowing(`${obj.Following} ${"following"}`);
+          updateAboutText(obj.AboutText);
+          updatePrivacyStatus(obj.Privacy);
         }
+        updateGroupID(0);
       }
+      //}
     };
 
-    const updateGroupProfileStates = (groupid) => {
-      if (groupid > 0) {
-        for (const obj of AllGroupsData) {
-          if (obj.GroupID == groupid) {
-            setfirstName(obj.GroupName);
-            setlastName("");
-            setfollowing(`${obj.Members} ${"members"}`);
-            setfollowers("");
-            updateAboutText(obj.AboutText);
-          }
+    const updateGroupProfile = (groupid) => {
+      // if (GroupID > 0) {
+      for (const obj of AllGroupsData) {
+        if (obj.GroupID == groupid) {
+          setfirstName(obj.GroupName);
+          setlastName("");
+          setfollowing(`${obj.Members} ${"members"}`);
+          setfollowers("");
+          updateAboutText(obj.AboutText);
         }
       }
+      //}
+      updateUserID(0);
     };
 
     useEffect(() => {
-      updateProfileStates(userID);
-      fetchRelationship(LoggedInUserID, userID);
+      updateUserProfile(userID);
+      //fetchRelationship(LoggedInUserID, userID);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userID]);
-    // console.log('from profileBar', DBAllUsers);
-    //   console.log('profilebarclickuser', userID);
 
     useEffect(() => {
-      updateGroupProfileStates(GroupID);
+      updateGroupProfile(GroupID);
       // fetchRelationship(LoggedInUserID, userID);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,26 +118,25 @@ AboutText: Array(1), Members: 2941}
             Following={following}
           />
           <div className="ProfileBtnContainer">
-            <PrivateBtn
-              className="privacy-btn"
-              OptionA={
-                <>
-                  <FontAwesomeIcon icon="fa-solid fa-lock" />
-                  <span className="icon-text">Private</span>
-                </>
-              }
-              OptionB={
-                <>
-                  <FontAwesomeIcon icon="fa-solid fa-users" />
-                  <span className="icon-text">Public</span>
-                </>
-              }
-            />
-            <ProfilePostBtn />
-            <UserRequestBtn isPublic={true} followStatus={followText} />
+            {userID == LoggedInUserID ? <PrivateBtn /> : null}
+            {console.log("PrivacyBtnText****", PrivacyBtnText)}
+            {console.log("PrivacyStatus****", PrivacyStatus)}
+
+            {userID == LoggedInUserID ? <ProfilePostBtn /> : null}
+            {userID != LoggedInUserID ? (
+              <UserRequestBtn
+                isPublic={true}
+                followStatus={Following ? unfollowText : followText}
+              />
+            ) : null}
+            {console.log("**FOLOWING IS**", Following)}
             <ProfileEventBtn />
             <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
-            <StaticBtn status={"Private"} />
+            {/* {console.log(PrivacyStatus)} */}
+            {console.log(LoggedInUserID)}
+            {userID != LoggedInUserID ? (
+              <StaticBtn status={!PrivacyStatus ? "Public" : "Private"} />
+            ) : null}
             <GroupInviteBtn />
           </div>
         </div>

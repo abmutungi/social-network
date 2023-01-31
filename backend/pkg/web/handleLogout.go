@@ -38,13 +38,11 @@ func (s *Server) HandleLogout() http.HandlerFunc {
 
 		if err != nil {
 			fmt.Println("Error looking for cookie on log out: ", err)
-			// http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
 
 		// delete the session
 		if c.Value == OnlineUsersSessionsMap[c.Name] {
-
 			delete(OnlineUsersSessionsMap, c.Name)
 		}
 		// remove the cookie
@@ -56,7 +54,6 @@ func (s *Server) HandleLogout() http.HandlerFunc {
 		http.SetCookie(w, c)
 		sendLogoutMessage(w, loInfo, true, "User cookie deleted and logged out")
 		fmt.Println("User logged out and redirected to the log-in page")
-		// http.Redirect(w, r, "/login", http.StatusSeeOther)
 	}
 }
 
@@ -68,9 +65,7 @@ func sendLogoutMessage(w http.ResponseWriter, logoutResp LogoutInfo, success boo
 	if err != nil {
 		fmt.Println("Error marshalling error message struct --> ", err)
 	}
-
 	(w).Write([]byte(resp))
-
 }
 
 func (s *Server) frontendLogin() http.HandlerFunc {
@@ -80,9 +75,7 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		d, _ := io.ReadAll(r.Body)
 		fmt.Println("checking d from login -> ", string(d))
 		json.Unmarshal(d, &lrData)
-		// fmt.Println("Checking lrData struct in feLogin: ", lrData)
 		if len(r.Cookies()) == 0 {
-
 			lrData.Success = true
 			r, _ := json.Marshal(lrData)
 			w.Write(r)
@@ -92,11 +85,9 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 			email := users.GetEmailFromUserID(s.Db, lrData.CookieID)
 			lrData.User = users.ReturnSingleUser(s.Db, email)
 			fmt.Println("Checking lrData struct in feLogin: ", lrData)
-
 			r, _ := json.Marshal(lrData)
 			w.Write(r)
 			fmt.Println("Logged in user went to log in frontend check")
 		}
-
 	}
 }

@@ -7,6 +7,7 @@ import { Register } from "../../register/components/RegistrationComponent";
 import { Link, Route, Routes } from "react-router-dom";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { PublicText, PrivateText } from "../../home/components/PrivateBtn";
 import "../../../assets/css/login.css";
 
 // let currentUser = {
@@ -18,7 +19,15 @@ import "../../../assets/css/login.css";
 
 const Login = () => {
   const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
-  const { updateAboutText, updateUserID } = useContext(LowerHeaderContext);
+  const {
+    updateAboutText,
+    updateUserID,
+    updateLoggedInUserID,
+    updatePrivacyStatus,
+    PrivacyStatus,
+    updatePrivacyBtnText,
+
+  } = useContext(LowerHeaderContext);
 
   async function loginCheck() {
     console.log("cookie check => ", document.cookie);
@@ -48,12 +57,18 @@ const Login = () => {
         FName: data.User.Firstname,
         LName: data.User.Lastname,
         AboutText: data.User.AboutText,
+        Privacy: data.User.Privacy,
       };
       console.log(currentUser);
       updateLoggedInUser(currentUser);
       updateAboutText(currentUser.AboutText);
       updateUserID(currentUser.ID);
+      updateLoggedInUserID(currentUser.ID);
+      updatePrivacyStatus(currentUser.Privacy);
+      if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
+      if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
 
+      console.log(loggedInUser);
       navigate("/");
     } else {
       return;
@@ -109,14 +124,20 @@ const Login = () => {
           FName: data.User.Firstname,
           LName: data.User.Lastname,
           AboutText: data.User.AboutText,
+          Privacy: data.User.Privacy,
         };
         console.log(currentUser);
         updateLoggedInUser(currentUser);
         updateAboutText(currentUser.AboutText);
         updateUserID(currentUser.ID);
-
+        updateLoggedInUserID(currentUser.ID);
+        updatePrivacyStatus(currentUser.Privacy);
+        if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
+        if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
+        console.log(loggedInUser);
         navigate("/");
       }
+      
     }
 
     sendLoginData();

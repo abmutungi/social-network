@@ -33,7 +33,7 @@
 }
 
 .privacy-btn {
-  display: none;
+  display: block;
   width: 100px;
   padding: 7.5px 16px;
   height: fit-content;
@@ -65,7 +65,7 @@
 }
 
 .add-event-btn {
-  display: block;
+  display: none;
   width: 100px;
   padding: 7.5px 16px;
   height: fit-content;
@@ -81,7 +81,7 @@
 }
 
 .group-request-btn {
-  display: block;
+  display: none;
   width: 120px;
   padding: 7.5px 16px;
   height: fit-content;
