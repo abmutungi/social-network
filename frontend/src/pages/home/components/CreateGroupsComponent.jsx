@@ -1,29 +1,48 @@
-import React from "react";
-import { useState } from "react";
+import React, { StrictMode } from "react";
+import { useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import {faXmark,} from "@fortawesome/free-solid-svg-icons";
-
+import {faChampagneGlasses, faXmark,} from "@fortawesome/free-solid-svg-icons";
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 
 const CreateGroupModal = ({show, onClose}) => {
-  const [formValues, setFormValues] = useState({
-   groupName:"",
-   groupDescription:"",
-  });
+  const { loggedInUser} = useContext(loggedInUserContext);
+  const { AllGroupsData, updateAllGroupsData} = useContext(LowerHeaderContext);
+  const [imgName, setimgName] = useState('')
 
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
+  async function CreateGroup(fdata) {
+    try{
 
-    const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(formValues);
+      const response = await fetch("http://localhost:8080/creategroup", {
+        method: "POST",
+        credentials: "include",
+        body: fdata,
+      });
+
+      const data = await response.json();
+
+//responds with an array of group objects including the newly created group 
+      updateAllGroupsData(data)
+      onClose()
+
+    }catch(e){
+      console.log('Error with the creategroup fn', e);
+    }
+
+  }
+    const handleSubmit = (e) => {
+
+      e.preventDefault();
+const form = e.target
+const formData = new FormData(form)
+
+formData.append("creatorID" , loggedInUser.ID)
+formData.append("imgName", imgName)
+CreateGroup(formData);
+console.log('AGD', AllGroupsData);
     
   };
 
@@ -49,22 +68,31 @@ const CreateGroupModal = ({show, onClose}) => {
                 <form className="cg-form" onSubmit={handleSubmit}>
             <div className="cg-modal-body">
                     <input name="groupName"
-            value={formValues.groupName}
-            onChange={handleChange} className="cg-input" type="text" placeholder="enter group name" required></input>
+            //value={formValues.groupName}
+           // onChange={handleChange} 
+            className="cg-input" type="text" placeholder="enter group name" required></input>
                     <input name="groupDescription"
-            value={formValues.groupDescription}
-            onChange={handleChange} className="cg-input" type="text" placeholder="enter group description" required></input>
+           // value={formValues.groupDescription}
+            //onChange={handleChange} 
+            className="cg-input" type="text" placeholder="enter group description" required></input>
                          <label htmlFor="avatar">
             Choose an image 
           </label>
           <input
             type="file"
             name="group-avatar"
+            onChange ={(e)=>{
+              setimgName(e.target.files[0].name)
+            }
+
+            }
+  
+            
            
           />
             </div>
             <div className="cg-modal-footer">
-                    <button onSubmit={handleSubmit} className="cg-submit-button" type="submit">Submit</button>
+                    <button  className="cg-submit-button" type="submit">Submit</button>
                     </div>
                 </form>
             </div>

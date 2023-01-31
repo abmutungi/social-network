@@ -11,7 +11,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/updatePrivacy", s.GeneralSessionChecker(s.HandlePrivacyUpdate()))
 	
 	s.Router.HandleFunc("/dummyusers", s.HandleDummyUsers())
-	s.Router.HandleFunc("/dummygroups", s.HandleDummyGroups())
+	s.Router.HandleFunc("/getgroupdata", s.HandleGroups())
 
 	s.Router.HandleFunc("/login", (s.HandleLogin()))
 	s.Router.HandleFunc("/logout", s.HandleLogout())
@@ -19,6 +19,8 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/createpost", s.HandleCreatePost())
 	s.Router.HandleFunc("/storecomment", s.handleComment())
 	s.Router.HandleFunc("/myposts", s.HandleSendUserPosts())
+	s.Router.HandleFunc("/creategroup", s.HandleCreateGroup())
+
 	// s.TestDBfunctions()
 
 }

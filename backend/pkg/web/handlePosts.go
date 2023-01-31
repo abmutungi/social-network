@@ -26,8 +26,8 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			fmt.Printf("error parsing createPost form: %v", err)
 		}
 
-		fmt.Println(r.Form.Get("textContent"), "text content here")
-		fmt.Println(r.Form.Get("imgName"))
+		// fmt.Println(r.Form.Get("textContent"), "text content here")
+		// fmt.Println(r.Form.Get("imgName"))
 
 		var newFileName string
 		// if file is added in form, create file for image and return filename

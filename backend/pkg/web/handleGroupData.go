@@ -3,6 +3,8 @@ package web
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/abmutungi/social-network/backend/pkg/groups"
 )
 
 type Group struct {
@@ -56,19 +58,20 @@ var AllGroups = []Group{
 	},
 }
 
-func (s *Server) HandleDummyGroups() http.HandlerFunc {
+func (s *Server) HandleGroups() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		enableCors(&w)
 
-		Groups, err := json.Marshal(AllGroups)
+		var AllGroupData = groups.GetAllGroupsData(s.Db)
+
+		AllGroups, err := json.Marshal(AllGroupData)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(Groups)
+		w.Write([]byte(AllGroups))
+		
 
 	}
 
