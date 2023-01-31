@@ -76,7 +76,7 @@ const Login = () => {
       return;
     }
   }
-  loginCheck();
+  if (document.cookie !== "") loginCheck();
 
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
   const navigate = useNavigate();
