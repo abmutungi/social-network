@@ -26,6 +26,7 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			fmt.Printf("error parsing createPost form: %v", err)
 		}
 
+		fmt.Println(r.Form, "form values")
 		fmt.Println(r.Form.Get("textContent"), "text content here")
 		fmt.Println(r.Form.Get("imgName"))
 
@@ -35,10 +36,13 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			newFileName = s.HandleImage(r, "uploadedPostImg")
 		}
 
+		fmt.Println("USERID for posts ********", r.Form.Get("userID"))
+		userIDToInt, _ := strconv.Atoi(r.Form.Get("userID"))
+
 		fmt.Println("new file name", newFileName)
 		// adding post to the db
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-		posts.CreatePost(s.Db, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
+		posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
 
 	}
 }
@@ -92,6 +96,7 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 		// conver id to int
 		userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
 
+		fmt.Println("clicked USER ID =====>", userIdInt)
 		// getall posts from db
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 

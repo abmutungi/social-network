@@ -16,6 +16,7 @@ const SingleProfileComponent = (props) => {
     updateRequested,
     //FollowText,
     updateFollowText,
+    updateDynamicID,
   } = useContext(LowerHeaderContext);
 
   async function FetchRelationship(lgInUser, userProfile) {
@@ -58,8 +59,10 @@ const SingleProfileComponent = (props) => {
     return (
       <div
         role="presentation"
-        onClick={(e) => updateUserID(Number(e.currentTarget.id),
-        updateFollowing(true))}
+        onClick={(e) => {
+          updateUserID(Number(e.currentTarget.id), updateFollowing(true));
+          updateDynamicID(e.currentTarget.id);
+        }}
         className="SingleProfile"
         id={props.id}
       >

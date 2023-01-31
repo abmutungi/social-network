@@ -18,7 +18,12 @@ import "../../../assets/css/login.css";
 
 const Login = () => {
   const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
-  const { updateAboutText, updateUserID, updateLoggedInUserID } = useContext(LowerHeaderContext);
+  const {
+    updateAboutText,
+    updateUserID,
+    updateLoggedInUserID,
+    updateDynamicID,
+  } = useContext(LowerHeaderContext);
 
   async function loginCheck() {
     console.log("cookie check => ", document.cookie);
@@ -54,6 +59,7 @@ const Login = () => {
       updateAboutText(currentUser.AboutText);
       updateUserID(currentUser.ID);
       updateLoggedInUserID(currentUser.ID);
+      updateDynamicID(currentUser.ID);
       console.log(loggedInUser);
       navigate("/");
     } else {

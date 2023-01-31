@@ -1,4 +1,4 @@
-import { createContext, useState, useContext} from "react";
+import { createContext, useState, useContext } from "react";
 import { followText } from "../components/UserRequestBtn";
 import { loggedInUserContext } from "./loggedInUserContext";
 // import { UseIdFromUrl} from '../hooks/UseIdFromUrl'
@@ -11,11 +11,13 @@ export function LowerHeaderProvider({ children }) {
   const [GroupID, setGroupID] = useState(0);
   const [AllGroupsData, setAllGroupsData] = useState([]);
 
+  const [DynamicID, setDynamicID] = useState(0);
+
   const [AboutText, setAboutText] = useState("loggedInUser.AboutText");
 
   const [ProfilePhotoBackground, setProfilePhotoBackground] =
     useState("man-utd.png");
-  const { loggedInUser } = useContext(loggedInUserContext)
+  const { loggedInUser } = useContext(loggedInUserContext);
   const [LoggedInUserID, setLoggedInUserID] = useState(loggedInUser.ID);
   const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);
@@ -67,6 +69,9 @@ export function LowerHeaderProvider({ children }) {
     setLoggedInUserID(() => id);
   };
 
+  const updateDynamicID = (id) => {
+    setDynamicID(id);
+  };
   return (
     <LowerHeaderContext.Provider
       value={{
@@ -92,6 +97,8 @@ export function LowerHeaderProvider({ children }) {
         updateRequested,
         LoggedInUserID,
         updateLoggedInUserID,
+        DynamicID,
+        updateDynamicID,
       }}
     >
       {children}
