@@ -15,6 +15,7 @@ import (
 )
 
 var OnlineUsersSessionsMap = make(map[string]string)
+var SessionsStructMap = map[string]Session{}
 
 type LoginData struct {
 	Email    string `json:"email"`
@@ -68,7 +69,7 @@ func (s *Server) HandleLogin() http.HandlerFunc {
 				return
 			} else {
 				loginResponse.PopulateLoginDataResponse(s.Db, ld.Email)
-
+				LoggedInCheck(r, w, strconv.Itoa(users.ReturnSingleUser(s.Db, ld.Email).UserID))
 				giveUserCookieOnLogIn(w, r, users.ReturnSingleUser(s.Db, ld.Email).UserID, uuid.Must(uuid.NewV4()))
 				sendLoginMessage(w, loginResponse, false, "Successful log in")
 
@@ -94,11 +95,18 @@ func sendLoginMessage(w http.ResponseWriter, loginResp LoginResponse, errExists 
 func giveUserCookieOnLogIn(w http.ResponseWriter, r *http.Request, userID int, id uuid.UUID) {
 
 	stringUserID := strconv.Itoa(userID)
+	sessionToken := id.String()
+	expiresAt := time.Now().Add(time.Minute * 60)
+
+	SessionsStructMap[sessionToken] = Session{
+		UserID: stringUserID,
+		Expiry: expiresAt,
+	}
 
 	c := &http.Cookie{
-		Name:     stringUserID,
-		Value:    id.String(),
-		Expires:  time.Now().Add(time.Minute * 60),
+		Name:     "session_cookie",
+		Value:    sessionToken,
+		Expires:  expiresAt,
 		Secure:   true,
 		SameSite: http.SameSiteNoneMode,
 	}
@@ -112,8 +120,57 @@ func giveUserCookieOnLogIn(w http.ResponseWriter, r *http.Request, userID int, i
 		fmt.Println("Value/UUID : ", cookie.Value)
 	}
 
+	fmt.Println("Session Struct Map ==> ", SessionsStructMap)
 	fmt.Println("First time log-in successful")
 	fmt.Println(OnlineUsersSessionsMap)
+
+}
+
+func LoggedInCheck(r *http.Request, w http.ResponseWriter, id string) {
+	fmt.Println("Entered LoggedInCheck Function")
+	// c, err := r.Cookie("session_cookie")
+	// if err != nil {
+	// 	fmt.Println("Error occurred -> ", err)
+	// 	return
+	// }
+	// fmt.Println("Cookie -> ", c)
+	// sessionToken := c.Value
+
+	for k, v := range SessionsStructMap {
+		if v.UserID == id {
+			fmt.Println("Match is -> ", SessionsStructMap[k])
+			for _, c := range r.Cookies() {
+				if c.Value == k {
+
+					http.SetCookie(w, &http.Cookie{
+						Name:    "session_cookie",
+						Value:   "",
+						Expires: time.Now(),
+					})
+
+				}
+			}
+			v.Expiry = time.Now()
+			delete(SessionsStructMap, k)
+		}
+	}
+	fmt.Println("After alleged deletion--> ", SessionsStructMap)
+
+	// _, exists := SessionsStructMap[sessionToken]
+	// if !exists {
+
+	// 	return
+	// } else {
+	// 	fmt.Println("deleting from map")
+	// 	delete(SessionsStructMap, sessionToken)
+	// 	fmt.Println("deleted map", SessionsStructMap)
+	// 	http.SetCookie(w, &http.Cookie{
+	// 		Name:    "session_token",
+	// 		Value:   "",
+	// 		Expires: time.Now(),
+	// 	})
+
+	// }
 
 }
 

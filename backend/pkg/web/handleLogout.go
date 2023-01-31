@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strconv"
 
 	"github.com/abmutungi/social-network/backend/pkg/users"
 )
@@ -34,7 +33,7 @@ func (s *Server) HandleLogout() http.HandlerFunc {
 		json.Unmarshal(data1, &loInfo)
 		fmt.Println("checking struct -> ", loInfo)
 		fmt.Println("Checking string data -> ", string(data1))
-		c, err := r.Cookie(strconv.Itoa(loInfo.UserID))
+		c, err := r.Cookie("session_cookie")
 
 		if err != nil {
 			fmt.Println("Error looking for cookie on log out: ", err)
@@ -73,7 +72,7 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		enableCors(&w)
 		var lrData LogoutInfo
 		d, _ := io.ReadAll(r.Body)
-		fmt.Println("checking d from login -> ", string(d))
+		// fmt.Println("checking d from login -> ", string(d))
 		json.Unmarshal(d, &lrData)
 		if len(r.Cookies()) == 0 {
 			lrData.Success = true
@@ -82,7 +81,7 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		} else {
 			fmt.Println(lrData)
 			lrData.Success = false
-			email := users.GetEmailFromUserID(s.Db, lrData.CookieID)
+			email := users.GetEmailFromUserID(s.Db, SessionsStructMap[lrData.CookieID].UserID)
 			lrData.User = users.ReturnSingleUser(s.Db, email)
 			fmt.Println("Checking lrData struct in feLogin: ", lrData)
 			r, _ := json.Marshal(lrData)

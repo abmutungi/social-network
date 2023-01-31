@@ -30,10 +30,13 @@ const Login = () => {
 
   async function loginCheck() {
     console.log("cookie check => ", document.cookie);
-    console.log("cookie id check => ", document.cookie.charAt(0));
+    console.log(
+      "cookie id check => ",
+      document.cookie.slice(document.cookie.indexOf("=") + 1)
+    );
 
     let userCookie = {
-      CookieID: document.cookie.charAt(0),
+      CookieID: document.cookie.slice(document.cookie.indexOf("=") + 1),
     };
     console.log("CURRENT USER CHECK -> ", loggedInUser);
     const response = await fetch("http://localhost:8080/frontendlogin", {

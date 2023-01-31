@@ -4,6 +4,7 @@ import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
 import { useContext } from "react";
 import { followText, unfollowText, requestText } from "./UserRequestBtn";
+import { useNavigate } from "react-router-dom";
 
 const SingleProfileComponent = (props) => {
   const {
@@ -17,6 +18,7 @@ const SingleProfileComponent = (props) => {
     updateFollowText,
   } = useContext(LowerHeaderContext);
 
+  const navigate = useNavigate();
   const handleClick = (e) => {
     async function FetchRelationship(lgInUser, userProfile) {
       console.log("*********IS THIS FUNCTION RUNNING*****************");
@@ -44,6 +46,10 @@ const SingleProfileComponent = (props) => {
 
         console.log("************************************", Following, userID);
         console.log(data);
+        if (data.msg) {
+          navigate("/login");
+          return;
+        }
         //   console.log("STATIC BUTTON RENDER *****************");
         // }
 
@@ -52,7 +58,7 @@ const SingleProfileComponent = (props) => {
         console.log("error fetching relationshiip", e);
       }
     }
-    FetchRelationship(LoggedInUserID, updateUserID(Number(e.currentTarget.id)))
+    FetchRelationship(LoggedInUserID, updateUserID(Number(e.currentTarget.id)));
   };
   // useEffect(() => {
   //   FetchRelationship(LoggedInUserID, userID) // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,6 +71,7 @@ const SingleProfileComponent = (props) => {
         onClick={(e) => {
           // updateUserID(Number(e.currentTarget.id), updateFollowing(true))
           handleClick(e);
+          console.log(e.currentTarget.id);
         }}
         className="SingleProfile"
         id={props.id}

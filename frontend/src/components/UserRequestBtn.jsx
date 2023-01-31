@@ -51,6 +51,7 @@ const UserRequestBtn = () => {
       if (FollowText === followText) {
         fetch("http://localhost:8080/follow", {
           method: "POST",
+          credentials: "include",
           body: JSON.stringify({
             userID: userID,
             loggedInUserID: LoggedInUserID,
