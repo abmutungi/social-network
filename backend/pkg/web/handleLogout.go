@@ -73,7 +73,7 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		enableCors(&w)
 		var lrData LogoutInfo
 		d, _ := io.ReadAll(r.Body)
-		fmt.Println("checking d from login -> ", string(d))
+		// fmt.Println("checking d from login -> ", string(d))
 		json.Unmarshal(d, &lrData)
 		if len(r.Cookies()) == 0 {
 			lrData.Success = true
@@ -82,7 +82,7 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		} else {
 			fmt.Println(lrData)
 			lrData.Success = false
-			email := users.GetEmailFromUserID(s.Db, lrData.CookieID)
+			email := users.GetEmailFromUserID(s.Db, SessionsStructMap[lrData.CookieID].UserID)
 			lrData.User = users.ReturnSingleUser(s.Db, email)
 			fmt.Println("Checking lrData struct in feLogin: ", lrData)
 			r, _ := json.Marshal(lrData)

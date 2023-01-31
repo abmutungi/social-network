@@ -25,6 +25,7 @@ const SingleProfileComponent = (props) => {
     try {
       const response = await fetch("http://localhost:8080/followCheck", {
         method: "POST",
+        credentials: "include",
         body: JSON.stringify({
           loggedInUserID: lgInUser,
           userID: userProfile,

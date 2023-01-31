@@ -18,49 +18,53 @@ import "../../../assets/css/login.css";
 
 const Login = () => {
   const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
-  const { updateAboutText, updateUserID, updateLoggedInUserID } = useContext(LowerHeaderContext);
+  const { updateAboutText, updateUserID, updateLoggedInUserID } =
+    useContext(LowerHeaderContext);
 
-  async function loginCheck() {
-    console.log("cookie check => ", document.cookie);
-    console.log("cookie id check => ", document.cookie.charAt(0));
+  // async function loginCheck() {
+  //   console.log("cookie check => ", document.cookie);
+  //   console.log(
+  //     "cookie id check => ",
+  //     document.cookie.slice(document.cookie.indexOf("=") + 1)
+  //   );
 
-    let userCookie = {
-      CookieID: document.cookie.charAt(0),
-    };
-    console.log("CURRENT USER CHECK -> ", loggedInUser);
-    const response = await fetch("http://localhost:8080/frontendlogin", {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(userCookie),
+  //   let userCookie = {
+  //     CookieID: document.cookie.slice(document.cookie.indexOf("=") + 1),
+  //   };
+  //   console.log("CURRENT USER CHECK -> ", loggedInUser);
+  //   const response = await fetch("http://localhost:8080/frontendlogin", {
+  //     method: "POST",
+  //     credentials: "include",
+  //     body: JSON.stringify(userCookie),
 
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //   });
 
-    const data = await response.json();
-    console.log("Data check -> ", data);
-    if (!data.success) {
-      const currentUser = {
-        ID: data.User.UserID,
-        Email: data.User.Email,
-        FName: data.User.Firstname,
-        LName: data.User.Lastname,
-        AboutText: data.User.AboutText,
-      };
-      console.log(currentUser);
-      updateLoggedInUser(currentUser);
-      updateAboutText(currentUser.AboutText);
-      updateUserID(currentUser.ID);
-      updateLoggedInUserID(currentUser.ID);
-      console.log(loggedInUser);
-      navigate("/");
-    } else {
-      return;
-    }
-  }
-  loginCheck();
+  //   const data = await response.json();
+  //   console.log("Data check -> ", data);
+  //   if (!data.success) {
+  //     const currentUser = {
+  //       ID: data.User.UserID,
+  //       Email: data.User.Email,
+  //       FName: data.User.Firstname,
+  //       LName: data.User.Lastname,
+  //       AboutText: data.User.AboutText,
+  //     };
+  //     console.log(currentUser);
+  //     updateLoggedInUser(currentUser);
+  //     updateAboutText(currentUser.AboutText);
+  //     updateUserID(currentUser.ID);
+  //     updateLoggedInUserID(currentUser.ID);
+  //     console.log(loggedInUser);
+  //     navigate("/");
+  //   } else {
+  //     return;
+  //   }
+  // }
+  // loginCheck();
 
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
   const navigate = useNavigate();

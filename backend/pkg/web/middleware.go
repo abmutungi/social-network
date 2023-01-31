@@ -42,15 +42,19 @@ func LogInPageSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
 func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
+		for _, c := range r.Cookies() {
+			fmt.Println("COOKIE LOOP -> ", c)
+		}
 		c, err := r.Cookie("session_cookie")
 		if err != nil {
-			if err == http.ErrNoCookie {
-				//handle there being no cookie
-				var cm ClientMessage
-				cm.Msg = "No cookie, send back to login"
-				d, _ := json.Marshal(cm)
-				w.Write([]byte(d))
-			}
+			// if err == http.ErrNoCookie {
+			//handle there being no cookie
+			fmt.Println("ERROR IN GSC --> ", err)
+			var cm ClientMessage
+			cm.Msg = "No cookie, send back to login"
+			d, _ := json.Marshal(cm)
+			w.Write([]byte(d))
+			//}
 			return
 		}
 		sessionToken := c.Value
