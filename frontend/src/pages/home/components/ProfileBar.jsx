@@ -48,7 +48,8 @@ const ProfileBar = () =>
       Following,
     } = useContext(LowerHeaderContext);
     const { loggedInUser } = useContext(loggedInUserContext);
-
+    console.log("loggedInUser.ID", loggedInUser.ID);
+    console.log("current userID", userID);
     const [firstName, setfirstName] = useState(loggedInUser.FName);
     const [lastName, setlastName] = useState(loggedInUser.LName);
     const [followers, setfollowers] = useState("10 Followers");
@@ -87,7 +88,7 @@ AboutText: Array(1), Members: 2941}
         }
       }
       //}
-      updateUserID(0);
+      updateUserID(LoggedInUserID);
     };
 
     useEffect(() => {

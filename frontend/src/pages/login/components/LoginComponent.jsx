@@ -133,7 +133,7 @@ const Login = () => {
         updatePrivacyStatus(currentUser.Privacy);
         if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
         if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
-        console.log(loggedInUser);
+        // console.log(loggedInUser);
         navigate("/");
       }
     }

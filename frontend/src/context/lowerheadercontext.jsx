@@ -5,7 +5,8 @@ import { loggedInUserContext } from "./loggedInUserContext";
 export const LowerHeaderContext = createContext();
 
 export function LowerHeaderProvider({ children }) {
-  const [userID, setUserID] = useState(0);
+  const { loggedInUser } = useContext(loggedInUserContext);
+  const [userID, setUserID] = useState();
   const [DBAllUsers, setDBAllUsers] = useState([]);
   const [GroupID, setGroupID] = useState(0);
   const [AllGroupsData, setAllGroupsData] = useState([]);
@@ -14,8 +15,7 @@ export function LowerHeaderProvider({ children }) {
 
   const [ProfilePhotoBackground, setProfilePhotoBackground] =
     useState("man-utd.png");
-  const { loggedInUser } = useContext(loggedInUserContext);
-  const [LoggedInUserID, setLoggedInUserID] = useState(loggedInUser.ID);
+  const [LoggedInUserID, setLoggedInUserID] = useState();
   const [PrivacyBtnText, setPrivacyBtnText] = useState();
   const [PrivacyStatus, setPrivacyStatus] = useState(loggedInUser.Privacy);
   const [Following, setFollowing] = useState();
