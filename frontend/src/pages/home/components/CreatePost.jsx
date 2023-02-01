@@ -5,6 +5,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import "../../../assets/css/posts.css";
 import { useState, useContext } from "react";
+import DropdownCheckBox from "../../../components/DropdownCheckbox";
 library.add(faImage, faXmark);
 
 // All classNames start with cp(short for createpost)
@@ -15,6 +16,9 @@ const CreatePostModal = (props) => {
   const [privacy, setPrivacy] = useState("public");
   // state for when image is uploaded
   const [imgName, setImgName] = useState("");
+
+  // set state for custom (users) dropdown
+  const [dropdown, setDropdown] = useState(false);
 
   const { LoggedInUserID, updatePosts } = useContext(LowerHeaderContext);
 
@@ -49,14 +53,16 @@ const CreatePostModal = (props) => {
     setTextContent("");
     setImg(null);
     setPrivacy("public");
+    setImgName("");
     props.onClose();
   };
 
   const handleCustomPrivacy = (e) => {
-    console.log(e.target.value);
-
     if (e.target.value === "custom") {
       console.log("custom clicked");
+      setDropdown(true);
+    } else {
+      setDropdown(false);
     }
   };
 
@@ -81,26 +87,29 @@ const CreatePostModal = (props) => {
             <img className="cp-profile-pic" src={props.profileImg} alt="img" />
             <div className="cp-name&viewer">
               <div className="cp-name cp-span">{props.name}</div>
-              <select
-                name="privacyOption"
-                id="who-can-view"
-                className="cp-dropdown"
-                value={privacy}
-                onChange={(e) => {
-                  setPrivacy(e.target.value);
-                  handleCustomPrivacy(e);
-                }}
-              >
-                <option name="privacy" value="public">
-                  Public
-                </option>
-                <option name="privacy" value="private">
-                  Private
-                </option>
-                <option name="privacy" value="custom">
-                  Custom
-                </option>
-              </select>
+              <div className="cp-dropdowns">
+                <select
+                  name="privacyOption"
+                  id="who-can-view"
+                  className="cp-dropdown"
+                  value={privacy}
+                  onChange={(e) => {
+                    setPrivacy(e.target.value);
+                    handleCustomPrivacy(e);
+                  }}
+                >
+                  <option name="privacy" value="public">
+                    Public
+                  </option>
+                  <option name="privacy" value="private">
+                    Private
+                  </option>
+                  <option name="privacy" value="custom">
+                    Custom
+                  </option>
+                </select>
+                {dropdown && <DropdownCheckBox />}
+              </div>
             </div>
           </div>
           <textarea
