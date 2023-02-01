@@ -24,6 +24,8 @@ import { ProfileEventBtn } from "./ProfileEventBtn";
 import { GroupRequestBtn } from "./GroupRequestBtn";
 import { StaticBtn } from "./StaticBtn";
 import { GroupInviteBtn } from "./GroupInviteBtn";
+import { GroupPostBtn } from "./GroupPostBtn";
+import { GroupCreateEventBtn } from "./GroupCreateEventBtn";
 
 // import { FetchRelationship } from "../../../components/SingleProfileComponent";
 const ProfileBar = () => {
@@ -130,7 +132,7 @@ AboutText: Array(1), Members: 2941}
               followStatus={Following ? unfollowText : followText}
             />
           ) : null}
-          {console.log("**FOLOWING IS**", Following)}
+          {/* {console.log("**FOLOWING IS**", Following)} */}
           <ProfileEventBtn />
           {groupNotUser && !isGroupMember? (
             <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
@@ -139,12 +141,11 @@ AboutText: Array(1), Members: 2941}
           {userID != LoggedInUserID && !groupNotUser ? (
             <StaticBtn status={!PrivacyStatus ? "Public" : "Private"} />
           ) : null}
-          {groupNotUser ? <GroupInviteBtn /> : null}
-          {console.log(
-            "***************groupNotUser******************",
-            groupNotUser
-          )}
-          {console.log("****GroupID*****", GroupID)}
+          {groupNotUser && isGroupMember ? <GroupInviteBtn /> : null}
+          {groupNotUser && isGroupMember ? <GroupPostBtn /> : null}
+          {groupNotUser && isGroupMember ? <GroupCreateEventBtn /> : null}
+
+      
         </div>
       </div>
     </>
