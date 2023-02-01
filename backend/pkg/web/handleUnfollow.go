@@ -3,7 +3,6 @@ package web
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -25,21 +24,21 @@ func (s *Server) HandleUnfollow() http.HandlerFunc {
 			log.Println(err)
 		}
 
-		fmt.Println(string(data))
+	//	fmt.Println(string(data))
 
 		var f UnfollowData
 
 		json.Unmarshal(data, &f)
 
-		fmt.Println(f.User)
-		fmt.Println(f.Follower)
+		// fmt.Println(f.User)
+		// fmt.Println(f.Follower)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		if relationships.FollowingYouCheck(s.Db, f.User, f.Follower) {
 			relationships.UnfollowUser(s.Db, f.User, f.Follower)
 		} else {
-			fmt.Println("You don't follow this user")
+			//fmt.Println("You don't follow this user")
 		}
 	}
 }

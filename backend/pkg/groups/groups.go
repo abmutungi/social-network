@@ -15,6 +15,8 @@ type Group struct {
 	Members   int
 }
 
+
+//add a new group entry to the group table
 func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc string)[]Group {
 	stmt, err := db.Prepare("INSERT INTO groups (name, creator, avatar, about) VALUES ( ?, ?,?, ?)")
 
@@ -32,6 +34,8 @@ func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc 
 	LastIns, _ := res.LastInsertId()
 	fmt.Println("groups rows affected: ", rowsAff)
 	fmt.Println("group last inserted id: ", LastIns)
+
+	AddGroupMember(db, int(LastIns), creatorid)
 
 	return GetAllGroupsData(db)
 }
@@ -57,4 +61,27 @@ func GetAllGroupsData(db *sql.DB) []Group {
 	}
 
 	return AllGroups
+}
+
+
+
+
+func AddGroupMember(db *sql.DB, groupid int, memberid int) {
+	stmt, err := db.Prepare("INSERT INTO groupMembers (groupid, member, dateJoined) VALUES ( ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
+
+	if err != nil {
+		fmt.Printf("error preparing within AddGroupMember fn: %v", err)
+	}
+
+	res, err2 := stmt.Exec(groupid, memberid)
+
+	if err2 != nil {
+		fmt.Printf("error adding new member to groupMember table: %v", err2)
+	}
+
+	rowsAff, _ := res.RowsAffected()
+	LastIns, _ := res.LastInsertId()
+	fmt.Println("addgroupmember rows affected: ", rowsAff)
+	fmt.Println("addgroupmember last inserted id: ", LastIns)
+
 }

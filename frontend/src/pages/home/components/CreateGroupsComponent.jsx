@@ -1,8 +1,7 @@
-import React, { StrictMode } from "react";
 import { useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import {faChampagneGlasses, faXmark,} from "@fortawesome/free-solid-svg-icons";
+import { faXmark,} from "@fortawesome/free-solid-svg-icons";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
@@ -42,6 +41,7 @@ const formData = new FormData(form)
 formData.append("creatorID" , loggedInUser.ID)
 formData.append("imgName", imgName)
 CreateGroup(formData);
+setimgName('')
 console.log('AGD', AllGroupsData);
     
   };

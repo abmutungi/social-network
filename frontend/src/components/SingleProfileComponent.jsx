@@ -59,10 +59,11 @@ const SingleProfileComponent = (props) => {
   }
   useEffect(() => {
     if (userID > 0) FetchRelationship();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
   //};
   // useEffect(() => {
-  //   FetchRelationship(LoggedInUserID, userID) // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   FetchRelationship(LoggedInUserID, userID) 
   // }, [userID]);
 
   if (props.type === "AllUsers") {
