@@ -64,7 +64,7 @@ const PostsContainer = () => {
 
   // the user id would have to be taken from somewhere (context data for user)
   userForm.append("userID", DynamicID);
-  console.log("dynamicID", typeof DynamicID);
+
   async function fetchPosts() {
     const resp = await fetch("http://localhost:8080/myposts", {
       method: "POST",

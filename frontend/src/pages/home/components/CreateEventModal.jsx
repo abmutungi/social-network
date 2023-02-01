@@ -1,19 +1,23 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {faXmark,} from "@fortawesome/free-solid-svg-icons";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import "../../../assets/css/Groups.css"
 
 
 
 const CreateEventModal = ({show, onClose}) => {
+
+  const { LoggedInUserID, GroupID } = useContext(LowerHeaderContext);
+
   const [formValues, setFormValues] = useState({
    eventName:"",
    eventDescription:"",
    eventStartDate:"",
-
-   
+   creator: LoggedInUserID,
+   GroupID : GroupID
   });
 
 
@@ -25,10 +29,34 @@ const CreateEventModal = ({show, onClose}) => {
     });
   };
 
+
+
+
+  async function CreateGroupEvent() {
+    try{
+
+      console.log('formvalues from group event', formValues);
+      const response = await fetch("http://localhost:8080/creategroupevent", {
+        method: "POST",
+        credentials: "include",
+        body: formValues,
+      });
+
+      const data = await response.json();
+
+      console.log('resp from creategroupevent', data);
+//responds with an array of group objects including the newly created group 
+
+    }catch(e){
+      console.log('Error with the creategroupevent fn', e);
+    }
+
+  }
+
     const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formValues);
-    
+    //console.log(formValues);
+    CreateGroupEvent()
   };
 
     if (!show) {
@@ -50,7 +78,7 @@ const CreateEventModal = ({show, onClose}) => {
             size="lg"
           />
             </div>
-                <form className="cg-form" onSubmit={handleSubmit}>
+                <form id="createGroupEvent"className="cg-form" onSubmit={handleSubmit}>
             <div className="cg-modal-body">
                   <div className="modal-titles">Event Name</div>
                     <input name="eventName"
@@ -77,19 +105,7 @@ const CreateEventModal = ({show, onClose}) => {
           id="event-form-date-start"
         />
            
-      
-      {/* <label style={{marginRight:"0.5rem"}} htmlFor="endDate">End Date</label>
-        <input name="eventEndDate" type ="date" 
-        min="2023-01-01"
-        value={formValues.eventEndDate}
-        onChange={handleChange}
-
-          className="event-form-control"
-          id="event-form-date-end"
-        /> */}
 </div>
-
-
 
 
             </div>
