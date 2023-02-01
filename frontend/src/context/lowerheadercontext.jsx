@@ -8,7 +8,7 @@ export function LowerHeaderProvider({ children }) {
   const { loggedInUser } = useContext(loggedInUserContext);
   const [userID, setUserID] = useState();
   const [DBAllUsers, setDBAllUsers] = useState([]);
-  const [GroupID, setGroupID] = useState(0);
+  const [GroupID, setGroupID] = useState();
   const [AllGroupsData, setAllGroupsData] = useState([]);
 
   const [DynamicID, setDynamicID] = useState(0);
@@ -23,6 +23,7 @@ export function LowerHeaderProvider({ children }) {
   const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);
   const [FollowText, setFollowText] = useState(followText);
+  const [isGroupMember, setisGroupMember] = useState(false)
 
   const updateUserID = (id) => {
     setUserID(() => id);
@@ -81,6 +82,11 @@ export function LowerHeaderProvider({ children }) {
     setPosts(data);
   };
 
+
+  const updateisGroupMember= (data) => {
+    setisGroupMember(data);
+  };
+  
   return (
     <LowerHeaderContext.Provider
       value={{
@@ -112,6 +118,8 @@ export function LowerHeaderProvider({ children }) {
         updateDynamicID,
         posts,
         updatePosts,
+        isGroupMember,
+        updateisGroupMember
       }}
     >
       {children}

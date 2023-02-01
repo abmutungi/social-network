@@ -13,9 +13,12 @@ const SingleProfileComponent = (props) => {
     updateFollowing,
     LoggedInUserID,
     userID,
+    GroupID,
     updateRequested,
     updateFollowText,
     updateDynamicID,
+    updateisGroupMember
+
   } = useContext(LowerHeaderContext);
 
   const navigate = useNavigate();
@@ -43,8 +46,7 @@ const SingleProfileComponent = (props) => {
         updateFollowText(requestText);
       }
 
-      console.log("******userID*********", userID);
-      console.log("********data********", data);
+    
       if (data.msg) {
         navigate("/login");
         return;
@@ -57,23 +59,51 @@ const SingleProfileComponent = (props) => {
       console.log("error fetching relationshiip", e);
     }
   }
+
+  async function FetchGroupInfo() {
+
+    try {
+      const response = await fetch("http://localhost:8080/isgroupmember", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          loggedInUserID: LoggedInUserID,
+          groupID: GroupID,
+        }),
+      });
+      const data = await response.json();
+      updateisGroupMember(data)
+
+
+      console.log('response from fetchgroupinfo', data);
+
+      //console.log("*************DATA SENT************************", data);
+    } catch (e) {
+      console.log("error fetching groupinfo", e);
+    }
+  }
+
   useEffect(() => {
     if (userID > 0) FetchRelationship();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
-  //};
-  // useEffect(() => {
-  //   FetchRelationship(LoggedInUserID, userID) 
-  // }, [userID]);
+
+  useEffect(() => {
+    if (GroupID > 0) FetchGroupInfo()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [GroupID]);
+
+
 
   if (props.type === "AllUsers") {
     return (
       <div
         role="presentation"
         onClick={(e) => {
+          e.preventDefault()
+
           updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
-          console.log("e.currentTarget.id", e.currentTarget.id);
         }}
         className="SingleProfile"
         id={props.id}
@@ -98,7 +128,11 @@ const SingleProfileComponent = (props) => {
     return (
       <div
         role="presentation"
-        onClick={(e) => updateGroupID(e.currentTarget.id)}
+        onClick={(e) => {
+          e.preventDefault()
+          updateGroupID(Number(e.currentTarget.id))}
+        
+        }
         className="SingleProfile"
         id={props.id}
         // creatorid = {props.creator}   - custom html tags??

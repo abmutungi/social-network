@@ -85,3 +85,18 @@ func AddGroupMember(db *sql.DB, groupid int, memberid int) {
 	fmt.Println("addgroupmember last inserted id: ", LastIns)
 
 }
+
+
+// checking if user follows loggedInUser
+func GroupMemberCheck(db *sql.DB, loggedInUser, GroupID int) bool {
+	var count int
+	err := db.QueryRow(`SELECT  COUNT(*)  FROM groupMembers WHERE groupID = ? AND member = ?;`, GroupID,loggedInUser).Scan(&count)
+	if err != nil {
+		log.Println("Error from GroupMemberCheck fn():", err)
+		return false
+	}
+	if count > 0 {
+		return true
+	}
+	return false
+}
