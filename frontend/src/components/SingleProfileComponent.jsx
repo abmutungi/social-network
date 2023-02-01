@@ -2,7 +2,7 @@ import React from "react";
 import "../assets/css/AllChats.css";
 import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { followText, unfollowText, requestText } from "./UserRequestBtn";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +10,6 @@ const SingleProfileComponent = (props) => {
   const {
     updateUserID,
     updateGroupID,
-    Following,
     updateFollowing,
     LoggedInUserID,
     userID,
@@ -20,47 +19,48 @@ const SingleProfileComponent = (props) => {
   } = useContext(LowerHeaderContext);
 
   const navigate = useNavigate();
-  const handleClick = () => {
-    async function FetchRelationship(lgInUser, userProfile) {
-      console.log("userProfile*********", userProfile);
-      try {
-        const response = await fetch("http://localhost:8080/followCheck", {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify({
-            loggedInUserID: lgInUser,
-            userID: userProfile,
-          }),
-        });
-        const data = await response.json();
+  // const handleClick = () => {
+  async function FetchRelationship() {
+    try {
+      const response = await fetch("http://localhost:8080/followCheck", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          loggedInUserID: LoggedInUserID,
+          userID: userID,
+        }),
+      });
+      const data = await response.json();
 
-        if (data.canFollow) {
-          updateFollowing(false);
-          updateFollowText(followText);
-        } else if (data.following) {
-          updateFollowing(true);
-          updateFollowText(unfollowText);
-        } else if (data.requested) {
-          updateRequested(true);
-          updateFollowText(requestText);
-        }
-
-        console.log("************************************", Following, userID);
-        console.log(data);
-        if (data.msg) {
-          navigate("/login");
-          return;
-        }
-        //   console.log("STATIC BUTTON RENDER *****************");
-        // }
-
-        //console.log("*************DATA SENT************************", data);
-      } catch (e) {
-        console.log("error fetching relationshiip", e);
+      if (data.canFollow) {
+        updateFollowing(false);
+        updateFollowText(followText);
+      } else if (data.following) {
+        updateFollowing(true);
+        updateFollowText(unfollowText);
+      } else if (data.requested) {
+        updateRequested(true);
+        updateFollowText(requestText);
       }
+
+      console.log("******userID*********", userID);
+      console.log("********data********", data);
+      if (data.msg) {
+        navigate("/login");
+        return;
+      }
+      //   console.log("STATIC BUTTON RENDER *****************");
+      // }
+
+      //console.log("*************DATA SENT************************", data);
+    } catch (e) {
+      console.log("error fetching relationshiip", e);
     }
-    FetchRelationship(LoggedInUserID, userID);
-  };
+  }
+  useEffect(() => {
+    if (userID > 0) FetchRelationship();
+  }, [userID]);
+  //};
   // useEffect(() => {
   //   FetchRelationship(LoggedInUserID, userID) // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [userID]);
@@ -70,11 +70,9 @@ const SingleProfileComponent = (props) => {
       <div
         role="presentation"
         onClick={(e) => {
-          // updateUserID(Number(e.currentTarget.id), updateFollowing(true))
-          updateUserID(Number(e.currentTarget.id))
-          console.log(e.currentTarget.id);
+          updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
-          handleClick();
+          console.log("e.currentTarget.id", e.currentTarget.id);
         }}
         className="SingleProfile"
         id={props.id}
