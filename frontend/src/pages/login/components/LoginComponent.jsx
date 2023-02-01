@@ -18,7 +18,8 @@ import "../../../assets/css/login.css";
 // };
 
 const Login = () => {
-  const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
+  const { loggedInUser, updateLoggedInUser, updateNotifications } =
+    useContext(loggedInUserContext);
   const {
     updateAboutText,
     updateUserID,
@@ -61,6 +62,7 @@ const Login = () => {
         LName: data.User.Lastname,
         AboutText: data.User.AboutText,
         Privacy: data.User.Privacy,
+        Notifications: data.User.Notifications,
       };
       console.log(currentUser);
       updateLoggedInUser(currentUser);
@@ -68,6 +70,7 @@ const Login = () => {
       updateUserID(currentUser.ID);
       updateLoggedInUserID(currentUser.ID);
       updatePrivacyStatus(currentUser.Privacy);
+      updateNotifications(currentUser.Notifications);
       if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
       if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
 
@@ -129,6 +132,7 @@ const Login = () => {
           LName: data.User.Lastname,
           AboutText: data.User.AboutText,
           Privacy: data.User.Privacy,
+          Notifications: data.User.Notifications,
         };
         console.log(currentUser);
         updateLoggedInUser(currentUser);
@@ -136,6 +140,7 @@ const Login = () => {
         updateUserID(currentUser.ID);
         updateLoggedInUserID(currentUser.ID);
         updatePrivacyStatus(currentUser.Privacy);
+        updateNotifications(currentUser.Notifications);
         if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
         if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
         // console.log(loggedInUser);

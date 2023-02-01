@@ -49,21 +49,15 @@ const SingleProfileComponent = (props) => {
         navigate("/login");
         return;
       }
-      //   console.log("STATIC BUTTON RENDER *****************");
-      // }
-
-      //console.log("*************DATA SENT************************", data);
     } catch (e) {
       console.log("error fetching relationshiip", e);
     }
   }
   useEffect(() => {
     if (userID > 0) FetchRelationship();
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
-  //};
-  // useEffect(() => {
-  //   FetchRelationship(LoggedInUserID, userID) // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [userID]);
+
 
   if (props.type === "AllUsers") {
     return (

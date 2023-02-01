@@ -10,7 +10,6 @@ export function LowerHeaderProvider({ children }) {
   const [DBAllUsers, setDBAllUsers] = useState([]);
   const [GroupID, setGroupID] = useState(0);
   const [AllGroupsData, setAllGroupsData] = useState([]);
-
   const [DynamicID, setDynamicID] = useState(0);
   const [posts, setPosts] = useState([]);
   const [AboutText, setAboutText] = useState("loggedInUser.AboutText");
@@ -72,7 +71,7 @@ export function LowerHeaderProvider({ children }) {
 
   const updatePrivacyBtnText = (str) => {
     setPrivacyBtnText(() => str);
-  }
+  };
   const updateDynamicID = (id) => {
     setDynamicID(id);
   };
@@ -80,6 +79,7 @@ export function LowerHeaderProvider({ children }) {
   const updatePosts = (data) => {
     setPosts(data);
   };
+
 
   return (
     <LowerHeaderContext.Provider
@@ -112,6 +112,7 @@ export function LowerHeaderProvider({ children }) {
         updateDynamicID,
         posts,
         updatePosts,
+
       }}
     >
       {children}

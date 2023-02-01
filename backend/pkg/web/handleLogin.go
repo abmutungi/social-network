@@ -10,12 +10,15 @@ import (
 	"time"
 
 	"github.com/abmutungi/social-network/backend/pkg/login"
+	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/users"
 	uuid "github.com/gofrs/uuid"
 )
 
-var OnlineUsersSessionsMap = make(map[string]string)
-var SessionsStructMap = map[string]Session{}
+var (
+	OnlineUsersSessionsMap = make(map[string]string)
+	SessionsStructMap      = map[string]Session{}
+)
 
 type LoginData struct {
 	Email    string `json:"email"`
@@ -29,7 +32,7 @@ type LoginResponse struct {
 }
 
 func (lr *LoginResponse) PopulateLoginDataResponse(db *sql.DB, email string) {
-	var u = users.ReturnSingleUser(db, email)
+	u := users.ReturnSingleUser(db, email)
 	lr.User.UserID = u.UserID
 	lr.User.Email = u.Email
 	lr.User.Firstname = u.Firstname
@@ -40,6 +43,11 @@ func (lr *LoginResponse) PopulateLoginDataResponse(db *sql.DB, email string) {
 	lr.User.AboutText = u.AboutText
 	lr.User.Privacy = u.Privacy
 	lr.User.Created = u.Created
+	if notifications.NotificationCheck(db, lr.User.UserID) {
+		lr.User.Notifications = true
+	} else {
+		lr.User.Notifications = false
+	}
 }
 
 func (s *Server) HandleLogin() http.HandlerFunc {
@@ -88,12 +96,10 @@ func sendLoginMessage(w http.ResponseWriter, loginResp LoginResponse, errExists 
 	}
 
 	(w).Write([]byte(resp))
-
 }
 
 // Function to give a cookie on login
 func giveUserCookieOnLogIn(w http.ResponseWriter, r *http.Request, userID int, id uuid.UUID) {
-
 	stringUserID := strconv.Itoa(userID)
 	sessionToken := id.String()
 	expiresAt := time.Now().Add(time.Minute * 60)
@@ -123,7 +129,6 @@ func giveUserCookieOnLogIn(w http.ResponseWriter, r *http.Request, userID int, i
 	fmt.Println("Session Struct Map ==> ", SessionsStructMap)
 	fmt.Println("First time log-in successful")
 	fmt.Println(OnlineUsersSessionsMap)
-
 }
 
 func LoggedInCheck(r *http.Request, w http.ResponseWriter, id string) {
@@ -141,13 +146,11 @@ func LoggedInCheck(r *http.Request, w http.ResponseWriter, id string) {
 			fmt.Println("Match is -> ", SessionsStructMap[k])
 			for _, c := range r.Cookies() {
 				if c.Value == k {
-
 					http.SetCookie(w, &http.Cookie{
 						Name:    "session_cookie",
 						Value:   "",
 						Expires: time.Now(),
 					})
-
 				}
 			}
 			v.Expiry = time.Now()
@@ -171,12 +174,11 @@ func LoggedInCheck(r *http.Request, w http.ResponseWriter, id string) {
 	// 	})
 
 	// }
-
 }
 
-//Need to check if user is in map on login and if not give them a cookie
-//if they are in the map then need to check if the cookie has the same value
+// Need to check if user is in map on login and if not give them a cookie
+// if they are in the map then need to check if the cookie has the same value
 // as whats in the map, if it doesn't delete that session and give a new
-//cookie, if it does then same sesssion carry on?
+// cookie, if it does then same sesssion carry on?
 
-//Need to check if cookie
+// Need to check if cookie

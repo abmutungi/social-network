@@ -18,7 +18,7 @@ type User struct {
 	AboutText string
 	Privacy   int
 	Created   string
-
+	Notifications bool 
 	// Followers int
 	// Following int
 }
@@ -58,6 +58,7 @@ type User struct {
 func ReturnSingleUser(db *sql.DB, email string) User {
 	userStmt := "SELECT  userID, email, firstName, lastName, dateOfBirth, avatar, nickname, aboutMe, privacy, createdAT from users WHERE email=?"
 	userRow := db.QueryRow(userStmt, email)
+	
 	var a User
 	err := userRow.Scan(&a.UserID, &a.Email, &a.Firstname, &a.Lastname, &a.DOB, &a.Avatar, &a.Nickname, &a.AboutText, &a.Privacy, &a.Created)
 	if err != nil {

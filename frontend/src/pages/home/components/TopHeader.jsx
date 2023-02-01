@@ -20,7 +20,7 @@ function ContainerLogo() {
 }
 
 function ContainerIcons() {
-  const { loggedInUser } = useContext(loggedInUserContext);
+  const { loggedInUser, Notifications } = useContext(loggedInUserContext);
   const navigate = useNavigate();
   /*On logout click,
   need to send info back to the log out handler
@@ -49,12 +49,14 @@ function ContainerIcons() {
   return (
     <>
       <div className="ContainerEventIcons">
-        <FontAwesomeIcon
-          onClick={() => setShowNotifModal(true)}
-          icon={faBell}
-          className="ClickableHeaderIcons"
-        />
-
+        <div>
+          <FontAwesomeIcon
+            onClick={() => setShowNotifModal(true)}
+            icon={faBell}
+            className="ClickableHeaderIcons"
+          />
+          {Notifications ? <span className="dot"></span> : null}
+        </div>
         {/* <Link to="/login" style={{ textDecoration: "none", color: "white" }}> */}
         <div>
           <FontAwesomeIcon

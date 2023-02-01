@@ -186,4 +186,14 @@ code {
   border: none;
   background-color: inherit;
   font-size: 100%;
+  position: relative;
+}
+
+.dot {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  position: absolute;
+  background-color: red;
+  z-index: 10;
 }

@@ -37,3 +37,19 @@ func AcceptFollow(db *sql.DB, userID, followerID int, notificationType string) {
 
 	relationships.StoreFollowing(db, userID, followerID)
 }
+
+func NotificationCheck(db *sql.DB, loggedInUser int) bool {
+	var count int
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ?`, loggedInUser).Scan(&count)
+	if err != nil {
+		log.Println("Error from NotificationCheck fn():", err)
+		return false
+	}
+
+	if count > 0 {
+		fmt.Printf("user has %d notifications", count)
+		return true
+	}
+	fmt.Println("user has 0 notifications")
+	return false
+}
