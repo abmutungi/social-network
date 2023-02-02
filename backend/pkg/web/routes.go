@@ -9,7 +9,8 @@ func (s *Server) Routes() {
 
 	s.Router.HandleFunc("/unfollow", s.GeneralSessionChecker(s.HandleUnfollow()))
 	s.Router.HandleFunc("/updatePrivacy", s.GeneralSessionChecker(s.HandlePrivacyUpdate()))
-	
+	s.Router.HandleFunc("/notifRead", s.GeneralSessionChecker(s.HandleNotifRead()))
+
 	s.Router.HandleFunc("/dummyusers", s.HandleDummyUsers())
 	s.Router.HandleFunc("/getgroupdata", s.HandleGroups())
 
@@ -22,5 +23,4 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/creategroup", s.HandleCreateGroup())
 
 	// s.TestDBfunctions()
-
 }

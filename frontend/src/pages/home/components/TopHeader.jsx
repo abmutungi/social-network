@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 
 // import {  logoutUser } from "./ClickFuncs";
 import "../../../index.css";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { NotificationsModal } from "../../../pages/home/components/notificationsModal";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 function ContainerLogo() {
   return (
@@ -20,7 +21,9 @@ function ContainerLogo() {
 }
 
 function ContainerIcons() {
-  const { loggedInUser, Notifications } = useContext(loggedInUserContext);
+  const { loggedInUser, Notifications, updateNotifications } =
+    useContext(loggedInUserContext);
+  const { LoggedInUserID } = useContext(LowerHeaderContext);
   const navigate = useNavigate();
   /*On logout click,
   need to send info back to the log out handler
@@ -46,12 +49,43 @@ function ContainerIcons() {
   }
 
   const [showNotifModal, setShowNotifModal] = useState(false);
+
+  async function SendNotificationRead() {
+    console.log("LoggedInUserID", LoggedInUserID);
+    try {
+      const response = await fetch("http://localhost:8080/notifRead", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          loggedInUserID: LoggedInUserID,
+          read: Notifications,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+      // if (data) {
+      //   updateNotifications(true);
+      // } else if (!data) {
+      //   updateNotifications(false);
+      // }
+    } catch (e) {
+      console.log("error sending notifications have been read", e);
+    }
+  }
+  useEffect(() => {
+    if (!Notifications) SendNotificationRead();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Notifications]);
+
   return (
     <>
       <div className="ContainerEventIcons">
         <div>
           <FontAwesomeIcon
-            onClick={() => setShowNotifModal(true)}
+            onClick={() => {
+              setShowNotifModal(true);
+              updateNotifications(false);
+            }}
             icon={faBell}
             className="ClickableHeaderIcons"
           />

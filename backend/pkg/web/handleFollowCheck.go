@@ -31,7 +31,7 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			log.Println(err)
 		}
 
-		fmt.Println("DATA FROM FollowCheck HFn() ******************", string(data))
+		fmt.Println("DATA FROM FollowCheck H-Fn() ******************", string(data))
 
 		var f FollowStatusCheck
 
