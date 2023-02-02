@@ -17,6 +17,7 @@ type GroupEvent struct {
 	GroupID          int
 }
 
+//Adds a new group event to the db (need to return this on the group's wall immediately)
 func (s *Server) CreateGroupEvent() http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
