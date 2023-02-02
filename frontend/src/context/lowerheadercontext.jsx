@@ -11,14 +11,23 @@ export function LowerHeaderProvider({ children }) {
   const [GroupID, setGroupID] = useState(0);
   const [AllGroupsData, setAllGroupsData] = useState([]);
 
-  const [DynamicID, setDynamicID] = useState(0);
+  const [DynamicID, setDynamicID] = useState(() => {
+    const storedDynamicID = localStorage.getItem("DynamicID");
+    return storedDynamicID ? JSON.parse(storedDynamicID) : loggedInUser.ID;
+  });
   const [posts, setPosts] = useState([]);
-  const [AboutText, setAboutText] = useState("loggedInUser.AboutText");
+  const [AboutText, setAboutText] = useState(() => {
+    const storedAboutText = JSON.parse(
+      localStorage.getItem("loggedInUser")
+    ).AboutText;
+
+    return storedAboutText ? storedAboutText : "loggedInUser.AboutText";
+  });
 
   const [ProfilePhotoBackground, setProfilePhotoBackground] =
     useState("man-utd.png");
   const [LoggedInUserID, setLoggedInUserID] = useState();
-  const [PrivacyBtnText, setPrivacyBtnText] = useState();
+  const [PrivacyBtnText, setPrivacyBtnText] = useState(() => {});
   const [PrivacyStatus, setPrivacyStatus] = useState(loggedInUser.Privacy);
   const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);
@@ -72,9 +81,10 @@ export function LowerHeaderProvider({ children }) {
 
   const updatePrivacyBtnText = (str) => {
     setPrivacyBtnText(() => str);
-  }
+  };
   const updateDynamicID = (id) => {
     setDynamicID(id);
+    localStorage.setItem("DynamicID", JSON.stringify(id));
   };
 
   const updatePosts = (data) => {
