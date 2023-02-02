@@ -15,16 +15,15 @@ type Group struct {
 	Members   int
 }
 
-
-//add a new group entry to the group table
-func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc string)[]Group {
+//add a new group entry to the group table, then adds the group creator to groupMember table
+func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc string) []Group {
 	stmt, err := db.Prepare("INSERT INTO groups (name, creator, avatar, about) VALUES ( ?, ?,?, ?)")
 
 	if err != nil {
 		fmt.Printf("error preparing create group statement: %v", err)
 	}
 
-	res, err2 := stmt.Exec(groupname, creatorid,file, desc)
+	res, err2 := stmt.Exec(groupname, creatorid, file, desc)
 
 	if err2 != nil {
 		fmt.Printf("error adding group into database: %v", err2)
@@ -63,9 +62,7 @@ func GetAllGroupsData(db *sql.DB) []Group {
 	return AllGroups
 }
 
-
-
-
+//adds a new entry to the groupMember table
 func AddGroupMember(db *sql.DB, groupid int, memberid int) {
 	stmt, err := db.Prepare("INSERT INTO groupMembers (groupid, member, dateJoined) VALUES ( ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
 
@@ -86,11 +83,10 @@ func AddGroupMember(db *sql.DB, groupid int, memberid int) {
 
 }
 
-
 // checking if user follows loggedInUser
 func GroupMemberCheck(db *sql.DB, loggedInUser, GroupID int) bool {
 	var count int
-	err := db.QueryRow(`SELECT  COUNT(*)  FROM groupMembers WHERE groupID = ? AND member = ?;`, GroupID,loggedInUser).Scan(&count)
+	err := db.QueryRow(`SELECT  COUNT(*)  FROM groupMembers WHERE groupID = ? AND member = ?;`, GroupID, loggedInUser).Scan(&count)
 	if err != nil {
 		log.Println("Error from GroupMemberCheck fn():", err)
 		return false
@@ -99,4 +95,26 @@ func GroupMemberCheck(db *sql.DB, loggedInUser, GroupID int) bool {
 		return true
 	}
 	return false
+}
+
+//add a new entry to the events table
+//**TODO - amend date fields within table only one needed**
+func CreateGroupEvent(db *sql.DB, groupID int, creatorid int, eventname string, desc string, date string, dateEnd string) {
+	stmt, err := db.Prepare("INSERT INTO events (groupID, creator, eventTitle, description, dateStart, dateFinish) VALUES (?,?,?,?,?,?)")
+
+	if err != nil {
+		fmt.Printf("error preparing creategroupevent statement: %v", err)
+	}
+
+	res, err2 := stmt.Exec(groupID, creatorid, eventname, desc, date,dateEnd)
+
+	if err2 != nil {
+		fmt.Printf("error adding new group event into database: %v", err2)
+	}
+
+	rowsAff, _ := res.RowsAffected()
+	LastIns, _ := res.LastInsertId()
+	fmt.Println("groups rows affected: ", rowsAff)
+	fmt.Println("group last inserted id: ", LastIns)
+
 }

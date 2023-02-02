@@ -3,39 +3,53 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/abmutungi/social-network/backend/pkg/groups"
 )
 
 type GroupEvent struct {
-	EventName   string `json:"eventName"`
-	Description string `json:"eventDescription"`
-	Date        string `json:"eventStartDate"`
-	UserID      int    `json:"creator"`
-	GroupID     int    `json:"GroupID"`
+	eventName        string
+	eventDescription string
+	eventStartDate   string
+	creator          int
+	GroupID          int
 }
-
-
 
 func (s *Server) CreateGroupEvent() http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 
-		data, err := io.ReadAll(r.Body)
+		err := r.ParseMultipartForm(10 << 20)
 		if err != nil {
-			log.Println("Error reading body from IsGroupMember", err)
+			fmt.Println("err parsing within creategroupevent", err)
 		}
 
-		fmt.Println("data preparsed", data)
+		// for key, value := range r.Form {
+		// 	fmt.Printf("%s = %s\n", key, value)
+		// }
 
-		var g GroupEvent
+		groupid, err := strconv.Atoi(r.Form.Get("GroupID"))
+		if err != nil {
+			fmt.Println("Error converting string to int, CreateGroupEvent fn()")
+		}
 
-		json.Unmarshal(data, &g)
-		
+		creatorid, err := strconv.Atoi(r.Form.Get("creator"))
+		if err != nil {
+			fmt.Println("Error converting string to int, CreateGroupEvent fn()")
+		}
 
-		fmt.Println("GroupEventDetails", g)
+		groups.CreateGroupEvent(s.Db, groupid, creatorid, r.Form.Get("eventName"), r.Form.Get("eventDescription"), r.Form.Get("eventStartDate"),r.Form.Get("eventStartDate"))
+
+		var message = fmt.Sprintf("The Event %s has been added to the database", r.Form.Get("eventName"))
+		createGroupEventResponse, err := json.Marshal(message)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Write([]byte(createGroupEventResponse))
 
 	}
 }
