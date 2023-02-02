@@ -21,7 +21,7 @@ function ContainerLogo() {
 }
 
 function ContainerIcons() {
-  const { loggedInUser, Notifications, updateNotifications } =
+  const { loggedInUser, NewNotifsExist, updateNewNotifsExist, updateMyNotifs } =
     useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
   const navigate = useNavigate();
@@ -50,32 +50,46 @@ function ContainerIcons() {
 
   const [showNotifModal, setShowNotifModal] = useState(false);
 
-  async function SendNotificationRead() {
-    console.log("LoggedInUserID", LoggedInUserID);
+  async function DisplayNotifications() {
     try {
-      const response = await fetch("http://localhost:8080/notifRead", {
+      const response = await fetch("http://localhost:8080/displayNotif", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
           loggedInUserID: LoggedInUserID,
-          read: Notifications,
         }),
       });
       const data = await response.json();
-      console.log(data);
-      // if (data) {
-      //   updateNotifications(true);
-      // } else if (!data) {
-      //   updateNotifications(false);
-      // }
+      updateMyNotifs(data.AllNotifs);
+      console.log("Notif data check on click ->", data.AllNotifs);
     } catch (e) {
-      console.log("error sending notifications have been read", e);
+      console.log("error displaying notifications", e);
+    }
+  }
+
+  async function CheckNotifications() {
+    // console.log("LoggedInUserID", LoggedInUserID);
+    try {
+      const response = await fetch("http://localhost:8080/checkNotif", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          loggedInUserID: LoggedInUserID,
+        }),
+      });
+      const data = await response.json();
+
+      if (data.NewNotif) updateNewNotifsExist(true);
+
+      console.log("Login notif data check ->", data);
+    } catch (e) {
+      console.log("error sending notifications that have been read", e);
     }
   }
   useEffect(() => {
-    if (!Notifications) SendNotificationRead();
+    if (!NewNotifsExist) CheckNotifications();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Notifications]);
+  }, [NewNotifsExist]);
 
   return (
     <>
@@ -84,12 +98,13 @@ function ContainerIcons() {
           <FontAwesomeIcon
             onClick={() => {
               setShowNotifModal(true);
-              updateNotifications(false);
+              DisplayNotifications();
+              updateNewNotifsExist(false);
             }}
             icon={faBell}
             className="ClickableHeaderIcons"
           />
-          {Notifications ? <span className="dot"></span> : null}
+          {NewNotifsExist ? <span className="dot"></span> : null}
         </div>
         {/* <Link to="/login" style={{ textDecoration: "none", color: "white" }}> */}
         <div>

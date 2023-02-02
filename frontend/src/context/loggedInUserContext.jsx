@@ -4,23 +4,30 @@ const loggedInUserContext = createContext({});
 
 function LoggedInUserProvider({ children }) {
   const [loggedInUser, setLoggedInUser] = useState({});
-  const [Notifications, setNotifications] = useState(false);
+  const [NewNotifsExist, setNewNotifsExist] = useState(false);
+  const [MyNotifs, setMyNotifs] = useState({});
 
   function updateLoggedInUser(user) {
     setLoggedInUser(user);
   }
 
-    const updateNotifications = (bool) => {
-      setNotifications(bool);
-    };
+  const updateNewNotifsExist = (bool) => {
+    setNewNotifsExist(bool);
+  };
+
+  const updateMyNotifs = (data) => {
+    setMyNotifs(data);
+  };
 
   return (
     <loggedInUserContext.Provider
       value={{
         loggedInUser,
         updateLoggedInUser,
-        Notifications,
-        updateNotifications,
+        NewNotifsExist,
+        updateNewNotifsExist,
+        MyNotifs,
+        updateMyNotifs,
       }}
     >
       {children}

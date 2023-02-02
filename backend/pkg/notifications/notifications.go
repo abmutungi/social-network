@@ -30,7 +30,7 @@ func StoreNotification(db *sql.DB, notificationType string, notifiyee, notifier 
 }
 
 func AcceptFollow(db *sql.DB, userID, followerID int, notificationType string) {
-	result, err := db.Exec("UPDATE notifcations SET actioned = actioned + 1 WHERE userID =? AND followerID = ?", userID, followerID)
+	result, err := db.Exec("UPDATE notifcations SET actioned = 1 WHERE userID =? AND followerID = ?", userID, followerID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,7 +62,7 @@ func NotificationCheck(db *sql.DB, loggedInUser int) bool {
 }
 
 func ReadNotification(db *sql.DB, userID int) {
-	result, err := db.Exec("UPDATE notifications SET read = read + 1 WHERE notifiyee =?", userID)
+	result, err := db.Exec("UPDATE notifications SET read = 1 WHERE notifiyee =?", userID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,12 +71,11 @@ func ReadNotification(db *sql.DB, userID int) {
 		log.Fatal(err)
 	}
 	fmt.Println(rows)
-
 }
 
 func GetNotifications(db *sql.DB, userID int) []Notification {
 	//`SELECT notifications.notificationID, notifications.notifier notifications.notificationType, users.firstName, users.lastName FROM notifications INNER JOIN users ON notifications.notifier=users.userID WHERE notifications.notifiyee = 1`
-	rows, err := db.Query(`SELECT notificationID, notifier notificationType, firstName, lastName 
+	rows, err := db.Query(`SELECT notificationID, notificationType, firstName, lastName 
 	FROM notifications INNER JOIN users ON notifier=userID WHERE notifiyee = ?`, userID)
 	if err != nil {
 		log.Println("Error from GetNotifications fn():", err)
@@ -97,3 +96,4 @@ func GetNotifications(db *sql.DB, userID int) []Notification {
 
 	return MyNotifs
 }
+

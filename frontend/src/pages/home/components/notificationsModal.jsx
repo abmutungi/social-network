@@ -1,4 +1,6 @@
 import "../../../assets/css/notifications-modal.css";
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
+import { useContext } from "react";
 
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
@@ -14,7 +16,7 @@ const SingleNotificationComponent = ({ props }) => {
           <div className="notifs-content">
             <strong>{props.name}</strong> sent you a {props.notificationType}
           </div>
-          <div className="notifs-date">01/01</div>
+          <div className="notifs-date">{}</div>
         </div>
       </div>
       <div className="notifs-action">
@@ -27,10 +29,12 @@ const SingleNotificationComponent = ({ props }) => {
 
 // notifications modal that holds single notifications
 const NotificationsModal = ({ show, onClose }) => {
+  const { MyNotifs } = useContext(loggedInUserContext);
+  console.log("MyNotifs", MyNotifs[0]);
+  console.log("MyNotifs.FName", MyNotifs[0].notifFName);
   if (!show) {
     return null;
   }
-
   return (
     <div className="notifs-modal" onClick={onClose} role="presentation">
       <div
@@ -44,29 +48,8 @@ const NotificationsModal = ({ show, onClose }) => {
           <SingleNotificationComponent
             props={{
               profileImgPath: "../assets/img/ext/man-utd.png",
-              name: "Cristiano Ronaldo",
-              notificationType: "follow request",
-            }}
-          />
-          <SingleNotificationComponent
-            props={{
-              profileImgPath: "../assets/img/ext/man-utd.png",
-              name: "Cristiano Ronaldo",
-              notificationType: "follow request",
-            }}
-          />
-          <SingleNotificationComponent
-            props={{
-              profileImgPath: "../assets/img/ext/man-utd.png",
-              name: "Cristiano Ronaldo",
-              notificationType: "follow request",
-            }}
-          />
-          <SingleNotificationComponent
-            props={{
-              profileImgPath: "../assets/img/ext/man-utd.png",
-              name: "Cristiano Ronaldo",
-              notificationType: "follow request",
+              name: `${MyNotifs[0].notifFName} ${MyNotifs[0].notifLName}`,
+              notificationType: `${MyNotifs[0].notifType}`,
             }}
           />
         </div>

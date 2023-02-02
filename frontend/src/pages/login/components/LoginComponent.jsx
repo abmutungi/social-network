@@ -18,7 +18,7 @@ import "../../../assets/css/login.css";
 // };
 
 const Login = () => {
-  const { loggedInUser, updateLoggedInUser, updateNotifications } =
+  const { loggedInUser, updateLoggedInUser, updateNewNotifsExist } =
     useContext(loggedInUserContext);
   const {
     updateAboutText,
@@ -70,7 +70,7 @@ const Login = () => {
       updateUserID(currentUser.ID);
       updateLoggedInUserID(currentUser.ID);
       updatePrivacyStatus(currentUser.Privacy);
-      updateNotifications(currentUser.Notifications);
+      updateNewNotifsExist(currentUser.Notifications);
       if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
       if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
 
@@ -140,7 +140,7 @@ const Login = () => {
         updateUserID(currentUser.ID);
         updateLoggedInUserID(currentUser.ID);
         updatePrivacyStatus(currentUser.Privacy);
-        updateNotifications(currentUser.Notifications);
+        updateNewNotifsExist(currentUser.Notifications);
         if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
         if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
         // console.log(loggedInUser);
