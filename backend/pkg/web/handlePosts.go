@@ -9,8 +9,8 @@ import (
 	"os"
 	"strconv"
 
-	comment "github.com/abmutungi/social-network/backend/pkg/comments"
 	"github.com/abmutungi/social-network/backend/pkg/posts"
+	"github.com/abmutungi/social-network/backend/pkg/relationships"
 	uuid "github.com/gofrs/uuid"
 )
 
@@ -56,7 +56,7 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 func (s *Server) TestDBfunctions() {
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
-	fmt.Println(comment.GetAllComments(s.Db, 1))
+	fmt.Println(relationships.GetAllFollowers(s.Db, 3))
 }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {
@@ -108,10 +108,10 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 
 		var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
 		// fmt.Println(postsToSend)
-		marshalledPosts, _ := json.Marshal(postsToSend)
+		marshalPosts, _ := json.Marshal(postsToSend)
 
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(marshalledPosts)
+		w.Write(marshalPosts)
 
 	}
 }

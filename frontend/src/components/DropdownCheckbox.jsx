@@ -1,9 +1,14 @@
 import "../assets/css/posts.css";
 import { useState } from "react";
 
-const DropdownCheckBox = () => {
+const DropdownCheckBox = (props) => {
   const [dropdownDisplay, setDropdownDisplay] = useState(false);
 
+  //   const [followers, setFollowers] = useState([]);
+
+  //   props.followersFromParent.map((follower) => {
+  //     console.log(follower.UserID);
+  //   });
   const handleDropDownDisplay = () => {
     const checkboxContainer = document.querySelector(".checkboxes");
     if (!dropdownDisplay) {
@@ -28,18 +33,12 @@ const DropdownCheckBox = () => {
         <div className="over-select"></div>
       </div>
       <div className="checkboxes">
-        <label htmlFor="1">
-          <input type="checkbox" id="1" />
-          one
-        </label>
-        <label htmlFor="2">
-          <input type="checkbox" id="2" />
-          two
-        </label>
-        <label htmlFor="3">
-          <input type="checkbox" id="3" />
-          three
-        </label>
+        {props.followersFromParent?.map((follower) => (
+          <label htmlFor={follower.UserID} key={follower.UserID}>
+            <input type="checkbox" id={follower.UserID} />
+            {follower.Firstname}
+          </label>
+        ))}
       </div>
     </div>
   );

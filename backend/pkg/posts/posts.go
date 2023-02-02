@@ -59,7 +59,7 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 		var p Post
 		err2 := rows.Scan(&p.PostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.Privacy, &p.FName)
 		if err2 != nil {
-			fmt.Printf("error scaning rows for posts: %v", err2)
+			fmt.Printf("error scanning rows for posts: %v", err2)
 		}
 		p.Comments = comment.GetAllComments(db, p.PostID)
 		posts = append(posts, p)

@@ -20,6 +20,8 @@ const CreatePostModal = (props) => {
   // set state for custom (users) dropdown
   const [dropdown, setDropdown] = useState(false);
 
+  const [followers, setFollowers] = useState([]);
+
   const { LoggedInUserID, updatePosts } = useContext(LowerHeaderContext);
 
   // for displaying the modal
@@ -42,6 +44,7 @@ const CreatePostModal = (props) => {
     fetch("http://localhost:8080/createpost", {
       credentials: "include",
       method: "POST",
+      mode: "no-cors",
       body: formData,
     })
       .then((response) => response.json())
@@ -57,9 +60,30 @@ const CreatePostModal = (props) => {
     props.onClose();
   };
 
+  async function fetchFollowers() {
+    const form = new FormData();
+    form.append("userID", LoggedInUserID);
+    const resp = await fetch("http://localhost:8080/myfollowers", {
+      method: "POST",
+      body: form,
+      credentials: "include",
+    });
+    const data = await resp.json();
+    // return data;
+    setFollowers(data);
+  }
+
+  const sendFollowersToDropdown = () => {
+    fetchFollowers();
+  };
+
   const handleCustomPrivacy = (e) => {
     if (e.target.value === "custom") {
       console.log("custom clicked");
+      // fetch all followers here that belong to logged in user
+      sendFollowersToDropdown();
+      // fetchFollowers();
+
       setDropdown(true);
     } else {
       setDropdown(false);
@@ -108,7 +132,9 @@ const CreatePostModal = (props) => {
                     Custom
                   </option>
                 </select>
-                {dropdown && <DropdownCheckBox />}
+                {dropdown && (
+                  <DropdownCheckBox followersFromParent={followers} />
+                )}
               </div>
             </div>
           </div>
