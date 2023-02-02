@@ -17,11 +17,12 @@ export function LowerHeaderProvider({ children }) {
   });
   const [posts, setPosts] = useState([]);
   const [AboutText, setAboutText] = useState(() => {
-    const storedAboutText = JSON.parse(
-      localStorage.getItem("loggedInUser")
-    ).AboutText;
-
-    return storedAboutText ? storedAboutText : "loggedInUser.AboutText";
+    if (localStorage.length > 0) {
+      const storedAboutText = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).AboutText;
+      return storedAboutText ? storedAboutText : "loggedInUser.AboutText";
+    }
   });
 
   const [ProfilePhotoBackground, setProfilePhotoBackground] =
