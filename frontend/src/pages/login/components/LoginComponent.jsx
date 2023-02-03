@@ -29,6 +29,8 @@ const Login = () => {
     updateDynamicID,
   } = useContext(LowerHeaderContext);
 
+  console.log("PS CHECK ON LOGIN --> ", PrivacyStatus);
+
   async function loginCheck() {
     console.log("cookie check => ", document.cookie);
     console.log(
@@ -136,8 +138,14 @@ const Login = () => {
         updateUserID(currentUser.ID);
         updateLoggedInUserID(currentUser.ID);
         updatePrivacyStatus(currentUser.Privacy);
-        if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
-        if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
+        console.log("2ND PS CHECK ON LOGIN --> ", currentUser.Privacy);
+
+        updateDynamicID(currentUser.ID);
+        if (currentUser.Privacy) updatePrivacyBtnText(PrivateText);
+        if (!currentUser.Privacy) updatePrivacyBtnText(PublicText);
+        console.log("3RD PS CHECK ON LOGIN --> ", PrivacyStatus);
+        console.log("4TH CHECK --> ", updatePrivacyStatus(currentUser.Privacy));
+
         // console.log(loggedInUser);
         navigate("/");
       }
