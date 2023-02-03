@@ -132,3 +132,8 @@
   font-size: small;
   width: 25%;
 } 
+
+.group-event-banners{
+  height: 120px;
+  overflow: auto;
+}

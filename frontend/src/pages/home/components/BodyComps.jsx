@@ -105,6 +105,7 @@ const LeftBodyDiv = () => {
 };
 
 function MainBody() {
+
   return (
     <div className="MainBody">
       <LeftBodyDiv />
@@ -112,12 +113,11 @@ function MainBody() {
         <NavBar />
         <div className="nav-and-post">
           {/* <EventBanner />
-          <EventBanner />
 
-          <EventBanner /> */}
-          {groupNotUser ? <GroupCreateEventBtn /> : null}
-
+<EventBanner />
+<EventBanner /> */}
           <PostsContainer />
+
           {/* <Followers Followers={DBData} />
           <Following Following={DBData} />
           <MyGroups MyGroups={DBData} /> */}

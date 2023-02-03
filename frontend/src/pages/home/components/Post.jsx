@@ -6,6 +6,7 @@ import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { useEffect, useContext } from "react";
 import "../../../assets/css/posts.css";
 import Comments from "./Comments";
+import EventBanner from "./EventBanner";
 
 library.add(faThumbsUp, faMessage);
 
@@ -57,7 +58,7 @@ const SinglePost = (props) => {
 const PostsContainer = () => {
   // set initial state for incoming posts data
   // const [posts, setPosts] = useState([]);
-  const { DynamicID, posts, updatePosts } = useContext(LowerHeaderContext);
+  const { DynamicID, posts, updatePosts, groupNotUser } = useContext(LowerHeaderContext);
 
   // fetch home posts for the logged in user
   const userForm = new FormData();
@@ -85,7 +86,7 @@ const PostsContainer = () => {
   const handlePostImgPath = (strImgPath) => {
     return strImgPath === "" ? "" : `../assets/img/ext/${strImgPath}`;
   };
-
+if(!groupNotUser){
   return (
     <>
       <div className="posts-container">
@@ -105,6 +106,37 @@ const PostsContainer = () => {
       </div>
     </>
   );
+    };
+
+
+    if(groupNotUser){
+
+      return (
+        <>
+          <div className="posts-container">
+            <div className="group-event-banners">
+              <EventBanner/>
+              <EventBanner/>
+              <EventBanner/>
+
+            </div>
+            {posts?.map((post) => (
+              <SinglePost
+                key={post.postID}
+                profileImgPath={"../assets/img/ext/man-utd.png"}
+                name={post.name}
+                date={post.createdAt}
+                textContent={post.textContent}
+                commentsCount={100}
+                postImg={handlePostImgPath(post.postImg)}
+                commentsArray={post.comments}
+                postID={post.postID}
+              />
+            ))}
+          </div>
+        </>
+      );
+    }
 };
 
 export default PostsContainer;

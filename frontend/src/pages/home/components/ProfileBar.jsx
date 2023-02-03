@@ -44,6 +44,8 @@ const ProfileBar = () => {
     PrivacyBtnText,
     Following,
     isGroupMember,
+    groupNotUser,
+    updategroupNotUser
   } = useContext(LowerHeaderContext);
   const { loggedInUser } = useContext(loggedInUserContext);
   console.log("loggedInUser.ID", loggedInUser.ID);
@@ -52,7 +54,7 @@ const ProfileBar = () => {
   const [lastName, setlastName] = useState(loggedInUser.LName);
   const [followers, setfollowers] = useState("10 Followers");
   const [following, setfollowing] = useState("8 Following");
-  const [groupNotUser, setgroupNotUser] = useState(false);
+  //const [groupNotUser, setgroupNotUser] = useState(false);
 
   /*
 {GroupID: 2, GroupName: '2011 Rashford Fan Club', CreatorID: 2, 
@@ -60,7 +62,7 @@ AboutText: Array(1), Members: 2941}
 
 */
   const updateUserProfile = (userid) => {
-    setgroupNotUser(false);
+    updategroupNotUser(false);
     //if (userid > 0) {
     for (const obj of DBAllUsers) {
       if (obj.UserID == userid) {
@@ -78,7 +80,7 @@ AboutText: Array(1), Members: 2941}
 
   const updateGroupProfile = (groupid) => {
    // if (GroupID > 0) {
-      setgroupNotUser(true);
+    updategroupNotUser(true);
       for (const obj of AllGroupsData) {
         if (obj.GroupID == groupid) {
           setfirstName(obj.GroupName);
