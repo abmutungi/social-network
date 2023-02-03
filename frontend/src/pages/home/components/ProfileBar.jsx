@@ -77,7 +77,7 @@ AboutText: Array(1), Members: 2941}
   };
 
   const updateGroupProfile = (groupid) => {
-    if (GroupID > 0) {
+   // if (GroupID > 0) {
       setgroupNotUser(true);
       for (const obj of AllGroupsData) {
         if (obj.GroupID == groupid) {
@@ -87,20 +87,20 @@ AboutText: Array(1), Members: 2941}
           setfollowers("");
           updateAboutText(obj.AboutText);
         }
-      }
+    //  }
     }
     // updateUserID(LoggedInUserID);
   };
 
   useEffect(() => {
-    updateUserProfile(userID);
+    if (userID > 0) updateUserProfile(userID);
     //fetchRelationship(LoggedInUserID, userID);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
 
   useEffect(() => {
-    updateGroupProfile(GroupID);
+    if (GroupID > 0) updateGroupProfile(GroupID);
     // fetchRelationship(LoggedInUserID, userID);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

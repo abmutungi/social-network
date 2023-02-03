@@ -93,6 +93,7 @@ const SingleProfileComponent = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
 
+  console.log("Present Group ID", GroupID);
 
 
   if (props.type === "AllUsers") {

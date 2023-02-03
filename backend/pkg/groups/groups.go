@@ -15,6 +15,7 @@ type Group struct {
 	Members   int
 }
 
+
 //add a new group entry to the group table, then adds the group creator to groupMember table
 func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc string) []Group {
 	stmt, err := db.Prepare("INSERT INTO groups (name, creator, avatar, about) VALUES ( ?, ?,?, ?)")
@@ -83,7 +84,7 @@ func AddGroupMember(db *sql.DB, groupid int, memberid int) {
 
 }
 
-// checking if user follows loggedInUser
+// checking if user is a group valid
 func GroupMemberCheck(db *sql.DB, loggedInUser, GroupID int) bool {
 	var count int
 	err := db.QueryRow(`SELECT  COUNT(*)  FROM groupMembers WHERE groupID = ? AND member = ?;`, GroupID, loggedInUser).Scan(&count)
@@ -116,5 +117,51 @@ func CreateGroupEvent(db *sql.DB, groupID int, creatorid int, eventname string, 
 	LastIns, _ := res.LastInsertId()
 	fmt.Println("groups rows affected: ", rowsAff)
 	fmt.Println("group last inserted id: ", LastIns)
+
+}
+
+
+//returns an array of all groupmemberIDs against a given groupID
+func GetAllGroupMembers(db *sql.DB,groupid int) []int {
+	rows, err := db.Query(`SELECT member FROM groupMembers WHERE groupID = ? ;`, groupid)
+	if err != nil {
+		log.Println("Error from GetAllGroupsmembers fn():", err)
+		return nil
+	}
+	defer rows.Close()
+
+	var AllMembers []int
+	for rows.Next() {
+		var a int
+		err := rows.Scan(&a)
+		if err != nil {
+			log.Println("Error scanning group rows:", err)
+			continue
+		}
+		AllMembers = append(AllMembers, a)
+	}
+
+	return AllMembers
+}
+
+
+//creates an entry within the notifcations table upon creation of an event 
+func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string, notifyee, notifier, groupID int) {
+	stmt, err := db.Prepare("INSERT INTO notifications (notificationType, notifiyee, notifier, createdAt, groupID) VALUES ( ?, ?, ?,strftime('%H:%M %d/%m/%Y','now','localtime'), ?)")
+
+	if err != nil {
+		fmt.Printf("error preparing UpdateNotificationTablePostEventCreation fn: %v", err)
+	}
+
+	res, err2 := stmt.Exec( notifcationType, notifyee,notifier, groupID )
+
+	if err2 != nil {
+		fmt.Printf("error adding entry to notification table: %v", err2)
+	}
+
+	rowsAff, _ := res.RowsAffected()
+	LastIns, _ := res.LastInsertId()
+	fmt.Println("addgroupmember rows affected: ", rowsAff)
+	fmt.Println("addgroupmember last inserted id: ", LastIns)
 
 }

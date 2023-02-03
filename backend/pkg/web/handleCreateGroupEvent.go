@@ -42,6 +42,16 @@ func (s *Server) CreateGroupEvent() http.HandlerFunc {
 			fmt.Println("Error converting string to int, CreateGroupEvent fn()")
 		}
 
+		//get all group members then update the notifications table,
+		//then create entries within the notication table
+		var allgroupmembers = groups.GetAllGroupMembers(s.Db, groupid)
+		fmt.Println("all-group-members", allgroupmembers)
+
+		for _, member := range allgroupmembers{
+
+			groups.UpdateNotifcationTablePostEventCreation(s.Db,"eventInvite",member,creatorid,groupid )
+		}
+		
 		groups.CreateGroupEvent(s.Db, groupid, creatorid, r.Form.Get("eventName"), r.Form.Get("eventDescription"), r.Form.Get("eventStartDate"),r.Form.Get("eventStartDate"))
 
 		var message = fmt.Sprintf("The Event %s has been added to the database", r.Form.Get("eventName"))
