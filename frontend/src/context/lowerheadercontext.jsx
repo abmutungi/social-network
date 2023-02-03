@@ -12,8 +12,12 @@ export function LowerHeaderProvider({ children }) {
   const [AllGroupsData, setAllGroupsData] = useState([]);
 
   const [DynamicID, setDynamicID] = useState(() => {
-    const storedDynamicID = localStorage.getItem("DynamicID");
-    return storedDynamicID ? JSON.parse(storedDynamicID) : loggedInUser.ID;
+    if (localStorage.length > 0) {
+      const storedDynamicID = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).ID;
+      return storedDynamicID ? storedDynamicID : 0;
+    }
   });
   const [posts, setPosts] = useState([]);
   const [AboutText, setAboutText] = useState(() => {
@@ -85,7 +89,6 @@ export function LowerHeaderProvider({ children }) {
   };
   const updateDynamicID = (id) => {
     setDynamicID(id);
-    localStorage.setItem("DynamicID", JSON.stringify(id));
   };
 
   const updatePosts = (data) => {

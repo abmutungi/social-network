@@ -68,10 +68,10 @@ const Login = () => {
       updateUserID(currentUser.ID);
       updateLoggedInUserID(currentUser.ID);
       updatePrivacyStatus(currentUser.Privacy);
+      updateDynamicID(currentUser.ID);
       if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
       if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
 
-      updateDynamicID(currentUser.ID);
       console.log(loggedInUser);
       navigate("/");
     } else {

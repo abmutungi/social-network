@@ -42,6 +42,7 @@ function ContainerIcons() {
     console.log("Data check -> ", data);
     if (data.success) {
       navigate("/login");
+      location.reload();
       localStorage.clear();
     }
   }
