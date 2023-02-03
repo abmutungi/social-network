@@ -34,9 +34,9 @@ func CreatePost(db *sql.DB, userID int, textContent string, postPrivacy string, 
 	}
 
 	rowsAff, _ := res.RowsAffected()
-	LastIns, _ := res.LastInsertId()
+	lastIns, _ := res.LastInsertId()
 	fmt.Println("rows affected: ", rowsAff)
-	fmt.Println("last inserted id: ", LastIns)
+	fmt.Println("last inserted id: ", lastIns)
 }
 
 // get all posts that belong to a userID.
@@ -66,4 +66,33 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 	}
 
 	return posts
+}
+
+func GetLastPostID(db *sql.DB, userID int) int {
+	stmt := db.QueryRow("SELECT MAX(wallPostID) FROM wallPosts WHERE userID = ?", userID)
+
+	var postID int
+
+	stmt.Scan(&postID)
+
+	return postID
+}
+
+func AddPostAudience(db *sql.DB, postID int, userID int) {
+	stmt, err := db.Prepare("INSERT INTO postAudience(postID, userID) VALUES(?, ?)")
+
+	if err != nil {
+		fmt.Printf("error with addPostAudience statement: %v ", err)
+	}
+	res, err2 := stmt.Exec(postID, userID)
+
+	if err2 != nil {
+		fmt.Printf("error adding viewer into postAudience table: %v ", err2)
+	}
+
+	rowsAff, _ := res.RowsAffected()
+	lastIns, _ := res.LastInsertId()
+
+	fmt.Println("rows affected in postAudience table: ", rowsAff)
+	fmt.Println("last inserted id: ", lastIns)
 }

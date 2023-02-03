@@ -4,11 +4,6 @@ import { useState } from "react";
 const DropdownCheckBox = (props) => {
   const [dropdownDisplay, setDropdownDisplay] = useState(false);
 
-  //   const [followers, setFollowers] = useState([]);
-
-  //   props.followersFromParent.map((follower) => {
-  //     console.log(follower.UserID);
-  //   });
   const handleDropDownDisplay = () => {
     const checkboxContainer = document.querySelector(".checkboxes");
     if (!dropdownDisplay) {
@@ -35,7 +30,7 @@ const DropdownCheckBox = (props) => {
       <div className="checkboxes">
         {props.followersFromParent?.map((follower) => (
           <label htmlFor={follower.UserID} key={follower.UserID}>
-            <input type="checkbox" id={follower.UserID} />
+            <input type="checkbox" value={follower.UserID} name="post-viewer" />
             {follower.Firstname}
           </label>
         ))}

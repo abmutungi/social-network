@@ -22,6 +22,6 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/creategroup", s.HandleCreateGroup())
 
 	s.Router.HandleFunc("/myfollowers", s.HandleUserFollowers())
-	s.TestDBfunctions()
+	// s.TestDBfunctions()
 
 }

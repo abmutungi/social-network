@@ -38,13 +38,17 @@ const CreatePostModal = (props) => {
     const formData = new FormData(e.target);
     formData.append("imgName", imgName);
     formData.append("userID", LoggedInUserID);
+    // get all ids of private user
+    const checkboxValues = formData.getAll("post-viewer");
+    console.log(checkboxValues);
+
+    formData.append("viewers", JSON.stringify(checkboxValues));
 
     console.log("form data in obj", Object.fromEntries(formData.entries()));
 
     fetch("http://localhost:8080/createpost", {
       credentials: "include",
       method: "POST",
-      mode: "no-cors",
       body: formData,
     })
       .then((response) => response.json())
@@ -58,6 +62,7 @@ const CreatePostModal = (props) => {
     setPrivacy("public");
     setImgName("");
     props.onClose();
+    setDropdown(false);
   };
 
   async function fetchFollowers() {
@@ -73,16 +78,12 @@ const CreatePostModal = (props) => {
     setFollowers(data);
   }
 
-  const sendFollowersToDropdown = () => {
-    fetchFollowers();
-  };
-
   const handleCustomPrivacy = (e) => {
     if (e.target.value === "custom") {
       console.log("custom clicked");
       // fetch all followers here that belong to logged in user
-      sendFollowersToDropdown();
-      // fetchFollowers();
+      // sendFollowersToDropdown();
+      fetchFollowers();
 
       setDropdown(true);
     } else {
@@ -90,8 +91,14 @@ const CreatePostModal = (props) => {
     }
   };
 
+  const resetOnClose = () => {
+    props.onClose();
+    setDropdown(false);
+    setPrivacy("public");
+  };
+
   return (
-    <div className="cp-modal" onClick={props.onClose} role="presentation">
+    <div className="cp-modal" onClick={resetOnClose} role="presentation">
       <div
         className="cp-container"
         onClick={(e) => e.stopPropagation()}
@@ -102,7 +109,7 @@ const CreatePostModal = (props) => {
             <div></div>
             <div className="cp-title">Create post</div>
             <FontAwesomeIcon
-              onClick={props.onClose}
+              onClick={resetOnClose}
               icon="fa-solid fa-xmark"
               className="cp-x"
             />

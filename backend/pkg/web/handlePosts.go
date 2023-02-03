@@ -10,14 +10,13 @@ import (
 	"strconv"
 
 	"github.com/abmutungi/social-network/backend/pkg/posts"
-	"github.com/abmutungi/social-network/backend/pkg/relationships"
 	uuid "github.com/gofrs/uuid"
 )
 
 func (s *Server) HandleCreatePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
-		// // w.Header().Set("Content-Type", "application/json")
+		// w.Header().Set("Content-Type", "application/json")
 
 		// data recieved from frontend
 		err := r.ParseMultipartForm(10 << 20)
@@ -26,23 +25,35 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			fmt.Printf("error parsing createPost form: %v", err)
 		}
 
-		fmt.Println(r.Form, "form values")
-		fmt.Println(r.Form.Get("textContent"), "text content here")
-		fmt.Println(r.Form.Get("imgName"))
-
 		var newFileName string
 		// if file is added in form, create file for image and return filename
 		if r.Form.Get("imgName") != "" {
 			newFileName = s.HandleImage(r, "uploadedPostImg")
 		}
 
-		fmt.Println("USERID for posts ********", r.Form.Get("userID"))
 		userIDToInt, _ := strconv.Atoi(r.Form.Get("userID"))
 
-		fmt.Println("new file name", newFileName)
 		// adding post to the db
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 		posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
+
+		if r.Form.Get("privacyOption") == "custom" {
+			var checkboxArray []string
+			// convert checkbox string to array
+			err2 := json.Unmarshal([]byte(r.Form.Get("viewers")), &checkboxArray)
+
+			if err2 != nil {
+				fmt.Printf("error converting checkbox string into array: %v ", err)
+			}
+
+			for i := 0; i < len(checkboxArray); i++ {
+				// convent value of string id to int
+				id, _ := strconv.Atoi(checkboxArray[i])
+
+				// add each viewer to the post audience table
+				posts.AddPostAudience(s.Db, posts.GetLastPostID(s.Db, userIDToInt), id)
+			}
+		}
 
 		sendPosts, err := json.Marshal(posts.GetAllUserPosts(s.Db, userIDToInt))
 		if err != nil {
@@ -56,7 +67,9 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 func (s *Server) TestDBfunctions() {
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
-	fmt.Println(relationships.GetAllFollowers(s.Db, 3))
+	// fmt.Println(relationships.GetAllFollowers(s.Db, 3))
+
+	fmt.Println(posts.GetLastPostID(s.Db, 3))
 }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {
@@ -102,7 +115,7 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 		// conver id to int
 		userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
 
-		fmt.Println("clicked USER ID =====>", userIdInt)
+		// fmt.Println("clicked USER ID =====>", userIdInt)
 		// getall posts from db
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
