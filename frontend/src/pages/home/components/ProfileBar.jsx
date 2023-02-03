@@ -33,7 +33,7 @@ const ProfileBar = () => {
     DBAllUsers,
     AllGroupsData,
     userID,
-    // updateUserID,
+     updateUserID,
     GroupID,
     updateGroupID,
     updateAboutText,
@@ -89,7 +89,7 @@ AboutText: Array(1), Members: 2941}
         }
     //  }
     }
-    // updateUserID(LoggedInUserID);
+     updateUserID(0);
   };
 
   useEffect(() => {

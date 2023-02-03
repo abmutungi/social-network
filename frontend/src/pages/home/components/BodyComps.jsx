@@ -111,10 +111,11 @@ function MainBody() {
       <div className="middle-div">
         <NavBar />
         <div className="nav-and-post">
-          <EventBanner />
+          {/* <EventBanner />
           <EventBanner />
 
-          <EventBanner />
+          <EventBanner /> */}
+          {groupNotUser ? <GroupCreateEventBtn /> : null}
 
           <PostsContainer />
           {/* <Followers Followers={DBData} />

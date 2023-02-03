@@ -77,7 +77,6 @@ const SingleProfileComponent = (props) => {
 
       console.log('response from fetchgroupinfo', data);
 
-      //console.log("*************DATA SENT************************", data);
     } catch (e) {
       console.log("error fetching groupinfo", e);
     }
@@ -93,7 +92,6 @@ const SingleProfileComponent = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
 
-  console.log("Present Group ID", GroupID);
 
 
   if (props.type === "AllUsers") {
