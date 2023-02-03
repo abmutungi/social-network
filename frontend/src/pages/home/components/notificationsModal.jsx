@@ -1,22 +1,43 @@
 import "../../../assets/css/notifications-modal.css";
-import { loggedInUserContext } from "../../../context/loggedInUserContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
+  let notifText = props.notifType;
+
+  switch (notifText) {
+    case "followRequest":
+      notifText = "follow request";
+      break;
+    case "groupInvite":
+      notifText = "group invitation to...";
+      break;
+    case "groupRequest":
+      notifText = "request to join...";
+      break;
+    case "eventInvite":
+      notifText = "invitation to...";
+      break;
+    default:
+  }
+  console.log(notifText);
   return (
     <div className="notification-container">
       <div className="notifs-profile-content">
         <img
           className="notifs-profile cp-profile-pic"
-          src={props.profileImgPath}
+          src="../assets/img/ext/man-utd.png"
           alt="img"
         />
         <div className="notifs-content-date">
           <div className="notifs-content">
-            <strong>{props.name}</strong> sent you a {props.notificationType}
+            <strong>
+              {props.firstName} {props.lastName}
+            </strong>
+            {` sent you a ${notifText}`}
           </div>
-          <div className="notifs-date">{}</div>
+          <div className="notifs-date">01/01</div>
         </div>
       </div>
       <div className="notifs-action">
@@ -29,9 +50,35 @@ const SingleNotificationComponent = ({ props }) => {
 
 // notifications modal that holds single notifications
 const NotificationsModal = ({ show, onClose }) => {
-  const { MyNotifs } = useContext(loggedInUserContext);
-  console.log("MyNotifs", MyNotifs[0]);
-  console.log("MyNotifs.FName", MyNotifs[0].notifFName);
+  const { LoggedInUserID } = useContext(LowerHeaderContext);
+  const [MyNotifs, setMyNotifs] = useState([]);
+
+  async function DisplayNotifications() {
+    try {
+      const response = await fetch("http://localhost:8080/displayNotif", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          loggedInUserID: LoggedInUserID,
+        }),
+      });
+      const data = await response.json();
+      console.log("Notif data check on click ->", data);
+      setMyNotifs(data.AllNotifs);
+    } catch (e) {
+      console.log("error displaying notifications", e);
+    }
+  }
+
+  useEffect(() => {
+    DisplayNotifications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  console.log(
+    "MyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifs",
+    MyNotifs
+  );
   if (!show) {
     return null;
   }
@@ -45,13 +92,17 @@ const NotificationsModal = ({ show, onClose }) => {
         <div className="notifs-modal-header"></div>
         <div className="notifs-modal-title">Notifications</div>
         <div className="notifs-modal-body">
-          <SingleNotificationComponent
-            props={{
-              profileImgPath: "../assets/img/ext/man-utd.png",
-              name: `${MyNotifs[0].notifFName} ${MyNotifs[0].notifLName}`,
-              notificationType: `${MyNotifs[0].notifType}`,
-            }}
-          />
+          {MyNotifs?.map((notif) => (
+            <SingleNotificationComponent
+              key={notif.notifID}
+              props={{
+                profileImgPath: "../assets/img/ext/man-utd.png",
+                firstName: `${notif.notifFName}`,
+                lastName: `${notif.notifLName}`,
+                notifType: `${notif.notifType}`,
+              }}
+            />
+          ))}
         </div>
       </div>
     </div>
