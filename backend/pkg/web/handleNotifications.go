@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
+	"github.com/abmutungi/social-network/backend/pkg/relationships"
 )
 
 type NotifRead struct {
@@ -103,7 +104,7 @@ func (s *Server) HandleNotifDisplay() http.HandlerFunc {
 			log.Println(err)
 		}
 
-		fmt.Println("Data from notifications to display H-Fn()-------", string(data))
+		fmt.Println("Data received for notifdisplay H-Fn()-------", string(data))
 
 		var n Notifiyee
 
@@ -119,5 +120,31 @@ func (s *Server) HandleNotifDisplay() http.HandlerFunc {
 
 		sendNewNotif(w, notifResponse)
 		fmt.Println("notifications onclick")
+	}
+}
+
+func (s *Server) HandleActionNotif() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCors(&w)
+
+		data, err := io.ReadAll(r.Body)
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Println("Data received from `actionNotif H-Fn()-------", string(data))
+
+		var n notifications.Notification
+
+		json.Unmarshal(data, &n)
+
+		fmt.Println(n.NotifiyeeID)
+		fmt.Println(n.NotifierID)
+
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+
+		notifications.AcceptFollow(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+		relationships.DeleteRequest(s.Db, n.NotificationID)
+
+		// remove from notifications
 	}
 }

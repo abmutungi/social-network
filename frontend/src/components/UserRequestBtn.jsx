@@ -47,6 +47,7 @@ const UserRequestBtn = () => {
   } = useContext(LowerHeaderContext);
 
   const handleClick = () => {
+
     if (!PrivacyStatus) {
       if (FollowText === followText) {
         fetch("http://localhost:8080/follow", {

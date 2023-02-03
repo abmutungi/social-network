@@ -25,7 +25,6 @@ function ContainerIcons() {
      loggedInUser,
     NewNotifsExist,
     updateNewNotifsExist,
-    // updateMyNotifs,
   } = useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
   const navigate = useNavigate();
@@ -54,26 +53,7 @@ function ContainerIcons() {
 
   const [showNotifModal, setShowNotifModal] = useState(false);
 
-  // async function DisplayNotifications() {
-  //   try {
-  //     const response = await fetch("http://localhost:8080/displayNotif", {
-  //       method: "POST",
-  //       credentials: "include",
-  //       body: JSON.stringify({
-  //         loggedInUserID: LoggedInUserID,
-  //       }),
-  //     });
-  //     const data = await response.json();
-  //     // updateMyNotifs(data.AllNotifs);
-  //     return data
-  //     // console.log("Notif data check on click ->", data.AllNotifs);
-  //   } catch (e) {
-  //     console.log("error displaying notifications", e);
-  //   }
-  // }
-
   async function CheckNotifications() {
-    // console.log("LoggedInUserID", LoggedInUserID);
     try {
       const response = await fetch("http://localhost:8080/checkNotif", {
         method: "POST",
@@ -102,7 +82,6 @@ function ContainerIcons() {
         <div>
           <FontAwesomeIcon
             onClick={() => {
-              // DisplayNotifications();
               setShowNotifModal(true);
               updateNewNotifsExist(false);
             }}

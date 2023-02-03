@@ -15,10 +15,6 @@ function LoggedInUserProvider({ children }) {
     setNewNotifsExist(bool);
   };
 
-  // const updateMyNotifs = (data) => {
-  //   setMyNotifs(data);
-  // };
-
   return (
     <loggedInUserContext.Provider
       value={{
@@ -26,8 +22,6 @@ function LoggedInUserProvider({ children }) {
         updateLoggedInUser,
         NewNotifsExist,
         updateNewNotifsExist,
-        // MyNotifs,
-        // updateMyNotifs,
       }}
     >
       {children}

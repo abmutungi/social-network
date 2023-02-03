@@ -76,6 +76,7 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			w.Write(sendFollowStatus)
 			return
 		} else if relationships.FollowingYouCheck(s.Db, f.UserOfInterest, f.User) {
+			
 			var s FollowStatus
 
 			s.Following = true

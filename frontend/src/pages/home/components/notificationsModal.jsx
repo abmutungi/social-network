@@ -4,6 +4,8 @@ import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
+  const { LoggedInUserID } = useContext(LowerHeaderContext);
+
   let notifText = props.notifType;
 
   switch (notifText) {
@@ -22,8 +24,21 @@ const SingleNotificationComponent = ({ props }) => {
     default:
   }
   console.log(notifText);
+
+  const handleClick = () => {
+    fetch("http://localhost:8080/actionNotif", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        notifID: props.id,
+        notifierID: props.notifierID,
+        notifiyeeID: LoggedInUserID,
+      }),
+    });
+  };
+
   return (
-    <div className="notification-container">
+    <div id={props.id} className="notification-container">
       <div className="notifs-profile-content">
         <img
           className="notifs-profile cp-profile-pic"
@@ -41,7 +56,9 @@ const SingleNotificationComponent = ({ props }) => {
         </div>
       </div>
       <div className="notifs-action">
-        <button className="confirm-button">Confirm</button>
+        <button onClick={handleClick} className="confirm-button">
+          Confirm
+        </button>
         <button>Remove</button>
       </div>
     </div>
@@ -96,10 +113,12 @@ const NotificationsModal = ({ show, onClose }) => {
             <SingleNotificationComponent
               key={notif.notifID}
               props={{
+                id: notif.notifID,
+                firstName: notif.notifFName,
+                lastName: notif.notifLName,
+                notifType: notif.notifType,
+                notifierID: notif.notifierID,
                 profileImgPath: "../assets/img/ext/man-utd.png",
-                firstName: `${notif.notifFName}`,
-                lastName: `${notif.notifLName}`,
-                notifType: `${notif.notifType}`,
               }}
             />
           ))}

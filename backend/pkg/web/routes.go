@@ -10,6 +10,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/updatePrivacy", s.GeneralSessionChecker(s.HandlePrivacyUpdate()))
 	s.Router.HandleFunc("/displayNotif", s.GeneralSessionChecker(s.HandleNotifDisplay()))
 	s.Router.HandleFunc("/checkNotif", s.GeneralSessionChecker(s.HandleNotifCheck()))
+	s.Router.HandleFunc("/actionNotif", s.GeneralSessionChecker(s.HandleActionNotif()))
 
 	s.Router.HandleFunc("/dummyusers", s.HandleDummyUsers())
 	s.Router.HandleFunc("/getgroupdata", s.HandleGroups())

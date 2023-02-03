@@ -20,7 +20,7 @@ const SingleProfileComponent = (props) => {
 
   const navigate = useNavigate();
   // const handleClick = () => {
-  async function FetchRelationship() {
+   async function FetchRelationship() {
     try {
       const response = await fetch("http://localhost:8080/followCheck", {
         method: "POST",
