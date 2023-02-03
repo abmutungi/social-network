@@ -28,8 +28,13 @@ const PrivateBtn = () => {
     LoggedInUserID,
   } = useContext(LowerHeaderContext);
 
+  let lu = JSON.parse(localStorage.getItem("loggedInUser"));
   const handleClick = () => {
+    console.log("LU Check --> ", lu);
+
     if (PrivacyStatus) {
+      lu.Privacy = 0;
+      localStorage.setItem("loggedInUser", JSON.stringify(lu));
       updatePrivacyBtnText(PublicText);
       updatePrivacyStatus(false);
       fetch("http://localhost:8080/updatePrivacy", {
@@ -40,7 +45,10 @@ const PrivateBtn = () => {
           privacyStatus: false,
         }),
       });
-    } else {
+    } else if (!PrivacyStatus) {
+      lu.Privacy = 1;
+      localStorage.setItem("loggedInUser", JSON.stringify(lu));
+
       updatePrivacyBtnText(PrivateText);
       updatePrivacyStatus(true);
       fetch("http://localhost:8080/updatePrivacy", {
