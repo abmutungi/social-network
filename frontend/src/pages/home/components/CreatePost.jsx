@@ -31,8 +31,6 @@ const CreatePostModal = (props) => {
 
   // function to handle form submission.
   const handleFormSubmit = (e) => {
-    // currently not preventing submit default action as need page to reload after submission.
-    // eventually will redirect to home after the create post route is known.
     e.preventDefault();
 
     const formData = new FormData(e.target);
@@ -40,7 +38,6 @@ const CreatePostModal = (props) => {
     formData.append("userID", LoggedInUserID);
     // get all ids of private user
     const checkboxValues = formData.getAll("post-viewer");
-    console.log(checkboxValues);
 
     formData.append("viewers", JSON.stringify(checkboxValues));
 
@@ -82,7 +79,6 @@ const CreatePostModal = (props) => {
     if (e.target.value === "custom") {
       console.log("custom clicked");
       // fetch all followers here that belong to logged in user
-      // sendFollowersToDropdown();
       fetchFollowers();
 
       setDropdown(true);
