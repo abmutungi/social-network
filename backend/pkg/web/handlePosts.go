@@ -30,6 +30,13 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		fmt.Println(r.Form.Get("textContent"), "text content here")
 		fmt.Println(r.Form.Get("imgName"))
 
+
+		if r.Form.Has("groupID"){
+			//save post to groupposts
+			//send back to client to display 
+
+		}else{
+
 		var newFileName string
 		// if file is added in form, create file for image and return filename
 		if r.Form.Get("imgName") != "" {
@@ -50,6 +57,8 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		}
 
 		w.Write(sendPosts)
+
+	}
 	}
 }
 
@@ -99,8 +108,13 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			fmt.Printf("error parsing userID form: %v", err)
 		}
 
-		// conver id to int
+		if r.Form.Has("userID"){
+
+			// conver id to int
 		userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
+
+		fmt.Println("USER ----", userIdInt)
+
 
 		fmt.Println("clicked USER ID =====>", userIdInt)
 		// getall posts from db
@@ -112,6 +126,38 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshalledPosts)
+
+        
+		}
+		
+		if r.Form.Has("groupID"){
+			// conver id to int
+		groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")));
+		fmt.Println("GROUPID ----", groupIdInt)
+
+
+		//get posts for group and send back 
+		//frontend needs to 
+
+
+
+		// fmt.Println("clicked USER ID =====>", userIdInt)
+		// // getall posts from db
+		// s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+
+		// var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
+		// // fmt.Println(postsToSend)
+		// marshalledPosts, _ := json.Marshal(postsToSend)
+
+		// w.Header().Set("Content-Type", "application/json")
+		// w.Write(marshalledPosts)
+
+		}
+		//if r.Form.Get("userID") = 
+
+
+
+		
 
 	}
 }

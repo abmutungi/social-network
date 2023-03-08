@@ -51,6 +51,7 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
 	}
 
+
 	posts := []Post{}
 
 	// defer db.Close()

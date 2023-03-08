@@ -63,7 +63,7 @@ AboutText: Array(1), Members: 2941}
 */
   const updateUserProfile = (userid) => {
     updategroupNotUser(false);
-    //if (userid > 0) {
+
     for (const obj of DBAllUsers) {
       if (obj.UserID == userid) {
         setfirstName(obj.Firstname);
@@ -96,6 +96,8 @@ AboutText: Array(1), Members: 2941}
 
   useEffect(() => {
     if (userID > 0) updateUserProfile(userID);
+    // if (GroupID > 0) updateGroupProfile(GroupID);
+
     //fetchRelationship(LoggedInUserID, userID);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -16,7 +16,7 @@ const CreatePostModal = (props) => {
   // state for when image is uploaded
   const [imgName, setImgName] = useState("");
 
-  const { LoggedInUserID, updatePosts } = useContext(LowerHeaderContext);
+  const { LoggedInUserID, updatePosts, GroupID, groupNotUser } = useContext(LowerHeaderContext);
 
   // for displaying the modal
   if (!props.show) {
@@ -29,10 +29,13 @@ const CreatePostModal = (props) => {
     // eventually will redirect to home after the create post route is known.
     e.preventDefault();
 
+    //let clickedValue =  groupNotUser ?   GroupID : DynamicID;
+
     const formData = new FormData(e.target);
     formData.append("imgName", imgName);
     formData.append("userID", LoggedInUserID);
-
+    if (groupNotUser)  formData.append("groupID", GroupID) ;
+    
     console.log("form data in obj", Object.fromEntries(formData.entries()));
 
     fetch("http://localhost:8080/createpost", {
