@@ -78,6 +78,7 @@ func GetLastPostID(db *sql.DB, userID int) int {
 	return postID
 }
 
+// if user chooses a custom post, only the names chosen would get added to this table.
 func AddPostAudience(db *sql.DB, postID int, userID int) {
 	stmt, err := db.Prepare("INSERT INTO postAudience(postID, userID) VALUES(?, ?)")
 

@@ -71,7 +71,11 @@ const Login = () => {
       if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
       if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
 
-      updateDynamicID(currentUser.ID);
+      // console.log(
+      //   "CURRENT USER ID BEING PASSED TO UPDATE DYNAMIC =====>",
+      //   currentUser.ID
+      // );
+      // updateDynamicID(currentUser.ID);
       console.log(loggedInUser);
       navigate("/");
     } else {
@@ -139,6 +143,7 @@ const Login = () => {
         if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
         if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
         // console.log(loggedInUser);
+        updateDynamicID(currentUser.ID);
         navigate("/");
       }
     }

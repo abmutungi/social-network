@@ -37,8 +37,10 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 		posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
 
+		// if custom is chosen
 		if r.Form.Get("privacyOption") == "custom" {
 			var checkboxArray []string
+
 			// convert checkbox string to array
 			err2 := json.Unmarshal([]byte(r.Form.Get("viewers")), &checkboxArray)
 
@@ -101,6 +103,7 @@ func (s *Server) HandleImage(r *http.Request, formImageName string) string {
 	return newFileName
 }
 
+// sending ALL posts depending on which user has been clicked.
 func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
