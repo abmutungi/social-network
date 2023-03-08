@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+
+	"github.com/abmutungi/social-network/backend/pkg/users"
 )
 
 func StoreFollowing(db *sql.DB, userID, loggedInUser int) {
@@ -78,4 +80,32 @@ func FollowRequestCheck(db *sql.DB, loggedInUser, userID int) bool {
 	}
 	//fmt.Println("I'm not awaiting response from follow request, I can send a request")
 	return false
+}
+
+// function to get all followers of passed in user.
+
+func GetAllFollowers(db *sql.DB, userID int) []users.User {
+	rows, err := db.Query(`SELECT users.userID, firstName 
+	FROM users 
+	INNER JOIN relationships ON relationships.followerID = users.userID 
+	WHERE relationships.userID = ?`, userID)
+
+	if err != nil {
+		fmt.Printf("error querying GetAllFollowers statement: %v ", err)
+	}
+
+	var followers []users.User
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var f users.User
+		err2 := rows.Scan(&f.UserID, &f.Firstname)
+		if err2 != nil {
+			fmt.Printf("error scanning rows for followers: %v,", err2)
+		}
+		followers = append(followers, f)
+
+	}
+	return followers
 }

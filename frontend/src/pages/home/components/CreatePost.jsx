@@ -5,6 +5,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import "../../../assets/css/posts.css";
 import { useState, useContext } from "react";
+import DropdownCheckBox from "../../../components/DropdownCheckbox";
 library.add(faImage, faXmark);
 
 // All classNames start with cp(short for createpost)
@@ -17,6 +18,11 @@ const CreatePostModal = (props) => {
   const [imgName, setImgName] = useState("");
 
   const { LoggedInUserID, updatePosts, GroupID, groupNotUser } = useContext(LowerHeaderContext);
+  // set state for custom (users) dropdown
+  const [dropdown, setDropdown] = useState(false);
+
+  const [followers, setFollowers] = useState([]);
+
 
   // for displaying the modal
   if (!props.show) {
@@ -25,8 +31,6 @@ const CreatePostModal = (props) => {
 
   // function to handle form submission.
   const handleFormSubmit = (e) => {
-    // currently not preventing submit default action as need page to reload after submission.
-    // eventually will redirect to home after the create post route is known.
     e.preventDefault();
 
     //let clickedValue =  groupNotUser ?   GroupID : DynamicID;
@@ -36,6 +40,11 @@ const CreatePostModal = (props) => {
     formData.append("userID", LoggedInUserID);
     if (groupNotUser)  formData.append("groupID", GroupID) ;
     
+    // get all ids of private user
+    const checkboxValues = formData.getAll("post-viewer");
+
+    formData.append("viewers", JSON.stringify(checkboxValues));
+
     console.log("form data in obj", Object.fromEntries(formData.entries()));
 
     fetch("http://localhost:8080/createpost", {
@@ -52,19 +61,44 @@ const CreatePostModal = (props) => {
     setTextContent("");
     setImg(null);
     setPrivacy("public");
+    setImgName("");
     props.onClose();
+    setDropdown(false);
   };
 
-  const handleCustomPrivacy = (e) => {
-    console.log(e.target.value);
+  async function fetchFollowers() {
+    const form = new FormData();
+    form.append("userID", LoggedInUserID);
+    const resp = await fetch("http://localhost:8080/myfollowers", {
+      method: "POST",
+      body: form,
+      credentials: "include",
+    });
+    const data = await resp.json();
+    // return data;
+    setFollowers(data);
+  }
 
+  const handleCustomPrivacy = (e) => {
     if (e.target.value === "custom") {
       console.log("custom clicked");
+      // fetch all followers here that belong to logged in user
+      fetchFollowers();
+
+      setDropdown(true);
+    } else {
+      setDropdown(false);
     }
   };
 
+  const resetOnClose = () => {
+    props.onClose();
+    setDropdown(false);
+    setPrivacy("public");
+  };
+
   return (
-    <div className="cp-modal" onClick={props.onClose} role="presentation">
+    <div className="cp-modal" onClick={resetOnClose} role="presentation">
       <div
         className="cp-container"
         onClick={(e) => e.stopPropagation()}
@@ -75,7 +109,7 @@ const CreatePostModal = (props) => {
             <div></div>
             <div className="cp-title">Create post</div>
             <FontAwesomeIcon
-              onClick={props.onClose}
+              onClick={resetOnClose}
               icon="fa-solid fa-xmark"
               className="cp-x"
             />
@@ -84,26 +118,31 @@ const CreatePostModal = (props) => {
             <img className="cp-profile-pic" src={props.profileImg} alt="img" />
             <div className="cp-name&viewer">
               <div className="cp-name cp-span">{props.name}</div>
-              <select
-                name="privacyOption"
-                id="who-can-view"
-                className="cp-dropdown"
-                value={privacy}
-                onChange={(e) => {
-                  setPrivacy(e.target.value);
-                  handleCustomPrivacy(e);
-                }}
-              >
-                <option name="privacy" value="public">
-                  Public
-                </option>
-                <option name="privacy" value="private">
-                  Private
-                </option>
-                <option name="privacy" value="custom">
-                  Custom
-                </option>
-              </select>
+              <div className="cp-dropdowns">
+                <select
+                  name="privacyOption"
+                  id="who-can-view"
+                  className="cp-dropdown"
+                  value={privacy}
+                  onChange={(e) => {
+                    setPrivacy(e.target.value);
+                    handleCustomPrivacy(e);
+                  }}
+                >
+                  <option name="privacy" value="public">
+                    Public
+                  </option>
+                  <option name="privacy" value="private">
+                    Private
+                  </option>
+                  <option name="privacy" value="custom">
+                    Custom
+                  </option>
+                </select>
+                {dropdown && (
+                  <DropdownCheckBox followersFromParent={followers} />
+                )}
+              </div>
             </div>
           </div>
           <textarea

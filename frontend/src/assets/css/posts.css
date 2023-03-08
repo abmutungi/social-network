@@ -64,6 +64,7 @@ body {
   border: none;
   padding: 0.15rem;
   cursor: pointer;
+  height: fit-content;
 }
 
 .cp-text-content {
@@ -310,4 +311,53 @@ body {
 .comment-img {
   height: 200px;
   width: 200px;
+}
+/* dropdown checkbox */
+.cb-container {
+  width: 150px;
+}
+
+.select-box {
+  position: relative;
+}
+.select-box select {
+  width: 100%;
+  font-weight: bold;
+  background: #e4e6eb;
+  border-radius: 5px;
+  padding: 0.15rem;
+  border: none;
+}
+
+.over-select {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.checkboxes {
+  display: none;
+  border: 1px solid #dadada;
+  overflow-y: auto;
+  max-height: 100px;
+  border-radius: 5px;
+  position: absolute;
+  width: inherit;
+  background: white;
+}
+
+.checkboxes label {
+  display: block;
+  padding: 0.2rem;
+}
+
+.checkboxes label input {
+  margin-right: 0.2rem;
+}
+
+.cp-dropdowns {
+  display: flex;
+  gap: 0.5rem;
 }

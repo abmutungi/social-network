@@ -9,7 +9,6 @@ import (
 	"os"
 	"strconv"
 
-	comment "github.com/abmutungi/social-network/backend/pkg/comments"
 	"github.com/abmutungi/social-network/backend/pkg/posts"
 	uuid "github.com/gofrs/uuid"
 )
@@ -17,7 +16,7 @@ import (
 func (s *Server) HandleCreatePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
-		// // w.Header().Set("Content-Type", "application/json")
+		// w.Header().Set("Content-Type", "application/json")
 
 		// data recieved from frontend
 		err := r.ParseMultipartForm(10 << 20)
@@ -30,42 +29,61 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		fmt.Println(r.Form.Get("textContent"), "text content here")
 		fmt.Println(r.Form.Get("imgName"))
 
-
-		if r.Form.Has("groupID"){
+		if r.Form.Has("groupID") {
 			//save post to groupposts
-			//send back to client to display 
+			//send back to client to display
 
-		}else{
+		} else {
 
-		var newFileName string
-		// if file is added in form, create file for image and return filename
-		if r.Form.Get("imgName") != "" {
-			newFileName = s.HandleImage(r, "uploadedPostImg")
+			var newFileName string
+			// if file is added in form, create file for image and return filename
+			if r.Form.Get("imgName") != "" {
+				newFileName = s.HandleImage(r, "uploadedPostImg")
+			}
+
+			userIDToInt, _ := strconv.Atoi(r.Form.Get("userID"))
+
+			// adding post to the db
+			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
+
+			// if custom is chosen
+			if r.Form.Get("privacyOption") == "custom" {
+				var checkboxArray []string
+
+				// convert checkbox string to array
+				err2 := json.Unmarshal([]byte(r.Form.Get("viewers")), &checkboxArray)
+
+				if err2 != nil {
+					fmt.Printf("error converting checkbox string into array: %v ", err)
+				}
+
+				for i := 0; i < len(checkboxArray); i++ {
+					// convent value of string id to int
+					id, _ := strconv.Atoi(checkboxArray[i])
+
+					// add each viewer to the post audience table
+					posts.AddPostAudience(s.Db, posts.GetLastPostID(s.Db, userIDToInt), id)
+				}
+			}
+
+			sendPosts, err := json.Marshal(posts.GetAllUserPosts(s.Db, userIDToInt))
+			if err != nil {
+				fmt.Println("error marshalling posts", sendPosts)
+			}
+
+			w.Write(sendPosts)
+
 		}
-
-		fmt.Println("USERID for posts ********", r.Form.Get("userID"))
-		userIDToInt, _ := strconv.Atoi(r.Form.Get("userID"))
-
-		fmt.Println("new file name", newFileName)
-		// adding post to the db
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-		posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
-
-		sendPosts, err := json.Marshal(posts.GetAllUserPosts(s.Db, userIDToInt))
-		if err != nil {
-			fmt.Println("error marshalling posts", sendPosts)
-		}
-
-		w.Write(sendPosts)
-
-	}
 	}
 }
 
 func (s *Server) TestDBfunctions() {
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
-	fmt.Println(comment.GetAllComments(s.Db, 1))
+	// fmt.Println(relationships.GetAllFollowers(s.Db, 3))
+
+	fmt.Println(posts.GetLastPostID(s.Db, 3))
 }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {
@@ -97,6 +115,7 @@ func (s *Server) HandleImage(r *http.Request, formImageName string) string {
 	return newFileName
 }
 
+// sending ALL posts depending on which user has been clicked.
 func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
@@ -108,56 +127,45 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			fmt.Printf("error parsing userID form: %v", err)
 		}
 
-		if r.Form.Has("userID"){
+		if r.Form.Has("userID") {
 
 			// conver id to int
-		userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
+			userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
 
-		fmt.Println("USER ----", userIdInt)
+			fmt.Println("clicked USER ID =====>", userIdInt)
+			// getall posts from db
+			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
+			var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
+			// fmt.Println(postsToSend)
+			marshalPosts, _ := json.Marshal(postsToSend)
 
-		fmt.Println("clicked USER ID =====>", userIdInt)
-		// getall posts from db
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(marshalPosts)
 
-		var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
-		// fmt.Println(postsToSend)
-		marshalledPosts, _ := json.Marshal(postsToSend)
-
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(marshalledPosts)
-
-        
 		}
-		
-		if r.Form.Has("groupID"){
+
+		if r.Form.Has("groupID") {
 			// conver id to int
-		groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")));
-		fmt.Println("GROUPID ----", groupIdInt)
+			groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")))
+			fmt.Println("GROUPID ----", groupIdInt)
 
+			//get posts for group and send back
+			//frontend needs to
 
-		//get posts for group and send back 
-		//frontend needs to 
+			// fmt.Println("clicked USER ID =====>", userIdInt)
+			// // getall posts from db
+			// s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
+			// var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
+			// // fmt.Println(postsToSend)
+			// marshalledPosts, _ := json.Marshal(postsToSend)
 
-
-		// fmt.Println("clicked USER ID =====>", userIdInt)
-		// // getall posts from db
-		// s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-
-		// var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
-		// // fmt.Println(postsToSend)
-		// marshalledPosts, _ := json.Marshal(postsToSend)
-
-		// w.Header().Set("Content-Type", "application/json")
-		// w.Write(marshalledPosts)
+			// w.Header().Set("Content-Type", "application/json")
+			// w.Write(marshalledPosts)
 
 		}
-		//if r.Form.Get("userID") = 
-
-
-
-		
+		//if r.Form.Get("userID") =
 
 	}
 }
