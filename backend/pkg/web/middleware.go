@@ -42,9 +42,9 @@ func LogInPageSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
 func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
-		for _, c := range r.Cookies() {
-			fmt.Println("COOKIE LOOP -> ", c)
-		}
+		// for _, c := range r.Cookies() {
+		// 	fmt.Println("COOKIE LOOP -> ", c)
+		// }
 		c, err := r.Cookie("session_cookie")
 		if err != nil {
 			// if err == http.ErrNoCookie {

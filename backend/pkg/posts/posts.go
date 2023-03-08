@@ -34,9 +34,9 @@ func CreatePost(db *sql.DB, userID int, textContent string, postPrivacy string, 
 	}
 
 	rowsAff, _ := res.RowsAffected()
-	LastIns, _ := res.LastInsertId()
+	lastIns, _ := res.LastInsertId()
 	fmt.Println("rows affected: ", rowsAff)
-	fmt.Println("last inserted id: ", LastIns)
+	fmt.Println("last inserted id: ", lastIns)
 }
 
 // get all posts that belong to a userID.
@@ -51,6 +51,7 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
 	}
 
+
 	posts := []Post{}
 
 	// defer db.Close()
@@ -59,11 +60,41 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 		var p Post
 		err2 := rows.Scan(&p.PostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.Privacy, &p.FName)
 		if err2 != nil {
-			fmt.Printf("error scaning rows for posts: %v", err2)
+			fmt.Printf("error scanning rows for posts: %v", err2)
 		}
 		p.Comments = comment.GetAllComments(db, p.PostID)
 		posts = append(posts, p)
 	}
 
 	return posts
+}
+
+func GetLastPostID(db *sql.DB, userID int) int {
+	stmt := db.QueryRow("SELECT MAX(wallPostID) FROM wallPosts WHERE userID = ?", userID)
+
+	var postID int
+
+	stmt.Scan(&postID)
+
+	return postID
+}
+
+// if user chooses a custom post, only the names chosen would get added to this table.
+func AddPostAudience(db *sql.DB, postID int, userID int) {
+	stmt, err := db.Prepare("INSERT INTO postAudience(postID, userID) VALUES(?, ?)")
+
+	if err != nil {
+		fmt.Printf("error with addPostAudience statement: %v ", err)
+	}
+	res, err2 := stmt.Exec(postID, userID)
+
+	if err2 != nil {
+		fmt.Printf("error adding viewer into postAudience table: %v ", err2)
+	}
+
+	rowsAff, _ := res.RowsAffected()
+	lastIns, _ := res.LastInsertId()
+
+	fmt.Println("rows affected in postAudience table: ", rowsAff)
+	fmt.Println("last inserted id: ", lastIns)
 }

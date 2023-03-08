@@ -73,10 +73,15 @@ const Login = () => {
       updateLoggedInUserID(currentUser.ID);
       updatePrivacyStatus(currentUser.Privacy);
       updateNewNotifsExist(currentUser.Notifications);
-      updateDynamicID(currentUser.ID);
+     // updateDynamicID(currentUser.ID);
       if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
       if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
 
+      // console.log(
+      //   "CURRENT USER ID BEING PASSED TO UPDATE DYNAMIC =====>",
+      //   currentUser.ID
+      // );
+      // updateDynamicID(currentUser.ID);
       console.log(loggedInUser);
       navigate("/");
     } else {
@@ -143,11 +148,12 @@ const Login = () => {
         updateLoggedInUserID(currentUser.ID);
         updatePrivacyStatus(currentUser.Privacy);
         updateNewNotifsExist(currentUser.Notifications);
+        updateDynamicID(currentUser.ID);
+
         if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
         if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
         console.log("2ND PS CHECK ON LOGIN --> ", currentUser.Privacy);
 
-        updateDynamicID(currentUser.ID);
         if (currentUser.Privacy) updatePrivacyBtnText(PrivateText);
         if (!currentUser.Privacy) updatePrivacyBtnText(PublicText);
         console.log("3RD PS CHECK ON LOGIN --> ", PrivacyStatus);

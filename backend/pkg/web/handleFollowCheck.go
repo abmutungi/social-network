@@ -3,7 +3,6 @@ package web
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -31,7 +30,8 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			log.Println(err)
 		}
 
-		fmt.Println("DATA FROM FollowCheck H-Fn() ******************", string(data))
+		//fmt.Println("DATA FROM FollowCheck H-Fn() ******************", string(data))
+		//fmt.Println("DATA FROM FollowCheck HFn() ******************", string(data))
 
 		var f FollowStatusCheck
 
@@ -39,7 +39,7 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 
 		
 
-		fmt.Printf("****LOGGED IN USER: %v\n****USER TO FOLLOW:%v\n", f.User, f.UserOfInterest)
+		//.Printf("****LOGGED IN USER: %v\n****USER TO FOLLOW:%v\n", f.User, f.UserOfInterest)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 

@@ -2,60 +2,17 @@ package web
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
+	"log"
 	"net/http"
 
 	"github.com/abmutungi/social-network/backend/pkg/groups"
 )
 
-type Group struct {
-	GroupID   int
-	GroupName string
-	CreatorID int
-	AboutText []string
-	Members   int
-}
-
-/*
-   "Black & White Army",
-   "2011 Rashford Fan Club",
-   "Sancho Support Club",
-   "AirBnB crew",
-   "AgendaZone",
-   "Ski Club",
-   "Suya Society",
-   "SuperEaglesSupporters",
-*/
-
-var AllGroups = []Group{
-	{
-		GroupID:   1,
-		GroupName: "Black & White Army",
-		CreatorID: 1,
-		AboutText: []string{"For Fans of the Northern Football Giant"},
-		Members:   497567554,
-	},
-
-	{
-		GroupID:   2,
-		GroupName: "2011 Rashford Fan Club",
-		CreatorID: 2,
-		AboutText: []string{"Rashford stans unite"},
-		Members:   2941,
-	},
-	{
-		GroupID:   4,
-		GroupName: "AirBnB crew",
-		CreatorID: 4,
-		AboutText: []string{"Don't sleep on us"},
-		Members:   22,
-	},
-	{
-		GroupID:   5,
-		GroupName: "Ski Club",
-		CreatorID: 4,
-		AboutText: []string{"We’re here to help you plan and enjoy your winter adventures, make the most of your time in the mountains, and ensure that you feel part of the UK’s largest snowsports community. "},
-		Members:   46540,
-	},
+type IsMember struct {
+	GroupID int `json:"groupID"`
+	UserID int `json:"loggedInUserID"`
 }
 
 func (s *Server) HandleGroups() http.HandlerFunc {
@@ -71,7 +28,39 @@ func (s *Server) HandleGroups() http.HandlerFunc {
 			return
 		}
 		w.Write([]byte(AllGroups))
-		
+
+	}
+
+}
+
+
+//runs number of times singleprof component exists, should be once!
+func (s *Server) IsGroupMember() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCors(&w)
+
+		data, err := io.ReadAll(r.Body)
+		if err != nil {
+			log.Println("Error reading body from IsGroupMember", err)
+		}
+
+		var f IsMember
+
+		json.Unmarshal(data, &f)
+
+	var isMember = groups.GroupMemberCheck(s.Db, f.UserID, f.GroupID)
+
+	fmt.Println("IsMember?", isMember)
+
+
+	Memberbool, err := json.Marshal(isMember)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
+	w.Write([]byte(Memberbool))
+
 
 	}
 

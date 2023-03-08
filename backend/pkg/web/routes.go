@@ -13,7 +13,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/actionNotif", s.GeneralSessionChecker(s.HandleActionNotif()))
 
 	s.Router.HandleFunc("/dummyusers", s.HandleDummyUsers())
-	s.Router.HandleFunc("/getgroupdata", s.HandleGroups())
+	 s.Router.HandleFunc("/getgroupdata", s.HandleGroups())
 
 	s.Router.HandleFunc("/login", (s.HandleLogin()))
 	s.Router.HandleFunc("/logout", s.HandleLogout())
@@ -22,6 +22,11 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/storecomment", s.handleComment())
 	s.Router.HandleFunc("/myposts", s.HandleSendUserPosts())
 	s.Router.HandleFunc("/creategroup", s.HandleCreateGroup())
+	s.Router.HandleFunc("/isgroupmember", s.IsGroupMember())
+	s.Router.HandleFunc("/creategroupevent", s.CreateGroupEvent())
 
+
+
+	s.Router.HandleFunc("/myfollowers", s.HandleUserFollowers())
 	// s.TestDBfunctions()
 }

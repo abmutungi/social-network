@@ -27,19 +27,10 @@ func (s *Server) HandleCreateGroup() http.HandlerFunc {
 			fmt.Println("err parsing group image", err)
 		}
 
-		fmt.Println("Form Groups", r.Form)
-		// fmt.Println("Reqest Body", r.Body)
-
-		// fmt.Println("R.Form.Get", r.Form.Get("group-avatar"))
-
 
 		if r.Form.Get("imgName") != "" {
 			fileName = s.HandleImage(r, "group-avatar")
 		}
-
-		fmt.Println("FILE NAME", fileName)
-
-
 
 		creatorid, err := strconv.Atoi(r.Form.Get("creatorID"))
 		if err != nil {

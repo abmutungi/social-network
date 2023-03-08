@@ -105,18 +105,19 @@ const LeftBodyDiv = () => {
 };
 
 function MainBody() {
+
   return (
     <div className="MainBody">
       <LeftBodyDiv />
       <div className="middle-div">
         <NavBar />
         <div className="nav-and-post">
-          <EventBanner />
-          <EventBanner />
+          {/* <EventBanner />
 
-          <EventBanner />
-
+<EventBanner />
+<EventBanner /> */}
           <PostsContainer />
+
           {/* <Followers Followers={DBData} />
           <Following Following={DBData} />
           <MyGroups MyGroups={DBData} /> */}
