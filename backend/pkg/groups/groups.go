@@ -58,3 +58,19 @@ func GetAllGroupsData(db *sql.DB) []Group {
 
 	return AllGroups
 }
+
+// checking if loggedInUser is already in group
+func GroupMemberCheck(db *sql.DB, userID, loggedInUser int) bool {
+	var count int
+	err := db.QueryRow(`SELECT  COUNT(*)  FROM relationships WHERE userID = ? AND followerID = ?;`, userID, loggedInUser).Scan(&count)
+	if err != nil {
+		log.Println("Error from FollowingYouCheck fn():", err)
+		return false
+	}
+	if count > 0 {
+		fmt.Println("******I already follow this user****")
+		return true
+	}
+	fmt.Println("I'm not following this user")
+	return false
+}
