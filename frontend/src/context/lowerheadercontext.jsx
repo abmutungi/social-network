@@ -54,7 +54,15 @@ export function LowerHeaderProvider({ children }) {
       return JSON.parse(storedPrivacyStatus) ? PrivateText : PublicText;
     }
   });
-  const [PrivacyStatus, setPrivacyStatus] = useState(() => {});
+  const [PrivacyStatus, setPrivacyStatus] = useState(() => {
+    if (localStorage.length > 0) {
+      let storedPrivacyStatus = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).Privacy;
+
+      return JSON.parse(storedPrivacyStatus);
+    }
+  });
   const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);
   const [FollowText, setFollowText] = useState(followText);
