@@ -102,7 +102,7 @@ func sendLoginMessage(w http.ResponseWriter, loginResp LoginResponse, errExists 
 func giveUserCookieOnLogIn(w http.ResponseWriter, r *http.Request, userID int, id uuid.UUID) {
 	stringUserID := strconv.Itoa(userID)
 	sessionToken := id.String()
-	expiresAt := time.Now().Add(time.Minute * 60)
+	expiresAt := time.Now().Add(time.Minute * 240)
 
 	SessionsStructMap[sessionToken] = Session{
 		UserID: stringUserID,

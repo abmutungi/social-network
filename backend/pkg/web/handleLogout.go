@@ -3,7 +3,6 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	"github.com/abmutungi/social-network/backend/pkg/users"
@@ -29,10 +28,7 @@ func (s *Server) HandleLogout() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 		var loInfo LogoutInfo
-		data1, _ := io.ReadAll(r.Body)
-		json.Unmarshal(data1, &loInfo)
-		fmt.Println("checking struct -> ", loInfo)
-		fmt.Println("Checking string data -> ", string(data1))
+
 		c, err := r.Cookie("session_cookie")
 
 		if err != nil {
@@ -71,17 +67,25 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 		var lrData LogoutInfo
-		d, _ := io.ReadAll(r.Body)
-		// fmt.Println("checking d from login -> ", string(d))
-		json.Unmarshal(d, &lrData)
-		if len(r.Cookies()) == 0 {
-			lrData.Success = true
-			r, _ := json.Marshal(lrData)
-			w.Write(r)
+		//Assign session cookie to c
+		c, err := r.Cookie("session_cookie")
+		if err != nil {
+			//if there's an error and its no cookie then send everything cool message
+			if err == http.ErrNoCookie {
+				lrData.Success = true
+				r, errM := json.Marshal(lrData)
+				if errM != nil {
+					fmt.Println("Error when marshalling response for successful visit to log in: ", errM)
+				}
+				w.Write(r)
+			}
+			//not sure what other error it could be here but deal with it just in case
+			fmt.Println("Err when retrieving cookie on log in attempt", err)
 		} else {
-			fmt.Println(lrData)
+
 			lrData.Success = false
-			email := users.GetEmailFromUserID(s.Db, SessionsStructMap[lrData.CookieID].UserID)
+			//Use the cookie vlaue which is the uuid to get the email from the map
+			email := users.GetEmailFromUserID(s.Db, SessionsStructMap[c.Value].UserID)
 			lrData.User = users.ReturnSingleUser(s.Db, email)
 			fmt.Println("Checking lrData struct in feLogin: ", lrData)
 			r, _ := json.Marshal(lrData)

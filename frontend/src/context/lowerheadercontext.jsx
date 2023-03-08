@@ -1,24 +1,68 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState } from "react";
 import { followText } from "../components/UserRequestBtn";
-import { loggedInUserContext } from "./loggedInUserContext";
+import { PrivateText, PublicText } from "../pages/home/components/PrivateBtn";
+// import { loggedInUserContext } from "./loggedInUserContext";
 // import { UseIdFromUrl} from '../hooks/UseIdFromUrl'
 export const LowerHeaderContext = createContext();
 
 export function LowerHeaderProvider({ children }) {
-  const { loggedInUser } = useContext(loggedInUserContext);
-  const [userID, setUserID] = useState();
+  // const { loggedInUser } = useContext(loggedInUserContext);
+  const [userID, setUserID] = useState(() => {
+    if (localStorage.length > 0) {
+      const storedUserID = JSON.parse(localStorage.getItem("loggedInUser")).ID;
+      return storedUserID ? storedUserID : 0;
+    }
+  });
   const [DBAllUsers, setDBAllUsers] = useState([]);
   const [GroupID, setGroupID] = useState(0);
   const [AllGroupsData, setAllGroupsData] = useState([]);
-  const [DynamicID, setDynamicID] = useState(0);
+
+  const [DynamicID, setDynamicID] = useState(() => {
+    if (localStorage.length > 0) {
+      const storedDynamicID = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).ID;
+      return storedDynamicID ? storedDynamicID : 0;
+    }
+  });
   const [posts, setPosts] = useState([]);
-  const [AboutText, setAboutText] = useState("loggedInUser.AboutText");
+  const [AboutText, setAboutText] = useState(() => {
+    if (localStorage.length > 0) {
+      const storedAboutText = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).AboutText;
+      return storedAboutText ? storedAboutText : "loggedInUser.AboutText";
+    }
+  });
 
   const [ProfilePhotoBackground, setProfilePhotoBackground] =
     useState("man-utd.png");
-  const [LoggedInUserID, setLoggedInUserID] = useState();
-  const [PrivacyBtnText, setPrivacyBtnText] = useState();
-  const [PrivacyStatus, setPrivacyStatus] = useState(loggedInUser.Privacy);
+  const [LoggedInUserID, setLoggedInUserID] = useState(() => {
+    if (localStorage.length > 0) {
+      const storedLoggedInUserID = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).ID;
+      return storedLoggedInUserID ? storedLoggedInUserID : 0;
+    }
+  });
+  const [PrivacyBtnText, setPrivacyBtnText] = useState(() => {
+    if (localStorage.length > 0) {
+      let storedPrivacyStatus = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).Privacy;
+
+      return JSON.parse(storedPrivacyStatus) ? PrivateText : PublicText;
+    }
+  });
+  const [PrivacyStatus, setPrivacyStatus] = useState(() => {
+    if (localStorage.length > 0) {
+      let storedPrivacyStatus = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).Privacy;
+
+      return JSON.parse(storedPrivacyStatus);
+    }
+  });
   const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);
   const [FollowText, setFollowText] = useState(followText);
@@ -51,6 +95,7 @@ export function LowerHeaderProvider({ children }) {
 
   const updatePrivacyStatus = (id) => {
     setPrivacyStatus(() => id);
+    // localStorage.setItem("PrivacyStatus", JSON.stringify(id));
   };
 
   const updateFollowText = (str) => {
