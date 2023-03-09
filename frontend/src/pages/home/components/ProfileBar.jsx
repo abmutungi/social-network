@@ -47,6 +47,7 @@ const ProfileBar = () => {
     groupNotUser,
     updategroupNotUser,
     updateProfilePhotoBackground,
+    setProfilePhotoBackground,
   } = useContext(LowerHeaderContext);
   const { loggedInUser } = useContext(loggedInUserContext);
   console.log("loggedInUser.ID", loggedInUser.ID);
@@ -73,7 +74,9 @@ AboutText: Array(1), Members: 2941}
         setfollowing(`${obj.Following} ${"following"}`);
         updateAboutText(obj.AboutText);
         updatePrivacyStatus(obj.Privacy);
-        updateProfilePhotoBackground(obj.Avatar);
+        obj.Avatar != ""
+          ? updateProfilePhotoBackground(obj.Avatar)
+          : updateProfilePhotoBackground("man-utd.png");
       }
       updateGroupID(0);
     }
