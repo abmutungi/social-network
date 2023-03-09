@@ -98,7 +98,9 @@ func GetClickedProfilePosts(db *sql.DB, clickedUserId int, loggedInUserID int) [
 		}
 
 		// need to deal with custom posts.
-		// if p.privacy == "custom" &&
+		if p.Privacy == "custom" && postAudienceCheck(db, p.PostID, loggedInUserID) {
+			posts = append(posts, p)
+		}
 	}
 
 	return posts
@@ -135,7 +137,7 @@ func AddPostAudience(db *sql.DB, postID int, userID int) {
 	fmt.Println("last inserted id: ", lastIns)
 }
 
-func PostAudienceCheck(db *sql.DB, postID int, loggedInUserID int) bool {
+func postAudienceCheck(db *sql.DB, postID int, loggedInUserID int) bool {
 	// check whether a particular post can be viewed by logged in user
 
 	var count int

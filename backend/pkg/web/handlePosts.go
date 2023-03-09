@@ -82,7 +82,7 @@ func (s *Server) TestDBfunctions() {
 	// fmt.Println(posts.GetLastPostID(s.Db, 3))
 
 	fmt.Println("checking clicked posts", posts.GetClickedProfilePosts(s.Db, 1, 2))
-	fmt.Println("checking if user can view post", posts.PostAudienceCheck(s.Db, 5, 5))
+	// fmt.Println("checking if user can view post", posts.PostAudienceCheck(s.Db, 5, 5))
 }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {
