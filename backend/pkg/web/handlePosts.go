@@ -153,6 +153,8 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			fmt.Printf("error parsing userID form: %v", err)
 		}
 
+		fmt.Println("What is it!?", r.Form)
+
 		if r.Form.Has("userID") {
 
 			// convert id to int
@@ -183,23 +185,12 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			userIdInt, _ := strconv.Atoi((r.Form.Get("GuserID")))
 			fmt.Println("GuserID -->>--", userIdInt)
 
-			
-			
-
-			// convert id to int
-
-
-			
-
-			//get posts for group and send back
-			//frontend needs to
-
 
 	// getall posts from db
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 	var postsToSend []groups.GroupPost = groups.GetAllGroupPosts(s.Db, groupIdInt, userIdInt)
-	// fmt.Println(postsToSend)
+	 fmt.Println("TOSEND!", postsToSend)
 	marshalPosts, _ := json.Marshal(postsToSend)
 
 	w.Header().Set("Content-Type", "application/json")

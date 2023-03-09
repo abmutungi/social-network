@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	comment "github.com/abmutungi/social-network/backend/pkg/comments"
 
+	comment "github.com/abmutungi/social-network/backend/pkg/comments"
 )
 
 type Group struct {
@@ -17,9 +17,8 @@ type Group struct {
 	Members   int
 }
 
-
 type GroupPost struct {
-	GroupPostID         int               `json:"grouppostID"`
+	GroupPostID    int               `json:"grouppostID"`
 	UserID         int               `json:"userID"`
 	TextContent    string            `json:"textContent"`
 	ImagePath      string            `json:"postImg"`
@@ -28,6 +27,16 @@ type GroupPost struct {
 	FName          string            `json:"name"`
 	UserProfilePic string            `json:"profilePic"`
 	Comments       []comment.Comment `json:"comments"`
+	Events         []EventInfo       `json:"groupevents"`
+}
+
+type EventInfo struct {
+	EventName   string `json:"eventname"`
+	CanGo       int    `json:"cango"`
+	NotGoing    int    `json:"notgoing"`
+	Date        string `json:"date"`
+	CreatorName string `json:"creator"`
+	Description string `json:"description"`
 }
 
 //add a new group entry to the group table, then adds the group creator to groupMember table
@@ -71,7 +80,7 @@ func GetAllGroupsData(db *sql.DB) []Group {
 			log.Println("Error scanning group rows:", err)
 			continue
 		}
-		
+
 		a.Members = len(GetAllGroupMembers(db, a.GroupID))
 		AllGroups = append(AllGroups, a)
 	}
@@ -123,7 +132,7 @@ func CreateGroupEvent(db *sql.DB, groupID int, creatorid int, eventname string, 
 		fmt.Printf("error preparing creategroupevent statement: %v", err)
 	}
 
-	res, err2 := stmt.Exec(groupID, creatorid, eventname, desc, date,dateEnd)
+	res, err2 := stmt.Exec(groupID, creatorid, eventname, desc, date, dateEnd)
 
 	if err2 != nil {
 		fmt.Printf("error adding new group event into database: %v", err2)
@@ -136,9 +145,8 @@ func CreateGroupEvent(db *sql.DB, groupID int, creatorid int, eventname string, 
 
 }
 
-
 //returns an array of all groupmemberIDs against a given groupID
-func GetAllGroupMembers(db *sql.DB,groupid int) []int {
+func GetAllGroupMembers(db *sql.DB, groupid int) []int {
 	rows, err := db.Query(`SELECT member FROM groupMembers WHERE groupID = ? ;`, groupid)
 	if err != nil {
 		log.Println("Error from GetAllGroupsmembers fn():", err)
@@ -160,8 +168,7 @@ func GetAllGroupMembers(db *sql.DB,groupid int) []int {
 	return AllMembers
 }
 
-
-//creates an entry within the notifcations table upon creation of an event 
+//creates an entry within the notifcations table upon creation of an event
 func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string, notifyee, notifier, groupID int) {
 	stmt, err := db.Prepare("INSERT INTO notifications (notificationType, notifiyee, notifier, createdAt, groupID) VALUES ( ?, ?, ?,strftime('%H:%M %d/%m/%Y','now','localtime'), ?)")
 
@@ -169,7 +176,7 @@ func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string,
 		fmt.Printf("error preparing UpdateNotificationTablePostEventCreation fn: %v", err)
 	}
 
-	res, err2 := stmt.Exec( notifcationType, notifyee,notifier, groupID )
+	res, err2 := stmt.Exec(notifcationType, notifyee, notifier, groupID)
 
 	if err2 != nil {
 		fmt.Printf("error adding entry to notification table: %v", err2)
@@ -182,7 +189,6 @@ func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string,
 
 }
 
-
 // get all groupposts that belong to a userID.
 func GetAllGroupPosts(db *sql.DB, GroupID int, userID int) []GroupPost {
 	rows, err := db.Query(`SELECT groupPostID, groupPosts.userID, groupPosts.createdAt, textContent, imageContent, users.firstName
@@ -193,7 +199,6 @@ func GetAllGroupPosts(db *sql.DB, GroupID int, userID int) []GroupPost {
 	if err != nil {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
 	}
-
 
 	posts := []GroupPost{}
 
@@ -206,8 +211,40 @@ func GetAllGroupPosts(db *sql.DB, GroupID int, userID int) []GroupPost {
 			fmt.Printf("error scanning rows for groupposts: %v", err2)
 		}
 		p.Comments = comment.GetAllComments(db, p.GroupPostID)
+		p.Events = GetEventInfo(db, GroupID)
 		posts = append(posts, p)
 	}
+	
 
 	return posts
+}
+
+func GetEventInfo(db *sql.DB, GroupID int) []EventInfo {
+	rows, err := db.Query(`SELECT users.firstName, eventTitle, description, attending, dateStart
+	FROM events
+	INNER JOIN users ON users.userID = events.creator
+	WHERE users.userID =
+	events.creator`)
+
+	if err != nil {
+		fmt.Printf("error getting Events data: %v", err)
+	}
+
+	event := []EventInfo{}
+
+	// defer db.Close()
+	defer rows.Close()
+	for rows.Next() {
+		var p EventInfo
+		err2 := rows.Scan(&p.CreatorName, &p.EventName, &p.Description, &p.CanGo, &p.Date)
+		if err2 != nil {
+			fmt.Printf("error scanning rows for groupposts: %v", err2)
+		}
+
+		p.NotGoing = len(GetAllGroupMembers(db, GroupID)) - p.CanGo
+
+		event = append(event, p)
+	}
+
+	return event
 }
