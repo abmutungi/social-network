@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	comment "github.com/abmutungi/social-network/backend/pkg/comments"
+
 )
 
 type Group struct {
@@ -15,6 +17,19 @@ type Group struct {
 	Members   int
 }
 
+
+type Post struct {
+	PostID         int               `json:"postID"`
+	GroupPostID         int               `json:"grouppostID"`
+	UserID         int               `json:"userID"`
+	TextContent    string            `json:"textContent"`
+	ImagePath      string            `json:"postImg"`
+	CreatedAt      string            `json:"createdAt"`
+	Privacy        string            `json:"privacy"`
+	FName          string            `json:"name"`
+	UserProfilePic string            `json:"profilePic"`
+	Comments       []comment.Comment `json:"comments"`
+}
 
 //add a new group entry to the group table, then adds the group creator to groupMember table
 func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc string) []Group {
@@ -164,4 +179,34 @@ func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string,
 	fmt.Println("addgroupmember rows affected: ", rowsAff)
 	fmt.Println("addgroupmember last inserted id: ", LastIns)
 
+}
+
+
+// get all groupposts that belong to a userID.
+func GetAllGroupPosts(db *sql.DB, GroupID int, userID int) []Post {
+	rows, err := db.Query(`SELECT groupPostID, groupPosts.userID, groupPosts.createdAt, textContent, imageContent, users.firstName
+	FROM groupPosts
+	INNER JOIN users ON users.userID = groupPosts.userID 
+	WHERE groupPosts.userID = ?`, userID)
+
+	if err != nil {
+		fmt.Printf("error querying getAllUserPosts statement: %v", err)
+	}
+
+
+	posts := []Post{}
+
+	// defer db.Close()
+	defer rows.Close()
+	for rows.Next() {
+		var p Post
+		err2 := rows.Scan(&p.GroupPostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.FName)
+		if err2 != nil {
+			fmt.Printf("error scanning rows for groupposts: %v", err2)
+		}
+		p.Comments = comment.GetAllComments(db, p.PostID)
+		posts = append(posts, p)
+	}
+
+	return posts
 }

@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/posts"
 	uuid "github.com/gofrs/uuid"
 )
@@ -30,8 +31,33 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		fmt.Println(r.Form.Get("imgName"))
 
 		if r.Form.Has("groupID") {
+			fmt.Println("TESTING 12")
 			//save post to groupposts
 			//send back to client to display
+
+
+			var newFileName string
+			// if file is added in form, create file for image and return filename
+			if r.Form.Get("imgName") != "" {
+				newFileName = s.HandleImage(r, "uploadedPostImg")
+			}
+
+			groupIDToInt, _ := strconv.Atoi(r.Form.Get("groupID"))
+			GuserIDToInt, _ := strconv.Atoi(r.Form.Get("GuserID"))
+
+
+			// adding post to the db
+			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			posts.CreateGroupPost(s.Db, groupIDToInt,GuserIDToInt, r.Form.Get("textContent"),newFileName)
+
+	
+
+			sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db,groupIDToInt,GuserIDToInt))
+			if err != nil {
+				fmt.Println("error sending & marsalling group posts", sendPosts)
+			}
+
+			w.Write(sendPosts)
 
 		} else {
 
@@ -129,7 +155,7 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 
 		if r.Form.Has("userID") {
 
-			// conver id to int
+			// convert id to int
 			userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
 
 			fmt.Println("clicked USER ID =====>", userIdInt)
@@ -148,7 +174,7 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 		if r.Form.Has("groupID") {
 			// conver id to int
 			groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")))
-			fmt.Println("GROUPID ----", groupIdInt)
+			fmt.Println("GROUPID -->>--", groupIdInt)
 
 			//get posts for group and send back
 			//frontend needs to
