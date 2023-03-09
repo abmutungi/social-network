@@ -18,8 +18,7 @@ type Group struct {
 }
 
 
-type Post struct {
-	PostID         int               `json:"postID"`
+type GroupPost struct {
 	GroupPostID         int               `json:"grouppostID"`
 	UserID         int               `json:"userID"`
 	TextContent    string            `json:"textContent"`
@@ -72,6 +71,8 @@ func GetAllGroupsData(db *sql.DB) []Group {
 			log.Println("Error scanning group rows:", err)
 			continue
 		}
+		
+		a.Members = len(GetAllGroupMembers(db, a.GroupID))
 		AllGroups = append(AllGroups, a)
 	}
 
@@ -183,7 +184,7 @@ func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string,
 
 
 // get all groupposts that belong to a userID.
-func GetAllGroupPosts(db *sql.DB, GroupID int, userID int) []Post {
+func GetAllGroupPosts(db *sql.DB, GroupID int, userID int) []GroupPost {
 	rows, err := db.Query(`SELECT groupPostID, groupPosts.userID, groupPosts.createdAt, textContent, imageContent, users.firstName
 	FROM groupPosts
 	INNER JOIN users ON users.userID = groupPosts.userID 
@@ -194,17 +195,17 @@ func GetAllGroupPosts(db *sql.DB, GroupID int, userID int) []Post {
 	}
 
 
-	posts := []Post{}
+	posts := []GroupPost{}
 
 	// defer db.Close()
 	defer rows.Close()
 	for rows.Next() {
-		var p Post
+		var p GroupPost
 		err2 := rows.Scan(&p.GroupPostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.FName)
 		if err2 != nil {
 			fmt.Printf("error scanning rows for groupposts: %v", err2)
 		}
-		p.Comments = comment.GetAllComments(db, p.PostID)
+		p.Comments = comment.GetAllComments(db, p.GroupPostID)
 		posts = append(posts, p)
 	}
 

@@ -96,10 +96,10 @@ const NotificationsModal = ({ show, onClose }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(
-    "MyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifs",
-    MyNotifs
-  );
+  // console.log(
+  //   "MyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifs",
+  //   MyNotifs
+  // );
   if (!show) {
     return null;
   }

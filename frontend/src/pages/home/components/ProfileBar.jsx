@@ -48,8 +48,8 @@ const ProfileBar = () => {
     updategroupNotUser
   } = useContext(LowerHeaderContext);
   const { loggedInUser } = useContext(loggedInUserContext);
-  console.log("loggedInUser.ID", loggedInUser.ID);
-  console.log("current userID", userID);
+  // console.log("loggedInUser.ID", loggedInUser.ID);
+  // console.log("current userID", userID);
   const [firstName, setfirstName] = useState(loggedInUser.FName);
   const [lastName, setlastName] = useState(loggedInUser.LName);
   const [followers, setfollowers] = useState("10 Followers");
@@ -125,8 +125,8 @@ AboutText: Array(1), Members: 2941}
         />
         <div className="ProfileBtnContainer">
           {userID === LoggedInUserID && !groupNotUser ? <PrivateBtn /> : null}
-          {console.log("PrivacyBtnText****", PrivacyBtnText)}
-          {console.log("PrivacyStatus****", PrivacyStatus)}
+          {/* {console.log("PrivacyBtnText****", PrivacyBtnText)}
+          {console.log("PrivacyStatus****", PrivacyStatus)} */}
 
           {userID === LoggedInUserID && !groupNotUser ? (
             <ProfilePostBtn />
@@ -141,7 +141,6 @@ AboutText: Array(1), Members: 2941}
           {groupNotUser && !isGroupMember? (
             <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
           ) : null}
-          {console.log(LoggedInUserID)}
           {userID != LoggedInUserID && !groupNotUser ? (
             <StaticBtn status={!PrivacyStatus ? "Public" : "Private"} />
           ) : null}

@@ -17,7 +17,7 @@ const CreatePostModal = (props) => {
   // state for when image is uploaded
   const [imgName, setImgName] = useState("");
 
-  const { LoggedInUserID, updatePosts, GroupID, groupNotUser } = useContext(LowerHeaderContext);
+  const { LoggedInUserID, updatePosts, GroupID, groupNotUser,DynamicID } = useContext(LowerHeaderContext);
   // set state for custom (users) dropdown
   const [dropdown, setDropdown] = useState(false);
 
@@ -33,13 +33,23 @@ const CreatePostModal = (props) => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    //let clickedValue =  groupNotUser ?   GroupID : DynamicID;
 
     const formData = new FormData(e.target);
     formData.append("imgName", imgName);
     formData.append("userID", LoggedInUserID);
-    if (groupNotUser)  formData.append("groupID", GroupID) ;
-    
+
+
+
+
+  let clickedValue = groupNotUser ? GroupID : DynamicID;
+
+  groupNotUser
+    ? formData.append("groupID", clickedValue)
+    : formData.append("userID", clickedValue);
+
+  if (groupNotUser){
+    formData.append("GuserID", LoggedInUserID)
+  }    
     // get all ids of private user
     const checkboxValues = formData.getAll("post-viewer");
 
@@ -54,6 +64,8 @@ const CreatePostModal = (props) => {
     })
       .then((response) => response.json())
       .then((data) => {
+        updatePosts([]);
+
         updatePosts(data);
       });
 

@@ -159,6 +159,10 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
 
 			fmt.Println("clicked USER ID =====>", userIdInt)
+
+
+			groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")))
+			fmt.Println("GROUPID -->>--", groupIdInt)
 			// getall posts from db
 			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
@@ -176,22 +180,32 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")))
 			fmt.Println("GROUPID -->>--", groupIdInt)
 
+			userIdInt, _ := strconv.Atoi((r.Form.Get("GuserID")))
+			fmt.Println("GuserID -->>--", userIdInt)
+
+			
+			
+
+			// convert id to int
+
+
+			
+
 			//get posts for group and send back
 			//frontend needs to
 
-			// fmt.Println("clicked USER ID =====>", userIdInt)
-			// // getall posts from db
-			// s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-			// var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
-			// // fmt.Println(postsToSend)
-			// marshalledPosts, _ := json.Marshal(postsToSend)
+	// getall posts from db
+	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-			// w.Header().Set("Content-Type", "application/json")
-			// w.Write(marshalledPosts)
+	var postsToSend []groups.GroupPost = groups.GetAllGroupPosts(s.Db, groupIdInt, userIdInt)
+	// fmt.Println(postsToSend)
+	marshalPosts, _ := json.Marshal(postsToSend)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(marshalPosts)
 
 		}
-		//if r.Form.Get("userID") =
 
 	}
 }

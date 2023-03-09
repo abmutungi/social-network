@@ -26,6 +26,8 @@ export function LowerHeaderProvider({ children }) {
     }
   });
   const [posts, setPosts] = useState([]);
+  const [groupPosts, setGroupPosts] = useState([]);
+
   const [AboutText, setAboutText] = useState(() => {
     if (localStorage.length > 0) {
       const storedAboutText = JSON.parse(
@@ -72,8 +74,7 @@ export function LowerHeaderProvider({ children }) {
 
   const updateUserID = (id) => {
     setUserID(() => id);
-    // if (!Following) updateFollowText(followText);
-    // fetchRelationship(LoggedInUserID, userID);
+
   };
 
   const updateinitialDB = (data) => {
@@ -128,6 +129,10 @@ export function LowerHeaderProvider({ children }) {
     setPosts(data);
   };
 
+  const updateGroupPosts = (data) => {
+    setGroupPosts(data);
+  };
+
 
   const updateisGroupMember= (data) => {
     setisGroupMember(data);
@@ -171,7 +176,9 @@ export function LowerHeaderProvider({ children }) {
         isGroupMember,
         updateisGroupMember,
         groupNotUser,
-        updategroupNotUser
+        updategroupNotUser,
+        groupPosts,
+        updateGroupPosts
       }}
     >
       {children}
