@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	comment "github.com/abmutungi/social-network/backend/pkg/comments"
+	"github.com/abmutungi/social-network/backend/pkg/relationships"
 )
 
 // can change the name of imageContent in db to imgPath
@@ -39,7 +40,7 @@ func CreatePost(db *sql.DB, userID int, textContent string, postPrivacy string, 
 	fmt.Println("last inserted id: ", lastIns)
 }
 
-// get all posts that belong to a userID.
+// get all posts that belong to a userID. this is just for the logged in user
 // Need to add corresponding comments, when db comment function is done
 func GetAllUserPosts(db *sql.DB, userID int) []Post {
 	rows, err := db.Query(`SELECT wallPostID, wallPosts.userID, wallPosts.createdAt, textContent, imagePath, wallPosts.privacy, users.firstName
@@ -50,7 +51,6 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 	if err != nil {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
 	}
-
 
 	posts := []Post{}
 
@@ -67,6 +67,42 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 	}
 
 	return posts
+}
+
+// function to get all public posts when logged in user clicks on another profile.
+func GetClickedProfilePosts(db *sql.DB, clickedUserId int, loggedInUserID int) []Post {
+	rows, err := db.Query(`SELECT wallPostID, wallPosts.userID, wallPosts.createdAt, textContent, imagePath, wallPosts.privacy, users.firstName
+	FROM wallPosts
+	INNER JOIN users ON users.userID = wallPosts.userID 
+	WHERE wallPosts.userID = ?`, clickedUserId)
+
+	if err != nil {
+		fmt.Printf("error querying getAllUserPosts statement: %v", err)
+	}
+
+	posts := []Post{}
+
+	// defer db.Close()
+	defer rows.Close()
+	for rows.Next() {
+		var p Post
+		err2 := rows.Scan(&p.PostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.Privacy, &p.FName)
+		if err2 != nil {
+			fmt.Printf("error scanning rows for posts: %v", err2)
+		}
+		p.Comments = comment.GetAllComments(db, p.PostID)
+
+		// dealing with public / private posts
+		if p.Privacy == "public" || (p.Privacy == "private" && relationships.FollowingYouCheck(db, clickedUserId, loggedInUserID)) {
+			posts = append(posts, p)
+		}
+
+		// need to deal with custom posts.
+		// if p.privacy == "custom" &&
+	}
+
+	return posts
+
 }
 
 func GetLastPostID(db *sql.DB, userID int) int {
@@ -97,4 +133,19 @@ func AddPostAudience(db *sql.DB, postID int, userID int) {
 
 	fmt.Println("rows affected in postAudience table: ", rowsAff)
 	fmt.Println("last inserted id: ", lastIns)
+}
+
+func PostAudienceCheck(db *sql.DB, postID int, loggedInUserID int) bool {
+	// check whether a particular post can be viewed by logged in user
+
+	var count int
+	// check if row exsits
+	err := db.QueryRow(`SELECT EXISTS(SELECT * from postAudience WHERE postID = ? AND userID = ?)`, postID, loggedInUserID).Scan(&count)
+
+	if err != nil {
+		fmt.Println("error from postAudienceCheck : ", err)
+	}
+
+	return count > 0
+
 }

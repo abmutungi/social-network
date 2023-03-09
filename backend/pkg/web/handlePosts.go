@@ -25,10 +25,6 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			fmt.Printf("error parsing createPost form: %v", err)
 		}
 
-		fmt.Println(r.Form, "form values")
-		fmt.Println(r.Form.Get("textContent"), "text content here")
-		fmt.Println(r.Form.Get("imgName"))
-
 		if r.Form.Has("groupID") {
 			//save post to groupposts
 			//send back to client to display
@@ -45,7 +41,7 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 
 			// adding post to the db
 			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-			posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
+			posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacyOption"), newFileName)
 
 			// if custom is chosen
 			if r.Form.Get("privacyOption") == "custom" {
@@ -83,7 +79,10 @@ func (s *Server) TestDBfunctions() {
 	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
 	// fmt.Println(relationships.GetAllFollowers(s.Db, 3))
 
-	fmt.Println(posts.GetLastPostID(s.Db, 3))
+	// fmt.Println(posts.GetLastPostID(s.Db, 3))
+
+	fmt.Println("checking clicked posts", posts.GetClickedProfilePosts(s.Db, 1, 2))
+	fmt.Println("checking if user can view post", posts.PostAudienceCheck(s.Db, 5, 5))
 }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {
