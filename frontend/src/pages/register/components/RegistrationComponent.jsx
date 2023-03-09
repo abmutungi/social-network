@@ -9,6 +9,8 @@ const Register = () => {
   //State to hold errors
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [img, setImg] = useState(null);
+  const [imgName, setImgName] = useState("");
   const navigate = useNavigate();
 
   // State to store form values
@@ -18,7 +20,6 @@ const Register = () => {
     firstName: "",
     lastName: "",
     dateOfBirth: "",
-    avatar: "",
     nickname: "",
     aboutMe: "",
   });
@@ -34,13 +35,16 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const registrationFormData = new FormData(event.target);
+    registrationFormData.append("imgName", imgName);
 
-    console.log(formValues);
-
+    console.log(registrationFormData);
+    //console.log(formValues);
+    //JSON.stringify(formValues)
     async function sendRegistrationData() {
       const response = await fetch("http://localhost:8080/register", {
         method: "POST",
-        body: JSON.stringify(formValues),
+        body: registrationFormData,
         credentials: "include",
       });
 
@@ -138,7 +142,10 @@ const Register = () => {
             type="file"
             name="avatar"
             value={formValues.avatar}
-            onChange={handleChange}
+            onChange={(e) => {
+              setImg(e.target.files[0]);
+              setImgName(e.target.files[0].name);
+            }}
           />
 
           <button className="register-button" type="submit">

@@ -33,7 +33,7 @@ const ProfileBar = () => {
     DBAllUsers,
     AllGroupsData,
     userID,
-     updateUserID,
+    updateUserID,
     GroupID,
     updateGroupID,
     updateAboutText,
@@ -45,7 +45,8 @@ const ProfileBar = () => {
     Following,
     isGroupMember,
     groupNotUser,
-    updategroupNotUser
+    updategroupNotUser,
+    updateProfilePhotoBackground,
   } = useContext(LowerHeaderContext);
   const { loggedInUser } = useContext(loggedInUserContext);
   console.log("loggedInUser.ID", loggedInUser.ID);
@@ -72,6 +73,7 @@ AboutText: Array(1), Members: 2941}
         setfollowing(`${obj.Following} ${"following"}`);
         updateAboutText(obj.AboutText);
         updatePrivacyStatus(obj.Privacy);
+        updateProfilePhotoBackground(obj.Avatar);
       }
       updateGroupID(0);
     }
@@ -79,19 +81,19 @@ AboutText: Array(1), Members: 2941}
   };
 
   const updateGroupProfile = (groupid) => {
-   // if (GroupID > 0) {
+    // if (GroupID > 0) {
     updategroupNotUser(true);
-      for (const obj of AllGroupsData) {
-        if (obj.GroupID == groupid) {
-          setfirstName(obj.GroupName);
-          setlastName("");
-          setfollowing(`${obj.Members} ${"members"}`);
-          setfollowers("");
-          updateAboutText(obj.AboutText);
-        }
-    //  }
+    for (const obj of AllGroupsData) {
+      if (obj.GroupID == groupid) {
+        setfirstName(obj.GroupName);
+        setlastName("");
+        setfollowing(`${obj.Members} ${"members"}`);
+        setfollowers("");
+        updateAboutText(obj.AboutText);
+      }
+      //  }
     }
-     updateUserID(0);
+    updateUserID(0);
   };
 
   useEffect(() => {
@@ -138,7 +140,7 @@ AboutText: Array(1), Members: 2941}
           ) : null}
           {/* {console.log("**FOLOWING IS**", Following)} */}
           <ProfileEventBtn />
-          {groupNotUser && !isGroupMember? (
+          {groupNotUser && !isGroupMember ? (
             <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
           ) : null}
           {console.log(LoggedInUserID)}
@@ -148,8 +150,6 @@ AboutText: Array(1), Members: 2941}
           {groupNotUser && isGroupMember ? <GroupInviteBtn /> : null}
           {groupNotUser && isGroupMember ? <GroupPostBtn /> : null}
           {groupNotUser && isGroupMember ? <GroupCreateEventBtn /> : null}
-
-      
         </div>
       </div>
     </>

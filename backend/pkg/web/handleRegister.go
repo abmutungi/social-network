@@ -40,6 +40,18 @@ func (s *Server) HandleRegister() http.HandlerFunc {
 		enableCors(&w)
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 		var regResp RegistrationResponse
+		err := r.ParseMultipartForm(10 << 20)
+		if err != nil {
+			fmt.Printf("Errror when parsing registration form: %v", err)
+		}
+
+		var rd RegistrationData
+
+		// if file is added in form, create file for image and return filename
+		if r.Form.Get("imgName") != "" {
+			rd.Avatar = s.HandleImage(r, "avatar")
+		}
+
 		data, err := io.ReadAll(r.Body)
 		if err != nil {
 			log.Println(err)
@@ -47,9 +59,14 @@ func (s *Server) HandleRegister() http.HandlerFunc {
 
 		fmt.Println("checking data --> ", string(data))
 
-		var rd RegistrationData
-
-		json.Unmarshal(data, &rd)
+		//json.Unmarshal(data, &rd)
+		rd.FName = r.Form.Get("firstName")
+		rd.LName = r.Form.Get("lastName")
+		rd.Email = r.Form.Get("email")
+		rd.Password = r.Form.Get("password")
+		rd.DOB = r.Form.Get("dateOfBirth")
+		rd.Nickname = r.Form.Get("nickname")
+		rd.AboutMe = r.Form.Get("aboutMe")
 
 		fmt.Println(rd.FName)
 		fmt.Println(rd.LName)
@@ -79,7 +96,6 @@ func (s *Server) HandleRegister() http.HandlerFunc {
 	}
 
 }
-
 
 func sendRegistrationMessage(w http.ResponseWriter, regResp RegistrationResponse, errExists bool, msg string) {
 	regResp.Message = msg

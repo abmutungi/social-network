@@ -35,8 +35,14 @@ export function LowerHeaderProvider({ children }) {
     }
   });
 
-  const [ProfilePhotoBackground, setProfilePhotoBackground] =
-    useState("man-utd.png");
+  const [ProfilePhotoBackground, setProfilePhotoBackground] = useState(() => {
+    if (localStorage.length > 0) {
+      const storedAvatar = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).Avatar;
+      return storedAvatar ? storedAvatar : "man-utd.png";
+    }
+  });
   const [LoggedInUserID, setLoggedInUserID] = useState(() => {
     if (localStorage.length > 0) {
       const storedLoggedInUserID = JSON.parse(
@@ -68,7 +74,6 @@ export function LowerHeaderProvider({ children }) {
   const [FollowText, setFollowText] = useState(followText);
   const [isGroupMember, setisGroupMember] = useState(false);
   const [groupNotUser, setgroupNotUser] = useState(false);
-
 
   const updateUserID = (id) => {
     setUserID(() => id);
@@ -128,14 +133,13 @@ export function LowerHeaderProvider({ children }) {
     setPosts(data);
   };
 
-
-  const updateisGroupMember= (data) => {
+  const updateisGroupMember = (data) => {
     setisGroupMember(data);
   };
-  
-  const updategroupNotUser = (data)=>{
-    setgroupNotUser(data)
-  }
+
+  const updategroupNotUser = (data) => {
+    setgroupNotUser(data);
+  };
   return (
     <LowerHeaderContext.Provider
       value={{
@@ -171,7 +175,7 @@ export function LowerHeaderProvider({ children }) {
         isGroupMember,
         updateisGroupMember,
         groupNotUser,
-        updategroupNotUser
+        updategroupNotUser,
       }}
     >
       {children}

@@ -28,6 +28,7 @@ const Login = () => {
     PrivacyStatus,
     updatePrivacyBtnText,
     updateDynamicID,
+    updateProfilePhotoBackground,
   } = useContext(LowerHeaderContext);
 
   console.log("PS CHECK ON LOGIN --> ", PrivacyStatus);
@@ -64,6 +65,7 @@ const Login = () => {
         LName: data.User.Lastname,
         AboutText: data.User.AboutText,
         Privacy: data.User.Privacy,
+        Avatar: data.User.Avatar,
         Notifications: data.User.Notifications,
       };
       console.log(currentUser);
@@ -73,7 +75,8 @@ const Login = () => {
       updateLoggedInUserID(currentUser.ID);
       updatePrivacyStatus(currentUser.Privacy);
       updateNewNotifsExist(currentUser.Notifications);
-     // updateDynamicID(currentUser.ID);
+      updateProfilePhotoBackground(currentUser.Avatar);
+      // updateDynamicID(currentUser.ID);
       if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
       if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
 
@@ -139,6 +142,7 @@ const Login = () => {
           LName: data.User.Lastname,
           AboutText: data.User.AboutText,
           Privacy: data.User.Privacy,
+          Avatar: data.User.Avatar,
           Notifications: data.User.Notifications,
         };
         console.log(currentUser);
@@ -149,6 +153,7 @@ const Login = () => {
         updatePrivacyStatus(currentUser.Privacy);
         updateNewNotifsExist(currentUser.Notifications);
         updateDynamicID(currentUser.ID);
+        updateProfilePhotoBackground(currentUser.Avatar);
 
         if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
         if (!PrivacyStatus) updatePrivacyBtnText(PublicText);

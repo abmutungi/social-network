@@ -38,7 +38,7 @@ const App = () => {
                   <LowerHeader />
                   <MainBody />
 
-                  {/* <ChatBox/> */}
+                  {/* <ChatBox /> */}
                 </>
               }
             ></Route>

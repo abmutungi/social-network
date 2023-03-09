@@ -37,7 +37,6 @@ const SingleNotificationComponent = ({ props }) => {
     });
   };
 
-
   return (
     <div id={props.id} className="notification-container">
       <div className="notifs-profile-content">
@@ -57,10 +56,7 @@ const SingleNotificationComponent = ({ props }) => {
         </div>
       </div>
       <div className="notifs-action">
-        <button
-          onClick={(handleClick)}
-          className="confirm-button"
-        >
+        <button onClick={handleClick} className="confirm-button">
           Confirm
         </button>
         <button>Remove</button>
