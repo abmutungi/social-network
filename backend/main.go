@@ -24,4 +24,6 @@ func main() {
 
 	s.OpenServer()
 
+	s.TestDBfunctions()
+
 }

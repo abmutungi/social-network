@@ -189,12 +189,11 @@ func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string,
 
 }
 
-// get all groupposts that belong to a userID.
-func GetAllGroupPosts(db *sql.DB, GroupID int, userID int) []GroupPost {
-	rows, err := db.Query(`SELECT groupPostID, groupPosts.userID, groupPosts.createdAt, textContent, imageContent, users.firstName
+// get all groupposts.
+func GetAllGroupPosts(db *sql.DB, GroupID int) []GroupPost {
+	rows, err := db.Query(`SELECT groupPostID, userID, createdAt, textContent, imageContent
 	FROM groupPosts
-	INNER JOIN users ON users.userID = groupPosts.userID 
-	WHERE groupPosts.userID = ?`, userID)
+	WHERE groupID = ?`, GroupID)
 
 	if err != nil {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
@@ -206,12 +205,12 @@ func GetAllGroupPosts(db *sql.DB, GroupID int, userID int) []GroupPost {
 	defer rows.Close()
 	for rows.Next() {
 		var p GroupPost
-		err2 := rows.Scan(&p.GroupPostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.FName)
+		err2 := rows.Scan(&p.GroupPostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath)
 		if err2 != nil {
 			fmt.Printf("error scanning rows for groupposts: %v", err2)
 		}
 		p.Comments = comment.GetAllComments(db, p.GroupPostID)
-		p.Events = GetEventInfo(db, GroupID)
+		//p.Events = GetEventInfo(db, GroupID)
 		posts = append(posts, p)
 	}
 	

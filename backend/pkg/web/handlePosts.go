@@ -14,6 +14,11 @@ import (
 	uuid "github.com/gofrs/uuid"
 )
 
+type SendGroupPostsAndEvents struct{
+	Posts  []groups.GroupPost 
+	Events []groups.EventInfo
+}
+
 func (s *Server) HandleCreatePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
@@ -52,7 +57,7 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 
 	
 
-			sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db,groupIDToInt,GuserIDToInt))
+			sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db,groupIDToInt))
 			if err != nil {
 				fmt.Println("error sending & marsalling group posts", sendPosts)
 			}
@@ -104,12 +109,19 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 	}
 }
 
+//pretty prints the structs
+func prettyPrint(i interface{}) string {
+    s, _ := json.MarshalIndent(i, "", "\t")
+    return string(s)
+}
+
+
 func (s *Server) TestDBfunctions() {
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
 	// fmt.Println(relationships.GetAllFollowers(s.Db, 3))
 
-	fmt.Println(posts.GetLastPostID(s.Db, 3))
+	fmt.Printf("%+v\n",prettyPrint(groups.GetAllGroupPosts(s.Db, 1)))
 }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {
@@ -189,9 +201,17 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 	// getall posts from db
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-	var postsToSend []groups.GroupPost = groups.GetAllGroupPosts(s.Db, groupIdInt, userIdInt)
-	 fmt.Println("TOSEND!", postsToSend)
-	marshalPosts, _ := json.Marshal(postsToSend)
+
+	var postsToSend []groups.GroupPost = groups.GetAllGroupPosts(s.Db, groupIdInt)
+	var eventsToSend []groups.EventInfo = groups.GetEventInfo(s.Db, groupIdInt )
+
+	SendAll := SendGroupPostsAndEvents {
+		postsToSend,
+		eventsToSend,
+
+	}
+	 fmt.Println("TOSEND IN HANDLEPOSTS! -- - ", SendAll)
+	marshalPosts, _ := json.Marshal(SendAll)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(marshalPosts)
@@ -200,3 +220,4 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 
 	}
 }
+
