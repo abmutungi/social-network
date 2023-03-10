@@ -16,6 +16,7 @@ export function LowerHeaderProvider({ children }) {
   const [DBAllUsers, setDBAllUsers] = useState([]);
   const [GroupID, setGroupID] = useState();
   const [AllGroupsData, setAllGroupsData] = useState([]);
+const [GroupEvents, setGroupEvents] = useState([]);
 
   const [DynamicID, setDynamicID] = useState(() => {
     if (localStorage.length > 0) {
@@ -141,6 +142,12 @@ export function LowerHeaderProvider({ children }) {
   const updategroupNotUser = (data)=>{
     setgroupNotUser(data)
   }
+
+  const updateGroupEvents = (data) =>{
+
+    setGroupEvents(data)
+  }
+
   return (
     <LowerHeaderContext.Provider
       value={{
@@ -178,7 +185,9 @@ export function LowerHeaderProvider({ children }) {
         groupNotUser,
         updategroupNotUser,
         groupPosts,
-        updateGroupPosts
+        updateGroupPosts,
+        GroupEvents,
+        updateGroupEvents
       }}
     >
       {children}

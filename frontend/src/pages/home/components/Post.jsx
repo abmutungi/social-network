@@ -66,6 +66,8 @@ const PostsContainer = () => {
     GroupID,
     LoggedInUserID,
     isGroupMember,
+    GroupEvents,
+    updateGroupEvents
 
   } = useContext(LowerHeaderContext);
 
@@ -103,13 +105,14 @@ const PostsContainer = () => {
 
     const data = await resp.json();
 
-    updatePosts(data);
+    console.log('FROM GO POSTS ---- >>  ', data);
 
-
-    for (let i = 0 ; i < data.length; i++){
-      console.log("POSTS WITHIN  ---- ", i, posts[i],'/n');
+    groupNotUser ? updatePosts(data.Posts) :     updatePosts(data);
+    if (groupNotUser){
+      updateGroupEvents(data.Events)
     }
-    console.log('*************************');
+
+
   }
 
   // make a network request on component render.
@@ -118,11 +121,7 @@ const PostsContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickedValue]);
 
-  // make a network request on component render.
-  // useEffect(() => {
-  //   fetchPosts();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [GroupID]);
+
 
   // if there is no image return "" else return img path as prop
   const handlePostImgPath = (strImgPath) => {
@@ -156,9 +155,21 @@ if (groupNotUser && isGroupMember) {
       <>
         <div className="posts-container">
           <div className="group-event-banners">
-            <EventBanner />
-            <EventBanner />
-            <EventBanner />
+            {GroupEvents?.map((gevent)=>(
+        
+               <EventBanner
+               key={gevent.eventid}
+               creatorname = {gevent.creator} 
+               date = {gevent.date}
+               eventname = {gevent.eventname + ' by ' + gevent.creator}
+               attending = {gevent.cango}
+               notattending ={gevent.notgoing}
+
+               />
+            
+
+            ))}
+
           </div>
           {posts?.map((post) => (
             <SinglePost
