@@ -210,6 +210,7 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 		eventsToSend,
 
 	}
+	
 	 fmt.Println("TOSEND IN HANDLEPOSTS! -- - ", SendAll)
 	marshalPosts, _ := json.Marshal(SendAll)
 

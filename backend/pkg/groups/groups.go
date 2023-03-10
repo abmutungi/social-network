@@ -31,12 +31,14 @@ type GroupPost struct {
 }
 
 type EventInfo struct {
+	EventID string `json:"eventid"`
 	EventName   string `json:"eventname"`
 	CanGo       int    `json:"cango"`
 	NotGoing    int    `json:"notgoing"`
 	Date        string `json:"date"`
 	CreatorName string `json:"creator"`
 	Description string `json:"description"`
+	CreatorID   int    `json:"eventcreatorid"`
 }
 
 // add a new group entry to the group table, then adds the group creator to groupMember table
@@ -189,16 +191,6 @@ func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string,
 
 }
 
-/*
-	stmt := db.QueryRow("SELECT MAX(wallPostID) FROM wallPosts WHERE userID = ?", userID)
-
-	var postID int
-
-	stmt.Scan(&postID)
-
-	return postID
-*/
-
 func GetNameFromID(db *sql.DB, UserID int) string {
 	stmt := db.QueryRow(`SELECT firstName FROM users
 	WHERE userID = ?`, UserID)
@@ -241,11 +233,10 @@ func GetAllGroupPosts(db *sql.DB, GroupID int) []GroupPost {
 }
 
 func GetEventInfo(db *sql.DB, GroupID int) []EventInfo {
-	rows, err := db.Query(`SELECT users.firstName, eventTitle, description, attending, dateStart
+	rows, err := db.Query(`SELECT eventID, eventTitle, description, attending, dateStart, creator
 	FROM events
-	INNER JOIN users ON users.userID = events.creator
-	WHERE users.userID =
-	events.creator`)
+	WHERE groupID =
+	?`, GroupID)
 
 	if err != nil {
 		fmt.Printf("error getting Events data: %v", err)
@@ -257,10 +248,11 @@ func GetEventInfo(db *sql.DB, GroupID int) []EventInfo {
 	defer rows.Close()
 	for rows.Next() {
 		var p EventInfo
-		err2 := rows.Scan(&p.CreatorName, &p.EventName, &p.Description, &p.CanGo, &p.Date)
+		err2 := rows.Scan(&p.EventID, &p.EventName, &p.Description, &p.CanGo, &p.Date, &p.CreatorID)
 		if err2 != nil {
 			fmt.Printf("error scanning rows for groupposts: %v", err2)
 		}
+		p.CreatorName = GetNameFromID(db, p.CreatorID)
 
 		p.NotGoing = len(GetAllGroupMembers(db, GroupID)) - p.CanGo
 
