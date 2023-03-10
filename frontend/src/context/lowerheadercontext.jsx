@@ -71,6 +71,7 @@ export function LowerHeaderProvider({ children }) {
       return JSON.parse(storedPrivacyStatus);
     }
   });
+
   const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);
   const [FollowText, setFollowText] = useState(followText);
@@ -142,6 +143,7 @@ export function LowerHeaderProvider({ children }) {
   const updategroupNotUser = (data) => {
     setgroupNotUser(data);
   };
+
   return (
     <LowerHeaderContext.Provider
       value={{

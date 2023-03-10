@@ -75,7 +75,9 @@ const Login = () => {
       updateLoggedInUserID(currentUser.ID);
       updatePrivacyStatus(currentUser.Privacy);
       updateNewNotifsExist(currentUser.Notifications);
-      updateProfilePhotoBackground(currentUser.Avatar);
+      currentUser.Avatar != ""
+        ? updateProfilePhotoBackground(currentUser.Avatar)
+        : updateProfilePhotoBackground("man-utd.png");
       // updateDynamicID(currentUser.ID);
       if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
       if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
@@ -153,7 +155,10 @@ const Login = () => {
         updatePrivacyStatus(currentUser.Privacy);
         updateNewNotifsExist(currentUser.Notifications);
         updateDynamicID(currentUser.ID);
-        updateProfilePhotoBackground(currentUser.Avatar);
+
+        currentUser.Avatar != ""
+          ? updateProfilePhotoBackground(currentUser.Avatar)
+          : updateProfilePhotoBackground("man-utd.png");
 
         if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
         if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
