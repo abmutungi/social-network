@@ -58,28 +58,31 @@ const SinglePost = (props) => {
 const PostsContainer = () => {
   // set initial state for incoming posts data
   // const [posts, setPosts] = useState([]);
-  const { DynamicID, posts, updatePosts, groupNotUser, GroupID } = useContext(LowerHeaderContext);
+  const { DynamicID, posts, updatePosts, groupNotUser, GroupID } =
+    useContext(LowerHeaderContext);
 
   // fetch home posts for the logged in user
   const userForm = new FormData();
 
   // the user id would have to be taken from somewhere (context data for user)
-  //userForm.append("userID", DynamicID);
 
-  let clickedValue =  groupNotUser ?   GroupID : DynamicID;
+  // append to the form the loggedIn userID
 
- groupNotUser ?  userForm.append("groupID", clickedValue) : userForm.append("userID", clickedValue);
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
 
- 
+  userForm.append("loggedInUserID", loggedInUser);
 
- console.log('groupifd -----***---  ', userForm.entries(), groupNotUser);
+  let clickedValue = groupNotUser ? GroupID : DynamicID;
 
- 
+  groupNotUser
+    ? userForm.append("groupID", clickedValue)
+    : userForm.append("userID", clickedValue);
 
- for (const entry of userForm.entries()) {
-  console.log('check ****', entry);
-  
- }
+  console.log("groupifd -----***---  ", userForm.entries(), groupNotUser);
+
+  for (const entry of userForm.entries()) {
+    console.log("check ****", entry);
+  }
 
   async function fetchPosts() {
     const resp = await fetch("http://localhost:8080/myposts", {
@@ -97,70 +100,64 @@ const PostsContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickedValue]);
 
-
-    // make a network request on component render.
-    // useEffect(() => {
-    //   fetchPosts();
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [GroupID]);
-
-  
+  // make a network request on component render.
+  // useEffect(() => {
+  //   fetchPosts();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [GroupID]);
 
   // if there is no image return "" else return img path as prop
   const handlePostImgPath = (strImgPath) => {
     return strImgPath === "" ? "" : `../assets/img/ext/${strImgPath}`;
   };
-if(!groupNotUser){
-  return (
-    <>
-      <div className="posts-container">
-        {posts?.map((post) => (
-          <SinglePost
-            key={post.postID}
-            profileImgPath={"../assets/img/ext/man-utd.png"}
-            name={post.name}
-            date={post.createdAt}
-            textContent={post.textContent}
-            commentsCount={100}
-            postImg={handlePostImgPath(post.postImg)}
-            commentsArray={post.comments}
-            postID={post.postID}
-          />
-        ))}
-      </div>
-    </>
-  );
-    };
+  if (!groupNotUser) {
+    return (
+      <>
+        <div className="posts-container">
+          {posts?.map((post) => (
+            <SinglePost
+              key={post.postID}
+              profileImgPath={"../assets/img/ext/man-utd.png"}
+              name={post.name}
+              date={post.createdAt}
+              textContent={post.textContent}
+              commentsCount={100}
+              postImg={handlePostImgPath(post.postImg)}
+              commentsArray={post.comments}
+              postID={post.postID}
+            />
+          ))}
+        </div>
+      </>
+    );
+  }
 
-
-    if(groupNotUser){
-
-      return (
-        <>
-          <div className="posts-container">
-            <div className="group-event-banners">
-              <EventBanner/>
-              <EventBanner/>
-              <EventBanner/>
-
-            </div>
-            {posts?.map((post) => (
-              <SinglePost
-                key={post.postID}
-                profileImgPath={"../assets/img/ext/man-utd.png"}
-                name={post.name}
-                date={post.createdAt}
-                textContent={post.textContent}
-                commentsCount={100}
-                postImg={handlePostImgPath(post.postImg)}
-                commentsArray={post.comments}
-                postID={post.postID}
-              />
-            ))}
+  if (groupNotUser) {
+    return (
+      <>
+        <div className="posts-container">
+          <div className="group-event-banners">
+            <EventBanner />
+            <EventBanner />
+            <EventBanner />
           </div>
-        </>
-      );
-    }
+          {posts?.map((post) => (
+            <SinglePost
+              key={post.postID}
+              profileImgPath={"../assets/img/ext/man-utd.png"}
+              name={post.name}
+              date={post.createdAt}
+              textContent={post.textContent}
+              commentsCount={100}
+              postImg={handlePostImgPath(post.postImg)}
+              commentsArray={post.comments}
+              postID={post.postID}
+            />
+          ))}
+        </div>
+      </>
+    );
+  }
 };
 
 export default PostsContainer;

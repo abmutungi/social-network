@@ -81,7 +81,7 @@ func (s *Server) TestDBfunctions() {
 
 	// fmt.Println(posts.GetLastPostID(s.Db, 3))
 
-	fmt.Println("checking clicked posts", posts.GetClickedProfilePosts(s.Db, 1, 2))
+	fmt.Println("checking clicked posts", posts.GetClickedProfilePosts(s.Db, 1, 4))
 	// fmt.Println("checking if user can view post", posts.PostAudienceCheck(s.Db, 5, 5))
 }
 
@@ -131,16 +131,34 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			// conver id to int
 			userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
 
-			fmt.Println("clicked USER ID =====>", userIdInt)
-			// getall posts from db
+			loggedInID, _ := strconv.Atoi((r.Form.Get("loggedInUserID")))
+			fmt.Println("logged in uernfkjfnkewjefnkewjfn: =============", loggedInID)
+			// if the userID is the logged in user send all user post,
+
+			// else if its a different id send back the getclicked profile posts.
+
+			// fmt.Println("clicked USER ID =====>", userIdInt)
+
 			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			if userIdInt == loggedInID {
 
-			var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
-			// fmt.Println(postsToSend)
-			marshalPosts, _ := json.Marshal(postsToSend)
+				var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
+				// fmt.Println(postsToSend)
+				marshalPosts, _ := json.Marshal(postsToSend)
 
-			w.Header().Set("Content-Type", "application/json")
-			w.Write(marshalPosts)
+				w.Header().Set("Content-Type", "application/json")
+				w.Write(marshalPosts)
+			} else {
+				// clicked on a different user
+				fmt.Println("different user clicked idnewdnwiednwiudniwuedn")
+				var postsToSend []posts.Post = posts.GetClickedProfilePosts(s.Db, userIdInt, loggedInID)
+
+				marshalPosts, _ := json.Marshal(postsToSend)
+
+				w.Header().Set("Content-Type", "application/json")
+				w.Write(marshalPosts)
+			}
+			// getall posts from db
 
 		}
 
