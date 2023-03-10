@@ -42,7 +42,7 @@ func CreatePost(db *sql.DB, userID int, textContent string, postPrivacy string, 
 // get all posts that belong to a userID.
 // Need to add corresponding comments, when db comment function is done
 func GetAllUserPosts(db *sql.DB, userID int) []Post {
-	rows, err := db.Query(`SELECT wallPostID, wallPosts.userID, wallPosts.createdAt, textContent, imagePath, wallPosts.privacy, users.firstName
+	rows, err := db.Query(`SELECT wallPostID, wallPosts.userID, wallPosts.createdAt, textContent, imagePath, wallPosts.privacy, users.firstName, users.avatar
 	FROM wallPosts
 	INNER JOIN users ON users.userID = wallPosts.userID 
 	WHERE wallPosts.userID = ?`, userID)
@@ -51,14 +51,13 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
 	}
 
-
 	posts := []Post{}
 
 	// defer db.Close()
 	defer rows.Close()
 	for rows.Next() {
 		var p Post
-		err2 := rows.Scan(&p.PostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.Privacy, &p.FName)
+		err2 := rows.Scan(&p.PostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.Privacy, &p.FName, &p.UserProfilePic)
 		if err2 != nil {
 			fmt.Printf("error scanning rows for posts: %v", err2)
 		}

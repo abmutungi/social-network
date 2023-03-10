@@ -6,13 +6,14 @@ import (
 )
 
 type Comment struct {
-	CommentId    int    `json:"commentID"`
-	PostID       int    `json:"postID"`
-	UserID       int    `json:"userID"`
-	CreatedAt    string `json:"date"`
-	TextContent  string `json:"textContent"`
-	ImageContent string `json:"imageContent"`
-	FName        string `json:"name"`
+	CommentId      int    `json:"commentID"`
+	PostID         int    `json:"postID"`
+	UserID         int    `json:"userID"`
+	CreatedAt      string `json:"date"`
+	TextContent    string `json:"textContent"`
+	ImageContent   string `json:"imageContent"`
+	FName          string `json:"name"`
+	UserProfilePic string `json:"profilePic"`
 }
 
 // eventually need to add postId and userId as arguements
@@ -39,7 +40,7 @@ func StoreComment(db *sql.DB, postID int, userID int, textContent string, imgPat
 // function to get all comments related to a post
 
 func GetAllComments(db *sql.DB, postID int) []Comment {
-	rows, err := db.Query(`SELECT commentID, comments.createdAt, textContent, imageContent, users.firstName
+	rows, err := db.Query(`SELECT commentID, comments.createdAt, textContent, imageContent, users.firstName, users.avatar
 	FROM comments
 	INNER JOIN users ON users.userID=comments.userID
 	WHERE comments.postID = ?`, postID)
@@ -55,7 +56,7 @@ func GetAllComments(db *sql.DB, postID int) []Comment {
 	for rows.Next() {
 		var c Comment
 
-		err2 := rows.Scan(&c.CommentId, &c.CreatedAt, &c.TextContent, &c.ImageContent, &c.FName)
+		err2 := rows.Scan(&c.CommentId, &c.CreatedAt, &c.TextContent, &c.ImageContent, &c.FName, &c.UserProfilePic)
 		if err2 != nil {
 			fmt.Printf("error scanning the rows in getAllComments: %v", err2)
 		}

@@ -28,10 +28,11 @@ func (s *Server) handleComment() http.HandlerFunc {
 			newFileName = s.HandleImage(r, "uploadedCommentImg")
 		}
 
+		commenterIDToInt, _ := strconv.Atoi(r.Form.Get("commenterID"))
 		userIDToInt, _ := strconv.Atoi(r.Form.Get("userID"))
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-		comment.StoreComment(s.Db, postIDtoInt, userIDToInt, r.Form.Get("textContent"), newFileName)
+		comment.StoreComment(s.Db, postIDtoInt, commenterIDToInt, r.Form.Get("textContent"), newFileName)
 
 		sendPosts, err := json.Marshal(posts.GetAllUserPosts(s.Db, userIDToInt))
 		if err != nil {

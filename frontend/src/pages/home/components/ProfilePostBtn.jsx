@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import CreatePostModal from "./CreatePost";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 const ProfilePostBtn = () => {
+  const storedAvatar = JSON.parse(localStorage.getItem("loggedInUser")).Avatar;
+  let profilePic =
+    storedAvatar != ""
+      ? `../assets/img/ext/${storedAvatar}`
+      : "../assets/img/ext/man-utd.png";
   const [show, setShow] = useState(false);
   return (
     <>
@@ -12,15 +16,13 @@ const ProfilePostBtn = () => {
         <span className="icon-text">Post</span>
       </button>
       <CreatePostModal
-        name="Bruno"
-        profileImg="../assets/img/ext/man-utd.png"
+        name={JSON.parse(localStorage.getItem("loggedInUser")).FName}
+        profileImg={profilePic}
         onClose={() => setShow(false)}
         show={show}
       />
     </>
   );
 };
-
-
 
 export { ProfilePostBtn };

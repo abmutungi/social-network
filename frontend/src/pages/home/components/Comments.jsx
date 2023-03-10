@@ -37,7 +37,10 @@ const Comments = (props) => {
   const [commentInput, setCommentInput] = useState("");
   const [img, setImg] = useState(null);
   const [imgName, setImgName] = useState("");
-  const { updatePosts, DynamicID } = useContext(LowerHeaderContext);
+
+  const { updatePosts, DynamicID, LoggedInUserID } =
+    useContext(LowerHeaderContext);
+  // const commentUserID = JS;
   // function to handle form submission
   const handleCommentSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +49,10 @@ const Comments = (props) => {
     formData.append("postID", props.postID);
     formData.append("imgName", imgName);
     formData.append("userID", DynamicID);
+    formData.append(
+      "commenterID",
+      JSON.parse(localStorage.getItem("loggedInUser")).ID
+    );
     // const commentJson = Object.fromEntries(formData.entries());
     // console.log(commentJson);
     fetch("http://localhost:8080/storecomment", {
@@ -74,6 +81,17 @@ const Comments = (props) => {
   const handlePostImgPath = (strImgPath) => {
     return strImgPath === "" ? "" : `../assets/img/ext/${strImgPath}`;
   };
+  const handleProfilePicImgPath = (strImgPath) => {
+    return strImgPath === ""
+      ? `../assets/img/ext/man-utd.png`
+      : `../assets/img/ext/${strImgPath}`;
+  };
+
+  const storedAvatar = JSON.parse(localStorage.getItem("loggedInUser")).Avatar;
+  let profilePic =
+    storedAvatar != ""
+      ? `../assets/img/ext/${storedAvatar}`
+      : "../assets/img/ext/man-utd.png";
 
   return (
     <>
@@ -81,7 +99,7 @@ const Comments = (props) => {
         <div className="write-comment">
           <img
             className="cp-profile-pic comment-profile-pic"
-            src="../assets/img/ext/man-utd.png"
+            src={profilePic}
             alt="img"
           />
           <form className="comment-form" role="presentation">
@@ -124,6 +142,7 @@ const Comments = (props) => {
             content={comment.textContent}
             date={comment.date}
             commentImage={handlePostImgPath(comment.imageContent)}
+            imgPath={handleProfilePicImgPath(comment.profilePic)}
           />
         ))}
       </div>
