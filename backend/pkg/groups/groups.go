@@ -15,14 +15,13 @@ type Group struct {
 	Members   int
 }
 
-func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc string)[]Group {
+func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc string) []Group {
 	stmt, err := db.Prepare("INSERT INTO groups (name, creator, avatar, about) VALUES ( ?, ?,?, ?)")
-
 	if err != nil {
 		fmt.Printf("error preparing create group statement: %v", err)
 	}
 
-	res, err2 := stmt.Exec(groupname, creatorid,file, desc)
+	res, err2 := stmt.Exec(groupname, creatorid, file, desc)
 
 	if err2 != nil {
 		fmt.Printf("error adding group into database: %v", err2)
@@ -36,7 +35,7 @@ func CreateGroup(db *sql.DB, groupname string, creatorid int, file string, desc 
 	return GetAllGroupsData(db)
 }
 
-//add and increment members to group table
+// add and increment members to group table
 func GetAllGroupsData(db *sql.DB) []Group {
 	rows, err := db.Query(`SELECT * FROM groups ;`)
 	if err != nil {
@@ -60,17 +59,28 @@ func GetAllGroupsData(db *sql.DB) []Group {
 }
 
 // checking if loggedInUser is already in group
-func GroupMemberCheck(db *sql.DB, userID, loggedInUser int) bool {
+func GroupMemberCheck(db *sql.DB, groupID, loggedInUser int) bool {
 	var count int
-	err := db.QueryRow(`SELECT  COUNT(*)  FROM relationships WHERE userID = ? AND followerID = ?;`, userID, loggedInUser).Scan(&count)
+	err := db.QueryRow(`SELECT  COUNT(*)  FROM groupMembers WHERE groupID = ? AND followerID = ?;`, groupID, loggedInUser).Scan(&count)
 	if err != nil {
-		log.Println("Error from FollowingYouCheck fn():", err)
+		log.Println("Error from GroupMemberCheck fn():", err)
 		return false
 	}
 	if count > 0 {
-		fmt.Println("******I already follow this user****")
+		fmt.Println("*****already part of group****")
 		return true
 	}
-	fmt.Println("I'm not following this user")
+	fmt.Println("can join group")
 	return false
+}
+
+func GetCreator(db *sql.DB, groupID int) int {
+	userStmt := "`SELECT creator FROM  groups WHERE groupID = ?"
+	userRow := db.QueryRow(userStmt, groupID)
+	var creator int
+	err := userRow.Scan(&creator)
+	if err != nil {
+		fmt.Printf("Error in getting the creator for this groupID(%d): %v", groupID, err)
+	}
+	return creator
 }

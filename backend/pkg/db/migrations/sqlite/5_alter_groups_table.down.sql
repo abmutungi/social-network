@@ -7,7 +7,6 @@ CREATE TABLE groups
     creator CHAR(50) REFERENCES users(userID),
     avatar CHAR(50),
     about TEXT
-    createdAt INTEGER NOT NULL
 
 );
 

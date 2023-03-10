@@ -7,12 +7,10 @@ CREATE TABLE groups
     creator INTEGER REFERENCES users(userID),
     avatar CHAR(50),
     about TEXT
-    createdAt INTEGER NOT NULL
-
 );
 
-INSERT INTO groups (groupID, name, creator, avatar, about, createdAt)
-	SELECT groupID, name, creator, avatar, about, createdAt
+INSERT INTO groups (groupID, name, creator, avatar, about)
+	SELECT groupID, name, creator, avatar, about
 	FROM groups_old;
 
 DROP TABLE groups_old

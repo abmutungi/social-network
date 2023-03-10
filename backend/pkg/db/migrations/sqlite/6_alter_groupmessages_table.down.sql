@@ -10,8 +10,8 @@ CREATE TABLE groupMessages
 
 );
 
-INSERT INTO groupMessages (groupID, groupChatID, messageContent, sender, createdAt)
-	SELECT groupID, groupChatID, messageContent, sender, createdAt
+INSERT INTO groupMessages (groupChatID, messageContent, sender, createdAt)
+	SELECT groupChatID, messageContent, sender, createdAt
 	FROM groupMessages_old;
 
 DROP TABLE groupMessages_old

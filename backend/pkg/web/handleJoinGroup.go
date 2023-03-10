@@ -7,12 +7,14 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/abmutungi/social-network/backend/pkg/groups"
+	"github.com/abmutungi/social-network/backend/pkg/notifications"
 )
 
 type GroupData struct {
-	NotificationType string `json:"notificationType"`
-	Notifiyee        int    `json:"notifiyee"`
-	Notifier         int    `json:"notifier"`
+	Group int `json:"groupID"`
+	User  int `json:"loggedInUserID"`
 }
 
 func (s *Server) HandleJoinGroup() http.HandlerFunc {
@@ -30,11 +32,16 @@ func (s *Server) HandleJoinGroup() http.HandlerFunc {
 
 		json.Unmarshal(data, &g)
 
-		fmt.Printf("type %T", g.NotificationType)
-		fmt.Printf("notifier %T", g.Notifier)
+		fmt.Printf("notifier %T", g.User)
 
-		fmt.Printf("notifiyee %T", g.Notifiyee)
+		fmt.Printf("group %T", g.Group)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+
+		if !groups.GroupMemberCheck(s.Db, g.Group, g.User) {
+			notifications.StoreNotification(s.Db, "groupRequest", groups.GetCreator(s.Db, g.Group), g.User)
+		} else {
+			fmt.Println("Membership not added to the db as already part of group")
+		}
 	}
 }
