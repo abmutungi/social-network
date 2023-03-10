@@ -25,10 +25,6 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			fmt.Printf("error parsing createPost form: %v", err)
 		}
 
-		fmt.Println(r.Form, "form values")
-		fmt.Println(r.Form.Get("textContent"), "text content here")
-		fmt.Println(r.Form.Get("imgName"))
-
 		if r.Form.Has("groupID") {
 			//save post to groupposts
 			//send back to client to display
@@ -45,7 +41,7 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 
 			// adding post to the db
 			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-			posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacy"), newFileName)
+			posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacyOption"), newFileName)
 
 			// if custom is chosen
 			if r.Form.Get("privacyOption") == "custom" {
@@ -83,7 +79,10 @@ func (s *Server) TestDBfunctions() {
 	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
 	// fmt.Println(relationships.GetAllFollowers(s.Db, 3))
 
-	fmt.Println(posts.GetLastPostID(s.Db, 3))
+	// fmt.Println(posts.GetLastPostID(s.Db, 3))
+
+	fmt.Println("checking clicked posts", posts.GetClickedProfilePosts(s.Db, 1, 4))
+	// fmt.Println("checking if user can view post", posts.PostAudienceCheck(s.Db, 5, 5))
 }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {
@@ -132,16 +131,34 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			// conver id to int
 			userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
 
-			fmt.Println("clicked USER ID =====>", userIdInt)
-			// getall posts from db
+			loggedInID, _ := strconv.Atoi((r.Form.Get("loggedInUserID")))
+			fmt.Println("logged in uernfkjfnkewjefnkewjfn: =============", loggedInID)
+			// if the userID is the logged in user send all user post,
+
+			// else if its a different id send back the getclicked profile posts.
+
+			// fmt.Println("clicked USER ID =====>", userIdInt)
+
 			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			if userIdInt == loggedInID {
 
-			var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
-			// fmt.Println(postsToSend)
-			marshalPosts, _ := json.Marshal(postsToSend)
+				var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
+				// fmt.Println(postsToSend)
+				marshalPosts, _ := json.Marshal(postsToSend)
 
-			w.Header().Set("Content-Type", "application/json")
-			w.Write(marshalPosts)
+				w.Header().Set("Content-Type", "application/json")
+				w.Write(marshalPosts)
+			} else {
+				// clicked on a different user
+				fmt.Println("different user clicked idnewdnwiednwiudniwuedn")
+				var postsToSend []posts.Post = posts.GetClickedProfilePosts(s.Db, userIdInt, loggedInID)
+
+				marshalPosts, _ := json.Marshal(postsToSend)
+
+				w.Header().Set("Content-Type", "application/json")
+				w.Write(marshalPosts)
+			}
+			// getall posts from db
 
 		}
 

@@ -58,20 +58,19 @@ const SinglePost = (props) => {
 const PostsContainer = () => {
   // set initial state for incoming posts data
   // const [posts, setPosts] = useState([]);
-  const {
-    DynamicID,
-    updateProfilePhotoBackground,
-    posts,
-    updatePosts,
-    groupNotUser,
-    GroupID,
-  } = useContext(LowerHeaderContext);
+  const { DynamicID, posts, updatePosts, groupNotUser, GroupID } =
+    useContext(LowerHeaderContext);
 
   // fetch home posts for the logged in user
   const userForm = new FormData();
 
   // the user id would have to be taken from somewhere (context data for user)
-  //userForm.append("userID", DynamicID);
+
+  // append to the form the loggedIn userID
+
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
+
+  userForm.append("loggedInUserID", loggedInUser);
 
   let clickedValue = groupNotUser ? GroupID : DynamicID;
 
