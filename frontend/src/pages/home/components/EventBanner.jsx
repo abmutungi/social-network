@@ -20,20 +20,20 @@ return (
 
 }
 
-const EventBanner =()=>{
+const EventBanner =(props)=>{
     return (
       <div className="event-banner">
         <div className="event-banner-head">
           <SingleProfileComponent
-            chatName="tb38r"
+            chatName={props.creatorname}
             eventText=" created an event"
           />
         </div>
         <EventBannerBody
-          eventdate="1 Aug 2023"
-          eventname="Festival Season"
-          attending="7"
-          notattending="3"
+          eventdate={props.date}
+          eventname={props.eventname}
+          attending={props.attending}
+          notattending={props.notattending}
         />
       </div>
     );

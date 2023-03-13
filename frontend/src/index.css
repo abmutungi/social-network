@@ -183,11 +183,10 @@ code {
 }
 
 
-.group-event-banners{
+/* .group-event-banners{
 
-background-color: rebeccapurple;
 
-}
+} */
 
 .notif-bell {
   border: none;
@@ -203,4 +202,15 @@ background-color: rebeccapurple;
   position: absolute;
   background-color: red;
   z-index: 10;
+}
+
+
+.not-a-member{
+  height: 250px;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  font-weight: 700;
+  color:darkblue;
+  
 }

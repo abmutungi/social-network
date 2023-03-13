@@ -44,7 +44,7 @@ func (s *Server) HandlePrivateFollow() http.HandlerFunc {
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		if !relationships.FollowingYouCheck(s.Db, f.Notifiyee, f.Notifier) {
-			notifications.StoreNotification(s.Db, f.NotificationType, f.Notifiyee, f.Notifier)
+			notifications.StoreNotification(s.Db, f.NotificationType, f.Notifiyee, f.Notifier, 0)
 		} else {
 			fmt.Println("Relationship not added to the db as already follow this user")
 		}

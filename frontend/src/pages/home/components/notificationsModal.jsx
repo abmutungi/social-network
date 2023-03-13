@@ -50,7 +50,7 @@ const SingleNotificationComponent = ({ props }) => {
             <strong>
               {props.firstName} {props.lastName}
             </strong>
-            {` sent you a ${notifText}`}
+            {` sent you a ${notifText} `}
           </div>
           <div className="notifs-date">01/01</div>
         </div>
@@ -92,10 +92,10 @@ const NotificationsModal = ({ show, onClose }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(
-    "MyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifs",
-    MyNotifs
-  );
+  // console.log(
+  //   "MyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifs",
+  //   MyNotifs
+  // );
   if (!show) {
     return null;
   }

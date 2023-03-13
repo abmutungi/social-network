@@ -9,9 +9,15 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/posts"
 	uuid "github.com/gofrs/uuid"
 )
+
+type SendGroupPostsAndEvents struct{
+	Posts  []groups.GroupPost 
+	Events []groups.EventInfo
+}
 
 func (s *Server) HandleCreatePost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -26,8 +32,33 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		}
 
 		if r.Form.Has("groupID") {
+			fmt.Println("TESTING 12")
 			//save post to groupposts
 			//send back to client to display
+
+
+			var newFileName string
+			// if file is added in form, create file for image and return filename
+			if r.Form.Get("imgName") != "" {
+				newFileName = s.HandleImage(r, "uploadedPostImg")
+			}
+
+			groupIDToInt, _ := strconv.Atoi(r.Form.Get("groupID"))
+			GuserIDToInt, _ := strconv.Atoi(r.Form.Get("GuserID"))
+
+
+			// adding post to the db
+			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			posts.CreateGroupPost(s.Db, groupIDToInt,GuserIDToInt, r.Form.Get("textContent"),newFileName)
+
+	
+
+			sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db,groupIDToInt))
+			if err != nil {
+				fmt.Println("error sending & marsalling group posts", sendPosts)
+			}
+
+			w.Write(sendPosts)
 
 		} else {
 
@@ -74,6 +105,13 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 	}
 }
 
+//pretty prints the structs
+func prettyPrint(i interface{}) string {
+    s, _ := json.MarshalIndent(i, "", "\t")
+    return string(s)
+}
+
+
 func (s *Server) TestDBfunctions() {
 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
@@ -83,6 +121,7 @@ func (s *Server) TestDBfunctions() {
 
 	fmt.Println("checking clicked posts", posts.GetClickedProfilePosts(s.Db, 1, 4))
 	// fmt.Println("checking if user can view post", posts.PostAudienceCheck(s.Db, 5, 5))
+	fmt.Printf("%+v\n",prettyPrint(groups.GetAllGroupPosts(s.Db, 1)))
 }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {
@@ -126,9 +165,11 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			fmt.Printf("error parsing userID form: %v", err)
 		}
 
+		fmt.Println("What is it!?", r.Form)
+
 		if r.Form.Has("userID") {
 
-			// conver id to int
+			// convert id to int
 			userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
 
 			loggedInID, _ := strconv.Atoi((r.Form.Get("loggedInUserID")))
@@ -139,6 +180,12 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 
 			// fmt.Println("clicked USER ID =====>", userIdInt)
 
+			fmt.Println("clicked USER ID =====>", userIdInt)
+
+
+			groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")))
+			fmt.Println("GROUPID -->>--", groupIdInt)
+			// getall posts from db
 			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 			if userIdInt == loggedInID {
 
@@ -165,24 +212,33 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 		if r.Form.Has("groupID") {
 			// conver id to int
 			groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")))
-			fmt.Println("GROUPID ----", groupIdInt)
+			fmt.Println("GROUPID -->>--", groupIdInt)
 
-			//get posts for group and send back
-			//frontend needs to
+			userIdInt, _ := strconv.Atoi((r.Form.Get("GuserID")))
+			fmt.Println("GuserID -->>--", userIdInt)
 
-			// fmt.Println("clicked USER ID =====>", userIdInt)
-			// // getall posts from db
-			// s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-			// var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
-			// // fmt.Println(postsToSend)
-			// marshalledPosts, _ := json.Marshal(postsToSend)
+	// getall posts from db
+	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-			// w.Header().Set("Content-Type", "application/json")
-			// w.Write(marshalledPosts)
+
+	var postsToSend []groups.GroupPost = groups.GetAllGroupPosts(s.Db, groupIdInt)
+	var eventsToSend []groups.EventInfo = groups.GetEventInfo(s.Db, groupIdInt )
+
+	SendAll := SendGroupPostsAndEvents {
+		postsToSend,
+		eventsToSend,
+
+	}
+	
+	 fmt.Println("TOSEND IN HANDLEPOSTS! -- - ", SendAll)
+	marshalPosts, _ := json.Marshal(SendAll)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(marshalPosts)
 
 		}
-		//if r.Form.Get("userID") =
 
 	}
 }
+

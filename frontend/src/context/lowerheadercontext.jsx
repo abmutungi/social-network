@@ -16,6 +16,7 @@ export function LowerHeaderProvider({ children }) {
   const [DBAllUsers, setDBAllUsers] = useState([]);
   const [GroupID, setGroupID] = useState();
   const [AllGroupsData, setAllGroupsData] = useState([]);
+const [GroupEvents, setGroupEvents] = useState([]);
 
   const [DynamicID, setDynamicID] = useState(() => {
     if (localStorage.length > 0) {
@@ -26,6 +27,8 @@ export function LowerHeaderProvider({ children }) {
     }
   });
   const [posts, setPosts] = useState([]);
+  const [groupPosts, setGroupPosts] = useState([]);
+
   const [AboutText, setAboutText] = useState(() => {
     if (localStorage.length > 0) {
       const storedAboutText = JSON.parse(
@@ -80,8 +83,7 @@ export function LowerHeaderProvider({ children }) {
 
   const updateUserID = (id) => {
     setUserID(() => id);
-    // if (!Following) updateFollowText(followText);
-    // fetchRelationship(LoggedInUserID, userID);
+
   };
 
   const updateinitialDB = (data) => {
@@ -136,13 +138,23 @@ export function LowerHeaderProvider({ children }) {
     setPosts(data);
   };
 
-  const updateisGroupMember = (data) => {
-    setisGroupMember(data);
+  const updateGroupPosts = (data) => {
+    setGroupPosts(data);
   };
 
-  const updategroupNotUser = (data) => {
-    setgroupNotUser(data);
+
+  const updateisGroupMember= (data) => {
+    setisGroupMember(data);
   };
+  
+  const updategroupNotUser = (data)=>{
+    setgroupNotUser(data)
+  }
+
+  const updateGroupEvents = (data) =>{
+
+    setGroupEvents(data)
+  }
 
   return (
     <LowerHeaderContext.Provider
@@ -180,6 +192,10 @@ export function LowerHeaderProvider({ children }) {
         updateisGroupMember,
         groupNotUser,
         updategroupNotUser,
+        groupPosts,
+        updateGroupPosts,
+        GroupEvents,
+        updateGroupEvents
       }}
     >
       {children}

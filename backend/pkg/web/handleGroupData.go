@@ -48,7 +48,7 @@ func (s *Server) IsGroupMember() http.HandlerFunc {
 
 		json.Unmarshal(data, &f)
 
-	var isMember = groups.GroupMemberCheck(s.Db, f.UserID, f.GroupID)
+	var isMember = groups.GroupMemberCheck(s.Db,  f.GroupID,f.UserID,)
 
 	fmt.Println("IsMember?", isMember)
 

@@ -58,8 +58,18 @@ const SinglePost = (props) => {
 const PostsContainer = () => {
   // set initial state for incoming posts data
   // const [posts, setPosts] = useState([]);
-  const { DynamicID, posts, updatePosts, groupNotUser, GroupID } =
-    useContext(LowerHeaderContext);
+  const {
+    DynamicID,
+    posts,
+    updatePosts,
+    groupNotUser,
+    GroupID,
+    LoggedInUserID,
+    isGroupMember,
+    GroupEvents,
+    updateGroupEvents
+
+  } = useContext(LowerHeaderContext);
 
   // fetch home posts for the logged in user
   const userForm = new FormData();
@@ -77,6 +87,10 @@ const PostsContainer = () => {
   groupNotUser
     ? userForm.append("groupID", clickedValue)
     : userForm.append("userID", clickedValue);
+  
+  if (groupNotUser){
+    userForm.append("GuserID", LoggedInUserID)
+  }
 
   console.log("groupifd -----***---  ", userForm.entries(), groupNotUser);
 
@@ -85,13 +99,23 @@ const PostsContainer = () => {
   }
 
   async function fetchPosts() {
+
+
     const resp = await fetch("http://localhost:8080/myposts", {
       method: "POST",
       body: userForm,
     });
 
     const data = await resp.json();
-    updatePosts(data);
+
+    console.log('FROM GO POSTS ---- >>  ', data);
+
+    groupNotUser ? updatePosts(data.Posts) :     updatePosts(data);
+    if (groupNotUser){
+      updateGroupEvents(data.Events)
+    }
+
+
   }
 
   // make a network request on component render.
@@ -137,14 +161,26 @@ const PostsContainer = () => {
     );
   }
 
-  if (groupNotUser) {
+  if (groupNotUser && isGroupMember) {
     return (
       <>
         <div className="posts-container">
           <div className="group-event-banners">
-            <EventBanner />
-            <EventBanner />
-            <EventBanner />
+            {GroupEvents?.map((gevent)=>(
+        
+               <EventBanner
+               key={gevent.eventid}
+               creatorname = {gevent.creator} 
+               date = {gevent.date}
+               eventname = {gevent.eventname + ' by ' + gevent.creator}
+               attending = {gevent.cango}
+               notattending ={gevent.notgoing}
+
+               />
+            
+
+            ))}
+
           </div>
           {posts?.map((post) => (
             <SinglePost
@@ -162,6 +198,26 @@ const PostsContainer = () => {
         </div>
       </>
     );
+  }else{
+    return (
+      <>
+              <div className="posts-container">
+
+      <div className="not-a-member">
+      <br></br>
+      <br></br>             
+         This page is for members only!
+         <br></br>
+
+         </div>
+
+      </div>
+      </>
+    );
+
+
+
+
   }
 };
 

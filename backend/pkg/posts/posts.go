@@ -21,6 +21,7 @@ type Post struct {
 	Comments       []comment.Comment `json:"comments"`
 }
 
+//stores users' posts in the db 
 func CreatePost(db *sql.DB, userID int, textContent string, postPrivacy string, imgPath string) {
 	stmt, err := db.Prepare("INSERT INTO wallPosts (userID,textContent, privacy, imagePath, createdAt) VALUES (?, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
 
@@ -40,7 +41,28 @@ func CreatePost(db *sql.DB, userID int, textContent string, postPrivacy string, 
 	fmt.Println("last inserted id: ", lastIns)
 }
 
-// get all posts that belong to a userID. this is just for the logged in user
+
+//stores groups' posts in the db 
+func CreateGroupPost(db *sql.DB, groupID int, userID int, textContent string, imgPath string) {
+	stmt, err := db.Prepare("INSERT INTO groupPosts (groupID, userID,textContent, imageContent, createdAt, privacy) VALUES (?, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'), 0)")
+
+	if err != nil {
+		fmt.Printf("error preparing create grouppost statement: %v", err)
+	}
+
+	res, err2 := stmt.Exec(groupID, userID, textContent, imgPath)
+
+	if err2 != nil {
+		fmt.Printf("error adding post into grouppost table: %v", err2)
+	}
+
+	rowsAff, _ := res.RowsAffected()
+	lastIns, _ := res.LastInsertId()
+	fmt.Println("rows affected: ", rowsAff)
+	fmt.Println("last inserted id: ", lastIns)
+}
+
+// get all posts that belong to a userID.
 // Need to add corresponding comments, when db comment function is done
 func GetAllUserPosts(db *sql.DB, userID int) []Post {
 	rows, err := db.Query(`SELECT wallPostID, wallPosts.userID, wallPosts.createdAt, textContent, imagePath, wallPosts.privacy, users.firstName, users.avatar

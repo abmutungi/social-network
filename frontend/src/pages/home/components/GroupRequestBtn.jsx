@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -8,6 +9,12 @@ import {
 library.add(faUserGroup, faUserLock);
 
 const GroupRequestBtn = (props) => {
+   const {
+    GroupID,
+    LoggedInUserID,
+    // updateRequested,
+  } = useContext(LowerHeaderContext);
+
   const [status, setStatus] = useState(
     <>
       <FontAwesomeIcon icon={faUserGroup} />
@@ -16,12 +23,23 @@ const GroupRequestBtn = (props) => {
   );
 
   const handleClick = () => {
+    // updateRequested(true)
     setStatus(
       <>
         <FontAwesomeIcon icon={faUserLock} />{" "}
             <span className="icon-text">{props.requestSent}</span>
       </>
     );
+
+    fetch("http://localhost:8080/joinGroup", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        groupID: GroupID,
+        loggedInUserID: LoggedInUserID
+      })
+    })
+
   };
 
   return (
