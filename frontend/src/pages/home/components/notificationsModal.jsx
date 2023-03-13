@@ -51,7 +51,7 @@ const SingleNotificationComponent = ({ props }) => {
             <strong>
               {props.firstName} {props.lastName}
             </strong>
-            {` sent you a ${notifText}`}
+            {` sent you a ${notifText} `}
           </div>
           <div className="notifs-date">01/01</div>
         </div>

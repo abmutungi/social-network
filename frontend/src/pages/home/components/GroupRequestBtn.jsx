@@ -10,7 +10,7 @@ library.add(faUserGroup, faUserLock);
 
 const GroupRequestBtn = (props) => {
    const {
-    groupID,
+    GroupID,
     LoggedInUserID,
     // updateRequested,
   } = useContext(LowerHeaderContext);
@@ -35,7 +35,7 @@ const GroupRequestBtn = (props) => {
       method: "POST",
       credentials: "include",
       body: JSON.stringify({
-        groupID: groupID,
+        groupID: GroupID,
         loggedInUserID: LoggedInUserID
       })
     })
