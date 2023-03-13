@@ -92,6 +92,7 @@ func (s *Server) HandleNotifCheck() http.HandlerFunc {
 func (nr *NotifResponse) PopulateNotifResponse(db *sql.DB, notifiyee int) {
 	// return if I have notifications
 	n := notifications.GetNotifications(db, notifiyee)
+	
 	nr.AllNotifs = n
 }
 
@@ -117,6 +118,8 @@ func (s *Server) HandleNotifDisplay() http.HandlerFunc {
 		var notifResponse NotifResponse
 
 		notifResponse.PopulateNotifResponse(s.Db, n.UserID)
+
+		fmt.Printf("notifResponse------------>%v", notifResponse)
 
 		sendNewNotif(w, notifResponse)
 		fmt.Println("notifications onclick")

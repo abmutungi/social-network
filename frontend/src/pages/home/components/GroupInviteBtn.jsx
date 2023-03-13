@@ -4,6 +4,7 @@ import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 library.add(faUserPlus);
 
 const GroupInviteBtn = () => {
+  
   return (
     <button className={"group-request-btn"}>
       <FontAwesomeIcon icon={faUserPlus} />
