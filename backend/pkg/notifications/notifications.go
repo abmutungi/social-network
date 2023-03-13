@@ -6,6 +6,7 @@ import (
 	"log"
 
 	// "github.com/abmutungi/social-network/backend/pkg/groups"
+	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
 )
 
@@ -18,7 +19,7 @@ type Notification struct {
 	NotifierLName         string `json:"notifLName"`
 	NotificationDate      int    `json:"notifDate"`
 	NotificationGroupID   int    `json:"notifGroupID"`
-	// NotificationGroupName string `json:"notifGroupName"`
+	NotificationGroupName string `json:"notifGroupName"`
 }
 
 func StoreNotification(db *sql.DB, notificationType string, notifiyee, notifier, groupID int) {
@@ -92,7 +93,14 @@ func GetNotifications(db *sql.DB, userID int) []Notification {
 	for rows.Next() {
 		var n Notification
 		err := rows.Scan(&n.NotificationID, &n.NotificationType, &n.NotifiyeeID, &n.NotifierID, &n.NotifierFName, &n.NotifierLName, &n.NotificationDate, &n.NotificationGroupID)
-		// n.NotificationGroupName = groups.GetGroupName(db, n.NotificationGroupID)
+
+		// groupID, err := strconv.Atoi(g.Group)
+		// if err != nil {
+		// 	fmt.Printf("err: %v conv str in handlejoingroup fn()", err)
+		// }
+		fmt.Printf("n.NotificationGroupID----------->%v\ntype: %T\n", n.NotificationGroupID, n.NotificationGroupID)
+
+		n.NotificationGroupName = groups.GetGroupName(db, n.NotificationGroupID)
 		if err != nil {
 			log.Println("Error scanning rows:", err)
 			continue

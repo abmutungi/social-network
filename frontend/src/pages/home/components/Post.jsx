@@ -45,7 +45,7 @@ const SinglePost = (props) => {
           <span>Like</span>
         </button>
         <button className="post-action-button">
-          <FontAwesomeIcon icon="fa-regular fa-message" className="post-icon" />
+          <FontAwesomeIcon icon="fa-regular fa-message" className="post-icon"/>
           <span>Comment</span>
         </button>
       </div>

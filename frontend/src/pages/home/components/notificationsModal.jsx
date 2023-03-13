@@ -16,7 +16,7 @@ const SingleNotificationComponent = ({ props }) => {
       notifText = "group invitation to...";
       break;
     case "groupRequest":
-      notifText = "request to join...";
+      notifText = "request to join your group: ";
       break;
     case "eventInvite":
       notifText = "invitation to...";
@@ -50,7 +50,7 @@ const SingleNotificationComponent = ({ props }) => {
             <strong>
               {props.firstName} {props.lastName}
             </strong>
-            {` sent you a ${notifText} `}
+            {` sent you a ${notifText} ${props.groupName}`}
           </div>
           <div className="notifs-date">01/01</div>
         </div>
@@ -118,6 +118,7 @@ const NotificationsModal = ({ show, onClose }) => {
                 lastName: notif.notifLName,
                 notifType: notif.notifType,
                 notifierID: notif.notifierID,
+                groupName: notif.notifGroupName,
                 profileImgPath: "../assets/img/ext/man-utd.png",
               }}
             />
