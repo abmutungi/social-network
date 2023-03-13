@@ -52,7 +52,7 @@ func (s *Server) CreateGroupEvent() http.HandlerFunc {
 			groups.UpdateNotifcationTablePostEventCreation(s.Db,"eventInvite",member,creatorid,groupid )
 		}
 		
-		groups.CreateGroupEvent(s.Db, groupid, creatorid, r.Form.Get("eventName"), r.Form.Get("eventDescription"), r.Form.Get("eventStartDate"),r.Form.Get("eventStartDate"))
+		groups.CreateGroupEvent(s.Db, groupid, creatorid, r.Form.Get("eventName"), r.Form.Get("eventDescription"), r.Form.Get("eventStartDate"))
 
 		var message = fmt.Sprintf("The Event %s has been added to the database", r.Form.Get("eventName"))
 		createGroupEventResponse, err := json.Marshal(message)
