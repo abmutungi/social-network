@@ -67,8 +67,7 @@ const PostsContainer = () => {
     LoggedInUserID,
     isGroupMember,
     GroupEvents,
-    updateGroupEvents
-
+    updateGroupEvents,
   } = useContext(LowerHeaderContext);
 
   // fetch home posts for the logged in user
@@ -87,9 +86,9 @@ const PostsContainer = () => {
   groupNotUser
     ? userForm.append("groupID", clickedValue)
     : userForm.append("userID", clickedValue);
-  
-  if (groupNotUser){
-    userForm.append("GuserID", LoggedInUserID)
+
+  if (groupNotUser) {
+    userForm.append("GuserID", LoggedInUserID);
   }
 
   console.log("groupifd -----***---  ", userForm.entries(), groupNotUser);
@@ -99,8 +98,6 @@ const PostsContainer = () => {
   }
 
   async function fetchPosts() {
-
-
     const resp = await fetch("http://localhost:8080/myposts", {
       method: "POST",
       body: userForm,
@@ -108,14 +105,12 @@ const PostsContainer = () => {
 
     const data = await resp.json();
 
-    console.log('FROM GO POSTS ---- >>  ', data);
+    console.log("FROM GO POSTS ---- >>  ", data);
 
-    groupNotUser ? updatePosts(data.Posts) :     updatePosts(data);
-    if (groupNotUser){
-      updateGroupEvents(data.Events)
+    groupNotUser ? updatePosts(data.Posts) : updatePosts(data);
+    if (groupNotUser) {
+      updateGroupEvents(data.Events);
     }
-
-
   }
 
   // make a network request on component render.
@@ -139,6 +134,11 @@ const PostsContainer = () => {
       ? `../assets/img/ext/man-utd.png`
       : `../assets/img/ext/${strImgPath}`;
   };
+
+  const handleCommentsCount = (commentsArr) => {
+    return commentsArr === null ? 0 : commentsArr.length;
+  };
+
   if (!groupNotUser) {
     return (
       <>
@@ -150,7 +150,7 @@ const PostsContainer = () => {
               name={post.name}
               date={post.createdAt}
               textContent={post.textContent}
-              commentsCount={100}
+              commentsCount={handleCommentsCount(post.comments)}
               postImg={handlePostImgPath(post.postImg)}
               commentsArray={post.comments}
               postID={post.postID}
@@ -166,21 +166,16 @@ const PostsContainer = () => {
       <>
         <div className="posts-container">
           <div className="group-event-banners">
-            {GroupEvents?.map((gevent)=>(
-        
-               <EventBanner
-               key={gevent.eventid}
-               creatorname = {gevent.creator} 
-               date = {gevent.date}
-               eventname = {gevent.eventname + ' by ' + gevent.creator}
-               attending = {gevent.cango}
-               notattending ={gevent.notgoing}
-
-               />
-            
-
+            {GroupEvents?.map((gevent) => (
+              <EventBanner
+                key={gevent.eventid}
+                creatorname={gevent.creator}
+                date={gevent.date}
+                eventname={gevent.eventname + " by " + gevent.creator}
+                attending={gevent.cango}
+                notattending={gevent.notgoing}
+              />
             ))}
-
           </div>
           {posts?.map((post) => (
             <SinglePost
@@ -189,7 +184,7 @@ const PostsContainer = () => {
               name={post.name}
               date={post.createdAt}
               textContent={post.textContent}
-              commentsCount={100}
+              commentsCount={handleCommentsCount(post.comments)}
               postImg={handlePostImgPath(post.postImg)}
               commentsArray={post.comments}
               postID={post.postID}
@@ -198,26 +193,19 @@ const PostsContainer = () => {
         </div>
       </>
     );
-  }else{
+  } else {
     return (
       <>
-              <div className="posts-container">
-
-      <div className="not-a-member">
-      <br></br>
-      <br></br>             
-         This page is for members only!
-         <br></br>
-
-         </div>
-
-      </div>
+        <div className="posts-container">
+          <div className="not-a-member">
+            <br></br>
+            <br></br>
+            This page is for members only!
+            <br></br>
+          </div>
+        </div>
       </>
     );
-
-
-
-
   }
 };
 
