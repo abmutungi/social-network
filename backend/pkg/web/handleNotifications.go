@@ -150,13 +150,16 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 		if notifications.GroupNotificationCheck(s.Db, n.NotificationID) {
 			groups.AddUserToGroup(s.Db, notifications.GetGroupID(s.Db, n.NotificationID), n.NotifierID)
 			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
-		} else {
 
 			// check if notification is group invitation
+
+		
 
 			// check if notification is event invitation
 
 			// else
+		} else {
+
 			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
 			relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
 			relationships.DeleteRequest(s.Db, n.NotificationID)

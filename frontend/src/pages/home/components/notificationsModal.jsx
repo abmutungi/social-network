@@ -4,7 +4,7 @@ import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
-  const { LoggedInUserID } = useContext(LowerHeaderContext);
+  const { LoggedInUserID, GroupID } = useContext(LowerHeaderContext);
 
   let notifText = props.notifType;
 
@@ -33,6 +33,7 @@ const SingleNotificationComponent = ({ props }) => {
         notifID: props.id,
         notifierID: props.notifierID,
         notifiyeeID: LoggedInUserID,
+        notifGroupID: GroupID,
       }),
     });
   };

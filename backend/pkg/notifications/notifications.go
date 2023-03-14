@@ -16,7 +16,7 @@ type Notification struct {
 	NotifierID            int    `json:"notifierID"`
 	NotifierFName         string `json:"notifFName"`
 	NotifierLName         string `json:"notifLName"`
-	NotificationDate      int    `json:"notifDate"`
+	NotificationDate      string    `json:"notifDate"`
 	NotificationGroupID   int    `json:"notifGroupID"`
 	NotificationGroupName string `json:"notifGroupName"`
 }
