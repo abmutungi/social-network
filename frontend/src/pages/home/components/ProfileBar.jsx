@@ -92,6 +92,9 @@ AboutText: Array(1), Members: 2941}
         setlastName("");
         setfollowing(`${obj.Members} ${"members"}`);
         setfollowers("");
+        obj.Avatar != ""
+          ? updateProfilePhotoBackground(obj.Avatar)
+          : updateProfilePhotoBackground("man-utd.png");
         updateAboutText(obj.AboutText);
       }
       //  }

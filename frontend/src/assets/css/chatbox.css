@@ -1,7 +1,7 @@
 .chat-box-container {
   position: absolute;
-  left: 15vw;
-  top: 5vh;
+  left: 50vw;
+  top: 48vh;
   width: 25vw;
   height: 50vh;
   border-radius: 10px;
@@ -16,13 +16,14 @@
 
 .chat-box-body {
   height: 80%;
+  overflow: scroll;
 }
 
 .chat-box-footer {
   position: absolute;
   height: 10%;
   width: 100%;
-  top: 44vh;
+  top: 46vh;
 }
 
 .chat-box-footer > input {
@@ -60,8 +61,8 @@
   display: block;
   color: #1b74e4;
   position: absolute;
-  left: 2vw;
-  top: 0.7vh;
+  left: 1.5vw;
+  top: 0.4vh;
   cursor: pointer;
 }
 
@@ -69,7 +70,15 @@
   display: block;
   color: #1b74e4;
   position: absolute;
-  left: 20vw;
-  top: 0.7vh;
+  left: 22vw;
+  top: 0.4vh;
   cursor: pointer;
+}
+
+.msg-input {
+  position: absolute;
+  width: 80%;
+  left: 3vw;
+  word-wrap: normal;
+  border-radius: 15px;
 }
