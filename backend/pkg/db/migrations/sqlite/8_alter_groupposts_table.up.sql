@@ -7,7 +7,7 @@ CREATE TABLE groupPosts
     userID INTEGER REFERENCES users(userID),
     createdAt INTEGER NOT NULL, 
     textContent CHAR(250),
-    imageContent CHAR(50),
+    imageContent CHAR(50)
 );
 
 INSERT INTO groupPosts (groupPostID, groupID, userID, createdAt, textContent, imageContent)

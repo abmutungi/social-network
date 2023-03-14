@@ -8,8 +8,8 @@ CREATE TABLE privateMessages(
     createdAt INTEGER NOT NULL
 );
 
-INSERT INTO privateMessages (privateMessageID, privateChatID, userID, messageContent, createdAt)
-SELECT privateMessageID, privateChatID, userID, messageContent, createdAt
+INSERT INTO privateMessages (privateMessageID, privateChatID, messageContent, createdAt)
+SELECT privateMessageID, privateChatID, messageContent, createdAt
 FROM privateMessages_old;
 
 

@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	comment "github.com/abmutungi/social-network/backend/pkg/comments"
 	"strconv"
+
+	comment "github.com/abmutungi/social-network/backend/pkg/comments"
 )
 
 type Group struct {
@@ -24,7 +25,6 @@ type GroupPost struct {
 	TextContent    string            `json:"textContent"`
 	ImagePath      string            `json:"postImg"`
 	CreatedAt      string            `json:"createdAt"`
-	Privacy        string            `json:"privacy"`
 	FName          string            `json:"name"`
 	UserProfilePic string            `json:"profilePic"`
 	Comments       []comment.Comment `json:"comments"`
@@ -32,7 +32,7 @@ type GroupPost struct {
 }
 
 type EventInfo struct {
-	EventID string `json:"eventid"`
+	EventID     string `json:"eventid"`
 	EventName   string `json:"eventname"`
 	CanGo       int    `json:"cango"`
 	NotGoing    int    `json:"notgoing"`
@@ -114,7 +114,7 @@ func AddGroupMember(db *sql.DB, groupid int, memberid int) {
 // checking if loggedInUser is already in group
 func GroupMemberCheck(db *sql.DB, groupID, loggedInUser int) bool {
 
-	fmt.Println("GROUPDB FN", groupID, loggedInUser )
+	fmt.Println("GROUPDB FN", groupID, loggedInUser)
 	var count int
 	err := db.QueryRow(`SELECT  COUNT(*)  FROM groupMembers WHERE groupID = ? AND member = ?;`, groupID, loggedInUser).Scan(&count)
 	if err != nil {
@@ -188,7 +188,6 @@ func AddUserToGroup(db *sql.DB, groupID, loggedInUser int) {
 	}
 
 	res, err2 := stmt.Exec(groupID, loggedInUser)
-
 
 	if err2 != nil {
 		fmt.Printf("error adding group members into database: %v", err2)

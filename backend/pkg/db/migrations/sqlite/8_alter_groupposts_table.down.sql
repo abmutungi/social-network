@@ -10,8 +10,8 @@ CREATE TABLE groupPosts(
     privacy INTEGER NOT NULL
 );
 
-INSERT INTO groupPosts (groupPostID, groupID, userID, createdAt, textContent, imageContent, privacy)
-	SELECT groupPostID, groupID, userID, createdAt, textContent, imageContent, privacy
+INSERT INTO groupPosts (groupPostID, groupID, userID, createdAt, textContent, imageContent)
+	SELECT groupPostID, groupID, userID, createdAt, textContent, imageContent
 	FROM groupPosts_old;
 
 DROP TABLE groupPosts_old

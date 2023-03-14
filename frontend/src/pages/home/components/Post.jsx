@@ -45,7 +45,7 @@ const SinglePost = (props) => {
           <span>Like</span>
         </button>
         <button className="post-action-button">
-          <FontAwesomeIcon icon="fa-regular fa-message" className="post-icon"/>
+          <FontAwesomeIcon icon="fa-regular fa-message" className="post-icon" />
           <span>Comment</span>
         </button>
       </div>
@@ -180,7 +180,7 @@ const PostsContainer = () => {
           {posts?.map((post) => (
             <SinglePost
               key={post.postID}
-              profileImgPath={"../assets/img/ext/man-utd.png"}
+              profileImgPath={handleProfilePicImgPath(post.profilePic)}
               name={post.name}
               date={post.createdAt}
               textContent={post.textContent}

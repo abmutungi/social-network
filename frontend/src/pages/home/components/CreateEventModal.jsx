@@ -37,7 +37,7 @@ const CreateEventModal = ({ show, onClose }) => {
       const data = await response.json();
 
       console.log("resp from creategroupevent", data);
-      onClose()
+      onClose();
 
       //responds with an array of group objects including the newly created group
     } catch (e) {
@@ -113,7 +113,7 @@ const CreateEventModal = ({ show, onClose }) => {
                 </label>
                 <input
                   name="eventStartDate"
-                  type="datetime-local"
+                  type="date"
                   min="2023-01-01"
                   value={formValues.eventStartDate}
                   onChange={handleChange}

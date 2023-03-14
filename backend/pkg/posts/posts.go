@@ -21,7 +21,7 @@ type Post struct {
 	Comments       []comment.Comment `json:"comments"`
 }
 
-//stores users' posts in the db 
+// stores users' posts in the db
 func CreatePost(db *sql.DB, userID int, textContent string, postPrivacy string, imgPath string) {
 	stmt, err := db.Prepare("INSERT INTO wallPosts (userID,textContent, privacy, imagePath, createdAt) VALUES (?, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
 
@@ -41,10 +41,9 @@ func CreatePost(db *sql.DB, userID int, textContent string, postPrivacy string, 
 	fmt.Println("last inserted id: ", lastIns)
 }
 
-
-//stores groups' posts in the db 
+// stores groups' posts in the db
 func CreateGroupPost(db *sql.DB, groupID int, userID int, textContent string, imgPath string) {
-	stmt, err := db.Prepare("INSERT INTO groupPosts (groupID, userID,textContent, imageContent, createdAt, privacy) VALUES (?, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'), 0)")
+	stmt, err := db.Prepare("INSERT INTO groupPosts (groupID, userID,textContent, imageContent, createdAt) VALUES (?, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
 
 	if err != nil {
 		fmt.Printf("error preparing create grouppost statement: %v", err)

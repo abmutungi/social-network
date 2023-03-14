@@ -10,8 +10,8 @@ CREATE TABLE groups
 
 );
 
-INSERT INTO groups (groupID, name, creator, avatar, about, createdAt)
-	SELECT groupID, name, creator, avatar, about, createdAt
+INSERT INTO groups (groupID, name, creator, avatar, about)
+	SELECT groupID, name, creator, avatar, about
 	FROM groups_old;
 
 DROP TABLE groups_old

@@ -12,8 +12,8 @@ CREATE TABLE events(
 );
 
 
-INSERT INTO events (eventID, groupID, creator, eventTitle, description, dateStart, dateFinish, attending)
-	SELECT eventID, groupID, creator, eventTitle, description, dateStart, dateFinish, attending
+INSERT INTO events (eventID, groupID, creator, eventTitle, description, dateStart, attending)
+	SELECT eventID, groupID, creator, eventTitle, description, dateStart, attending
 	FROM events_old;
 
 DROP TABLE events_old
