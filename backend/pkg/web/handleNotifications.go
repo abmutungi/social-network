@@ -143,17 +143,20 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 
 		fmt.Println(n.NotifiyeeID)
 		fmt.Println(n.NotifierID)
+		fmt.Println(n.NotificationAccept)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		// check notification is a group request
 		if notifications.GroupNotificationCheck(s.Db, n.NotificationID) {
-			groups.AddUserToGroup(s.Db, notifications.GetGroupID(s.Db, n.NotificationID), n.NotifierID)
+
+			if n.NotificationAccept == 1 {
+				groups.AddUserToGroup(s.Db, notifications.GetGroupID(s.Db, n.NotificationID), n.NotifierID)
+				relationships.DeleteRequest(s.Db, n.NotificationID)
+			} else {
 			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
-
+			}
 			// check if notification is group invitation
-
-		
 
 			// check if notification is event invitation
 

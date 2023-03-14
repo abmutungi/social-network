@@ -16,9 +16,10 @@ type Notification struct {
 	NotifierID            int    `json:"notifierID"`
 	NotifierFName         string `json:"notifFName"`
 	NotifierLName         string `json:"notifLName"`
-	NotificationDate      string    `json:"notifDate"`
+	NotificationDate      string `json:"notifDate"`
 	NotificationGroupID   int    `json:"notifGroupID"`
 	NotificationGroupName string `json:"notifGroupName"`
+	NotificationAccept    int    `json:"notifAccept"`
 }
 
 func StoreNotification(db *sql.DB, notificationType string, notifiyee, notifier, groupID int) {
@@ -51,7 +52,7 @@ func ActionNotification(db *sql.DB, notifID, userID, followerID int) {
 
 func NotificationCheck(db *sql.DB, loggedInUser int) bool {
 	var count int
-	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0`, loggedInUser).Scan(&count)
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND actioned = 0`, loggedInUser).Scan(&count)
 	if err != nil {
 		log.Println("Error from NotificationCheck fn():", err)
 		return false
@@ -79,7 +80,7 @@ func ReadNotification(db *sql.DB, userID int) {
 
 func GetNotifications(db *sql.DB, userID int) []Notification {
 	rows, err := db.Query(`SELECT notificationID, notificationType, notifiyee, notifier, firstName, lastName, notifications.createdAt, 
-	notifications.groupID FROM notifications INNER JOIN users ON notifier=userID WHERE notifiyee = ?`, userID)
+	notifications.groupID FROM notifications INNER JOIN users ON notifier=userID WHERE notifiyee = ? AND actioned=0`, userID)
 	if err != nil {
 		log.Println("Error from GetNotifications fn():", err)
 		return nil

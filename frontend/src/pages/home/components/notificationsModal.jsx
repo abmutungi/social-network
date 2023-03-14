@@ -34,9 +34,29 @@ const SingleNotificationComponent = ({ props }) => {
         notifierID: props.notifierID,
         notifiyeeID: LoggedInUserID,
         notifGroupID: GroupID,
+        notifAccept: 1,
       }),
-    });
+    })
+    const notificationContainer = document.getElementById(props.id);
+    notificationContainer.parentNode.removeChild(notificationContainer);
   };
+
+  const handleRemove = () => {
+    fetch("http://localhost:8080/actionNotif", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        notifID: props.id,
+        notifierID: props.notifierID,
+        notifiyeeID: LoggedInUserID,
+        notifGroupID: GroupID,
+        notifAccept: 0,
+      }),
+    })
+    const notificationContainer = document.getElementById(props.id);
+    notificationContainer.parentNode.removeChild(notificationContainer);
+  };
+
 
   return (
     <div id={props.id} className="notification-container">
@@ -53,14 +73,14 @@ const SingleNotificationComponent = ({ props }) => {
             </strong>
             {` sent you a ${notifText} ${props.groupName}`}
           </div>
-          <div className="notifs-date">01/01</div>
+          <div className="notifs-date">{props.notifDate}</div>
         </div>
       </div>
       <div className="notifs-action">
         <button onClick={handleClick} className="confirm-button">
           Confirm
         </button>
-        <button>Remove</button>
+        <button onClick={handleRemove}>Remove</button>
       </div>
     </div>
   );
@@ -120,6 +140,7 @@ const NotificationsModal = ({ show, onClose }) => {
                 notifType: notif.notifType,
                 notifierID: notif.notifierID,
                 groupName: notif.notifGroupName,
+                notifDate: notif.notifDate,
                 profileImgPath: "../assets/img/ext/man-utd.png",
               }}
             />
