@@ -1,4 +1,4 @@
-  import React from "react";
+import React from "react";
 import "../assets/css/AllChats.css";
 import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
@@ -17,13 +17,12 @@ const SingleProfileComponent = (props) => {
     updateRequested,
     updateFollowText,
     updateDynamicID,
-    updateisGroupMember
-
+    updateisGroupMember,
   } = useContext(LowerHeaderContext);
 
   const navigate = useNavigate();
   // const handleClick = () => {
-   async function FetchRelationship() {
+  async function FetchRelationship() {
     try {
       const response = await fetch("http://localhost:8080/followCheck", {
         method: "POST",
@@ -46,7 +45,6 @@ const SingleProfileComponent = (props) => {
         updateFollowText(requestText);
       }
 
-    
       if (data.msg) {
         navigate("/login");
         return;
@@ -57,7 +55,6 @@ const SingleProfileComponent = (props) => {
   }
 
   async function FetchGroupInfo() {
-
     try {
       const response = await fetch("http://localhost:8080/isgroupmember", {
         method: "POST",
@@ -68,11 +65,9 @@ const SingleProfileComponent = (props) => {
         }),
       });
       const data = await response.json();
-      updateisGroupMember(data)
+      updateisGroupMember(data);
 
-
-      console.log('response from fetchgroupinfo', data);
-
+      console.log("response from fetchgroupinfo", data);
     } catch (e) {
       console.log("error fetching groupinfo", e);
     }
@@ -80,25 +75,23 @@ const SingleProfileComponent = (props) => {
 
   useEffect(() => {
     if (userID > 0) FetchRelationship();
-   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
 
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [userID]);
 
   useEffect(() => {
-    if (GroupID > 0) FetchGroupInfo()
+    if (GroupID > 0) FetchGroupInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
-
-
 
   if (props.type === "AllUsers") {
     return (
       <div
         role="presentation"
         onClick={(e) => {
-          e.preventDefault()
+          e.preventDefault();
 
           updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
@@ -127,13 +120,41 @@ const SingleProfileComponent = (props) => {
       <div
         role="presentation"
         onClick={(e) => {
-          e.preventDefault()
-          updateGroupID(Number(e.currentTarget.id))}
-        
-        }
+          e.preventDefault();
+          updateGroupID(Number(e.currentTarget.id));
+        }}
         className="SingleProfile"
         id={props.id}
         // creatorid = {props.creator}   - custom html tags??
+      >
+        <div className="ChatPic">
+          <img
+            src="https://www.facebook.com/images/fb_icon_325x325.png"
+            width="25"
+            height="25"
+            alt="chat-pic"
+          />
+        </div>
+        <p className="ChatName">
+          {props.chatName}
+          <small className="group-event-text">{props.eventText}</small>
+        </p>
+      </div>
+    );
+  }
+
+  if (props.type === "Chats") {
+    return (
+      <div
+        role="presentation"
+        onClick={(e) => {
+          e.preventDefault();
+
+          // updateUserID(Number(e.currentTarget.id));
+          // updateDynamicID(e.currentTarget.id);
+        }}
+        className="SingleProfile"
+        id={props.id}
       >
         <div className="ChatPic">
           <img

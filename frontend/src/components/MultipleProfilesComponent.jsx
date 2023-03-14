@@ -1,8 +1,6 @@
-import SingleProfileComponent  from "./SingleProfileComponent";
+import SingleProfileComponent from "./SingleProfileComponent";
 
 const MultipleProfilesComponent = ({ users, type }) => {
- 
-
   if (type === "AllGroups") {
     return users?.map((user, index) => {
       return (
@@ -11,8 +9,8 @@ const MultipleProfilesComponent = ({ users, type }) => {
           id={user.GroupID}
           key={index}
           type={type}
-          members= {user.Members}
-          creator = {users.CreatorID}
+          members={user.Members}
+          creator={users.CreatorID}
         />
       );
     });
@@ -24,6 +22,19 @@ const MultipleProfilesComponent = ({ users, type }) => {
         <SingleProfileComponent
           chatName={`${user.Firstname}`}
           id={user.UserID}
+          key={index}
+          type={type}
+        />
+      );
+    });
+  }
+
+  if (type === "Chats") {
+    return users?.map((user, index) => {
+      return (
+        <SingleProfileComponent
+          chatName={`${user.FName}`}
+          id={user.userID}
           key={index}
           type={type}
         />
