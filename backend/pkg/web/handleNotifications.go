@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
 )
@@ -92,7 +93,7 @@ func (s *Server) HandleNotifCheck() http.HandlerFunc {
 func (nr *NotifResponse) PopulateNotifResponse(db *sql.DB, notifiyee int) {
 	// return if I have notifications
 	n := notifications.GetNotifications(db, notifiyee)
-	
+
 	nr.AllNotifs = n
 }
 
@@ -145,13 +146,20 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-		//check notification is a group request
-		
+		// check notification is a group request
+		if notifications.GroupNotificationCheck(s.Db, n.NotificationID) {
+			groups.AddUserToGroup(s.Db, notifications.GetGroupID(s.Db, n.NotificationID), n.NotifierID)
+			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+		} else {
 
-		notifications.AcceptFollow(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
-		relationships.DeleteRequest(s.Db, n.NotificationID)
+			// check if notification is group invitation
 
+			// check if notification is event invitation
 
-	
+			// else
+			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+			relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
+			relationships.DeleteRequest(s.Db, n.NotificationID)
+		}
 	}
 }

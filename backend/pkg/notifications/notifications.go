@@ -7,7 +7,6 @@ import (
 
 	// "github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/groups"
-	"github.com/abmutungi/social-network/backend/pkg/relationships"
 )
 
 type Notification struct {
@@ -23,7 +22,7 @@ type Notification struct {
 }
 
 func StoreNotification(db *sql.DB, notificationType string, notifiyee, notifier, groupID int) {
-	stmt, err := db.Prepare("INSERT INTO notifications (notificationType, notifiyee, notifier, groupID) VALUES (?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO notifications (notificationType, notifiyee, notifier, groupID, createdAt) VALUES (?, ?, ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
 	if err != nil {
 		fmt.Println("error adding notification into db", err)
 		return
@@ -36,7 +35,7 @@ func StoreNotification(db *sql.DB, notificationType string, notifiyee, notifier,
 	fmt.Println("last inserted:", LastIns)
 }
 
-func AcceptFollow(db *sql.DB, notifID, userID, followerID int) {
+func ActionNotification(db *sql.DB, notifID, userID, followerID int) {
 	result, err := db.Exec("UPDATE notifications SET actioned = 1 WHERE notificationID=?", notifID)
 	if err != nil {
 		log.Fatal(err)
@@ -48,8 +47,6 @@ func AcceptFollow(db *sql.DB, notifID, userID, followerID int) {
 	if rows != 1 {
 		log.Fatalf("expected to affect 1 row, affected %d", rows)
 	}
-
-	relationships.StoreFollowing(db, userID, followerID)
 }
 
 func NotificationCheck(db *sql.DB, loggedInUser int) bool {
@@ -109,4 +106,31 @@ func GetNotifications(db *sql.DB, userID int) []Notification {
 	}
 
 	return MyNotifs
+}
+
+func GroupNotificationCheck(db *sql.DB, notificationID int) bool {
+	var count int
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notificationID = ? AND notificationType="groupRequest"`, notificationID).Scan(&count)
+	if err != nil {
+		log.Println("Error from GroupNotificationCheck fn():", err)
+		return false
+	}
+
+	if count > 0 {
+		fmt.Printf("user has %d group notifications", count)
+		return true
+	}
+	fmt.Println("user has 0 group notifications")
+	return false
+}
+
+func GetGroupID(db *sql.DB, notificationID int) int {
+	userStmt := "SELECT groupID FROM notifications WHERE notificationID = ?"
+	userRow := db.QueryRow(userStmt, notificationID)
+	var groupID int
+	err := userRow.Scan(&groupID)
+	if err != nil {
+		fmt.Printf("Error in getting the groupID for this notificationID(%d): %v", notificationID, err)
+	}
+	return groupID
 }
