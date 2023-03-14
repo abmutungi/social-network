@@ -184,7 +184,7 @@ func GetGroupName(db *sql.DB, groupID int) string {
 func AddUserToGroup(db *sql.DB, groupID, loggedInUser int) {
 	stmt, err := db.Prepare("INSERT INTO groupMembers (groupID, member, dateJoined) VALUES ( ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
 	if err != nil {
-		fmt.Printf("error preparing create group statement: %v", err)
+		fmt.Printf("error preparing add user to group statement: %v", err)
 	}
 
 	res, err2 := stmt.Exec(groupID, loggedInUser)
