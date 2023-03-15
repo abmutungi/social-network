@@ -42,7 +42,7 @@ let dummyMessages = [
   },
 ];
 
-const ChatBox = () => {
+const ChatBox = ({ show, onClose }) => {
   const [messages, setMessages] = useState(dummyMessages);
   const [newMsg, setNewMsg] = useState("");
 
@@ -62,10 +62,14 @@ const ChatBox = () => {
     }
   };
 
+  if (!show) {
+    return null;
+  }
+
   return (
     <>
       <div className="chat-box-container">
-        <div className="chat-box-header">
+        <div className="chat-box-header" onClick={(e) => e.stopPropagation()}>
           <FontAwesomeIcon
             icon={faUserNinja}
             className="chat-header-user-logo"
@@ -78,6 +82,7 @@ const ChatBox = () => {
             size="lg"
           />
           <FontAwesomeIcon
+            onClick={onClose}
             icon={faXmark}
             className="chat-header-close"
             size="lg"

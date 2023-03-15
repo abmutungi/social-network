@@ -2,9 +2,10 @@ import React from "react";
 import "../assets/css/AllChats.css";
 import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { followText, unfollowText, requestText } from "./UserRequestBtn";
 import { useNavigate } from "react-router-dom";
+import { ChatBox } from "../pages/home/components/ChatBoxComponent";
 
 const SingleProfileComponent = (props) => {
   const {
@@ -19,6 +20,7 @@ const SingleProfileComponent = (props) => {
     updateDynamicID,
     updateisGroupMember,
   } = useContext(LowerHeaderContext);
+  const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
   // const handleClick = () => {
@@ -148,14 +150,15 @@ const SingleProfileComponent = (props) => {
       <div
         role="presentation"
         onClick={(e) => {
+          setShow(true);
           e.preventDefault();
-
           // updateUserID(Number(e.currentTarget.id));
           // updateDynamicID(e.currentTarget.id);
         }}
         className="SingleProfile"
         id={props.id}
       >
+        <ChatBox onClose={() => setShow(false)} show={show} />;
         <div className="ChatPic">
           <img
             src="https://www.facebook.com/images/fb_icon_325x325.png"

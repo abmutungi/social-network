@@ -30,3 +30,5 @@ func (s *Server) HandleMyChatUsers() http.HandlerFunc {
 
 	}
 }
+
+//function to get group chats would consist of just getting all groups logged in member is a part of
