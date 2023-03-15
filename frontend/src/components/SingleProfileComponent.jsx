@@ -21,6 +21,7 @@ const SingleProfileComponent = (props) => {
     updateisGroupMember,
   } = useContext(LowerHeaderContext);
   const [show, setShow] = useState(false);
+  const [name, setName] = useState("");
 
   const navigate = useNavigate();
   // const handleClick = () => {
@@ -151,14 +152,22 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           setShow(true);
+          setName(props.chatName);
+
+          console.log("props.id -> ", props.id);
           e.preventDefault();
           // updateUserID(Number(e.currentTarget.id));
-          // updateDynamicID(e.currentTarget.id);
+          //updateDynamicID(e.currentTarget.id);
         }}
         className="SingleProfile"
         id={props.id}
       >
-        <ChatBox onClose={() => setShow(false)} show={show} />;
+        <ChatBox
+          onClose={() => setShow(false)}
+          show={show}
+          name={name}
+          id={props.id}
+        />
         <div className="ChatPic">
           <img
             src="https://www.facebook.com/images/fb_icon_325x325.png"
