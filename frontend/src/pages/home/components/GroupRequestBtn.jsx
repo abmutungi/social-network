@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -16,14 +16,16 @@ const GroupRequestBtn = (props) => {
     updateJoinText,
   } = useContext(LowerHeaderContext);
 
-  const [status, setStatus] = useState(
-    props.hasRequested
-  );
+  // const [status, setStatus] = useState(
+  //   props.hasRequested
+  // );
 
   const handleClick = () => {
-    setStatus(
-      props.hasRequested
-    );
+    updateJoinText(requestText)
+    updateGroupRequested(true)
+    // setStatus(
+    //   props.hasRequested
+    // );
 
     fetch("http://localhost:8080/joinGroup", {
       method: "POST",
@@ -33,8 +35,7 @@ const GroupRequestBtn = (props) => {
         loggedInUserID: LoggedInUserID
       })
     })
-    updateGroupRequested(true)
-    updateJoinText(requestText)
+    // updateJoinText(requestText)
   };
 
   return (
@@ -42,7 +43,7 @@ const GroupRequestBtn = (props) => {
           className={"group-request-btn"}
       onClick={handleClick}
     >
-      {status}
+      {props.hasRequested}
     </button>
   );
 };

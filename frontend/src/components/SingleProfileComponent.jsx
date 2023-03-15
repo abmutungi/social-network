@@ -58,7 +58,7 @@ const SingleProfileComponent = (props) => {
   }
 
   async function FetchGroupInfo() {
-    // updateGroupRequested(false)
+    //updateGroupRequested(false)
     try {
       const response = await fetch("http://localhost:8080/isgroupmember", {
         method: "POST",
