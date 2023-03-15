@@ -135,3 +135,19 @@ func GetGroupID(db *sql.DB, notificationID int) int {
 	}
 	return groupID
 }
+
+func UserRequestedToJoin(db *sql.DB, groupID, userID int) bool {
+	var count int
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where groupID = ? AND notifier = ?`, groupID, userID).Scan(&count)
+	if err != nil {
+		log.Println("Error from UserRequestedToJoin fn():", err)
+		return false
+	}
+
+	if count > 0 {
+		fmt.Printf("user: %v has requested to join group: %v", userID, groupID)
+		return true
+	}
+		fmt.Printf("user: %v has NOT requested to join group: %v", userID, groupID)
+	return false
+}

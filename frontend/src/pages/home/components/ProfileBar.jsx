@@ -14,6 +14,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {
   followText,
+  joinText,
+  requestText,
   unfollowText,
   UserRequestBtn,
 } from "../../../components/UserRequestBtn";
@@ -42,6 +44,7 @@ const ProfileBar = () => {
     updatePrivacyStatus,
     PrivacyStatus,
     PrivacyBtnText,
+    GroupRequested,
     Following,
     isGroupMember,
     groupNotUser,
@@ -147,7 +150,7 @@ AboutText: Array(1), Members: 2941}
           {/* {console.log("**FOLOWING IS**", Following)} */}
           <ProfileEventBtn />
           {groupNotUser && !isGroupMember ? (
-            <GroupRequestBtn requestJoin={"Join"} requestSent={"Requested"} />
+            <GroupRequestBtn hasRequested={GroupRequested ? requestText : joinText}/>
           ) : null}
           {userID != LoggedInUserID && !groupNotUser ? (
             <StaticBtn status={!PrivacyStatus ? "Public" : "Private"} />

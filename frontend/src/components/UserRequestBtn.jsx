@@ -19,6 +19,14 @@ const followText = (
   </>
 );
 
+
+const joinText = (
+  <>
+    <FontAwesomeIcon icon={faUserGroup} />
+    <span className="icon-text">Join</span>
+  </>
+);
+
 const unfollowText = (
   <>
     <FontAwesomeIcon icon={faCircleXmark} />
@@ -115,4 +123,4 @@ const UserRequestBtn = () => {
   );
 };
 
-export { followText, unfollowText, requestText, UserRequestBtn };
+export { followText, unfollowText, requestText, UserRequestBtn, joinText };

@@ -17,7 +17,8 @@ const SingleProfileComponent = (props) => {
     updateRequested,
     updateFollowText,
     updateDynamicID,
-    updateisGroupMember
+    updateisGroupMember,
+    updateGroupRequested
 
   } = useContext(LowerHeaderContext);
 
@@ -57,7 +58,7 @@ const SingleProfileComponent = (props) => {
   }
 
   async function FetchGroupInfo() {
-
+    // updateGroupRequested(false)
     try {
       const response = await fetch("http://localhost:8080/isgroupmember", {
         method: "POST",
@@ -68,8 +69,8 @@ const SingleProfileComponent = (props) => {
         }),
       });
       const data = await response.json();
-      updateisGroupMember(data)
-
+      updateisGroupMember(data.ismember)
+      updateGroupRequested(data.requested)
 
       console.log('response from fetchgroupinfo', data);
 

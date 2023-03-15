@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { followText } from "../components/UserRequestBtn";
+import { followText, joinText } from "../components/UserRequestBtn";
 import { PrivateText, PublicText } from "../pages/home/components/PrivateBtn";
 // import { loggedInUserContext } from "./loggedInUserContext";
 // import { UseIdFromUrl} from '../hooks/UseIdFromUrl'
@@ -77,7 +77,9 @@ const [GroupEvents, setGroupEvents] = useState([]);
 
   const [Following, setFollowing] = useState();
   const [Requested, setRequested] = useState(false);
+  const [GroupRequested, setGroupRequested] = useState(false);
   const [FollowText, setFollowText] = useState(followText);
+  const [JoinText, setJoinText] = useState(joinText);
   const [isGroupMember, setisGroupMember] = useState(false);
   const [groupNotUser, setgroupNotUser] = useState(false);
 
@@ -119,9 +121,16 @@ const [GroupEvents, setGroupEvents] = useState([]);
     setFollowing(() => bool);
   };
 
+  const updateJoinText = (str) => {
+    setJoinText(()=>str)
+  }
   const updateRequested = (bool) => {
     setRequested(() => bool);
   };
+
+  const updateGroupRequested = (bool) => {
+    setGroupRequested(()=>bool)
+  }
 
   const updateLoggedInUserID = (id) => {
     setLoggedInUserID(() => id);
@@ -195,7 +204,11 @@ const [GroupEvents, setGroupEvents] = useState([]);
         groupPosts,
         updateGroupPosts,
         GroupEvents,
-        updateGroupEvents
+        updateGroupEvents,
+        JoinText,
+        updateJoinText,
+        GroupRequested,
+        updateGroupRequested
       }}
     >
       {children}

@@ -8,19 +8,25 @@ import (
 	"net/http"
 
 	"github.com/abmutungi/social-network/backend/pkg/groups"
+	"github.com/abmutungi/social-network/backend/pkg/notifications"
 )
 
 type IsMember struct {
 	GroupID int `json:"groupID"`
-	UserID int `json:"loggedInUserID"`
+	UserID  int `json:"loggedInUserID"`
 }
+
+type GroupInfo struct {
+	IsMember bool `json:"ismember"`
+	Requested bool `json:"requested"`
+}
+
 
 func (s *Server) HandleGroups() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		enableCors(&w)
 
-		var AllGroupData = groups.GetAllGroupsData(s.Db)
+		AllGroupData := groups.GetAllGroupsData(s.Db)
 
 		AllGroups, err := json.Marshal(AllGroupData)
 		if err != nil {
@@ -28,13 +34,10 @@ func (s *Server) HandleGroups() http.HandlerFunc {
 			return
 		}
 		w.Write([]byte(AllGroups))
-
 	}
-
 }
 
-
-//runs number of times singleprof component exists, should be once!
+// runs number of times singleprof component exists, should be once!
 func (s *Server) IsGroupMember() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
@@ -48,20 +51,30 @@ func (s *Server) IsGroupMember() http.HandlerFunc {
 
 		json.Unmarshal(data, &f)
 
-	var isMember = groups.GroupMemberCheck(s.Db,  f.GroupID,f.UserID,)
+		isMember := groups.GroupMemberCheck(s.Db, f.GroupID, f.UserID)
+		hasRequested := notifications.UserRequestedToJoin(s.Db, f.GroupID, f.UserID)
 
-	fmt.Println("IsMember?", isMember)
+		fmt.Println("IsMember?", isMember)
+		fmt.Println("hasRequested?", hasRequested)
 
+		var g GroupInfo
 
-	Memberbool, err := json.Marshal(isMember)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		g.IsMember = isMember
+		g.Requested = hasRequested
+
+		GroupInfo, err := json.Marshal(g)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Write([]byte(GroupInfo))
 	}
-	
-	w.Write([]byte(Memberbool))
-
-
-	}
-
 }
+
+// func (s *Server) HasRequested() http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		enableCors(&w)
+
+// 	}
+// }
