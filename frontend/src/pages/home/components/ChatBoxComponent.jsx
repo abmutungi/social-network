@@ -13,8 +13,6 @@ import {
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 
-let currentUser = "Yonas Million";
-
 let dummyMessages = [
   {
     msgContent: "hi there",
@@ -42,80 +40,137 @@ let dummyMessages = [
   },
 ];
 
-const ChatBox = () => {
-  const [messages, setMessages] = useState(dummyMessages);
+//  let chatBoxes = document.getElementsByClassName("chat-box-container");
+//  for (const cBox of chatBoxes) {
+//    if (cBox.id != name) {
+//      console.log("Name in loop -> ", name);
+//      console.log("cBox id -> ", cBox.id);
+//      console.log("cBox attr -> ", cBox.attributes);
+//    }
+//  }
+
+const ChatBox = ({ show, onClose, name, id }) => {
+  const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState("");
+
+  // const handleChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setChatFormValues({
+  //     ...chatFormValues,
+  //     [name]: value,
+  //   });
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newMsg != "") {
-      setMessages([
-        ...messages,
-        {
-          msgContent: newMsg,
-          user: currentUser,
-          isCurrentUser: true,
-          date: new Date().toDateString(),
-        },
-      ]);
-      setNewMsg("");
+    const newChatFormData = new FormData(e.target);
+
+    newChatFormData.append(
+      "senderID",
+      JSON.parse(localStorage.getItem("loggedInUser")).ID
+    );
+    newChatFormData.append("recipientID", id);
+
+    for (const v of newChatFormData.values()) {
+      console.log("v check -> ", v);
     }
+
+    async function sendPrivateMessageInfo() {
+      const resp = await fetch("http://localhost:8080/sendprivatemessage", {
+        method: "POST",
+        credentials: "include",
+        body: newChatFormData,
+      });
+      const data = await resp.json();
+      console.log(data);
+    }
+    sendPrivateMessageInfo();
+
+    // if (newMsg != "") {
+    //   setMessages([
+    //     ...messages,
+    //     {
+    //       msgContent: newMsg,
+    //       user: JSON.parse(localStorage.getItem("loggedInUser")).FName,
+    //       isCurrentUser: true,
+    //       date: new Date().toDateString(),
+    //     },
+    //   ]);
+    setNewMsg("");
+    // }
   };
+  let currentUser = name;
+
+  console.log("name prop check --> ", name);
+
+  if (!show) {
+    return null;
+  }
 
   return (
     <>
-      <div className="chat-box-container">
-        <div className="chat-box-header">
-          <FontAwesomeIcon
-            icon={faUserNinja}
-            className="chat-header-user-logo"
-            size="xl"
-          />
-          {currentUser}
-          <FontAwesomeIcon
-            icon={faWindowMinimize}
-            className="chat-header-minimize"
-            size="lg"
-          />
-          <FontAwesomeIcon
-            icon={faXmark}
-            className="chat-header-close"
-            size="lg"
-          />
-        </div>
-        <div className="chat-box-body">
-          {messages.map((message, index) => (
-            <ChatBubble
-              key={index}
-              msgContent={message.msgContent}
-              user={message.user}
-              isCurrentUser={message.isCurrentUser}
-              date={message.date}
-            ></ChatBubble>
-          ))}
-        </div>
-        <div className="chat-box-footer">
-          <FontAwesomeIcon
-            icon={faImage}
-            className="chat-footer-image-logo"
-            size="lg"
-          />
-          {/* <button><i><FontAwesomeIcon icon={faPaperPlane} className="msg-btn"size="xl" type="submit"/></i></button> */}
-          <form onSubmit={handleSubmit}>
-            {" "}
-            <input
-              className="msg-input"
-              type="text"
-              placeholder="Enter your message...."
-              value={newMsg}
-              onChange={(e) => setNewMsg(e.target.value)}
-            ></input>
-          </form>
-          <FontAwesomeIcon
-            icon={faFaceSmile}
-            className="chat-footer-emoji-logo"
-            size="lg"
-          />
+      <div
+        role="presentation"
+        className="chat-modal-container"
+        onClick={onClose}
+      >
+        <div className="chat-box-container" id={name}>
+          <div className="chat-box-header" onClick={(e) => e.stopPropagation()}>
+            <FontAwesomeIcon
+              icon={faUserNinja}
+              className="chat-header-user-logo"
+              size="xl"
+            />
+            {currentUser}
+            <FontAwesomeIcon
+              icon={faWindowMinimize}
+              className="chat-header-minimize"
+              size="lg"
+            />
+            <FontAwesomeIcon
+              onClick={onClose}
+              icon={faXmark}
+              className="chat-header-close"
+              size="lg"
+            />
+          </div>
+          <div className="chat-box-body">
+            {messages.map((message, index) => (
+              <ChatBubble
+                key={index}
+                msgContent={message.msgContent}
+                user={message.user}
+                isCurrentUser={message.isCurrentUser}
+                date={message.date}
+              ></ChatBubble>
+            ))}
+          </div>
+          <div className="chat-box-footer">
+            <FontAwesomeIcon
+              icon={faImage}
+              className="chat-footer-image-logo"
+              size="lg"
+            />
+            {/* <button><i><FontAwesomeIcon icon={faPaperPlane} className="msg-btn"size="xl" type="submit"/></i></button> */}
+            <form onSubmit={handleSubmit}>
+              {" "}
+              <input
+                className="msg-input"
+                type="text"
+                name="msgContent"
+                placeholder="Enter your message...."
+                value={newMsg}
+                onChange={(e) => {
+                  setNewMsg(e.target.value);
+                }}
+              ></input>
+            </form>
+            <FontAwesomeIcon
+              icon={faFaceSmile}
+              className="chat-footer-emoji-logo"
+              size="lg"
+            />
+          </div>
         </div>
       </div>
     </>

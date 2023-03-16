@@ -3,7 +3,6 @@ import AllChats from "./Chats";
 import NavBar from "./NavBar";
 // import Groups from "../Groups/Groups";
 import PostsContainer from "./Post";
-import EventBanner from "./EventBanner";
 import { AboutMe } from "./About";
 
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -77,7 +76,7 @@ const LeftBodyDiv = () => {
   useEffect(() => {
     fetchUsers();
     fetchGroups();
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -105,7 +104,6 @@ const LeftBodyDiv = () => {
 };
 
 function MainBody() {
-
   return (
     <div className="MainBody">
       <LeftBodyDiv />

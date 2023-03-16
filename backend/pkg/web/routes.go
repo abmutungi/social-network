@@ -25,6 +25,8 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/creategroup", s.HandleCreateGroup())
 	s.Router.HandleFunc("/isgroupmember", s.IsGroupMember())
 	s.Router.HandleFunc("/creategroupevent", s.CreateGroupEvent())
+	s.Router.HandleFunc("/mychatusers", s.HandleMyChatUsers())
+	s.Router.HandleFunc("/sendprivatemessage", s.StorePrivateMessage())
 
 	s.Router.HandleFunc("/myfollowers", s.HandleUserFollowers())
 	s.TestDBfunctions()
