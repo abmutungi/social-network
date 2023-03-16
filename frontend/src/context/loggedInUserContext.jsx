@@ -5,6 +5,7 @@ const loggedInUserContext = createContext({});
 function LoggedInUserProvider({ children }) {
   const [NewNotifsExist, setNewNotifsExist] = useState(false);
   // const [MyNotifs, setMyNotifs] = useState({});
+  const [webSocket, setWebSocket] = useState({});
 
   const [loggedInUser, setLoggedInUser] = useState(() => {
     const storedUser = localStorage.getItem("loggedInUser");
@@ -19,6 +20,16 @@ function LoggedInUserProvider({ children }) {
     setNewNotifsExist(bool);
   };
 
+  const createWebSocket = () => {
+    //new WebSocket("ws://localhost:8080/upgradesocket");
+    setWebSocket(new WebSocket("ws://localhost:8080/upgradesocket"));
+    console.log("check web socket function works");
+    //console.log("ws check --> ", ws);
+    //  ws.onopen = () => {
+    //    console.log("connection established");
+    //  };
+  };
+
   return (
     <loggedInUserContext.Provider
       value={{
@@ -26,6 +37,8 @@ function LoggedInUserProvider({ children }) {
         updateLoggedInUser,
         NewNotifsExist,
         updateNewNotifsExist,
+        createWebSocket,
+        webSocket,
       }}
     >
       {children}

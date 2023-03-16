@@ -18,8 +18,13 @@ import "../../../assets/css/login.css";
 // };
 
 const Login = () => {
-  const { loggedInUser, updateLoggedInUser, updateNewNotifsExist } =
-    useContext(loggedInUserContext);
+  const {
+    loggedInUser,
+    updateLoggedInUser,
+    updateNewNotifsExist,
+    createWebSocket,
+    webSocket,
+  } = useContext(loggedInUserContext);
   const {
     updateAboutText,
     updateUserID,
@@ -168,11 +173,9 @@ const Login = () => {
         if (!currentUser.Privacy) updatePrivacyBtnText(PublicText);
         console.log("3RD PS CHECK ON LOGIN --> ", PrivacyStatus);
         console.log("4TH CHECK --> ", updatePrivacyStatus(currentUser.Privacy));
-
-        let ws = new WebSocket("ws://localhost:8080/upgradesocket");
-        ws.onopen = () => {
-          console.log("connection established");
-        };
+        createWebSocket();
+        //webSocket;
+        console.log("webscoket in login comp ==> ", webSocket);
 
         // console.log(loggedInUser);
         navigate("/");
