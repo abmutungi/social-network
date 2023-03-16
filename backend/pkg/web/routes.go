@@ -29,5 +29,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/sendprivatemessage", s.StorePrivateMessage())
 
 	s.Router.HandleFunc("/myfollowers", s.HandleUserFollowers())
+	s.Router.HandleFunc("/groupinvite", s.HandleGroupInvite())
+
 	s.TestDBfunctions()
 }

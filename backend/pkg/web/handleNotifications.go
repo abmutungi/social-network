@@ -160,7 +160,15 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 
 			// check if notification is event invitation
 
-			// else
+		} else if notifications.GetNotificationType(s.Db, n.NotificationID) == "groupInvite"{
+			fmt.Println("15k Lorry", prettyPrint((n)))
+			groups.AddGroupMember(s.Db,n.NotificationGroupID,n.NotifiyeeID )
+			relationships.DeleteRequest(s.Db, n.NotificationID)
+			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+
+
+
+		
 		} else {
 
 			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)

@@ -125,6 +125,18 @@ func GroupNotificationCheck(db *sql.DB, notificationID int) bool {
 	return false
 }
 
+// gets the notification type against a given notification id
+func GetNotificationType(db *sql.DB, notificationID int) string {
+	userStmt := "SELECT notificationType FROM notifications WHERE notificationID = ?"
+	userRow := db.QueryRow(userStmt, notificationID)
+	var notType string
+	err := userRow.Scan(&notType)
+	if err != nil {
+		fmt.Println("Error in getting the notification type", err)
+	}
+	return notType
+}
+
 func GetGroupID(db *sql.DB, notificationID int) int {
 	userStmt := "SELECT groupID FROM notifications WHERE notificationID = ?"
 	userRow := db.QueryRow(userStmt, notificationID)
