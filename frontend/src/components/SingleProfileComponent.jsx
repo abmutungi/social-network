@@ -19,6 +19,7 @@ const SingleProfileComponent = (props) => {
     updateFollowText,
     updateDynamicID,
     updateisGroupMember,
+    updateProfilePhotoBackground,
   } = useContext(LowerHeaderContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
@@ -103,12 +104,7 @@ const SingleProfileComponent = (props) => {
         id={props.id}
       >
         <div className="ChatPic">
-          <img
-            src="https://www.facebook.com/images/fb_icon_325x325.png"
-            width="25"
-            height="25"
-            alt="chat-pic"
-          />
+          <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
         <p className="ChatName">
           {props.chatName}
@@ -169,12 +165,7 @@ const SingleProfileComponent = (props) => {
           id={props.id}
         />
         <div className="ChatPic">
-          <img
-            src="https://www.facebook.com/images/fb_icon_325x325.png"
-            width="25"
-            height="25"
-            alt="chat-pic"
-          />
+          <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
         <p className="ChatName">
           {props.chatName}
