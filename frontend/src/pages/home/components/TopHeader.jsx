@@ -53,6 +53,27 @@ function ContainerIcons() {
     }
   }
 
+  //display all notifications
+  const [MyNotifs, setMyNotifs] = useState([]);
+
+  async function DisplayNotifications() {
+    try {
+      const response = await fetch("http://localhost:8080/displayNotif", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          loggedInUserID: LoggedInUserID,
+        }),
+      });
+      const data = await response.json();
+      console.log("Notif data check on click ->", data);
+      setMyNotifs(data.AllNotifs);
+    } catch (e) {
+      console.log("error displaying notifications", e);
+    }
+  }
+
+
   const [showNotifModal, setShowNotifModal] = useState(false);
 
   async function CheckNotifications() {
@@ -86,6 +107,7 @@ function ContainerIcons() {
             onClick={() => {
               setShowNotifModal(true);
               updateNewNotifsExist(false);
+              DisplayNotifications();
             }}
             icon={faBell}
             className="ClickableHeaderIcons"
@@ -108,6 +130,7 @@ function ContainerIcons() {
       <NotificationsModal
         onClose={() => setShowNotifModal(false)}
         show={showNotifModal}
+        data={MyNotifs}
       />
     </>
   );

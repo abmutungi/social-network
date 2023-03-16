@@ -1,5 +1,5 @@
 import "../../../assets/css/notifications-modal.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 // single notifications component
@@ -86,32 +86,32 @@ const SingleNotificationComponent = ({ props }) => {
   );
 };
 
+
+
 // notifications modal that holds single notifications
-const NotificationsModal = ({ show, onClose }) => {
-  const { LoggedInUserID } = useContext(LowerHeaderContext);
-  const [MyNotifs, setMyNotifs] = useState([]);
+const NotificationsModal = ({ show, onClose, data }) => {
 
-  async function DisplayNotifications() {
-    try {
-      const response = await fetch("http://localhost:8080/displayNotif", {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({
-          loggedInUserID: LoggedInUserID,
-        }),
-      });
-      const data = await response.json();
-      console.log("Notif data check on click ->", data);
-      setMyNotifs(data.AllNotifs);
-    } catch (e) {
-      console.log("error displaying notifications", e);
-    }
-  }
+  // async function DisplayNotifications() {
+  //   try {
+  //     const response = await fetch("http://localhost:8080/displayNotif", {
+  //       method: "POST",
+  //       credentials: "include",
+  //       body: JSON.stringify({
+  //         loggedInUserID: LoggedInUserID,
+  //       }),
+  //     });
+  //     const data = await response.json();
+  //     console.log("Notif data check on click ->", data);
+  //     setMyNotifs(data.AllNotifs);
+  //   } catch (e) {
+  //     console.log("error displaying notifications", e);
+  //   }
+  // }
 
-  useEffect(() => {
-    DisplayNotifications();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   DisplayNotifications();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   // console.log(
   //   "MyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifs",
@@ -130,7 +130,7 @@ const NotificationsModal = ({ show, onClose }) => {
         <div className="notifs-modal-header"></div>
         <div className="notifs-modal-title">Notifications</div>
         <div className="notifs-modal-body">
-          {MyNotifs?.map((notif) => (
+          {data?.map((notif) => (
             <SingleNotificationComponent
               key={notif.notifID}
               props={{
