@@ -170,17 +170,21 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 			}else{
 				fmt.Println("NOOOOOOOO!", prettyPrint((n)))
 
-
 				relationships.DeleteRequest(s.Db, n.NotificationID)
 				//notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
 
 
 			}
 
-		} else {
+		} else if notifications.GetNotificationType(s.Db, n.NotificationID) == "eventInvite"{
+			fmt.Println("EVENTTTTTT!", prettyPrint((n)))
+			relationships.DeleteRequest(s.Db, n.NotificationID)
 
-			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
-			relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
+
+		}else {
+
+			 notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+			 relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
 			relationships.DeleteRequest(s.Db, n.NotificationID)
 		}
 	}
