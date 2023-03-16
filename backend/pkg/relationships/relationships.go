@@ -86,11 +86,11 @@ func FollowRequestCheck(db *sql.DB, loggedInUser, userID int) bool {
 func DeleteRequest(db *sql.DB, notifID int) {
 	result, err := db.Exec("DELETE FROM notifications WHERE notificationID =?", notifID)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Delete Request", err)
 	}
 	rows, err := result.RowsAffected()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Delete Request", err)
 	}
 	fmt.Println(rows)
 }

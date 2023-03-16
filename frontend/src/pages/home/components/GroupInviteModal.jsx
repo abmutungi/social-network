@@ -14,6 +14,7 @@ const GroupInviteModal = ({ show, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
    console.log(GetCheckBoxValues(LoggedInUserID));
    let invited = GetCheckBoxValues(LoggedInUserID);
 
@@ -124,6 +125,7 @@ const GroupInviteModal = ({ show, onClose }) => {
           <div className="cg-modal-footer">
               <button
                 onSubmit={handleSubmit}
+
                 className="cg-submit-button"
                 type="submit"
               >

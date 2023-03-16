@@ -148,27 +148,35 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		// check notification is a group request
-		if notifications.GroupNotificationCheck(s.Db, n.NotificationID) {
+		if notifications.GetNotificationType(s.Db, n.NotificationID) == "groupRequest" {
 
 			if n.NotificationAccept == 1 {
 				groups.AddUserToGroup(s.Db, notifications.GetGroupID(s.Db, n.NotificationID), n.NotifierID)
 				relationships.DeleteRequest(s.Db, n.NotificationID)
 			} else {
-			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
 			}
-			// check if notification is group invitation
 
 			// check if notification is event invitation
 
-		} else if notifications.GetNotificationType(s.Db, n.NotificationID) == "groupInvite"{
-			fmt.Println("15k Lorry", prettyPrint((n)))
-			groups.AddGroupMember(s.Db,n.NotificationGroupID,n.NotifiyeeID )
-			relationships.DeleteRequest(s.Db, n.NotificationID)
-			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+			//GROUP INVITE
+		} else if notifications.GetNotificationType(s.Db, n.NotificationID) == "groupInvite" {
+			if n.NotificationAccept == 1 {
+				fmt.Println("YESSSSSSSS!", prettyPrint((n)))
+
+				groups.AddGroupMember(s.Db, n.NotificationGroupID, n.NotifiyeeID)
+				relationships.DeleteRequest(s.Db, n.NotificationID)
+				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+			}else{
+				fmt.Println("NOOOOOOOO!", prettyPrint((n)))
 
 
+				relationships.DeleteRequest(s.Db, n.NotificationID)
+				//notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
 
-		
+
+			}
+
 		} else {
 
 			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
