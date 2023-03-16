@@ -60,6 +60,7 @@ func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.Handle
 		sessionToken := c.Value
 
 		userSession, exists := SessionsStructMap[sessionToken]
+		fmt.Println("UserID from cookie --> ", userSession.UserID)
 		if !exists {
 			//handle there not being a session
 			var cm ClientMessage
@@ -77,7 +78,6 @@ func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.Handle
 
 			return
 		}
-		fmt.Println("UserID from cookie --> ", userSession.UserID)
 		if userSession.isExpired() {
 			fmt.Println("SESSION HAS EXPIRED")
 			delete(SessionsStructMap, sessionToken)

@@ -22,8 +22,8 @@ const Login = () => {
     loggedInUser,
     updateLoggedInUser,
     updateNewNotifsExist,
-    createWebSocket,
-    webSocket,
+    setLoggedIn,
+    socket,
   } = useContext(loggedInUserContext);
   const {
     updateAboutText,
@@ -173,9 +173,11 @@ const Login = () => {
         if (!currentUser.Privacy) updatePrivacyBtnText(PublicText);
         console.log("3RD PS CHECK ON LOGIN --> ", PrivacyStatus);
         console.log("4TH CHECK --> ", updatePrivacyStatus(currentUser.Privacy));
-        createWebSocket();
+
         //webSocket;
-        console.log("webscoket in login comp ==> ", webSocket);
+        setLoggedIn(true);
+
+        console.log("socket -> ", socket);
 
         // console.log(loggedInUser);
         navigate("/");

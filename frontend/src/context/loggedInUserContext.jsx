@@ -1,11 +1,33 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 const loggedInUserContext = createContext({});
 
 function LoggedInUserProvider({ children }) {
+  const [socket, setSocket] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (loggedIn) {
+      const newSocket = new WebSocket("ws://localhost:8080/upgradesocket");
+      newSocket.onopen = () => {
+        console.log("WebSocket connection opened");
+      };
+      newSocket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+      newSocket.onclose = () => {
+        console.log("WebSocket connection closed, logout");
+      };
+      setSocket(newSocket);
+
+      // Clean up function to close the WebSocket when the component unmounts or the user logs out
+      return () => {
+        newSocket.close();
+      };
+    }
+  }, [loggedIn]);
   const [NewNotifsExist, setNewNotifsExist] = useState(false);
   // const [MyNotifs, setMyNotifs] = useState({});
-  const [webSocket, setWebSocket] = useState({});
 
   const [loggedInUser, setLoggedInUser] = useState(() => {
     const storedUser = localStorage.getItem("loggedInUser");
@@ -20,16 +42,6 @@ function LoggedInUserProvider({ children }) {
     setNewNotifsExist(bool);
   };
 
-  const createWebSocket = () => {
-    //new WebSocket("ws://localhost:8080/upgradesocket");
-    setWebSocket(new WebSocket("ws://localhost:8080/upgradesocket"));
-    console.log("check web socket function works");
-    //console.log("ws check --> ", ws);
-    //  ws.onopen = () => {
-    //    console.log("connection established");
-    //  };
-  };
-
   return (
     <loggedInUserContext.Provider
       value={{
@@ -37,8 +49,8 @@ function LoggedInUserProvider({ children }) {
         updateLoggedInUser,
         NewNotifsExist,
         updateNewNotifsExist,
-        createWebSocket,
-        webSocket,
+        socket,
+        setLoggedIn,
       }}
     >
       {children}
