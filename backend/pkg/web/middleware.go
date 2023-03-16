@@ -8,7 +8,7 @@ import (
 )
 
 type Session struct {
-	UserID string
+	UserID int
 	Expiry time.Time
 }
 
@@ -77,6 +77,7 @@ func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.Handle
 
 			return
 		}
+		fmt.Println("UserID from cookie --> ", userSession.UserID)
 		if userSession.isExpired() {
 			fmt.Println("SESSION HAS EXPIRED")
 			delete(SessionsStructMap, sessionToken)

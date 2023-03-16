@@ -169,6 +169,11 @@ const Login = () => {
         console.log("3RD PS CHECK ON LOGIN --> ", PrivacyStatus);
         console.log("4TH CHECK --> ", updatePrivacyStatus(currentUser.Privacy));
 
+        let ws = new WebSocket("ws://localhost:8080/upgradesocket");
+        ws.onopen = () => {
+          console.log("connection established");
+        };
+
         // console.log(loggedInUser);
         navigate("/");
       }

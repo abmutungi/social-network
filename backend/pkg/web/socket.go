@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -12,15 +13,30 @@ var loggedInSockets = make(map[int]*websocket.Conn)
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
 }
 
 func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	wsConn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("error upgrading connection: %v", err)
 	}
 
-    defer wsConn.Close()
+	defer wsConn.Close()
 
-    loggedInSockets 
-}   
+	c, _ := r.Cookie("session_cookie")
+
+	sessionToken := c.Value
+
+	userSession, exists := SessionsStructMap[sessionToken]
+	if !exists {
+		log.Println("Error getting session info from cookie")
+
+	}
+
+	loggedInSockets[userSession.UserID] = wsConn
+	fmt.Println("socket map --> ", loggedInSockets)
+}

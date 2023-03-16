@@ -7,18 +7,18 @@ import (
 )
 
 type User struct {
-	UserID    int
-	Email     string
-	Password  string
-	Firstname string
-	Lastname  string
-	DOB       string
-	Nickname  string
-	Avatar    string
-	AboutText string
-	Privacy   int
-	Created   string
-	Notifications bool 
+	UserID        int
+	Email         string
+	Password      string
+	Firstname     string
+	Lastname      string
+	DOB           string
+	Nickname      string
+	Avatar        string
+	AboutText     string
+	Privacy       int
+	Created       string
+	Notifications bool
 	// Followers int
 	// Following int
 }
@@ -58,7 +58,7 @@ type User struct {
 func ReturnSingleUser(db *sql.DB, email string) User {
 	userStmt := "SELECT  userID, email, firstName, lastName, dateOfBirth, avatar, nickname, aboutMe, privacy, createdAT from users WHERE email=?"
 	userRow := db.QueryRow(userStmt, email)
-	
+
 	var a User
 	err := userRow.Scan(&a.UserID, &a.Email, &a.Firstname, &a.Lastname, &a.DOB, &a.Avatar, &a.Nickname, &a.AboutText, &a.Privacy, &a.Created)
 	if err != nil {
@@ -67,13 +67,13 @@ func ReturnSingleUser(db *sql.DB, email string) User {
 	return a
 }
 
-func GetEmailFromUserID(db *sql.DB, id string) string {
+func GetEmailFromUserID(db *sql.DB, id int) string {
 	userStmt := "SELECT email from users WHERE userID = ?"
 	userRow := db.QueryRow(userStmt, id)
 	var e string
 	err := userRow.Scan(&e)
 	if err != nil {
-		fmt.Printf("Error in getting the email for this userID(%s): %v", id, err)
+		fmt.Printf("Error in getting the email for this userID(%d): %v", id, err)
 	}
 	return e
 }
