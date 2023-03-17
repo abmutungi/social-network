@@ -30,6 +30,8 @@ func (s *Server) Routes() {
 
 	s.Router.HandleFunc("/myfollowers", s.HandleUserFollowers())
 	s.Router.HandleFunc("/groupinvite", s.HandleGroupInvite())
+	s.Router.HandleFunc("/getgroupinvitees", s.HandleGetGroupInvitees())
+
 
 	s.TestDBfunctions()
 }
