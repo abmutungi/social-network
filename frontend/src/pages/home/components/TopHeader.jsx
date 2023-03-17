@@ -21,15 +21,15 @@ function ContainerLogo() {
 }
 
 function ContainerIcons() {
-  const { loggedInUser, NewNotifsExist, updateNewNotifsExist, setLoggedIn } =
+  const { loggedInUser, NewNotifsExist, updateNewNotifsExist } =
     useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
   const navigate = useNavigate();
+
   /*On logout click,
   need to send info back to the log out handler
   and navigate to login page*/
   async function sendLogoutData() {
-    setLoggedIn(false);
     const response = await fetch("http://localhost:8080/logout", {
       method: "POST",
       credentials: "include",
@@ -46,6 +46,7 @@ function ContainerIcons() {
     console.log("Data check -> ", data);
     if (data.success) {
       navigate("/login");
+
       location.reload();
       localStorage.clear();
     }

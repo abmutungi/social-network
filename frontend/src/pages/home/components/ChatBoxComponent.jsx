@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import { ChatBubble } from "./ChatBubbleComponent";
 import "../../../assets/css/chatbox.css";
+import { SocketContext } from "../../../context/webSocketContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -50,6 +51,7 @@ let dummyMessages = [
 //  }
 
 const ChatBox = ({ show, onClose, name, id }) => {
+  const { socket } = useContext(SocketContext);
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState("");
 
@@ -70,7 +72,7 @@ const ChatBox = ({ show, onClose, name, id }) => {
       JSON.parse(localStorage.getItem("loggedInUser")).ID
     );
     newChatFormData.append("recipientID", id);
-
+    socket.send(JSON.stringify("Chat form"));
     for (const v of newChatFormData.values()) {
       console.log("v check -> ", v);
     }

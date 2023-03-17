@@ -38,5 +38,17 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 	}
 
 	loggedInSockets[userSession.UserID] = wsConn
+	fmt.Println("+++++++++++++++++++++++++++WEBSOCKET GRANTED++++++++++++++++++++++++++++=")
 	fmt.Println("socket map --> ", loggedInSockets)
+
+	for {
+		message, info, _ := wsConn.ReadMessage()
+		fmt.Println("----===> ", string(info))
+		fmt.Println("----", message)
+
+		if message == -1 {
+			fmt.Println("connection closed")
+			return
+		}
+	}
 }
