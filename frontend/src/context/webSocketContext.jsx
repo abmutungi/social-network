@@ -7,14 +7,17 @@ const SocketProvider = ({ children }) => {
   const [openSocket, setOpenSocket] = useState(false);
 
   useEffect(() => {
-    // create and open socket when component mounts
-    const ws = new WebSocket("ws://localhost:8080/upgradesocket");
-    setSocket(ws);
 
-    return () => {
-      // close socket when component unmounts
-      ws.close();
-    };
+    if (openSocket) {
+      // create and open socket when component mounts
+      const ws = new WebSocket("ws://localhost:8080/upgradesocket");
+      setSocket(ws);
+
+      return () => {
+        // close socket when component unmounts
+        ws.close();
+      };
+    }
   }, [openSocket]);
 
   const createSocket = (bool) => {

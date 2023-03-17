@@ -22,7 +22,7 @@ import "../../../assets/css/login.css";
 const Login = () => {
   const { loggedInUser, updateLoggedInUser, updateNewNotifsExist } =
     useContext(loggedInUserContext);
-  const { socket, openSocket, createSocket } = useContext(SocketContext);
+  const { socket, createSocket } = useContext(SocketContext);
   const {
     updateAboutText,
     updateUserID,
@@ -173,9 +173,7 @@ const Login = () => {
         console.log("3RD PS CHECK ON LOGIN --> ", PrivacyStatus);
         console.log("4TH CHECK --> ", updatePrivacyStatus(currentUser.Privacy));
         createSocket(true);
-        socket.onopen = () => {
-          console.log("socket opened");
-        };
+     
         console.log("socket check => ", socket);
         // console.log(loggedInUser);
         navigate("/");
