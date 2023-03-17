@@ -82,7 +82,7 @@ const [GroupEvents, setGroupEvents] = useState([]);
   const [JoinText, setJoinText] = useState(joinText);
   const [isGroupMember, setisGroupMember] = useState(false);
   const [groupNotUser, setgroupNotUser] = useState(false);
-  const [groupInvitees, setGroupInvitees]= useState(false)
+  const [groupInvitees, setGroupInvitees]= useState([])
 
 
   const updateGroupInvitees = (data)=>{

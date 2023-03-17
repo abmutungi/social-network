@@ -9,7 +9,7 @@ library.add(faUserPlus);
 
 const GroupInviteBtn = () => {
   const [show, setShow] = useState(false);
-  const { GroupID, groupInvitees, updateGroupInvitees } =
+  const { GroupID, updateGroupInvitees } =
     useContext(LowerHeaderContext);
 
   async function GetGroupInvitees() {
