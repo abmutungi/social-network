@@ -12,6 +12,9 @@ library.add(faThumbsUp, faMessage);
 
 // SinglePost takes the props that come from the database
 const SinglePost = (props) => {
+
+  //console.log('form comments', props);
+
   // if there is an image add the img div
   const imageExists = props.postImg;
 
@@ -179,7 +182,7 @@ const PostsContainer = () => {
           </div>
           {posts?.map((post) => (
             <SinglePost
-              key={post.postID}
+              key={post.grouppostID}
               profileImgPath={handleProfilePicImgPath(post.profilePic)}
               name={post.name}
               date={post.createdAt}
@@ -187,7 +190,7 @@ const PostsContainer = () => {
               commentsCount={handleCommentsCount(post.comments)}
               postImg={handlePostImgPath(post.postImg)}
               commentsArray={post.comments}
-              postID={post.postID}
+              postID={post.grouppostID}
             />
           ))}
         </div>
