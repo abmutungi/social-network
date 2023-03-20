@@ -31,15 +31,23 @@ func (s *Server) handleComment() http.HandlerFunc {
 		
 		userIDToInt, _ := strconv.Atoi(r.Form.Get("commenterID"))
 		groupPostIDToInt, _ := strconv.Atoi(r.Form.Get("grouppostID"))
+		groupIDToInt, _ := strconv.Atoi(r.Form.Get("groupID"))
+
 		textContent := r.Form.Get("textContent")
 
+		
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 		comment.StoreGroupPostComment(s.Db, groupPostIDToInt,userIDToInt,textContent,newFileName)
+
+		fmt.Println("aaa",userIDToInt, groupIDToInt)
          
 
-	sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db, groupPostIDToInt))
+	sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db, groupIDToInt))
 			if err != nil {
 				fmt.Println("error marshalling groupposts/comms", sendPosts)
 			}
+
+
 
 			w.Write(sendPosts)
 
