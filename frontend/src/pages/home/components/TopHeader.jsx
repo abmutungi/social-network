@@ -11,6 +11,8 @@ import { useContext, useState, useEffect } from "react";
 import { NotificationsModal } from "../../../pages/home/components/notificationsModal";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+// import { SocketContext } from "../../../context/webSocketContext";
+
 
 function ContainerLogo() {
   return (
@@ -21,11 +23,16 @@ function ContainerLogo() {
 }
 
 function ContainerIcons() {
-  const { loggedInUser, NewNotifsExist, updateNewNotifsExist } =
+  const { loggedInUser, NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs } =
     useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
+  // const {socket} = useContext(SocketContext)
   const navigate = useNavigate();
 
+  // console.log("socket from top header------------>", socket);
+
+
+  
   /*On logout click,
   need to send info back to the log out handler
   and navigate to login page*/
@@ -42,7 +49,6 @@ function ContainerIcons() {
     });
 
     const data = await response.json();
-
     console.log("Data check -> ", data);
     if (data.success) {
       navigate("/login");
@@ -53,8 +59,6 @@ function ContainerIcons() {
   }
 
   //display all notifications
-  const [MyNotifs, setMyNotifs] = useState([]);
-
   async function DisplayNotifications() {
     try {
       const response = await fetch("http://localhost:8080/displayNotif", {
@@ -66,7 +70,7 @@ function ContainerIcons() {
       });
       const data = await response.json();
       console.log("Notif data check on click ->", data);
-      setMyNotifs(data.AllNotifs);
+      updateMyNotifs(data.AllNotifs);
     } catch (e) {
       console.log("error displaying notifications", e);
     }

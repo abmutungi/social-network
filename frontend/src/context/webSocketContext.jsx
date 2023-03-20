@@ -12,10 +12,19 @@ const SocketProvider = ({ children }) => {
       // create and open socket when component mounts
       const ws = new WebSocket("ws://localhost:8080/upgradesocket");
       setSocket(ws);
-
+      ws.onopen = () => {
+          console.log("socket is open");
+      }
+      
+      ws.onmessage = () => {
+        console.log("sent through ws **********");
+      }
       return () => {
         // close socket when component unmounts
         ws.close();
+        ws.onclose = () => {
+          console.log("socket is closed");
+        }
       };
     }
   }, [openSocket]);

@@ -1,11 +1,25 @@
 import "../../../assets/css/notifications-modal.css";
 import { useContext } from "react";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { SocketContext } from "../../../context/webSocketContext";
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
   const { LoggedInUserID, GroupID } = useContext(LowerHeaderContext);
+  const { socket } = useContext(SocketContext)
 
+  
+
+  console.log("socket from single notification component ------------>", socket);
+  // socket.onmessage = (e) => {
+  //   let data = JSON.parse(e.data)
+  //   updateMyNotifs(data)
+  //   console.log("socket on message--------->", data);
+  // }
+  
+  // console.log("MyNotifs--------->", MyNotifs);
+  
   let notifText = props.notifType;
 
   switch (notifText) {
@@ -26,6 +40,13 @@ const SingleNotificationComponent = ({ props }) => {
   console.log(notifText);
 
   const handleClick = () => {
+  socket.send(JSON.stringify({
+    loggedInUserID: LoggedInUserID,
+    type: "notifs",
+   }))
+  
+
+
     fetch("http://localhost:8080/actionNotif", {
       method: "POST",
       credentials: "include",
@@ -90,6 +111,10 @@ const SingleNotificationComponent = ({ props }) => {
 
 // notifications modal that holds single notifications
 const NotificationsModal = ({ show, onClose, data }) => {
+  
+  const {MyNotifs, updateMyNotifs } = useContext(loggedInUserContext);
+  const { socket } = useContext(SocketContext)
+
 
   // async function DisplayNotifications() {
   //   try {
@@ -119,6 +144,17 @@ const NotificationsModal = ({ show, onClose, data }) => {
   // );
   if (!show) {
     return null;
+  } else {
+
+  console.log("socket from notification modal ------------>", socket);
+
+   socket.onmessage = (e) => {
+    let data = JSON.parse(e.data)
+    updateMyNotifs(data)
+    console.log("socket on message--------->", data);
+  }
+  
+  console.log("MyNotifs--------->", MyNotifs);
   }
   return (
     <div className="notifs-modal" onClick={onClose} role="presentation">
