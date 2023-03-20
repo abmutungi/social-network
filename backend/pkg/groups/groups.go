@@ -278,7 +278,7 @@ func GetAllGroupPosts(db *sql.DB, GroupID int) []GroupPost {
 			fmt.Printf("error scanning rows for groupposts: %v", err2)
 		}
 		p.FName = GetNameFromID(db, p.UserID)
-		p.Comments = comment.GetAllComments(db, p.GroupPostID)
+		p.Comments = comment.GetGroupPostComments(db, p.GroupPostID)
 		//p.Events = GetEventInfo(db, GroupID)
 		posts = append(posts, p)
 	}

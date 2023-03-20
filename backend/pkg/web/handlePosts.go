@@ -32,9 +32,7 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		}
 
 		if r.Form.Has("groupID") {
-			fmt.Println("TESTING 12")
-			//save post to groupposts
-			//send back to client to display
+		
 
 
 			var newFileName string

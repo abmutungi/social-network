@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	comment "github.com/abmutungi/social-network/backend/pkg/comments"
+	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/posts"
 )
 
@@ -19,6 +20,34 @@ func (s *Server) handleComment() http.HandlerFunc {
 		if err != nil {
 			fmt.Printf("error parsing comment form: %v", err)
 		}
+
+		if r.Form.Has("grouppostID") {
+
+		var newFileName string
+		// if file is added in form, create file for image and return filename
+		if r.Form.Get("imgName") != "" {
+			newFileName = s.HandleImage(r, "uploadedCommentImg")
+		}
+		
+		userIDToInt, _ := strconv.Atoi(r.Form.Get("commenterID"))
+		groupPostIDToInt, _ := strconv.Atoi(r.Form.Get("grouppostID"))
+		textContent := r.Form.Get("textContent")
+
+		comment.StoreGroupPostComment(s.Db, groupPostIDToInt,userIDToInt,textContent,newFileName)
+         
+
+	sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db, groupPostIDToInt))
+			if err != nil {
+				fmt.Println("error marshalling groupposts/comms", sendPosts)
+			}
+
+			w.Write(sendPosts)
+
+
+		}else{
+
+
+		
 
 		postIDtoInt, _ := strconv.Atoi(r.Form.Get("postID"))
 
@@ -52,4 +81,5 @@ func (s *Server) handleComment() http.HandlerFunc {
 		}
 
 	}
+}
 }
