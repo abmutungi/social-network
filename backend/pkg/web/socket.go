@@ -1,14 +1,20 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/gorilla/websocket"
 )
 
-var loggedInSockets = make(map[int]*websocket.Conn)
+var (
+	loggedInSockets = make(map[int]*websocket.Conn)
+	//broadcastChannelChats  = make(chan chats.Chat, 1)
+	// broadcastChannelGroupNotifs = make(chan notifications.Notification, 1)
+)
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -16,6 +22,43 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
+}
+
+type T struct {
+	TypeChecker
+	*notifications.Notification
+	// *chats.Chat
+	*NewMessage
+}
+
+type TypeChecker struct {
+	Type string `json:"type"`
+}
+
+// struct for new message
+
+type NewMessage struct {
+	LoggedInUserID int    `json:"loggedInUser"`
+	RecipientID    int    `json:"recipientID"`
+	Tipo           string `json:"tipo"`
+}
+
+func (t *T) UnmarshalData(data []byte) error {
+	if err := json.Unmarshal(data, &t.TypeChecker); err != nil {
+		log.Println("Error receiving data type")
+	}
+
+	switch t.Type {
+	case "notifs":
+		t.Notification = &notifications.Notification{}
+		return json.Unmarshal(data, t.Notification)
+	case "newMessage":
+		t.NewMessage = &NewMessage{}
+		return json.Unmarshal(data, t.NewMessage)
+	default:
+		return fmt.Errorf("unrecognized type value %q", t.Type)
+
+	}
 }
 
 func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
@@ -41,6 +84,8 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("+++++++++++++++++++++++++++WEBSOCKET GRANTED++++++++++++++++++++++++++++=")
 	fmt.Println("socket map --> ", loggedInSockets)
 
+	var f T
+
 	for {
 		message, info, _ := wsConn.ReadMessage()
 		fmt.Println("----===> ", string(info))
@@ -49,6 +94,26 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 		if message == -1 {
 			fmt.Println("connection closed")
 			return
+		}
+
+		f.UnmarshalData(info)
+
+		// for single chat messages
+
+		if f.Type == "newMessage" {
+
+			fmt.Println("New Message has been sent")
+			// check if recipeint is in the socket map
+			f.NewMessage.Tipo = "newMessage"
+
+			for id, conn := range loggedInSockets {
+				if f.RecipientID == id {
+					conn.WriteJSON("new message for recipient")
+				}
+			}
+
+			// if they are send back all messages between the pair
+
 		}
 	}
 }

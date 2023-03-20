@@ -20,6 +20,7 @@ type Notification struct {
 	NotificationGroupID   int    `json:"notifGroupID"`
 	NotificationGroupName string `json:"notifGroupName"`
 	NotificationAccept    int    `json:"notifAccept"`
+	Tipo                  string `json:"tipo"`
 }
 
 func StoreNotification(db *sql.DB, notificationType string, notifiyee, notifier, groupID int) {
@@ -148,6 +149,6 @@ func UserRequestedToJoin(db *sql.DB, groupID, userID int) bool {
 		fmt.Printf("user: %v has requested to join group: %v", userID, groupID)
 		return true
 	}
-		fmt.Printf("user: %v has NOT requested to join group: %v", userID, groupID)
+	fmt.Printf("user: %v has NOT requested to join group: %v", userID, groupID)
 	return false
 }

@@ -38,8 +38,7 @@ const Comments = (props) => {
   const [img, setImg] = useState(null);
   const [imgName, setImgName] = useState("");
 
-  const { updatePosts, DynamicID, LoggedInUserID } =
-    useContext(LowerHeaderContext);
+  const { updatePosts, DynamicID } = useContext(LowerHeaderContext);
   // const commentUserID = JS;
   // function to handle form submission
   const handleCommentSubmit = (e) => {

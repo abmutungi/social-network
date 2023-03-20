@@ -28,7 +28,7 @@ type Chat struct {
 	MessageID     int    `json:"messageID"`
 	Date          string `json:"chatDate"`
 	// LastNotification notification.Notification `json:"livenotification"`
-	// Tipo             string                    `json:"tipo"`
+	Tipo string `json:"tipo"`
 	// UsersWithChat    []Chat                    `json:"userswithchat"`
 	// AllUsers         []users.AllUsers          `json:"allUsers"`
 }
