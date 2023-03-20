@@ -107,6 +107,11 @@ const ChatBox = ({ show, onClose, name, id }) => {
     //       date: new Date().toDateString(),
     //     },
     //   ]);
+    socket.onmessage = (e) => {
+      console.log("check message for recipient", JSON.parse(e.data));
+      // set messages to the new data being sent
+      setMessages(JSON.parse(e.data));
+    };
     setNewMsg("");
 
     // }
@@ -114,9 +119,7 @@ const ChatBox = ({ show, onClose, name, id }) => {
   let currentUser = name;
 
   console.log("name prop check --> ", name);
-  socket.onmessage = (e) => {
-    console.log("check message for recipient", JSON.parse(e.data));
-  };
+
   if (!show) {
     return null;
   }

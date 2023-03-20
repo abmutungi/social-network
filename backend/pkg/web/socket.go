@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/gorilla/websocket"
 )
@@ -106,9 +107,16 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			// check if recipeint is in the socket map
 			f.NewMessage.Tipo = "newMessage"
 
+			// add fields in struct for message content etc.
+			// chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, f.LoggedInUserID, f.RecipientID).ChatID, msgContent, senderIdInt, recipientIdInt)
+
 			for id, conn := range loggedInSockets {
 				if f.RecipientID == id {
-					conn.WriteJSON("new message for recipient")
+
+					// conn.WriteJSON(chatHistoryToSend)
+					conn.WriteJSON(chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, f.LoggedInUserID, f.RecipientID).ChatID))
+
+					// conn.WriteJSON("new message for recipient")
 				}
 			}
 
