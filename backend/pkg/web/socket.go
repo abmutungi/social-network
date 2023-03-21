@@ -169,18 +169,20 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-		if f.Type == "notifBell" {
-			if notifications.NotificationCheck(s.Db, f.Notifiyee.UserID) {
-				for user, conn := range loggedInSockets {
-					if user == f.Notifiyee.UserID {
-						conn.WriteJSON(true)
-						notifications.ReadNotification(s.Db, f.Notifiyee.UserID)
-					} else {
-						conn.WriteJSON(false)
-					}
-				}
-			}
-		}
+		// if f.Type == "notifBell" {
+		// 	if notifications.NotificationCheck(s.Db, f.Notifiyee.UserID) {
+		// 		for user, conn := range loggedInSockets {
+		// 			if user == f.Notifiyee.UserID {
+		// 				fmt.Println("************** NOTIF BELL TRUE ********************")
+		// 				conn.WriteJSON(true)
+		// 				notifications.ReadNotification(s.Db, f.Notifiyee.UserID)
+		// 			} else {
+		// 				fmt.Println("************** NOTIF BELL FALSE ********************")
+		// 				conn.WriteJSON(false)
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 		if f.Type == "groupNotifs" {
 
