@@ -118,7 +118,7 @@ const SingleProfileComponent = (props) => {
       body: fetchChatsForm,
     });
     const data = await resp.json();
-    // console.log("messages data", data);
+    console.log("messages data", data);
     // setMessages(data);
     updateMessages(data);
   }
@@ -182,7 +182,7 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
-          fetchChatHistory();
+          if (!show) fetchChatHistory();
           setShow(true);
           setName(props.chatName);
           console.log("props.id -> ", props.id);

@@ -109,7 +109,7 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
 
   if (!show) {
     return null;
-  } else {
+  } else if (socket != null) {
     socket.onmessage = (e) => {
       // console.log("check message for recipient", JSON.parse(e.data));
 
