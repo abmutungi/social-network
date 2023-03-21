@@ -348,7 +348,7 @@ func PendingGroupInvite(db *sql.DB, groupId int) []int {
 
 //GetGroupData for a solitary user
 func GetMyGroups(db *sql.DB, groupID int) []Group {
-	rows, err := db.Query(`SELECT groupID, name,avatar 
+	rows, err := db.Query(`SELECT groups.groupID, name,avatar 
 	FROM groups 
 	INNER JOIN groupMembers ON groupMembers.groupID = groups.groupID
 	WHERE groupMembers.member = ?`, groupID)

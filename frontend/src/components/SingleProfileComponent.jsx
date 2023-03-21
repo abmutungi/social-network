@@ -21,6 +21,7 @@ const SingleProfileComponent = (props) => {
     updateDynamicID,
     updateisGroupMember,
     updateGroupRequested,
+    updateNavClicked
   } = useContext(LowerHeaderContext);
 
   const { messages, updateMessages } = useContext(loggedInUserContext);
@@ -131,6 +132,7 @@ const SingleProfileComponent = (props) => {
         onClick={(e) => {
           e.preventDefault();
 
+          updateNavClicked(false)
           updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
         }}
@@ -154,6 +156,7 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
+          updateNavClicked(false)
           updateGroupID(Number(e.currentTarget.id));
         }}
         className="SingleProfile"
@@ -185,7 +188,6 @@ const SingleProfileComponent = (props) => {
           if (!show) fetchChatHistory();
           setShow(true);
           setName(props.chatName);
-          console.log("props.id -> ", props.id);
           // updateUserID(Number(e.currentTarget.id));
           //updateDynamicID(e.currentTarget.id);
         }}
@@ -205,6 +207,25 @@ const SingleProfileComponent = (props) => {
         <p className="ChatName">
           {props.chatName}
           <small className="group-event-text">{props.eventText}</small>
+        </p>
+      </div>
+    );
+  }
+
+
+  if (props.type === "Navbar") {
+    return (
+      <div
+        role="presentation"
+     
+        className="SingleProfile"
+        id={props.id}
+      >
+        <div className="ChatPic">
+          <img src={props.avatar} width="25" height="25" alt="chat-pic" />
+        </div>
+        <p className="ChatName">
+          {props.chatName}
         </p>
       </div>
     );

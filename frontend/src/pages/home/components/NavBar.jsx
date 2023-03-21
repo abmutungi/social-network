@@ -1,17 +1,15 @@
 import "../../../assets/css/navbar.css";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
-import { useState, useContext } from "react";
+import {  useContext } from "react";
 
 const NavBar = () => {
-  const {
-    navFollower,
-    navFollowing,
-    navGroup,
-    updateNavFollower,
-    updateNavFollowing,
-    updateNavGroup,
-    LoggedInUserID,
-  } = useContext(LowerHeaderContext);
+  const { updateNavData, updateNavClicked, LoggedInUserID } =
+    useContext(LowerHeaderContext);
+
+  function handleClick(data) {
+    updateNavClicked(true);
+    GetNavBarData(data);
+  }
 
   return (
     <div className="navbar">
@@ -19,13 +17,25 @@ const NavBar = () => {
         Home
       </a>
 
-      <button disabled={LoggedInUserID=== 0}onClick={()=>GetNavBarData("followers")} className="nav-button">
+      <button
+        disabled={LoggedInUserID === 0}
+        onClick={() => handleClick("followers")}
+        className="nav-button"
+      >
         Followers
       </button>
-      <button disabled={LoggedInUserID=== 0}onClick={()=>GetNavBarData("following")} className="nav-button">
+      <button
+        disabled={LoggedInUserID === 0}
+        onClick={() => handleClick("following")}
+        className="nav-button"
+      >
         Following
       </button>
-      <button disabled={LoggedInUserID=== 0}onClick={()=>GetNavBarData("groups")} className="nav-button">
+      <button
+        disabled={LoggedInUserID === 0}
+        onClick={() => handleClick("groups")}
+        className="nav-button"
+      >
         Groups
       </button>
     </div>
@@ -42,15 +52,10 @@ const NavBar = () => {
     });
 
     const data = await resp.json();
+    updateNavData(data);
 
     console.log("NAVBAR DATA FROM GO ---- >>  ", data);
   }
-
-  // function CanSend(type) {
-  //   if (LoggedInUserID > 0) GetNavBarData(type);
-  // }
 };
-
-
 
 export default NavBar;

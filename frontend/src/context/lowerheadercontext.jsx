@@ -83,24 +83,20 @@ const [GroupEvents, setGroupEvents] = useState([]);
   const [isGroupMember, setisGroupMember] = useState(false);
   const [groupNotUser, setgroupNotUser] = useState(false);
   const [groupInvitees, setGroupInvitees]= useState([]);
-  const[navFollower, setNavFollower] = useState(false);
-  const[navFollowing, setNavFollowing] = useState(false);
-  const[navGroup, setNavGroup] = useState(false);
+ const[navData, setNavData] = useState([]);
+  const[navClicked, setNavClicked] = useState(false);
 
 
-const updateNavGroup = (data)=>{
-  setNavGroup(data)
+const updateNavClicked = (data)=>{
+  setNavClicked(data)
 }
 
-const updateNavFollower = (data)=>{
-setNavFollower(data)
+const updateNavData = (data)=>{
+setNavData(data)
 }
 
 
-const updateNavFollowing = (data)=>{
-  setNavFollowing(data)
-  }
-  
+
 
   const updateGroupInvitees = (data)=>{
     setGroupInvitees(data)
@@ -234,12 +230,12 @@ const updateNavFollowing = (data)=>{
         updateGroupRequested,
         groupInvitees,
         updateGroupInvitees,
-        navFollower,
-        navFollowing,
-        navGroup,
-        updateNavFollower,
-        updateNavFollowing,
-        updateNavGroup
+        
+        navClicked,
+        updateNavClicked,
+        navData, 
+        updateNavData
+
       }}
     >
       {children}
