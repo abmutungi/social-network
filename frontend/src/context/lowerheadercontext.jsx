@@ -82,8 +82,7 @@ const [GroupEvents, setGroupEvents] = useState([]);
   const [JoinText, setJoinText] = useState(joinText);
   const [isGroupMember, setisGroupMember] = useState(false);
   const [groupNotUser, setgroupNotUser] = useState(false);
-
-    const [groupInvitees, setGroupInvitees]= useState([])
+  const [groupInvitees, setGroupInvitees]= useState([])
 
 
   const updateGroupInvitees = (data)=>{
@@ -91,9 +90,10 @@ const [GroupEvents, setGroupEvents] = useState([]);
   }
 
 
+
+
   const updateUserID = (id) => {
     setUserID(() => id);
-
   };
 
   const updateinitialDB = (data) => {

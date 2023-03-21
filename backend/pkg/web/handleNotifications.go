@@ -178,9 +178,9 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 			relationships.DeleteRequest(s.Db, n.NotificationID)
 
 		} else {
-
-			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
-			relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
+		
+			 notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+			 relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
 			relationships.DeleteRequest(s.Db, n.NotificationID)
 		}
 	}

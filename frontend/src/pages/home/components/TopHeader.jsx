@@ -27,7 +27,7 @@ function ContainerIcons() {
   const { loggedInUser, NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs } =
     useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
-  const {socket} = useContext(SocketContext)
+  //const {socket} = useContext(SocketContext)
   const navigate = useNavigate();
 
   // console.log("socket from top header------------>", socket);
@@ -98,11 +98,11 @@ function ContainerIcons() {
     }
   }
 
-  socket.onmessage = (e) => {
-    let data = JSON.parse(e.data)
-    updateNewNotifsExist(data)
-    console.log("socket on message in notif bell --------->", data);
-  }
+  // socket.onmessage = (e) => {
+  //   let data = JSON.parse(e.data)
+  //   updateNewNotifsExist(data)
+  //   console.log("socket on message in notif bell --------->", data);
+  // }
   
   useEffect(() => {
     if (!NewNotifsExist) CheckNotifications();

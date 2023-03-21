@@ -7,18 +7,20 @@ import (
 )
 
 type User struct {
-	UserID        int
-	Email         string
-	Password      string
-	Firstname     string
-	Lastname      string
-	DOB           string
-	Nickname      string
-	Avatar        string
-	AboutText     string
-	Privacy       int
-	Created       string
-	Notifications bool
+	UserID    int
+	Email     string
+	Password  string
+	Firstname string
+	Lastname  string
+	DOB       string
+	Nickname  string
+	Avatar    string
+	AboutText string
+	Privacy   int
+	Created   string
+	Notifications bool 
+	Groups        []int
+
 	// Followers int
 	// Following int
 }
@@ -95,10 +97,36 @@ func GetAllUserData(db *sql.DB) []User {
 			log.Println("Error scanning rows:", err)
 			continue
 		}
+		a.Groups = append(a.Groups, GetAUsersGroups(db, a.UserID)...)
+
 		AllUsers = append(AllUsers, a)
 	}
 
 	return AllUsers
+}
+
+func GetAUsersGroups(db *sql.DB, userid int) []int {
+	rows, err := db.Query(`SELECT groupID FROM groupMembers WHERE member = ?`, userid)
+	if err != nil {
+		log.Println("Error from GetAUsersGroups fn():", err)
+		return nil
+	}
+	defer rows.Close()
+
+	var Groups []int
+	for rows.Next() {
+		var a int
+		err := rows.Scan(&a)
+		if err != nil {
+			log.Println("Error scanning group rows within GetAUsersGroups fn():", err)
+			continue
+
+		}
+		Groups = append(Groups, a)
+	}
+
+	return Groups
+
 }
 
 // update users set privacy = 1 where userID = 1;

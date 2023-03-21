@@ -73,9 +73,9 @@ const SingleProfileComponent = (props) => {
       updateisGroupMember(data.ismember);
       updateGroupRequested(data.requested);
 
-      console.log("response from fetchgroupinfo", data);
+      //console.log("response from fetchgroupinfo", data);
 
-      console.log("response from fetchgroupinfo", data);
+     // console.log("response from fetchgroupinfo", data);
     } catch (e) {
       console.log("error fetching groupinfo", e);
     }

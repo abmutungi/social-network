@@ -167,9 +167,10 @@ func GetCreator(db *sql.DB, groupID int) int {
 	if err2 != nil {
 		fmt.Printf("err2:%v conv creator str to int", err2)
 	}
-	fmt.Printf("creatorID------------------------->%v", creatorID)
+	//	fmt.Printf("creatorID------------------------->%v", creatorID)
 	return creatorID
 }
+
 func GetGroupName(db *sql.DB, groupID int) string {
 	userStmt := "SELECT name FROM  groups WHERE groupID = ?"
 	userRow := db.QueryRow(userStmt, groupID)
@@ -277,7 +278,7 @@ func GetAllGroupPosts(db *sql.DB, GroupID int) []GroupPost {
 			fmt.Printf("error scanning rows for groupposts: %v", err2)
 		}
 		p.FName = GetNameFromID(db, p.UserID)
-		p.Comments = comment.GetAllComments(db, p.GroupPostID)
+		p.Comments = comment.GetGroupPostComments(db, p.GroupPostID)
 		//p.Events = GetEventInfo(db, GroupID)
 		posts = append(posts, p)
 	}
@@ -314,7 +315,6 @@ func GetEventInfo(db *sql.DB, GroupID int) []EventInfo {
 
 	return event
 }
-
 
 //return userids with pending groupinvites where action = 0
 func PendingGroupInvite(db *sql.DB, groupId int) []int {
