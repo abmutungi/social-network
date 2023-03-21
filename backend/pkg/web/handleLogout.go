@@ -3,6 +3,7 @@ package web
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/abmutungi/social-network/backend/pkg/users"
@@ -35,10 +36,15 @@ func (s *Server) HandleLogout() http.HandlerFunc {
 			fmt.Println("Error looking for cookie on log out: ", err)
 			return
 		}
+		sessionToken := c.Value
 
+		userSession, exists := SessionsStructMap[sessionToken]
+		if !exists {
+			log.Println("Error: User doesn't exists")
+		}
 		// delete the session
-		if c.Value == OnlineUsersSessionsMap[c.Name] {
-			delete(OnlineUsersSessionsMap, c.Name)
+		if c.Value == OnlineUsersSessionsMap[userSession.UserID] {
+			delete(OnlineUsersSessionsMap, userSession.UserID)
 		}
 		// remove the cookie
 		c = &http.Cookie{

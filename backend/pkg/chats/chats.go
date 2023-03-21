@@ -28,7 +28,7 @@ type Chat struct {
 	MessageID     int    `json:"messageID"`
 	Date          string `json:"chatDate"`
 	// LastNotification notification.Notification `json:"livenotification"`
-	// Tipo             string                    `json:"tipo"`
+	Tipo string `json:"tipo"`
 	// UsersWithChat    []Chat                    `json:"userswithchat"`
 	// AllUsers         []users.AllUsers          `json:"allUsers"`
 }
@@ -56,7 +56,7 @@ func GetChatUsers(db *sql.DB, userID int) []PotentialChats {
 			fmt.Printf("error with potentialChats scan: %v", err)
 		}
 
-		fmt.Println("LoggeduserID", userID, "pcUserId", pc.UserID)
+	//	fmt.Println("LoggeduserID", userID, "pcUserId", pc.UserID)
 		if pc.Privacy == 0 && pc.UserID != userID || relationships.FollowingYouCheck(db, pc.UserID, userID) {
 			chats = append(chats, pc)
 		}

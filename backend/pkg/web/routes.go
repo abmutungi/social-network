@@ -12,6 +12,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/displayNotif", s.GeneralSessionChecker(s.HandleNotifDisplay()))
 	s.Router.HandleFunc("/checkNotif", s.GeneralSessionChecker(s.HandleNotifCheck()))
 	s.Router.HandleFunc("/actionNotif", s.GeneralSessionChecker(s.HandleActionNotif()))
+	s.Router.HandleFunc("/upgradesocket", s.GeneralSessionChecker(s.UpgradeConnection))
 
 	s.Router.HandleFunc("/dummyusers", s.HandleDummyUsers())
 	s.Router.HandleFunc("/getgroupdata", s.HandleGroups())
@@ -26,8 +27,11 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/isgroupmember", s.IsGroupMember())
 	s.Router.HandleFunc("/creategroupevent", s.CreateGroupEvent())
 	s.Router.HandleFunc("/mychatusers", s.HandleMyChatUsers())
-	s.Router.HandleFunc("/sendprivatemessage", s.StorePrivateMessage())
+	s.Router.HandleFunc("/sendprivatemessage", s.SendChatHistory())
 
 	s.Router.HandleFunc("/myfollowers", s.HandleUserFollowers())
+	s.Router.HandleFunc("/groupinvite", s.HandleGroupInvite())
+	s.Router.HandleFunc("/getgroupinvitees", s.HandleGetGroupInvitees())
+
 	s.TestDBfunctions()
 }

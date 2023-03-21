@@ -20,6 +20,7 @@ type Notification struct {
 	NotificationGroupID   int    `json:"notifGroupID"`
 	NotificationGroupName string `json:"notifGroupName"`
 	NotificationAccept    int    `json:"notifAccept"`
+	Tipo                  string `json:"tipo"`
 }
 
 func StoreNotification(db *sql.DB, notificationType string, notifiyee, notifier, groupID int) {
@@ -125,6 +126,18 @@ func GroupNotificationCheck(db *sql.DB, notificationID int) bool {
 	return false
 }
 
+// gets the notification type against a given notification id
+func GetNotificationType(db *sql.DB, notificationID int) string {
+	userStmt := "SELECT notificationType FROM notifications WHERE notificationID = ?"
+	userRow := db.QueryRow(userStmt, notificationID)
+	var notType string
+	err := userRow.Scan(&notType)
+	if err != nil {
+		fmt.Println("Error in getting the notification type", err)
+	}
+	return notType
+}
+
 func GetGroupID(db *sql.DB, notificationID int) int {
 	userStmt := "SELECT groupID FROM notifications WHERE notificationID = ?"
 	userRow := db.QueryRow(userStmt, notificationID)
@@ -148,6 +161,6 @@ func UserRequestedToJoin(db *sql.DB, groupID, userID int) bool {
 		fmt.Printf("user: %v has requested to join group: %v", userID, groupID)
 		return true
 	}
-		fmt.Printf("user: %v has NOT requested to join group: %v", userID, groupID)
+	fmt.Printf("user: %v has NOT requested to join group: %v", userID, groupID)
 	return false
 }

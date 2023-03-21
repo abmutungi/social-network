@@ -9,12 +9,12 @@ CREATE TABLE notifications
     read INTEGER DEFAULT 0 NOT NULL,
     actioned INTEGER DEFAULT 0 NOT NULL,
     createdAt INTEGER DEFAULT 0 NOT NULL, 
-    groupID INTEGER REFERENCES groups(groupID)  
+    groupID INTEGER DEFAULT 0 NOT NULL  
 
 );
 
-INSERT INTO notifications (notificationID, notificationType, notifiyee, notifier, read,  actioned, createdAt)
-	SELECT notificationID, notificationType, notifiyee, notifier, read, actioned, createdAt
+INSERT INTO notifications (notificationID, notificationType, notifiyee, notifier, read,  actioned, createdAt, groupID)
+	SELECT notificationID, notificationType, notifiyee, notifier, read, actioned, createdAt, groupID
 	FROM notifications_old;
 
 DROP TABLE notifications_old

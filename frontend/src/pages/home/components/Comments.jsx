@@ -38,23 +38,46 @@ const Comments = (props) => {
   const [img, setImg] = useState(null);
   const [imgName, setImgName] = useState("");
 
-  const { updatePosts, DynamicID, LoggedInUserID } =
+  const { updatePosts, DynamicID, groupNotUser, GroupID} =
     useContext(LowerHeaderContext);
-  // const commentUserID = JS;
-  // function to handle form submission
+
+    // function to handle form submission
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     const form = e.target.form;
     const formData = new FormData(form);
-    formData.append("postID", props.postID);
-    formData.append("imgName", imgName);
-    formData.append("userID", DynamicID);
-    formData.append(
-      "commenterID",
-      JSON.parse(localStorage.getItem("loggedInUser")).ID
-    );
-    // const commentJson = Object.fromEntries(formData.entries());
-    // console.log(commentJson);
+
+     //let clickedValue = groupNotUser ? GroupID : null;
+
+    // groupNotUser
+    // ? formData.append("groupID", clickedValue)
+    // : null
+
+    // console.log('CHECKDATAGROUPID --' , props);
+
+    if (!groupNotUser){
+      formData.append("postID", props.postID);
+      formData.append("imgName", imgName);
+      formData.append("userID", DynamicID);
+      formData.append(
+        "commenterID",
+        JSON.parse(localStorage.getItem("loggedInUser")).ID
+      );
+
+    }else{
+      formData.append("grouppostID", props.postID);
+      formData.append("imgName", imgName);
+      formData.append("groupID", GroupID);
+
+      formData.append(
+        "commenterID",
+        JSON.parse(localStorage.getItem("loggedInUser")).ID
+      );
+
+
+
+      }
+
     fetch("http://localhost:8080/storecomment", {
       credentials: "include",
       method: "POST",
@@ -62,7 +85,7 @@ const Comments = (props) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log('FROM COMMENTS??', data);
         updatePosts(data);
       });
     setCommentInput("");

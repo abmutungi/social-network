@@ -8,7 +8,7 @@ import (
 )
 
 type Session struct {
-	UserID string
+	UserID int
 	Expiry time.Time
 }
 
@@ -60,6 +60,7 @@ func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.Handle
 		sessionToken := c.Value
 
 		userSession, exists := SessionsStructMap[sessionToken]
+		// fmt.Println("UserID from cookie --> ", userSession.UserID)
 		if !exists {
 			//handle there not being a session
 			var cm ClientMessage

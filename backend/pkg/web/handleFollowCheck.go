@@ -30,14 +30,10 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			log.Println(err)
 		}
 
-		//fmt.Println("DATA FROM FollowCheck H-Fn() ******************", string(data))
-		//fmt.Println("DATA FROM FollowCheck HFn() ******************", string(data))
-
 		var f FollowStatusCheck
 
 		json.Unmarshal(data, &f)
 
-		
 
 		//.Printf("****LOGGED IN USER: %v\n****USER TO FOLLOW:%v\n", f.User, f.UserOfInterest)
 

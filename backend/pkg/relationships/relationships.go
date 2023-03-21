@@ -47,7 +47,7 @@ func FollowingYouCheck(db *sql.DB, userID, loggedInUser int) bool {
 		return false
 	}
 	if count > 0 {
-		fmt.Println("******I already follow this user****")
+		//fmt.Println("******I already follow this user****")
 		return true
 	}
 	//fmt.Println("I'm not following this user")
@@ -86,11 +86,11 @@ func FollowRequestCheck(db *sql.DB, loggedInUser, userID int) bool {
 func DeleteRequest(db *sql.DB, notifID int) {
 	result, err := db.Exec("DELETE FROM notifications WHERE notificationID =?", notifID)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Delete Request", err)
 	}
 	rows, err := result.RowsAffected()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Delete Request", err)
 	}
 	fmt.Println(rows)
 }

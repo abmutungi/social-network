@@ -1,21 +1,22 @@
 package web
 
 import (
-	"database/sql"
+	//"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 
-	"github.com/abmutungi/social-network/backend/pkg/notifications"
-	"github.com/abmutungi/social-network/backend/pkg/relationships"
+	// "github.com/abmutungi/social-network/backend/pkg/notifications"
+	// "github.com/abmutungi/social-network/backend/pkg/relationships"
 )
 
 type FollowerPrivateData struct {
 	NotificationType string `json:"notificationType"`
 	Notifiyee        int    `json:"notifiyee"`
 	Notifier         int    `json:"notifier"`
+	Tipo             string `json:"tipo"`
 }
 
 func (s *Server) HandlePrivateFollow() http.HandlerFunc {
@@ -41,12 +42,12 @@ func (s *Server) HandlePrivateFollow() http.HandlerFunc {
 
 		fmt.Printf("notifiyee %T", f.Notifiyee)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		// s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-		if !relationships.FollowingYouCheck(s.Db, f.Notifiyee, f.Notifier) {
-			notifications.StoreNotification(s.Db, f.NotificationType, f.Notifiyee, f.Notifier, 0)
-		} else {
-			fmt.Println("Relationship not added to the db as already follow this user")
-		}
+		// if !relationships.FollowingYouCheck(s.Db, f.Notifiyee, f.Notifier) {
+		// 	notifications.StoreNotification(s.Db, f.NotificationType, f.Notifiyee, f.Notifier, 0)
+		// } else {
+		// 	fmt.Println("Relationship not added to the db as already follow this user")
+		// }
 	}
 }

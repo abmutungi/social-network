@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import TopHeader from "./pages/home/components/TopHeader";
 import { LowerHeader } from "./pages/home/components/LowerHeader";
 import { MainBody } from "./pages/home/components/BodyComps";
+import { SocketProvider } from "./context/webSocketContext";
 
 // import { ChatBox } from "./pages/home/components/ChatBoxComponent";
 import { Login } from "./pages/login/components/LoginComponent";
@@ -23,28 +24,30 @@ hanged "/" Route to "*" in (tb38r)
 const App = () => {
   return (
     <>
-      <LoggedInUserProvider>
-        <LowerHeaderProvider>
-          <Routes>
-            <Route path="/register" element={<Register />}></Route>
-            <Route path="/login" element={<Login />}></Route>
-            {/* <Route path="/notif" element={<NotificationsModal />}></Route> */}
+      <SocketProvider>
+        <LoggedInUserProvider>
+          <LowerHeaderProvider>
+            <Routes>
+              <Route path="/register" element={<Register />}></Route>
+              <Route path="/login" element={<Login />}></Route>
+              {/* <Route path="/notif" element={<NotificationsModal />}></Route> */}
 
-            <Route
-              path="*"
-              element={
-                <>
-                  <TopHeader />
-                  <LowerHeader />
-                  <MainBody />
+              <Route
+                path="*"
+                element={
+                  <>
+                    <TopHeader />
+                    <LowerHeader />
+                    <MainBody />
 
-                  {/* <ChatBox /> */}
-                </>
-              }
-            ></Route>
-          </Routes>
-        </LowerHeaderProvider>
-      </LoggedInUserProvider>
+                    {/* <ChatBox /> */}
+                  </>
+                }
+              ></Route>
+            </Routes>
+          </LowerHeaderProvider>
+        </LoggedInUserProvider>
+      </SocketProvider>
     </>
   );
 };

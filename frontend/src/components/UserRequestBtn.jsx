@@ -11,6 +11,7 @@ library.add(faUserGroup, faUserLock, faCircleXmark);
 
 import "../assets/css/ProfileBar.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
+import { SocketContext } from "../context/webSocketContext";
 
 const followText = (
   <>
@@ -54,6 +55,7 @@ const UserRequestBtn = () => {
     updateRequested,
   } = useContext(LowerHeaderContext);
 
+  const {socket} = useContext(SocketContext)
   const handleClick = () => {
 
     if (!PrivacyStatus) {
@@ -95,6 +97,14 @@ const UserRequestBtn = () => {
             notifier: LoggedInUserID,
           }),
         });
+
+        socket.send(JSON.stringify({
+          notificationType: "followRequest",
+          notifiyee: userID,
+          notifier: LoggedInUserID,
+          type: "followNotifs"
+        }))
+        
         updateFollowText(requestText);
         updateRequested(true);
         //updateFollowing(false);

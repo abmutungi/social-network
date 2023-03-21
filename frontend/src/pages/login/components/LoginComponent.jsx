@@ -7,6 +7,8 @@ import { Register } from "../../register/components/RegistrationComponent";
 import { Link, Route, Routes } from "react-router-dom";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { SocketContext } from "../../../context/webSocketContext";
+
 import { PublicText, PrivateText } from "../../home/components/PrivateBtn";
 import "../../../assets/css/login.css";
 
@@ -20,6 +22,7 @@ import "../../../assets/css/login.css";
 const Login = () => {
   const { loggedInUser, updateLoggedInUser, updateNewNotifsExist } =
     useContext(loggedInUserContext);
+  const { createSocket } = useContext(SocketContext);
   const {
     updateAboutText,
     updateUserID,
@@ -154,6 +157,7 @@ const Login = () => {
         updateLoggedInUserID(currentUser.ID);
         updatePrivacyStatus(currentUser.Privacy);
         updateNewNotifsExist(currentUser.Notifications);
+
         updateDynamicID(currentUser.ID);
 
         currentUser.Avatar != ""
@@ -168,13 +172,18 @@ const Login = () => {
         if (!currentUser.Privacy) updatePrivacyBtnText(PublicText);
         console.log("3RD PS CHECK ON LOGIN --> ", PrivacyStatus);
         console.log("4TH CHECK --> ", updatePrivacyStatus(currentUser.Privacy));
+        createSocket(true);
 
+        console.log("socket check => ", socket);
         // console.log(loggedInUser);
+        createSocket(true);
         navigate("/");
+        // console.log("socket check => ", socket);
       }
     }
 
     sendLoginData();
+
   };
 
   return (

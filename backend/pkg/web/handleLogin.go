@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/abmutungi/social-network/backend/pkg/login"
@@ -16,7 +15,7 @@ import (
 )
 
 var (
-	OnlineUsersSessionsMap = make(map[string]string)
+	OnlineUsersSessionsMap = make(map[int]string)
 	SessionsStructMap      = map[string]Session{}
 )
 
@@ -77,7 +76,7 @@ func (s *Server) HandleLogin() http.HandlerFunc {
 				return
 			} else {
 				loginResponse.PopulateLoginDataResponse(s.Db, ld.Email)
-				LoggedInCheck(r, w, strconv.Itoa(users.ReturnSingleUser(s.Db, ld.Email).UserID))
+				LoggedInCheck(r, w, users.ReturnSingleUser(s.Db, ld.Email).UserID)
 				giveUserCookieOnLogIn(w, r, users.ReturnSingleUser(s.Db, ld.Email).UserID, uuid.Must(uuid.NewV4()))
 				sendLoginMessage(w, loginResponse, false, "Successful log in")
 
@@ -100,12 +99,12 @@ func sendLoginMessage(w http.ResponseWriter, loginResp LoginResponse, errExists 
 
 // Function to give a cookie on login
 func giveUserCookieOnLogIn(w http.ResponseWriter, r *http.Request, userID int, id uuid.UUID) {
-	stringUserID := strconv.Itoa(userID)
+	//stringUserID := strconv.Itoa(userID)
 	sessionToken := id.String()
 	expiresAt := time.Now().Add(time.Minute * 240)
 
 	SessionsStructMap[sessionToken] = Session{
-		UserID: stringUserID,
+		UserID: userID,
 		Expiry: expiresAt,
 	}
 
@@ -118,7 +117,7 @@ func giveUserCookieOnLogIn(w http.ResponseWriter, r *http.Request, userID int, i
 	}
 	http.SetCookie(w, c)
 
-	OnlineUsersSessionsMap[stringUserID] = c.Value
+	OnlineUsersSessionsMap[userID] = c.Value
 
 	for _, cookie := range r.Cookies() {
 		fmt.Println()
@@ -131,7 +130,7 @@ func giveUserCookieOnLogIn(w http.ResponseWriter, r *http.Request, userID int, i
 	fmt.Println(OnlineUsersSessionsMap)
 }
 
-func LoggedInCheck(r *http.Request, w http.ResponseWriter, id string) {
+func LoggedInCheck(r *http.Request, w http.ResponseWriter, id int) {
 	fmt.Println("Entered LoggedInCheck Function")
 	// c, err := r.Cookie("session_cookie")
 	// if err != nil {
