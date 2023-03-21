@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { followText, unfollowText, requestText } from "./UserRequestBtn";
 import { useNavigate } from "react-router-dom";
 import { ChatBox } from "../pages/home/components/ChatBoxComponent";
+import { loggedInUserContext } from "../context/loggedInUserContext";
 
 const SingleProfileComponent = (props) => {
   const {
@@ -21,6 +22,8 @@ const SingleProfileComponent = (props) => {
     updateisGroupMember,
     updateGroupRequested,
   } = useContext(LowerHeaderContext);
+
+  const { messages, updateMessages } = useContext(loggedInUserContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
@@ -94,6 +97,33 @@ const SingleProfileComponent = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
 
+  // fetch chat history on chat user click
+  const fetchChatsForm = new FormData();
+
+  fetchChatsForm.append(
+    "senderID",
+    JSON.parse(localStorage.getItem("loggedInUser")).ID
+  );
+  fetchChatsForm.append("recipientID", props.id);
+
+  // let object = {};
+  // fetchChatsForm.forEach(function (value, key) {
+  //   object[key] = value;
+  // });
+
+  async function fetchChatHistory() {
+    const resp = await fetch("http://localhost:8080/sendprivatemessage", {
+      method: "POST",
+      credentials: "include",
+      body: fetchChatsForm,
+    });
+    const data = await resp.json();
+    console.log("messages data", data);
+    // setMessages(data);
+    updateMessages(data);
+  }
+  // sendPrivateMessageInfo();
+
   if (props.type === "AllUsers") {
     return (
       <div
@@ -151,11 +181,11 @@ const SingleProfileComponent = (props) => {
       <div
         role="presentation"
         onClick={(e) => {
+          e.preventDefault();
+          if (!show) fetchChatHistory();
           setShow(true);
           setName(props.chatName);
-
           console.log("props.id -> ", props.id);
-          e.preventDefault();
           // updateUserID(Number(e.currentTarget.id));
           //updateDynamicID(e.currentTarget.id);
         }}
@@ -167,6 +197,7 @@ const SingleProfileComponent = (props) => {
           show={show}
           name={name}
           id={props.id}
+          data={messages}
         />
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />

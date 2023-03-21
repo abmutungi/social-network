@@ -24,6 +24,6 @@ func main() {
 
 	s.OpenServer()
 
-	s.TestDBfunctions()
+	//s.TestDBfunctions()
 
 }

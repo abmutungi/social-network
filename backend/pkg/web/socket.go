@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	//"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
+	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/gorilla/websocket"
 )
 
@@ -35,10 +37,21 @@ type T struct {
 	*GroupData
 	// *Test
 	*InvitedToGroup
+	// *chats.Chat
+	*NewMessage
 }
 
 type TypeChecker struct {
 	Type string `json:"type"`
+}
+
+// struct for new message
+
+type NewMessage struct {
+	LoggedInUserID string `json:"loggedInUser"`
+	RecipientID    string `json:"recipientID"`
+	MessageContent string `json:"msgContent"`
+	Tipo           string `json:"tipo"`
 }
 
 func (t *T) UnmarshalData(data []byte) error {
@@ -56,6 +69,12 @@ func (t *T) UnmarshalData(data []byte) error {
 	case "groupInviteNotifs":
 		t.InvitedToGroup = &InvitedToGroup{}
 		return json.Unmarshal(data, t.InvitedToGroup)
+	case "notifs":
+		t.Notification = &notifications.Notification{}
+		return json.Unmarshal(data, t.Notification)
+	case "newMessage":
+		t.NewMessage = &NewMessage{}
+		return json.Unmarshal(data, t.NewMessage)
 	default:
 		return fmt.Errorf("unrecognized type value %q", t.Type)
 
@@ -121,6 +140,38 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		}
 
+
+		// for single chat messages
+
+		if f.Type == "newMessage" {
+
+			// store messages here
+
+			senderIdInt, _ := strconv.Atoi(f.LoggedInUserID)
+
+			recipientIdInt, _ := strconv.Atoi(f.RecipientID)
+			msgContent := f.MessageContent
+
+			if !chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).Exists {
+				chats.StoreChat(s.Db, senderIdInt, recipientIdInt)
+
+			}
+
+			chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID, msgContent, senderIdInt, recipientIdInt)
+			// check if recipeint is in the socket map
+			f.NewMessage.Tipo = "newMessage"
+
+			for id, conn := range loggedInSockets {
+				if recipientIdInt == id || senderIdInt == id {
+					conn.WriteJSON(chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID))
+				}
+			}
+
+		}
+
+
+
+
 		if f.Type == "groupNotifs" {
 
 			if !groups.GroupMemberCheck(s.Db, f.Group, f.User) {
@@ -139,11 +190,15 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			}
 
 		}
+
+
+
+
+
 		if f.Type == "groupInviteNotifs" {
 			// use channels
 
 		}
 	}
-	// else {
-	// }
+
 }

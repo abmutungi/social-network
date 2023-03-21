@@ -7,8 +7,7 @@ const SocketProvider = ({ children }) => {
   const [openSocket, setOpenSocket] = useState(false);
 
   useEffect(() => {
-
-    if (openSocket) {
+    if (openSocket || performance.navigation.TYPE_RELOAD) {
       // create and open socket when component mounts
       const ws = new WebSocket("ws://localhost:8080/upgradesocket");
       setSocket(ws);

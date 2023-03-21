@@ -11,35 +11,36 @@ import {
   faXmark,
   faImage,
   faFaceSmile,
-  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 
-let dummyMessages = [
-  {
-    msgContent: "hi there",
-    user: "Yonas",
-    date: new Date().toDateString(),
-    isCurrentUser: true,
-  },
-  {
-    msgContent: "hola",
-    user: "Messi",
-    date: new Date().toDateString(),
-    isCurrentUser: false,
-  },
-  {
-    msgContent: "who's the best defender?",
-    user: "Yonas",
-    date: new Date().toDateString(),
-    isCurrentUser: true,
-  },
-  {
-    msgContent: "romero",
-    user: "Messi",
-    date: new Date().toDateString(),
-    isCurrentUser: false,
-  },
-];
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
+
+// let dummyMessages = [
+//   {
+//     msgContent: "hi there",
+//     user: "Yonas",
+//     date: new Date().toDateString(),
+//     isCurrentUser: true,
+//   },
+//   {
+//     msgContent: "hola",
+//     user: "Messi",
+//     date: new Date().toDateString(),
+//     isCurrentUser: false,
+//   },
+//   {
+//     msgContent: "who's the best defender?",
+//     user: "Yonas",
+//     date: new Date().toDateString(),
+//     isCurrentUser: true,
+//   },
+//   {
+//     msgContent: "romero",
+//     user: "Messi",
+//     date: new Date().toDateString(),
+//     isCurrentUser: false,
+//   },
+// ];
 
 //  let chatBoxes = document.getElementsByClassName("chat-box-container");
 //  for (const cBox of chatBoxes) {
@@ -50,9 +51,10 @@ let dummyMessages = [
 //    }
 //  }
 
-const ChatBox = ({ show, onClose, name, id }) => {
+const ChatBox = ({ show, onClose, name, id, data }) => {
   const { socket } = useContext(SocketContext);
-  const [messages, setMessages] = useState([]);
+
+  const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
 
   // const handleChange = (event) => {
@@ -65,28 +67,26 @@ const ChatBox = ({ show, onClose, name, id }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newChatFormData = new FormData(e.target);
+    const storeMessageForm = new FormData(e.target);
 
-    newChatFormData.append(
-      "senderID",
+    storeMessageForm.append(
+      "loggedInUser",
       JSON.parse(localStorage.getItem("loggedInUser")).ID
     );
-    newChatFormData.append("recipientID", id);
-    socket.send(JSON.stringify("Chat form"));
-    for (const v of newChatFormData.values()) {
+    storeMessageForm.append("recipientID", id);
+    storeMessageForm.append("type", "newMessage");
+
+    var messageObject = {};
+    storeMessageForm.forEach((value, key) => (messageObject[key] = value));
+
+    console.log("checking message object", messageObject);
+
+    // sending through the socket that a new message has been sent
+    socket.send(JSON.stringify(messageObject));
+
+    for (const v of storeMessageForm.values()) {
       console.log("v check -> ", v);
     }
-
-    async function sendPrivateMessageInfo() {
-      const resp = await fetch("http://localhost:8080/sendprivatemessage", {
-        method: "POST",
-        credentials: "include",
-        body: newChatFormData,
-      });
-      const data = await resp.json();
-      console.log(data);
-    }
-    sendPrivateMessageInfo();
 
     // if (newMsg != "") {
     //   setMessages([
@@ -99,14 +99,24 @@ const ChatBox = ({ show, onClose, name, id }) => {
     //     },
     //   ]);
     setNewMsg("");
+
     // }
   };
+
   let currentUser = name;
 
   console.log("name prop check --> ", name);
 
   if (!show) {
     return null;
+  } else if (socket != null) {
+    socket.onmessage = (e) => {
+      // console.log("check message for recipient", JSON.parse(e.data));
+
+      // set messages to the new data being sent
+
+      updateMessages(JSON.parse(e.data));
+    };
   }
 
   return (
@@ -117,7 +127,11 @@ const ChatBox = ({ show, onClose, name, id }) => {
         onClick={onClose}
       >
         <div className="chat-box-container" id={name}>
-          <div className="chat-box-header" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="chat-box-header"
+            onClick={(e) => e.stopPropagation()}
+            role="presentation"
+          >
             <FontAwesomeIcon
               icon={faUserNinja}
               className="chat-header-user-logo"
@@ -137,13 +151,14 @@ const ChatBox = ({ show, onClose, name, id }) => {
             />
           </div>
           <div className="chat-box-body">
-            {messages.map((message, index) => (
+            {data.map((message, index) => (
               <ChatBubble
                 key={index}
-                msgContent={message.msgContent}
-                user={message.user}
+                msgContent={message.message}
+                // need to add first name, of sender, currently sending back ids
+                user={message.chatsender}
                 isCurrentUser={message.isCurrentUser}
-                date={message.date}
+                date={message.chatDate}
               ></ChatBubble>
             ))}
           </div>
