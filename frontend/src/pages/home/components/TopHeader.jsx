@@ -120,7 +120,6 @@ function ContainerIcons() {
               setShowNotifModal(true);
               updateNewNotifsExist(false);
               DisplayNotifications();
-              
             }}
             icon={faBell}
             className="ClickableHeaderIcons"
