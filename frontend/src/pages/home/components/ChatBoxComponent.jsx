@@ -13,6 +13,8 @@ import {
   faFaceSmile,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
+
 // let dummyMessages = [
 //   {
 //     msgContent: "hi there",
@@ -49,9 +51,10 @@ import {
 //    }
 //  }
 
-const ChatBox = ({ show, onClose, name, id }) => {
+const ChatBox = ({ show, onClose, name, id, data }) => {
   const { socket } = useContext(SocketContext);
-  const [messages, setMessages] = useState([]);
+
+  const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
 
   // const handleChange = (event) => {
@@ -64,38 +67,26 @@ const ChatBox = ({ show, onClose, name, id }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newChatFormData = new FormData(e.target);
+    const storeMessageForm = new FormData(e.target);
 
-    newChatFormData.append(
-      "senderID",
+    storeMessageForm.append(
+      "loggedInUser",
       JSON.parse(localStorage.getItem("loggedInUser")).ID
     );
-    newChatFormData.append("recipientID", id);
+    storeMessageForm.append("recipientID", id);
+    storeMessageForm.append("type", "newMessage");
+
+    var messageObject = {};
+    storeMessageForm.forEach((value, key) => (messageObject[key] = value));
+
+    console.log("checking message object", messageObject);
 
     // sending through the socket that a new message has been sent
-    socket.send(
-      JSON.stringify({
-        loggedInUser: JSON.parse(localStorage.getItem("loggedInUser")).ID,
-        recipientID: id,
-        type: "newMessage",
-      })
-    );
+    socket.send(JSON.stringify(messageObject));
 
-    for (const v of newChatFormData.values()) {
+    for (const v of storeMessageForm.values()) {
       console.log("v check -> ", v);
     }
-
-    async function sendPrivateMessageInfo() {
-      const resp = await fetch("http://localhost:8080/sendprivatemessage", {
-        method: "POST",
-        credentials: "include",
-        body: newChatFormData,
-      });
-      const data = await resp.json();
-      console.log("messages data", data);
-      setMessages(data);
-    }
-    sendPrivateMessageInfo();
 
     // if (newMsg != "") {
     //   setMessages([
@@ -107,21 +98,25 @@ const ChatBox = ({ show, onClose, name, id }) => {
     //       date: new Date().toDateString(),
     //     },
     //   ]);
-    socket.onmessage = (e) => {
-      console.log("check message for recipient", JSON.parse(e.data));
-      // set messages to the new data being sent
-      setMessages(JSON.parse(e.data));
-    };
     setNewMsg("");
 
     // }
   };
+
   let currentUser = name;
 
   console.log("name prop check --> ", name);
 
   if (!show) {
     return null;
+  } else {
+    socket.onmessage = (e) => {
+      // console.log("check message for recipient", JSON.parse(e.data));
+
+      // set messages to the new data being sent
+
+      updateMessages(JSON.parse(e.data));
+    };
   }
 
   return (
@@ -156,7 +151,7 @@ const ChatBox = ({ show, onClose, name, id }) => {
             />
           </div>
           <div className="chat-box-body">
-            {messages.map((message, index) => (
+            {data.map((message, index) => (
               <ChatBubble
                 key={index}
                 msgContent={message.message}

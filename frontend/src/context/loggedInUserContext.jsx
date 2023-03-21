@@ -10,6 +10,8 @@ function LoggedInUserProvider({ children }) {
 
   const [NewNotifsExist, setNewNotifsExist] = useState(false);
 
+  const [messages, setMessages] = useState([]);
+
   function updateLoggedInUser(user) {
     setLoggedInUser(user);
 
@@ -20,6 +22,10 @@ function LoggedInUserProvider({ children }) {
     setNewNotifsExist(bool);
   };
 
+  const updateMessages = (data) => {
+    setMessages(() => data);
+  };
+
   return (
     <loggedInUserContext.Provider
       value={{
@@ -27,6 +33,8 @@ function LoggedInUserProvider({ children }) {
         updateLoggedInUser,
         NewNotifsExist,
         updateNewNotifsExist,
+        messages,
+        updateMessages,
       }}
     >
       {children}

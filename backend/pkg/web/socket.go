@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
@@ -39,8 +40,9 @@ type TypeChecker struct {
 // struct for new message
 
 type NewMessage struct {
-	LoggedInUserID int    `json:"loggedInUser"`
-	RecipientID    int    `json:"recipientID"`
+	LoggedInUserID string `json:"loggedInUser"`
+	RecipientID    string `json:"recipientID"`
+	MessageContent string `json:"msgContent"`
 	Tipo           string `json:"tipo"`
 }
 
@@ -103,18 +105,27 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		if f.Type == "newMessage" {
 
-			fmt.Println("New Message has been sent")
+			// store messages here
+
+			senderIdInt, _ := strconv.Atoi(f.LoggedInUserID)
+
+			recipientIdInt, _ := strconv.Atoi(f.RecipientID)
+			msgContent := f.MessageContent
+
+			if !chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).Exists {
+				chats.StoreChat(s.Db, senderIdInt, recipientIdInt)
+
+			}
+
+			chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID, msgContent, senderIdInt, recipientIdInt)
 			// check if recipeint is in the socket map
 			f.NewMessage.Tipo = "newMessage"
 
-			// add fields in struct for message content etc.
-			// chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, f.LoggedInUserID, f.RecipientID).ChatID, msgContent, senderIdInt, recipientIdInt)
-
 			for id, conn := range loggedInSockets {
-				if f.RecipientID == id {
+				if recipientIdInt == id {
 
 					// conn.WriteJSON(chatHistoryToSend)
-					conn.WriteJSON(chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, f.LoggedInUserID, f.RecipientID).ChatID))
+					conn.WriteJSON(chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID))
 
 					// conn.WriteJSON("new message for recipient")
 				}
