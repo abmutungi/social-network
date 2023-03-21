@@ -94,10 +94,11 @@ func DeleteRequest(db *sql.DB, notifID int) {
 	}
 	fmt.Println(rows)
 }
-// function to get all followers of passed in user.
 
+
+// function to get all followers of passed in user.
 func GetAllFollowers(db *sql.DB, userID int) []users.User {
-	rows, err := db.Query(`SELECT users.userID, firstName 
+	rows, err := db.Query(`SELECT users.userID, firstName,lastName 
 	FROM users 
 	INNER JOIN relationships ON relationships.followerID = users.userID 
 	WHERE relationships.userID = ?`, userID)
@@ -112,7 +113,7 @@ func GetAllFollowers(db *sql.DB, userID int) []users.User {
 
 	for rows.Next() {
 		var f users.User
-		err2 := rows.Scan(&f.UserID, &f.Firstname)
+		err2 := rows.Scan(&f.UserID, &f.Firstname, &f.Lastname)
 		if err2 != nil {
 			fmt.Printf("error scanning rows for followers: %v,", err2)
 		}
@@ -120,4 +121,32 @@ func GetAllFollowers(db *sql.DB, userID int) []users.User {
 
 	}
 	return followers
+}
+
+
+// function to get all followers of passed in user.
+func GetFollowing(db *sql.DB, userID int) []users.User {
+	rows, err := db.Query(`SELECT users.userID, firstName,lastName 
+	FROM users 
+	INNER JOIN relationships ON relationships.userID = users.userID 
+	WHERE relationships.followerID = ?`, userID)
+
+	if err != nil {
+		fmt.Printf("error querying GetFollowing statement: %v ", err)
+	}
+
+	var following []users.User
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var f users.User
+		err2 := rows.Scan(&f.UserID, &f.Firstname, &f.Lastname)
+		if err2 != nil {
+			fmt.Printf("error scanning rows for getfollowing: %v,", err2)
+		}
+		following = append(following, f)
+
+	}
+	return following
 }

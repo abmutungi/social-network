@@ -345,3 +345,39 @@ func PendingGroupInvite(db *sql.DB, groupId int) []int {
 	return result
 
 }
+
+//GetGroupData for a solitary user
+func GetMyGroups(db *sql.DB, groupID int) []Group {
+	rows, err := db.Query(`SELECT groupID, name,avatar 
+	FROM groups 
+	INNER JOIN groupMembers ON groupMembers.groupID = groups.groupID
+	WHERE groupMembers.member = ?`, groupID)
+
+	if err != nil {
+		fmt.Printf("error querying GetMyGroups statement: %v ", err)
+	}
+
+	var groups []Group
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var f Group
+		err2 := rows.Scan(&f.GroupID, &f.GroupName, &f.Avatar)
+		if err2 != nil {
+			fmt.Printf("error scanning rows for followers: %v,", err2)
+		}
+		groups = append(groups, f)
+
+	}
+	return groups
+}
+
+// type Group struct {
+// 	GroupID   int
+// 	GroupName string
+// 	CreatorID int
+// 	Avatar    interface{}
+// 	AboutText string
+// 	Members   int
+// }
