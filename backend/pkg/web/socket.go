@@ -123,15 +123,9 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			for id, conn := range loggedInSockets {
 				if recipientIdInt == id || senderIdInt == id {
-
-					// conn.WriteJSON(chatHistoryToSend)
 					conn.WriteJSON(chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID))
-
-					// conn.WriteJSON("new message for recipient")
 				}
 			}
-
-			// if they are send back all messages between the pair
 
 		}
 	}
