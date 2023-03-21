@@ -14,7 +14,7 @@ import (
 
 type FollowerPrivateData struct {
 	NotificationType string `json:"notificationType"`
-	Notifiyee        int    `json:"notifiyee"`
+	FNotifiyee        int    `json:"notifiyee"`
 	Notifier         int    `json:"notifier"`
 	Tipo             string `json:"tipo"`
 }
@@ -34,13 +34,13 @@ func (s *Server) HandlePrivateFollow() http.HandlerFunc {
 
 		json.Unmarshal(data, &f)
 
-		fmt.Println(f.Notifiyee)
+		fmt.Println(f.FNotifiyee)
 		fmt.Println(f.Notifier)
 
 		fmt.Printf("type %T", f.NotificationType)
 		fmt.Printf("notifier %T", f.Notifier)
 
-		fmt.Printf("notifiyee %T", f.Notifiyee)
+		fmt.Printf("notifiyee %T", f.FNotifiyee)
 
 		// s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 

@@ -8,10 +8,10 @@ import (
 	"strconv"
 
 	//"github.com/abmutungi/social-network/backend/pkg/chats"
+	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
-	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/gorilla/websocket"
 )
 
@@ -39,6 +39,7 @@ type T struct {
 	*InvitedToGroup
 	// *chats.Chat
 	*NewMessage
+	*Notifiyee
 }
 
 type TypeChecker struct {
@@ -69,9 +70,9 @@ func (t *T) UnmarshalData(data []byte) error {
 	case "groupInviteNotifs":
 		t.InvitedToGroup = &InvitedToGroup{}
 		return json.Unmarshal(data, t.InvitedToGroup)
-	case "notifs":
-		t.Notification = &notifications.Notification{}
-		return json.Unmarshal(data, t.Notification)
+	case "notifBell":
+		t.Notifiyee = &Notifiyee{}
+		return json.Unmarshal(data, t.Notifiyee)
 	case "newMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)
@@ -121,8 +122,8 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 		if f.Type == "followNotifs" {
 
 			// store follow notification
-			if !relationships.FollowingYouCheck(s.Db, f.Notifiyee, f.Notifier) {
-				notifications.StoreNotification(s.Db, "followRequest", f.Notifiyee, f.Notifier, 0)
+			if !relationships.FollowingYouCheck(s.Db, f.FNotifiyee, f.Notifier) {
+				notifications.StoreNotification(s.Db, "followRequest", f.FNotifiyee, f.Notifier, 0)
 			} else {
 				fmt.Println("Relationship not added to the db as already follow this user")
 			}
@@ -131,7 +132,7 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			f.FollowerPrivateData.Tipo = "followNotifs"
 
 			for user, conn := range loggedInSockets {
-				if user == f.Notifiyee {
+				if user == f.FNotifiyee {
 					fmt.Printf("*********************** %v has new notifications ***********************************", user)
 					conn.WriteJSON(notifications.GetNotifications(s.Db, user))
 				}
@@ -139,7 +140,6 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			// broadcastChannelGroupNotifs <- notifications.GetNotifications()
 
 		}
-
 
 		// for single chat messages
 
@@ -154,7 +154,6 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			if !chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).Exists {
 				chats.StoreChat(s.Db, senderIdInt, recipientIdInt)
-
 			}
 
 			chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID, msgContent, senderIdInt, recipientIdInt)
@@ -169,8 +168,18 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-
-
+		if f.Type == "notifBell" {
+			if notifications.NotificationCheck(s.Db, f.Notifiyee.UserID) {
+				for user, conn := range loggedInSockets {
+					if user == f.Notifiyee.UserID {
+						conn.WriteJSON(true)
+						notifications.ReadNotification(s.Db, f.Notifiyee.UserID)
+					} else {
+						conn.WriteJSON(false)
+					}
+				}
+			}
+		}
 
 		if f.Type == "groupNotifs" {
 
@@ -191,14 +200,8 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-
-
-
-
 		if f.Type == "groupInviteNotifs" {
 			// use channels
-
 		}
 	}
-
 }

@@ -7,12 +7,11 @@ import { useNavigate } from "react-router-dom";
 
 // import {  logoutUser } from "./ClickFuncs";
 import "../../../index.css";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { NotificationsModal } from "../../../pages/home/components/notificationsModal";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { SocketContext } from "../../../context/webSocketContext";
-// import { SocketContext } from "../../../context/webSocketContext";
 
 
 function ContainerLogo() {
@@ -27,7 +26,7 @@ function ContainerIcons() {
   const { loggedInUser, NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs } =
     useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
-  //const {socket} = useContext(SocketContext)
+  const {socket} = useContext(SocketContext)
   const navigate = useNavigate();
 
   // console.log("socket from top header------------>", socket);
@@ -79,36 +78,41 @@ function ContainerIcons() {
 
   const [showNotifModal, setShowNotifModal] = useState(false);
 
-  async function CheckNotifications() {
-    try {
-      const response = await fetch("http://localhost:8080/checkNotif", {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({
-          loggedInUserID: LoggedInUserID,
-        }),
-      });
-      const data = await response.json();
+  // async function CheckNotifications() {
+  //   try {
+  //     const response = await fetch("http://localhost:8080/checkNotif", {
+  //       method: "POST",
+  //       credentials: "include",
+  //       body: JSON.stringify({
+  //         loggedInUserID: LoggedInUserID,
+  //       }),
+  //     });
+  //     const data = await response.json();
 
-      if (data.NewNotif) updateNewNotifsExist(true);
+  //     if (data.NewNotif) updateNewNotifsExist(true);
 
-      console.log("Login notif data check ->", data);
-    } catch (e) {
-      console.log("error sending notifications that have been read", e);
-    }
-  }
-
-  // socket.onmessage = (e) => {
-  //   let data = JSON.parse(e.data)
-  //   updateNewNotifsExist(data)
-  //   console.log("socket on message in notif bell --------->", data);
+  //     console.log("Login notif data check ->", data);
+  //   } catch (e) {
+  //     console.log("error sending notifications that have been read", e);
+  //   }
   // }
-  
-  useEffect(() => {
-    if (!NewNotifsExist) CheckNotifications();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [NewNotifsExist]);
+  socket.send(JSON.stringify({
+          loggedInUserID: LoggedInUserID,
+          type: "notifBell"
+        }))
+
+  socket.onmessage = (e) => {
+    let data = JSON.parse(e.data)
+    updateNewNotifsExist(data)
+    console.log("socket on message in notif bell --------->", data);
+  }
+  
+  // useEffect(() => {
+  //   if (!NewNotifsExist) CheckNotifications();
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [NewNotifsExist]);
 
   return (
     <>

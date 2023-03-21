@@ -149,8 +149,8 @@ const NotificationsModal = ({ show, onClose, data }) => {
   console.log("socket from notification modal ------------>", socket);
 
    socket.onmessage = (e) => {
-    let data = JSON.parse(e.data)
-    updateMyNotifs(data)
+    let dt = JSON.parse(e.data)
+    updateMyNotifs(dt)
     console.log("socket on message--------->", data);
   }
   

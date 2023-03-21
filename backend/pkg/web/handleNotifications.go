@@ -27,7 +27,8 @@ type NewNotif struct {
 }
 
 type Notifiyee struct {
-	UserID int `json:"loggedInUserID"`
+	UserID int    `json:"loggedInUserID"`
+	Tipo   string `json:"tipo"`
 }
 
 func sendNewNotif(w http.ResponseWriter, notifResp NotifResponse) {
@@ -39,56 +40,56 @@ func sendNewNotif(w http.ResponseWriter, notifResp NotifResponse) {
 	(w).Write([]byte(resp))
 }
 
-func (s *Server) HandleNotifCheck() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		enableCors(&w)
+// func (s *Server) HandleNotifCheck() http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		enableCors(&w)
 
-		data, err := io.ReadAll(r.Body)
-		if err != nil {
-			log.Println(err)
-		}
+// 		data, err := io.ReadAll(r.Body)
+// 		if err != nil {
+// 			log.Println(err)
+// 		}
 
-		fmt.Println("Data from NotifRead H-Fn()************", string(data))
+// 		fmt.Println("Data from NotifRead H-Fn()************", string(data))
 
-		var n NotifRead
+// 		var n NotifRead
 
-		json.Unmarshal(data, &n)
+// 		json.Unmarshal(data, &n)
 
-		fmt.Println(n.UserID)
+// 		fmt.Println(n.UserID)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+// 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-		notifications.ReadNotification(s.Db, n.UserID)
+// 		notifications.ReadNotification(s.Db, n.UserID)
 
-		var notifResponse NewNotif
+// 		var notifResponse NewNotif
 
-		if notifications.NotificationCheck(s.Db, n.UserID) {
-			notifResponse.NewNotif = true
-			sendNotifStatus, err := json.Marshal(notifResponse)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			fmt.Println("new notifications")
+// 		if notifications.NotificationCheck(s.Db, n.UserID) {
+// 			notifResponse.NewNotif = true
+// 			sendNotifStatus, err := json.Marshal(notifResponse)
+// 			if err != nil {
+// 				http.Error(w, err.Error(), http.StatusInternalServerError)
+// 				return
+// 			}
+// 			fmt.Println("new notifications")
 
-			w.Header().Set("Content-Type", "application/json")
-			w.Write(sendNotifStatus)
-			return
+// 			w.Header().Set("Content-Type", "application/json")
+// 			w.Write(sendNotifStatus)
+// 			return
 
-		} else {
-			notifResponse.NewNotif = false
-			sendNotifStatus, err := json.Marshal(notifResponse)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.Header().Set("Content-Type", "application/json")
-			w.Write(sendNotifStatus)
-			fmt.Println("0 notifications")
-			return
-		}
-	}
-}
+// 		} else {
+// 			notifResponse.NewNotif = false
+// 			sendNotifStatus, err := json.Marshal(notifResponse)
+// 			if err != nil {
+// 				http.Error(w, err.Error(), http.StatusInternalServerError)
+// 				return
+// 			}
+// 			w.Header().Set("Content-Type", "application/json")
+// 			w.Write(sendNotifStatus)
+// 			fmt.Println("0 notifications")
+// 			return
+// 		}
+// 	}
+// }
 
 func (nr *NotifResponse) PopulateNotifResponse(db *sql.DB, notifiyee int) {
 	// return if I have notifications
@@ -178,9 +179,9 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 			relationships.DeleteRequest(s.Db, n.NotificationID)
 
 		} else {
-		
-			 notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
-			 relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
+
+			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+			relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
 			relationships.DeleteRequest(s.Db, n.NotificationID)
 		}
 	}
