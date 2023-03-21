@@ -11,6 +11,7 @@ import { useContext, useState, useEffect } from "react";
 import { NotificationsModal } from "../../../pages/home/components/notificationsModal";
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { SocketContext } from "../../../context/webSocketContext";
 // import { SocketContext } from "../../../context/webSocketContext";
 
 
@@ -26,7 +27,7 @@ function ContainerIcons() {
   const { loggedInUser, NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs } =
     useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
-  // const {socket} = useContext(SocketContext)
+  const {socket} = useContext(SocketContext)
   const navigate = useNavigate();
 
   // console.log("socket from top header------------>", socket);
@@ -96,8 +97,16 @@ function ContainerIcons() {
       console.log("error sending notifications that have been read", e);
     }
   }
+
+  socket.onmessage = (e) => {
+    let data = JSON.parse(e.data)
+    updateNewNotifsExist(data)
+    console.log("socket on message in notif bell --------->", data);
+  }
+  
   useEffect(() => {
     if (!NewNotifsExist) CheckNotifications();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [NewNotifsExist]);
 
