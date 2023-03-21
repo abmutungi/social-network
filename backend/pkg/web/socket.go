@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	//"github.com/abmutungi/social-network/backend/pkg/chats"
+	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
 	"github.com/gorilla/websocket"
@@ -31,13 +32,10 @@ type T struct {
 	*notifications.Notification
 	//*chats.Chat
 	*FollowerPrivateData
+	*GroupData
 	// *Test
+	*InvitedToGroup
 }
-
-// type Test struct {
-// 	UserID int    `json:"loggedInUserID"`
-// 	Tipo   string `json:"tipo"`
-// }
 
 type TypeChecker struct {
 	Type string `json:"type"`
@@ -49,9 +47,15 @@ func (t *T) UnmarshalData(data []byte) error {
 	}
 
 	switch t.Type {
-	case "notifs":
+	case "followNotifs":
 		t.FollowerPrivateData = &FollowerPrivateData{}
 		return json.Unmarshal(data, t.FollowerPrivateData)
+	case "groupNotifs":
+		t.GroupData = &GroupData{}
+		return json.Unmarshal(data, t.GroupData)
+	case "groupInviteNotifs":
+		t.InvitedToGroup = &InvitedToGroup{}
+		return json.Unmarshal(data, t.InvitedToGroup)
 	default:
 		return fmt.Errorf("unrecognized type value %q", t.Type)
 
@@ -95,18 +99,17 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		f.UnmarshalData(info)
 
-		if f.Type == "notifs" {
+		if f.Type == "followNotifs" {
 
-			// store notification
+			// store follow notification
 			if !relationships.FollowingYouCheck(s.Db, f.Notifiyee, f.Notifier) {
 				notifications.StoreNotification(s.Db, "followRequest", f.Notifiyee, f.Notifier, 0)
 			} else {
 				fmt.Println("Relationship not added to the db as already follow this user")
 			}
 
-			fmt.Println("******************* ws notifs ************************")
-			f.FollowerPrivateData.Tipo = "notifs"
-			// f.FollowerPrivateData.Tipo = "notifs"
+			fmt.Println("******************* ws notifs: followRequest ************************")
+			f.FollowerPrivateData.Tipo = "followNotifs"
 
 			for user, conn := range loggedInSockets {
 				if user == f.Notifiyee {
@@ -117,5 +120,30 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			// broadcastChannelGroupNotifs <- notifications.GetNotifications()
 
 		}
+
+		if f.Type == "groupNotifs" {
+
+			if !groups.GroupMemberCheck(s.Db, f.Group, f.User) {
+				notifications.StoreNotification(s.Db, "groupRequest", groups.GetCreator(s.Db, f.Group), f.User, f.Group)
+			} else {
+				fmt.Println("Membership not added to the db as already part of group")
+			}
+			fmt.Println("******************* ws notifs: groupRequest ************************")
+			f.GroupData.Tipo = "groupNotifs"
+
+			for user, conn := range loggedInSockets {
+				if user == groups.GetCreator(s.Db, f.Group) {
+					fmt.Printf("*********************** %v has new notifications ***********************************", user)
+					conn.WriteJSON(notifications.GetNotifications(s.Db, user))
+				}
+			}
+
+		}
+		if f.Type == "groupInviteNotifs" {
+			// use channels
+
+		}
 	}
+	// else {
+	// }
 }

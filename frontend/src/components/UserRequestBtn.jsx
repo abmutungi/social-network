@@ -102,7 +102,7 @@ const UserRequestBtn = () => {
           notificationType: "followRequest",
           notifiyee: userID,
           notifier: LoggedInUserID,
-          type: "notifs"
+          type: "followNotifs"
         }))
         
         updateFollowText(requestText);

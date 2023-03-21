@@ -6,9 +6,11 @@ import {
   faUserLock,
 } from "@fortawesome/free-solid-svg-icons";
 import { requestText } from "../../../components/UserRequestBtn";
+import { SocketContext } from "../../../context/webSocketContext";
 library.add(faUserGroup, faUserLock);
 
 const GroupRequestBtn = (props) => {
+  const { socket} = useContext(SocketContext)
    const {
     GroupID,
     LoggedInUserID,
@@ -36,6 +38,12 @@ const GroupRequestBtn = (props) => {
       })
     })
     // updateJoinText(requestText)
+      socket.send(JSON.stringify({
+          groupID: GroupID,
+          loggedInUserID: LoggedInUserID,
+          type: "groupNotifs"
+        }))
+        
   };
 
   return (
