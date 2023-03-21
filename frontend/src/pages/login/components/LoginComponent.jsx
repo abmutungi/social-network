@@ -22,7 +22,7 @@ import "../../../assets/css/login.css";
 const Login = () => {
   const { loggedInUser, updateLoggedInUser, updateNewNotifsExist } =
     useContext(loggedInUserContext);
-  const { createSocket } = useContext(SocketContext);
+  const { socket, createSocket } = useContext(SocketContext);
   const {
     updateAboutText,
     updateUserID,
@@ -135,6 +135,7 @@ const Login = () => {
       if (data.error && data.loginMsg === "User is already logged in") {
         setLoginErrorMessage(data.loginMsg);
         setTimeout(() => {
+          
           navigate("/");
         }, 3000);
       } else if (data.error) {
@@ -193,7 +194,9 @@ const Login = () => {
         <div className="loginErrorMsg">{loginErrorMessage}</div>
       )}
       <div className="login-container">
-        <form onSubmit={handleSubmit} className="login-form">
+        <form onSubmit={handleSubmit
+        
+        } className="login-form">
           <input
             required
             name="email"

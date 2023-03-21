@@ -40,6 +40,7 @@ type T struct {
 	// *chats.Chat
 	*NewMessage
 	*Notifiyee
+	NotifRead
 }
 
 type TypeChecker struct {
@@ -70,9 +71,9 @@ func (t *T) UnmarshalData(data []byte) error {
 	case "groupInviteNotifs":
 		t.InvitedToGroup = &InvitedToGroup{}
 		return json.Unmarshal(data, t.InvitedToGroup)
-	case "notifBell":
-		t.Notifiyee = &Notifiyee{}
-		return json.Unmarshal(data, t.Notifiyee)
+	case "notifs":
+		t.Notification = &notifications.Notification{}
+		return json.Unmarshal(data, t.Notification)
 	case "newMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)

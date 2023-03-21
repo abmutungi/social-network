@@ -29,9 +29,8 @@ function ContainerIcons() {
   const {socket} = useContext(SocketContext)
   const navigate = useNavigate();
 
-  // console.log("socket from top header------------>", socket);
-
-
+  
+  
   
   /*On logout click,
   need to send info back to the log out handler
@@ -41,23 +40,23 @@ function ContainerIcons() {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(loggedInUser),
-
+      
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
     });
-
+    
     const data = await response.json();
     console.log("Data check -> ", data);
     if (data.success) {
       navigate("/login");
-
+      
       location.reload();
       localStorage.clear();
     }
   }
-
+  
   //display all notifications
   async function DisplayNotifications() {
     try {
@@ -75,42 +74,40 @@ function ContainerIcons() {
       console.log("error displaying notifications", e);
     }
   }
-
-  const [showNotifModal, setShowNotifModal] = useState(false);
-
-  // async function CheckNotifications() {
-  //   try {
-  //     const response = await fetch("http://localhost:8080/checkNotif", {
-  //       method: "POST",
-  //       credentials: "include",
-  //       body: JSON.stringify({
-  //         loggedInUserID: LoggedInUserID,
-  //       }),
-  //     });
-  //     const data = await response.json();
-
-  //     if (data.NewNotif) updateNewNotifsExist(true);
-
-  //     console.log("Login notif data check ->", data);
-  //   } catch (e) {
-  //     console.log("error sending notifications that have been read", e);
-  //   }
-  // }
-
-  socket.send(JSON.stringify({
-          loggedInUserID: LoggedInUserID,
-          type: "notifBell"
-        }))
-
-  socket.onmessage = (e) => {
-    let data = JSON.parse(e.data)
-    updateNewNotifsExist(data)
-    console.log("socket on message in notif bell --------->", data);
-  }
   
-  // useEffect(() => {
-  //   if (!NewNotifsExist) CheckNotifications();
-
+  
+  const [showNotifModal, setShowNotifModal] = useState(false);
+  
+  // async function CheckNotifications() {
+    //   try {
+      //     const response = await fetch("http://localhost:8080/checkNotif", {
+        //       method: "POST",
+        //       credentials: "include",
+        //       body: JSON.stringify({
+          //         loggedInUserID: LoggedInUserID,
+          //       }),
+          //     });
+          //     const data = await response.json();
+          
+          //     if (data.NewNotif) updateNewNotifsExist(true);
+          
+          //     console.log("Login notif data check ->", data);
+          //   } catch (e) {
+            //     console.log("error sending notifications that have been read", e);
+            //   }
+            // }
+            
+            console.log("socket from top header------------>", socket);
+            
+            socket.onmessage = (e) => {
+              let data = JSON.parse(e.data)
+              updateNewNotifsExist(data)
+              console.log("socket on message in notif bell --------->", data);
+            }
+            
+            // useEffect(() => {
+              //   if (!NewNotifsExist) CheckNotifications();
+              
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [NewNotifsExist]);
 
@@ -123,6 +120,7 @@ function ContainerIcons() {
               setShowNotifModal(true);
               updateNewNotifsExist(false);
               DisplayNotifications();
+              
             }}
             icon={faBell}
             className="ClickableHeaderIcons"
