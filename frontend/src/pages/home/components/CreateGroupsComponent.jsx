@@ -6,7 +6,7 @@ import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 
-const CreateGroupModal = ({show, onClose}) => {
+const CreateGroupModal = ({showGroup, onClose}) => {
   const { loggedInUser} = useContext(loggedInUserContext);
   const { AllGroupsData, updateAllGroupsData} = useContext(LowerHeaderContext);
   const [imgName, setimgName] = useState('')
@@ -46,7 +46,7 @@ console.log('AGD', AllGroupsData);
     
   };
 
-    if (!show) {
+    if (!showGroup) {
         return null
     }
 

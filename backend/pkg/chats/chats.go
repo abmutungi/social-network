@@ -27,10 +27,7 @@ type Chat struct {
 	ChatMessage   string `json:"message"`
 	MessageID     int    `json:"messageID"`
 	Date          string `json:"chatDate"`
-	// LastNotification notification.Notification `json:"livenotification"`
-	Tipo string `json:"tipo"`
-	// UsersWithChat    []Chat                    `json:"userswithchat"`
-	// AllUsers         []users.AllUsers          `json:"allUsers"`
+
 }
 
 // send all public users and users you are following for chat section

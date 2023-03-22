@@ -51,7 +51,7 @@ import { loggedInUserContext } from "../../../context/loggedInUserContext";
 //    }
 //  }
 
-const ChatBox = ({ show, onClose, name, id, data }) => {
+const ChatBox = ({ showChat, onClose, name, id, data }) => {
   const { socket } = useContext(SocketContext);
 
   const { updateMessages } = useContext(loggedInUserContext);
@@ -107,16 +107,33 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
 
   console.log("name prop check --> ", name);
 
-  if (!show) {
+  if (socket != null) { 
+  socket.onmessage = (e) => {
+    // console.log("check message for recipient", JSON.parse(e.data));
+    let data = JSON.parse(e.data)
+      
+    if (data.tipo == "allChats") {
+
+      updateMessages(data.allChats);
+    }
+  }
+}
+
+
+  if (!showChat) {
     return null;
-  } else if (socket != null) {
-    socket.onmessage = (e) => {
-      console.log("check message for recipient", JSON.parse(e.data));
+  } else{
+    // socket.onmessage = (e) => {
+    //   let data = JSON.parse(e.data)
+      
+    //   if (data.tipo == "allChats") {
+
+    //     updateMessages(data.allChats);
+    //   }
 
       // set messages to the new data being sent
 
-      updateMessages(JSON.parse(e.data));
-    };
+    
   }
 
   return (

@@ -24,7 +24,7 @@ const SingleProfileComponent = (props) => {
   } = useContext(LowerHeaderContext);
 
   const { messages, updateMessages } = useContext(loggedInUserContext);
-  const [show, setShow] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const [name, setName] = useState("");
 
   const navigate = useNavigate();
@@ -182,8 +182,8 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
-          if (!show) fetchChatHistory();
-          setShow(true);
+          if (!showChat) fetchChatHistory();
+          setShowChat(true);
           setName(props.chatName);
           console.log("props.id -> ", props.id);
           // updateUserID(Number(e.currentTarget.id));
@@ -193,8 +193,8 @@ const SingleProfileComponent = (props) => {
         id={props.id}
       >
         <ChatBox
-          onClose={() => setShow(false)}
-          show={show}
+          onClose={() => setShowChat(false)}
+          showChat={showChat}
           name={name}
           id={props.id}
           data={messages}

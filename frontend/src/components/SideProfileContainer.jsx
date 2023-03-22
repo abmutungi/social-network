@@ -12,7 +12,7 @@ import { MultipleProfilesComponent } from "../components/MultipleProfilesCompone
 library.add(faCirclePlus, faLock, faUsers);
 
 const SideProfileContainer = (props) => {
-  const [show, setShow] = useState(false);
+  const [showGroup, setShowGroup] = useState(false);
 
   if (props.headers === "Groups") {
     return (
@@ -20,11 +20,11 @@ const SideProfileContainer = (props) => {
         <div className="ChatTitle">
           Groups{" "}
           <FontAwesomeIcon
-            onClick={() => setShow(true)}
+            onClick={() => setShowGroup(true)}
             className="create-event-btn"
             icon="fa-solid fa-circle-plus"
           />
-          <CreateGroupModal onClose={() => setShow(false)} show={show} />
+          <CreateGroupModal onClose={() => setShowGroup(false)} showGroup={showGroup} />
         </div>
         <div className="AllCumulativeData">
           <MultipleProfilesComponent users={props.data} type={props.type} />

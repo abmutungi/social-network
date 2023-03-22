@@ -53,11 +53,12 @@ type TypeChecker struct {
 
 type AllNotifs struct {
 	SendNotifs []notifications.Notification `json:"allNotifs"`
-	Tipo       string `json:"tipo"`
+	Tipo       string                       `json:"tipo"`
 }
 
 type AllChats struct {
-	
+	SendChats []chats.Chat `json:"allChats"`
+	Tipo      string       `json:"tipo"`
 }
 type NewMessage struct {
 	LoggedInUserID string `json:"loggedInUser"`
@@ -172,31 +173,16 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID, msgContent, senderIdInt, recipientIdInt)
 			// check if recipeint is in the socket map
-			f.NewMessage.Tipo = "newMessage"
-
+			var c AllChats
+			c.SendChats = chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID)
+			c.Tipo = "allChats"
 			for id, conn := range loggedInSockets {
 				if recipientIdInt == id || senderIdInt == id {
-					conn.WriteJSON(chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID))
+					conn.WriteJSON(c)
 				}
 			}
 
 		}
-
-		// if f.Type == "notifBell" {
-		// 	if notifications.NotificationCheck(s.Db, f.Notifiyee.UserID) {
-		// 		for user, conn := range loggedInSockets {
-		// 			if user == f.Notifiyee.UserID {
-		// 				fmt.Println("************** NOTIF BELL TRUE ********************")
-		// 				conn.WriteJSON(true)
-		// 				notifications.ReadNotification(s.Db, f.Notifiyee.UserID)
-		// 			} else {
-		// 				fmt.Println("************** NOTIF BELL FALSE ********************")
-		// 				conn.WriteJSON(false)
-		// 			}
-		// 		}
-		// 	}
-		// }
-
 		if f.Type == "groupNotifs" {
 
 			if !groups.GroupMemberCheck(s.Db, f.Group, f.User) {
