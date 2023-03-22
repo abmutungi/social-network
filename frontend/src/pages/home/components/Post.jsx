@@ -75,6 +75,8 @@ const PostsContainer = () => {
     navData,
   } = useContext(LowerHeaderContext);
 
+
+
   // fetch home posts for the logged in user
   const userForm = new FormData();
 
@@ -96,11 +98,10 @@ const PostsContainer = () => {
     userForm.append("GuserID", LoggedInUserID);
   }
 
-  console.log("groupifd -----***---  ", userForm.entries(), groupNotUser);
 
-  for (const entry of userForm.entries()) {
-    console.log("check ****", entry);
-  }
+  // for (const entry of userForm.entries()) {
+  //   console.log("check ****", entry);
+  // }
 
   async function fetchPosts() {
     const resp = await fetch("http://localhost:8080/myposts", {
@@ -200,15 +201,18 @@ const PostsContainer = () => {
     );
   } else if (navClicked) {
 
-        navData?.map((data) => {
-
-let userPicPath =
-data.Avatar === ""
-  ? "../assets/img/ext/man-utd.png"
-  : `../assets/img/ext/${data.Avatar}`;
-  return (
-    <>
+    
+    // let userPicPath =
+    // data.Avatar === ""
+    //   ? "../assets/img/ext/man-utd.png"
+    //   : `../assets/img/ext/${data.Avatar}`;
+    return (
+      <>
       <div className="nav-bar-style">
+       
+        
+      {navData?.map((data) => (
+        
 
           <SingleProfileComponent
           key = {data.UserID}
@@ -218,14 +222,14 @@ data.Avatar === ""
             //data={navData}
             childClass="AGroup"
             type="Navbar"
-            avatar = {userPicPath}
+            avatar = {data.Avatar}
           />
           
 
+       ) )}
         </div>
       </>
-        )});
-  } else {
+ ); } else {
     return (
       <>
         <div className="posts-container">

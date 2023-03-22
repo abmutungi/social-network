@@ -47,10 +47,8 @@ func FollowingYouCheck(db *sql.DB, userID, loggedInUser int) bool {
 		return false
 	}
 	if count > 0 {
-		//fmt.Println("******I already follow this user****")
 		return true
 	}
-	//fmt.Println("I'm not following this user")
 	return false
 }
 

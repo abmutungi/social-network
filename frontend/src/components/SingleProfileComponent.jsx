@@ -123,9 +123,10 @@ const SingleProfileComponent = (props) => {
     // setMessages(data);
     updateMessages(data);
   }
-  // sendPrivateMessageInfo();
 
   if (props.type === "AllUsers") {
+   
+
     return (
       <div
         role="presentation"
@@ -151,6 +152,7 @@ const SingleProfileComponent = (props) => {
   }
 
   if (props.type === "AllGroups") {
+    
     return (
       <div
         role="presentation"
@@ -161,11 +163,10 @@ const SingleProfileComponent = (props) => {
         }}
         className="SingleProfile"
         id={props.id}
-        // creatorid = {props.creator}   - custom html tags??
       >
         <div className="ChatPic">
           <img
-            src="https://www.facebook.com/images/fb_icon_325x325.png"
+            src={props.avatar}
             width="25"
             height="25"
             alt="chat-pic"
@@ -180,6 +181,7 @@ const SingleProfileComponent = (props) => {
   }
 
   if (props.type === "Chats") {
+    
     return (
       <div
         role="presentation"
@@ -188,8 +190,7 @@ const SingleProfileComponent = (props) => {
           if (!show) fetchChatHistory();
           setShow(true);
           setName(props.chatName);
-          // updateUserID(Number(e.currentTarget.id));
-          //updateDynamicID(e.currentTarget.id);
+          
         }}
         className="SingleProfile"
         id={props.id}
@@ -214,15 +215,22 @@ const SingleProfileComponent = (props) => {
 
 
   if (props.type === "Navbar") {
+ let PicPath =
+    props.avatar === ""
+      ? "../assets/img/ext/blue-placeholder.jpeg"
+      : `../assets/img/ext/${props.avatar}`;
+
+
+
     return (
       <div
         role="presentation"
      
-        className="SingleProfile"
+        className="Nav-SingleProfile"
         id={props.id}
       >
         <div className="ChatPic">
-          <img src={props.avatar} width="25" height="25" alt="chat-pic" />
+          <img src={PicPath} width="25" height="25" alt="chat-pic" />
         </div>
         <p className="ChatName">
           {props.chatName}

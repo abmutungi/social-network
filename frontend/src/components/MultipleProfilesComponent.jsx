@@ -3,14 +3,20 @@ import SingleProfileComponent from "./SingleProfileComponent";
 const MultipleProfilesComponent = ({ users, type }) => {
   if (type === "AllGroups") {
     return users?.map((user, index) => {
-      return (
+      let userPicPath =
+      user.Avatar === ""
+        ? "../assets/img/ext/babyblue-placeholder.jpeg"
+        : `../assets/img/ext/${user.Avatar}`;      
+        
+        return (
         <SingleProfileComponent
           chatName={`${user.GroupName}`}
           id={user.GroupID}
           key={index}
           type={type}
           members={user.Members}
-          creator={users.CreatorID}
+          creator={user.CreatorID}
+          avatar= {userPicPath}
         />
       );
     });
@@ -20,7 +26,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
     return users?.map((user, index) => {
       let userPicPath =
         user.Avatar === ""
-          ? "../assets/img/ext/man-utd.png"
+          ? "../assets/img/ext/babyblue-placeholder.jpeg"
           : `../assets/img/ext/${user.Avatar}`;
 
       return (
@@ -39,7 +45,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
     return users?.map((user, index) => {
       let userPicPath =
         user.avatar === ""
-          ? "../assets/img/ext/man-utd.png"
+          ? "../assets/img/ext/babyblue-placeholder.jpeg"
           : `../assets/img/ext/${user.avatar}`;
       return (
         <SingleProfileComponent

@@ -16,6 +16,12 @@
   align-items: center;
 }
 
+.Nav-SingleProfile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .AllCumulativeData{
   overflow: auto;
   height: 76%;
