@@ -201,17 +201,15 @@ const PostsContainer = () => {
     );
   } else if (navClicked) {
 
-    
-    // let userPicPath =
-    // data.Avatar === ""
-    //   ? "../assets/img/ext/man-utd.png"
-    //   : `../assets/img/ext/${data.Avatar}`;
+  
     return (
       <>
       <div className="nav-bar-style">
        
         
       {navData?.map((data) => (
+         
+         !data.hasOwnProperty('GroupID') ?
         
 
           <SingleProfileComponent
@@ -219,11 +217,21 @@ const PostsContainer = () => {
           id = {data.UserID}
           chatName = {data.Firstname + ' ' + data.Lastname}
             headers="Nav"
-            //data={navData}
             childClass="AGroup"
             type="Navbar"
             avatar = {data.Avatar}
           />
+          :
+          <SingleProfileComponent
+          key = {data.GroupID}
+          id = {data.GroupID}
+          chatName = {data.GroupName }
+            headers="Nav"
+            childClass="AGroup"
+            type="Navbar"
+            avatar = {data.Avatar}
+          />
+
           
 
        ) )}
