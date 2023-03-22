@@ -31,7 +31,6 @@ var upgrader = websocket.Upgrader{
 
 type T struct {
 	TypeChecker
-	*notifications.Notification
 	//*chats.Chat
 	*FollowerPrivateData
 	*GroupData
@@ -71,9 +70,9 @@ func (t *T) UnmarshalData(data []byte) error {
 	case "groupInviteNotifs":
 		t.InvitedToGroup = &InvitedToGroup{}
 		return json.Unmarshal(data, t.InvitedToGroup)
-	case "notifs":
-		t.Notification = &notifications.Notification{}
-		return json.Unmarshal(data, t.Notification)
+	// case "notifs":
+	// 	t.Notification = &notifications.Notification{}
+	// 	return json.Unmarshal(data, t.Notification)
 	case "newMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)

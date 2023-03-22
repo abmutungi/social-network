@@ -97,14 +97,17 @@ function ContainerIcons() {
             //   }
             // }
             
-            console.log("socket from top header------------>", socket);
-            
-            socket.onmessage = (e) => {
-              let data = JSON.parse(e.data)
-              updateNewNotifsExist(data)
-              console.log("socket on message in notif bell --------->", data);
-            }
-            
+  console.log("socket from top header------------>", socket);
+  
+  if (socket != null) {   
+    socket.onmessage = (e) => {
+      let data = JSON.parse(e.data)
+      console.log("data check", data[0].notifID);
+      //truthy/falsy
+      updateNewNotifsExist(data[0].notifID)
+      console.log("socket on message in notif bell --------->", data);
+    }
+  }
             // useEffect(() => {
               //   if (!NewNotifsExist) CheckNotifications();
               

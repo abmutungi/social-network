@@ -40,10 +40,10 @@ const SingleNotificationComponent = ({ props }) => {
   console.log(notifText);
 
   const handleClick = () => {
-  socket.send(JSON.stringify({
-    loggedInUserID: LoggedInUserID,
-    type: "notifs",
-   }))
+  // socket.send(JSON.stringify({
+  //   loggedInUserID: LoggedInUserID,
+  //   type: "notifs",
+  //  }))
   
 
 
@@ -143,6 +143,8 @@ const NotificationsModal = ({ show, onClose, data }) => {
   //   MyNotifs
   // );
   if (!show) {
+
+
     return null;
   } else {
 
@@ -150,7 +152,7 @@ const NotificationsModal = ({ show, onClose, data }) => {
 
    socket.onmessage = (e) => {
     let dt = JSON.parse(e.data)
-    updateMyNotifs(dt)
+     updateMyNotifs(dt)
     console.log("socket on message--------->", data);
   }
   
