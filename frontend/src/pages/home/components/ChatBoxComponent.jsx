@@ -111,7 +111,7 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
     return null;
   } else if (socket != null) {
     socket.onmessage = (e) => {
-      // console.log("check message for recipient", JSON.parse(e.data));
+      console.log("check message for recipient", JSON.parse(e.data));
 
       // set messages to the new data being sent
 

@@ -102,10 +102,12 @@ function ContainerIcons() {
   if (socket != null) {   
     socket.onmessage = (e) => {
       let data = JSON.parse(e.data)
-      console.log("data check", data[0].notifID);
-      //truthy/falsy
-      updateNewNotifsExist(data[0].notifID)
-      console.log("socket on message in notif bell --------->", data);
+      if (data.tipo == "allNotifs") {
+        updateMyNotifs(data.allNotifs)
+        updateNewNotifsExist(data)
+        console.log("socket on message in notif bell --------->", data);
+      }
+      
     }
   }
             // useEffect(() => {

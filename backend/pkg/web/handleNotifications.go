@@ -117,6 +117,8 @@ func (s *Server) HandleNotifDisplay() http.HandlerFunc {
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
+		notifications.ReadNotification(s.Db, n.UserID)
+
 		var notifResponse NotifResponse
 
 		notifResponse.PopulateNotifResponse(s.Db, n.UserID)

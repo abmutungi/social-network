@@ -112,7 +112,7 @@ const SingleNotificationComponent = ({ props }) => {
 // notifications modal that holds single notifications
 const NotificationsModal = ({ show, onClose, data }) => {
   
-  const {MyNotifs, updateMyNotifs } = useContext(loggedInUserContext);
+  const {MyNotifs, updateNewNotifsExist } = useContext(loggedInUserContext);
   const { socket } = useContext(SocketContext)
 
 
@@ -150,12 +150,13 @@ const NotificationsModal = ({ show, onClose, data }) => {
 
   console.log("socket from notification modal ------------>", socket);
 
-   socket.onmessage = (e) => {
-    let dt = JSON.parse(e.data)
-     updateMyNotifs(dt)
-    console.log("socket on message--------->", data);
-  }
+  //  socket.onmessage = (e) => {
+  //   let dt = JSON.parse(e.data)
+  //    updateMyNotifs(dt)
+  //   console.log("socket on message--------->", data);
+  // }
   
+updateNewNotifsExist(false)
   console.log("MyNotifs--------->", MyNotifs);
   }
   return (

@@ -20,7 +20,6 @@ type Notification struct {
 	NotificationGroupID   int    `json:"notifGroupID"`
 	NotificationGroupName string `json:"notifGroupName"`
 	NotificationAccept    int    `json:"notifAccept"`
-	Tipo                  string `json:"tipo"`
 }
 
 func StoreNotification(db *sql.DB, notificationType string, notifiyee, notifier, groupID int) {
@@ -104,6 +103,7 @@ func GetNotifications(db *sql.DB, userID int) []Notification {
 			log.Println("Error scanning rows:", err)
 			continue
 		}
+
 		MyNotifs = append(MyNotifs, n)
 	}
 

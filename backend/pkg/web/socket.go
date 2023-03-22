@@ -29,6 +29,10 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+type updateOnlineGroupMembers struct {
+	UpdatedGroupMembers []int ``
+}
+
 type T struct {
 	TypeChecker
 	//*chats.Chat
@@ -39,7 +43,6 @@ type T struct {
 	// *chats.Chat
 	*NewMessage
 	*Notifiyee
-	NotifRead
 }
 
 type TypeChecker struct {
@@ -48,6 +51,14 @@ type TypeChecker struct {
 
 // struct for new message
 
+type AllNotifs struct {
+	SendNotifs []notifications.Notification `json:"allNotifs"`
+	Tipo       string `json:"tipo"`
+}
+
+type AllChats struct {
+	
+}
 type NewMessage struct {
 	LoggedInUserID string `json:"loggedInUser"`
 	RecipientID    string `json:"recipientID"`
@@ -134,7 +145,10 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			for user, conn := range loggedInSockets {
 				if user == f.FNotifiyee {
 					fmt.Printf("*********************** %v has new notifications ***********************************", user)
-					conn.WriteJSON(notifications.GetNotifications(s.Db, user))
+					var x AllNotifs
+					x.SendNotifs = notifications.GetNotifications(s.Db, user)
+					x.Tipo = "allNotifs"
+					conn.WriteJSON(x)
 				}
 			}
 			// broadcastChannelGroupNotifs <- notifications.GetNotifications()
@@ -204,6 +218,11 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		if f.Type == "groupInviteNotifs" {
 			// use channels
+
+			// for user, conn :=  range loggedInSockets {
+
+			// 	groups.GetAllGroupMembers()
+			// }
 		}
 	}
 }

@@ -10,6 +10,7 @@ function LoggedInUserProvider({ children }) {
 
   const [NewNotifsExist, setNewNotifsExist] = useState(false);
 
+
   const [MyNotifs, setMyNotifs] = useState([])
   const [messages, setMessages] = useState([]);
 
