@@ -156,6 +156,9 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 				relationships.DeleteRequest(s.Db, n.NotificationID)
 			} else {
 				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+				//should you be able to join group if creator removes notif?
+				//relationships.DeleteRequest(s.Db, n.NotificationID)
+
 			}
 
 			// check if notification is event invitation
@@ -167,7 +170,7 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 
 				groups.AddGroupMember(s.Db, n.NotificationGroupID, n.NotifiyeeID)
 				relationships.DeleteRequest(s.Db, n.NotificationID)
-				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)//should this happen?
 			} else {
 				fmt.Println("NOOOOOOOO!", prettyPrint((n)))
 

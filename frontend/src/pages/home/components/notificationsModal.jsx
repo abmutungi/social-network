@@ -6,7 +6,7 @@ import { SocketContext } from "../../../context/webSocketContext";
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
   const { LoggedInUserID, GroupID } = useContext(LowerHeaderContext);
-  const { socket } = useContext(SocketContext);
+  const { socket} = useContext(SocketContext);
 
   console.log(
     "socket from single notification component ------------>",
@@ -108,7 +108,7 @@ const SingleNotificationComponent = ({ props }) => {
 
 // notifications modal that holds single notifications
 const NotificationsModal = ({ show, onClose, data }) => {
-  const { socket, MyNotifs, updateMyNewNotifs } = useContext(SocketContext);
+  const { socket, MyNotifs, updateNewNotifsExist } = useContext(SocketContext);
 
   // async function DisplayNotifications() {
   //   try {
@@ -142,7 +142,7 @@ const NotificationsModal = ({ show, onClose, data }) => {
     console.log("socket from notification modal ------------>", socket);
 
 
-    updateMyNewNotifs(false)
+    updateNewNotifsExist(false)
     console.log("MyNotifs--------->", MyNotifs);
   }
   return (
