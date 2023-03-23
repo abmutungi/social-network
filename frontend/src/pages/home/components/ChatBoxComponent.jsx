@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 
 import { ChatBubble } from "./ChatBubbleComponent";
 import "../../../assets/css/chatbox.css";
@@ -55,14 +55,6 @@ const ChatBox = ({ show, onClose, name, id, data, avatar }) => {
   const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
 
-  // const handleChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setChatFormValues({
-  //     ...chatFormValues,
-  //     [name]: value,
-  //   });
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const storeMessageForm = new FormData(e.target);
@@ -87,20 +79,21 @@ const ChatBox = ({ show, onClose, name, id, data, avatar }) => {
     }
 
     // if (newMsg != "") {
-    //   setMessages([
-    //     ...messages,
-    //     {
-    //       msgContent: newMsg,
-    //       user: JSON.parse(localStorage.getItem("loggedInUser")).FName,
-    //       isCurrentUser: true,
-    //       date: new Date().toDateString(),
-    //     },
-    //   ]);
-    setNewMsg("");
 
     // }
+    setNewMsg("");
   };
 
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    // scroll to bottom every time messages change
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [data]);
+
+  const currentUserCheck = (mess) => {
+    return JSON.parse(localStorage.getItem("loggedInUser")).FName == mess;
+  };
   let currentUser = name;
 
   console.log("name prop check --> ", name);
@@ -146,10 +139,11 @@ const ChatBox = ({ show, onClose, name, id, data, avatar }) => {
                 key={index}
                 msgContent={message.message}
                 user={message.senderName}
-                isCurrentUser={message.isCurrentUser}
+                isCurrentUser={currentUserCheck(message.senderName)}
                 date={message.chatDate}
               ></ChatBubble>
             ))}
+            <div ref={bottomRef} />
           </div>
           <div className="chat-box-footer">
             <form className="chat-box-form" onSubmit={handleSubmit}>

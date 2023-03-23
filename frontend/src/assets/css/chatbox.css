@@ -43,9 +43,16 @@
 .chat-box-name {
   font-weight: bold;
 }
+
 .chat-box-body {
   height: 80%;
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-box-body > * {
+  margin: 1rem 1.2em;
 }
 
 .chat-box-footer {
@@ -71,21 +78,21 @@
   align-items: center;
 }
 
-.chat-header-user-logo {
+/* .chat-header-user-logo {
   display: block;
   color: #1b74e4;
   position: absolute;
   left: 2vw;
   top: 0.5vh;
   cursor: pointer;
-}
+} */
 
-.chat-header-minimize {
+/* .chat-header-minimize {
   color: #1b74e4;
   position: absolute;
   cursor: pointer;
   left: 20vw;
-}
+} */
 
 .chat-header-close {
   color: #1b74e4;
@@ -117,4 +124,18 @@
   border-radius: 15px;
   height: 60%;
   padding: 0 0.8rem;
+}
+
+.chat-bubble-current-user {
+  /* color: red; */
+  align-self: flex-end;
+}
+
+.chat-bubble {
+  /* color: green; */
+}
+
+#anchor {
+  overflow-anchor: auto;
+  height: 1px;
 }
