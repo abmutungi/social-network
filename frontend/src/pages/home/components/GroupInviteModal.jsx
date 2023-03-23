@@ -25,6 +25,7 @@ const GroupInviteModal = ({ show, onClose }) => {
     groupInvites.type = "groupInviteNotifs"
     console.log("*****group invites******", JSON.stringify(groupInvites));
     socket.send(JSON.stringify(groupInvites))
+    onClose();
   };
 
   // async function GroupInvitesToBackend(values) {
@@ -42,7 +43,7 @@ console.log('GIIIN---->', groupInvitees);
   return (
     <>
       <div role="presentation" className="cg-modal-container" onClick={onClose}>
-        <div
+        <div 
           role="presentation"
           className="cg-modal"
           onClick={(e) => e.stopPropagation()}
@@ -96,7 +97,7 @@ console.log('GIIIN---->', groupInvitees);
                 </div>
 
                 <div className="cg-modal-footer">
-                  <button
+                  <button 
                     onSubmit={handleSubmit}
                     className="cg-submit-button"
                     type="submit"
