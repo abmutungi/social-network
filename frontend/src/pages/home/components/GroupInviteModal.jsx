@@ -9,7 +9,7 @@ import { Checkbox } from "./Checkbox";
 import { SocketContext } from "../../../context/webSocketContext";
 
 const GroupInviteModal = ({ show, onClose }) => {
-    const { socket} = useContext(SocketContext)
+  const { socket} = useContext(SocketContext)
   const { LoggedInUserID, GroupID, groupInvitees } =
     useContext(LowerHeaderContext);
 
@@ -18,19 +18,21 @@ const GroupInviteModal = ({ show, onClose }) => {
 
     console.log(GetCheckBoxValues(LoggedInUserID));
     let invited = GetCheckBoxValues(LoggedInUserID);
+    
+    let groupInvites = {}
 
-    const fdata = new FormData();
-    fdata.append("data", JSON.stringify(invited));
-      GroupInvitesToBackend(fdata);
-      socket.send(fdata)
+    groupInvites.Invitees = invited
+    groupInvites.type = "groupInviteNotifs"
+    console.log("*****group invites******", JSON.stringify(groupInvites));
+    socket.send(JSON.stringify(groupInvites))
   };
 
-  async function GroupInvitesToBackend(values) {
-    await fetch("http://localhost:8080/groupinvite", {
-      method: "POST",
-      body: values,
-    });
-  }
+  // async function GroupInvitesToBackend(values) {
+  //   await fetch("http://localhost:8080/groupinvite", {
+  //     method: "POST",
+  //     body: values,
+  //   });
+  // }
 
   if (!show) {
     return null;

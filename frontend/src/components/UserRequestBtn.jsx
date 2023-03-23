@@ -88,16 +88,7 @@ const UserRequestBtn = () => {
     } else {
       if (FollowText == followText) {
         updateFollowText(requestText);
-        fetch("http://localhost:8080/followRequest", {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify({
-            notificationType: "followRequest",
-            notifiyee: userID,
-            notifier: LoggedInUserID,
-          }),
-        });
-
+   
         socket.send(JSON.stringify({
           notificationType: "followRequest",
           notifiyee: userID,

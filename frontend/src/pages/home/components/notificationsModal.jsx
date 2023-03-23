@@ -28,7 +28,7 @@ const SingleNotificationComponent = ({ props }) => {
       notifText = "follow request";
       break;
     case "groupInvite":
-      notifText = "group invitation to...";
+      notifText = "group invitation to: ";
       break;
     case "groupRequest":
       notifText = "request to join your group: ";

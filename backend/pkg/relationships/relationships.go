@@ -121,3 +121,34 @@ func GetAllFollowers(db *sql.DB, userID int) []users.User {
 	}
 	return followers
 }
+
+
+// func FollowingYouCheck2(db *sql.DB, userID, loggedInUser int) bool {
+// 	var count int
+// 	err := db.QueryRow(`SELECT  COUNT(*)  FROM relationships WHERE userID = ? AND followerID = ?;`, userID, loggedInUser).Scan(&count)
+// 	if err != nil {
+// 		log.Println("Error from FollowingYouCheck fn():", err)
+// 		return false
+// 	}
+// 	if count > 0 {
+// 		//fmt.Println("******I already follow this user****")
+// 		return true
+// 	}
+// 	//fmt.Println("I'm not following this user")
+// 	return false
+// }
+
+// func FollowingYouCheck3(db *sql.DB, userID, loggedInUser int) bool {
+// 	var count int
+// 	err := db.QueryRow(`SELECT  COUNT(*)  FROM relationships WHERE userID = ? AND followerID = ?;`, userID, loggedInUser).Scan(&count)
+// 	if err != nil {
+// 		log.Println("Error from FollowingYouCheck fn():", err)
+// 		return false
+// 	}
+// 	if count > 0 {
+// 		//fmt.Println("******I already follow this user****")
+// 		return true
+// 	}
+// 	//fmt.Println("I'm not following this user")
+// 	return false
+// }

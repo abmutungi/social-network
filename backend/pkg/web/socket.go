@@ -18,7 +18,7 @@ import (
 var (
 	loggedInSockets = make(map[int]*websocket.Conn)
 	// broadcastChannelChats  = make(chan chats.Chat, 1)
-	broadcastChannelGroupNotifs = make(chan notifications.Notification, 1)
+	broadcastChannelGroupNotifs = make(chan GroupMembers, 1)
 )
 
 var upgrader = websocket.Upgrader{
@@ -29,6 +29,24 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+type InvitedToGroup struct {
+	GroupID string `json:"groupID"`
+	Invited string `json:"invitedID"`
+	Inviter int    `json:"inviter"`
+}
+
+type GroupMembers struct {
+	Invitees []InvitedToGroup `json:"Invitees"`
+	Tipo     string           `json:"tipo"`
+}
+
+type FollowerPrivateData struct {
+	NotificationType string `json:"notificationType"`
+	Notifiyee        int    `json:"notifiyee"`
+	Notifier         int    `json:"notifier"`
+	Tipo             string `json:"tipo"`
+}
+
 type T struct {
 	TypeChecker
 	*notifications.Notification
@@ -36,9 +54,9 @@ type T struct {
 	*FollowerPrivateData
 	*GroupData
 	// *Test
-	*InvitedToGroup
 	// *chats.Chat
 	*NewMessage
+	*GroupMembers
 }
 
 type TypeChecker struct {
@@ -51,7 +69,6 @@ type ChatsToSend struct {
 	Chats []chats.Chat `json:"chatsfromgo"`
 	Tipo  string       `json:"tipo"`
 }
-
 
 type AllNotifs struct {
 	SendNotifs []notifications.Notification `json:"allNotifs"`
@@ -78,8 +95,8 @@ func (t *T) UnmarshalData(data []byte) error {
 		t.GroupData = &GroupData{}
 		return json.Unmarshal(data, t.GroupData)
 	case "groupInviteNotifs":
-		t.InvitedToGroup = &InvitedToGroup{}
-		return json.Unmarshal(data, t.InvitedToGroup)
+		t.GroupMembers = &GroupMembers{}
+		return json.Unmarshal(data, t.GroupMembers)
 	// case "notifs":
 	// 	t.Notification = &notifications.Notification{}
 	// 	return json.Unmarshal(data, t.Notification)
@@ -141,7 +158,7 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("******************* ws notifs: followRequest ************************")
 
 			for user, conn := range loggedInSockets {
-				if user == f.Notifiyee {
+				if user == f.Notifiyee || user == 2 || user == 3 {
 					fmt.Printf("*********************** %v has new notifications ***********************************", user)
 					var fn AllNotifs
 					fn.SendNotifs = notifications.GetNotifications(s.Db, user)
@@ -166,7 +183,6 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			if !chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).Exists {
 				chats.StoreChat(s.Db, senderIdInt, recipientIdInt)
-
 			}
 
 			chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID, msgContent, senderIdInt, recipientIdInt)
@@ -205,9 +221,41 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if f.Type == "groupInviteNotifs" {
-			// use channels
 
+			for _, obj := range f.Invitees {
+				invited, err := strconv.Atoi(obj.Invited)
+				if err != nil {
+					fmt.Println("Error parsing invited string", err)
+				}
+
+				gid, err := strconv.Atoi(obj.GroupID)
+				if err != nil {
+					fmt.Println("Error parsing invited string", err)
+				}
+
+				notifications.StoreNotification(s.Db, "groupInvite", invited, obj.Inviter, gid)
+				// fmt.Println("from loop", prettyPrint(obj))
+
+			}
+
+			for i := range f.Invitees {
+				for user, conn := range loggedInSockets {
+					invited, err := strconv.Atoi(f.Invitees[i].Invited)
+					if err != nil {
+						fmt.Println("Error parsing invited string", err)
+					}
+					if user != f.Invitees[0].Inviter && user == invited {
+						var in AllNotifs
+						in.SendNotifs = notifications.GetNotifications(s.Db, user)
+						in.Tipo = "allNotifs"
+						conn.WriteJSON(in)
+					}
+				}
+			}
+
+			// for user, conn := range loggedInSockets {
+
+			// }
 		}
 	}
-
 }

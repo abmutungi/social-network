@@ -9,11 +9,11 @@ import (
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 )
 
-type InvitedToGroup struct {
-	GroupID string `json:"groupID"`
-	Invited string `json:"invitedID"`
-	Inviter int    `json:"inviter"`
-}
+// type InvitedToGroup struct {
+// 	GroupID string `json:"groupID"`
+// 	Invited string `json:"invitedID"`
+// 	Inviter int    `json:"inviter"`
+// }
 
 func (s *Server) HandleGroupInvite() http.HandlerFunc {
 
