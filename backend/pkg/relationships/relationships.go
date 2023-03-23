@@ -44,7 +44,7 @@ func FollowingYouCheck(db *sql.DB, userID, loggedInUser int) bool {
 	err := db.QueryRow(`SELECT  COUNT(*)  FROM relationships WHERE userID = ? AND followerID = ?;`, userID, loggedInUser).Scan(&count)
 	if err != nil {
 		log.Println("Error from FollowingYouCheck fn():", err)
-		return false
+		// return false
 	}
 	if count > 0 {
 		//fmt.Println("******I already follow this user****")

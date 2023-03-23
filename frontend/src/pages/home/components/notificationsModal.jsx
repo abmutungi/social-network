@@ -2,7 +2,6 @@ import "../../../assets/css/notifications-modal.css";
 import { useContext } from "react";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { SocketContext } from "../../../context/webSocketContext";
-import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
@@ -109,7 +108,7 @@ const SingleNotificationComponent = ({ props }) => {
 
 // notifications modal that holds single notifications
 const NotificationsModal = ({ show, onClose, data }) => {
-  const { socket, MyNotifs, updateMyNotifs } = useContext(SocketContext);
+  const { socket, MyNotifs, updateMyNewNotifs } = useContext(SocketContext);
 
   // async function DisplayNotifications() {
   //   try {
@@ -142,12 +141,8 @@ const NotificationsModal = ({ show, onClose, data }) => {
   } else {
     console.log("socket from notification modal ------------>", socket);
 
-    //  socket.onmessage = (e) => {
-    //   let data = JSON.parse(e.data)
-    //   updateMyNotifs(data)
-    //   console.log("socket on message--------->", data);
-    // }
 
+    updateMyNewNotifs(false)
     console.log("MyNotifs--------->", MyNotifs);
   }
   return (

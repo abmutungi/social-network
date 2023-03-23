@@ -13,7 +13,8 @@ const GroupRequestBtn = (props) => {
   const { socket} = useContext(SocketContext)
    const {
     GroupID,
-    LoggedInUserID,
+     LoggedInUserID,
+    GroupRequested,
      updateGroupRequested,
     updateJoinText,
   } = useContext(LowerHeaderContext);
@@ -24,26 +25,19 @@ const GroupRequestBtn = (props) => {
 
   const handleClick = () => {
     updateJoinText(requestText)
-    updateGroupRequested(true)
     // setStatus(
-    //   props.hasRequested
-    // );
-
-    fetch("http://localhost:8080/joinGroup", {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify({
-        groupID: GroupID,
-        loggedInUserID: LoggedInUserID
-      })
-    })
-    // updateJoinText(requestText)
+      //   props.hasRequested
+      // );
+      
+      // updateJoinText(requestText)
+    if (!GroupRequested) {
       socket.send(JSON.stringify({
-          groupID: GroupID,
-          loggedInUserID: LoggedInUserID,
-          type: "groupNotifs"
-        }))
-        
+        groupID: GroupID,
+        loggedInUserID: LoggedInUserID,
+        type: "groupNotifs"
+      }))
+    }
+      updateGroupRequested(true)
   };
 
   return (

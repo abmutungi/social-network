@@ -4,7 +4,6 @@ func (s *Server) Routes() {
 	// s.Router.HandleFunc("/", s.Home)
 	s.Router.HandleFunc("/register", s.HandleRegister())
 	s.Router.HandleFunc("/follow", s.GeneralSessionChecker(s.HandlePublicFollow()))
-	s.Router.HandleFunc("/joinGroup", s.GeneralSessionChecker(s.HandleJoinGroup()))
 	s.Router.HandleFunc("/followCheck", s.GeneralSessionChecker(s.HandleFollowCheck()))
 	s.Router.HandleFunc("/unfollow", s.GeneralSessionChecker(s.HandleUnfollow()))
 	s.Router.HandleFunc("/updatePrivacy", s.GeneralSessionChecker(s.HandlePrivacyUpdate()))

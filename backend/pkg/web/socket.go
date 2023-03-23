@@ -35,6 +35,12 @@ type InvitedToGroup struct {
 	Inviter int    `json:"inviter"`
 }
 
+type GroupData struct {
+	Group int `json:"groupID"`
+	User  int `json:"loggedInUserID"`
+	Tipo string `json:"tipo"`
+}
+
 type GroupMembers struct {
 	Invitees []InvitedToGroup `json:"Invitees"`
 	Tipo     string           `json:"tipo"`
