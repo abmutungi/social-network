@@ -10,8 +10,7 @@ function LoggedInUserProvider({ children }) {
 
   const [NewNotifsExist, setNewNotifsExist] = useState(false);
 
-  const [MyNotifs, setMyNotifs] = useState([])
-  const [messages, setMessages] = useState([]);
+  const [MyNotifs, setMyNotifs] = useState([]);
 
   function updateLoggedInUser(user) {
     setLoggedInUser(user);
@@ -24,10 +23,7 @@ function LoggedInUserProvider({ children }) {
   };
 
   const updateMyNotifs = (data) => {
-    setMyNotifs(()=> data)
-  }
-  const updateMessages = (data) => {
-    setMessages(() => data);
+    setMyNotifs(() => data);
   };
 
   return (
@@ -39,8 +35,6 @@ function LoggedInUserProvider({ children }) {
         updateNewNotifsExist,
         MyNotifs,
         updateMyNotifs,
-        messages,
-        updateMessages,
       }}
     >
       {children}

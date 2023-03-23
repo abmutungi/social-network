@@ -174,7 +174,6 @@ const Login = () => {
         console.log("4TH CHECK --> ", updatePrivacyStatus(currentUser.Privacy));
         createSocket(true);
 
-        console.log("socket check => ", socket);
         // console.log(loggedInUser);
         createSocket(true);
         navigate("/");
@@ -183,7 +182,6 @@ const Login = () => {
     }
 
     sendLoginData();
-
   };
 
   return (

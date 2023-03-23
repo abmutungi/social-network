@@ -8,10 +8,10 @@ import (
 	"strconv"
 
 	//"github.com/abmutungi/social-network/backend/pkg/chats"
+	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
-	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/gorilla/websocket"
 )
 
@@ -43,6 +43,11 @@ type T struct {
 
 type TypeChecker struct {
 	Type string `json:"type"`
+}
+
+type ChatsToSend struct {
+	Chats []chats.Chat `json:"chatsfromgo"`
+	Tipo  string       `json:"tipo"`
 }
 
 // struct for new message
@@ -140,7 +145,6 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-
 		// for single chat messages
 
 		if f.Type == "newMessage" {
@@ -159,18 +163,17 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID, msgContent, senderIdInt, recipientIdInt)
 			// check if recipeint is in the socket map
-			f.NewMessage.Tipo = "newMessage"
+			var nc ChatsToSend
+			nc.Chats = chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID)
+			nc.Tipo = "chatHistory"
 
 			for id, conn := range loggedInSockets {
 				if recipientIdInt == id || senderIdInt == id {
-					conn.WriteJSON(chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID))
+					conn.WriteJSON(nc)
 				}
 			}
 
 		}
-
-
-
 
 		if f.Type == "groupNotifs" {
 
@@ -190,10 +193,6 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			}
 
 		}
-
-
-
-
 
 		if f.Type == "groupInviteNotifs" {
 			// use channels

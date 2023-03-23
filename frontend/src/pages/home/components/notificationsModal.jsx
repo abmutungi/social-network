@@ -7,19 +7,20 @@ import { loggedInUserContext } from "../../../context/loggedInUserContext";
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
   const { LoggedInUserID, GroupID } = useContext(LowerHeaderContext);
-  const { socket } = useContext(SocketContext)
+  const { socket } = useContext(SocketContext);
 
-  
-
-  console.log("socket from single notification component ------------>", socket);
+  console.log(
+    "socket from single notification component ------------>",
+    socket
+  );
   // socket.onmessage = (e) => {
   //   let data = JSON.parse(e.data)
   //   updateMyNotifs(data)
   //   console.log("socket on message--------->", data);
   // }
-  
+
   // console.log("MyNotifs--------->", MyNotifs);
-  
+
   let notifText = props.notifType;
 
   switch (notifText) {
@@ -40,12 +41,12 @@ const SingleNotificationComponent = ({ props }) => {
   console.log(notifText);
 
   const handleClick = () => {
-  socket.send(JSON.stringify({
-    loggedInUserID: LoggedInUserID,
-    type: "notifs",
-   }))
-  
-
+    socket.send(
+      JSON.stringify({
+        loggedInUserID: LoggedInUserID,
+        type: "notifs",
+      })
+    );
 
     fetch("http://localhost:8080/actionNotif", {
       method: "POST",
@@ -57,7 +58,7 @@ const SingleNotificationComponent = ({ props }) => {
         notifGroupID: GroupID,
         notifAccept: 1,
       }),
-    })
+    });
     const notificationContainer = document.getElementById(props.id);
     notificationContainer.parentNode.removeChild(notificationContainer);
   };
@@ -73,11 +74,10 @@ const SingleNotificationComponent = ({ props }) => {
         notifGroupID: GroupID,
         notifAccept: 0,
       }),
-    })
+    });
     const notificationContainer = document.getElementById(props.id);
     notificationContainer.parentNode.removeChild(notificationContainer);
   };
-
 
   return (
     <div id={props.id} className="notification-container">
@@ -107,14 +107,10 @@ const SingleNotificationComponent = ({ props }) => {
   );
 };
 
-
-
 // notifications modal that holds single notifications
 const NotificationsModal = ({ show, onClose, data }) => {
-  
-  const {MyNotifs, updateMyNotifs } = useContext(loggedInUserContext);
-  const { socket } = useContext(SocketContext)
-
+  const { MyNotifs, updateMyNotifs } = useContext(loggedInUserContext);
+  const { socket } = useContext(SocketContext);
 
   // async function DisplayNotifications() {
   //   try {
@@ -145,16 +141,15 @@ const NotificationsModal = ({ show, onClose, data }) => {
   if (!show) {
     return null;
   } else {
+    console.log("socket from notification modal ------------>", socket);
 
-  console.log("socket from notification modal ------------>", socket);
+    //  socket.onmessage = (e) => {
+    //   let data = JSON.parse(e.data)
+    //   updateMyNotifs(data)
+    //   console.log("socket on message--------->", data);
+    // }
 
-   socket.onmessage = (e) => {
-    let data = JSON.parse(e.data)
-    updateMyNotifs(data)
-    console.log("socket on message--------->", data);
-  }
-  
-  console.log("MyNotifs--------->", MyNotifs);
+    console.log("MyNotifs--------->", MyNotifs);
   }
   return (
     <div className="notifs-modal" onClick={onClose} role="presentation">
