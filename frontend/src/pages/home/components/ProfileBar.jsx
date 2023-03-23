@@ -73,9 +73,8 @@ const ProfileBar = () => {
     const data = await resp.json();
 
     let count = getFollowCount(data)
-    let  suffix = count > 1 ? ' followers' : ' follower'
-    let fcount = getFollowCount(data) + suffix
-    setfollowers(fcount)
+    let  text = count > 1 ? count + ' followers' : ''
+    setfollowers(text)
    
 
   }
@@ -92,7 +91,6 @@ const ProfileBar = () => {
     });
 
     const data = await resp.json();
-    console.log('FOLLOWWWWINGGG',  data);
     var fcount = getFollowCount(data) + ' following'
     setfollowing(fcount )
 
