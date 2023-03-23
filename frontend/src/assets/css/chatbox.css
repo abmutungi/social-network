@@ -83,6 +83,7 @@
   border-radius: 15px;
   height: 60%;
   padding: 0 0.8rem;
+  border: none;
 }
 
 .chat-bubble-current-user {
@@ -92,6 +93,8 @@
   padding: 0.5rem;
   background: #0183ff;
   width: fit-content;
+  max-width: 50%;
+  overflow-wrap: break-word;
 }
 
 .chat-bubble {
@@ -100,9 +103,23 @@
   background: #e4e6eb;
   color: black;
   width: fit-content;
+  max-width: 50%;
+  overflow-wrap: break-word;
 }
 
 #anchor {
   overflow-anchor: auto;
   height: 1px;
+}
+
+.user-date {
+  display: none;
+}
+
+.chat-bubble:hover > .user-date {
+  display: block;
+}
+
+.chat-bubble-current-user:hover > .user-date {
+  display: block;
 }

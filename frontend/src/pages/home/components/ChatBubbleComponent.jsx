@@ -8,7 +8,7 @@ const ChatBubble = ({ msgContent, user, date, isCurrentUser }) => {
     <>
       <div className={className}>
         <p className="chat-msg">{msgContent}</p>
-        <span>{[user, " ", date]}</span>
+        <span className="user-date">{[user, " ", date]}</span>
       </div>
     </>
   );
