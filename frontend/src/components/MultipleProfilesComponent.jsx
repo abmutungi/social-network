@@ -1,8 +1,10 @@
 import SingleProfileComponent from "./SingleProfileComponent";
 import { loggedInUserContext } from "../context/loggedInUserContext";
 import { useContext, useEffect } from "react";
+import { SocketContext } from "../context/webSocketContext";
 
 const MultipleProfilesComponent = ({ users, type }) => {
+  const { socketChatNotif, lastMsgSender } = useContext(SocketContext);
   const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
     useContext(loggedInUserContext);
   // fetch chat history on chat user click
@@ -94,6 +96,11 @@ const MultipleProfilesComponent = ({ users, type }) => {
           avatar={userPicPath}
           notifier={
             checkUserForChatNotification(user.FName) && chatNotifsOnLogin
+          }
+          socketnotifier={
+            socketChatNotif &&
+            user.userID == lastMsgSender &&
+            loggedInUser !== lastMsgSender
           }
           onClick={() => {
             console.log("chatbox clicked");

@@ -14,26 +14,28 @@ import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { SocketContext } from "../../../context/webSocketContext";
 // import { SocketContext } from "../../../context/webSocketContext";
 
-
 function ContainerLogo() {
   return (
     <div className="ContainerLogo">
-      <span>facebook</span>
+      <span>connect</span>
     </div>
   );
 }
 
 function ContainerIcons() {
-  const { loggedInUser, NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs } =
-    useContext(loggedInUserContext);
+  const {
+    loggedInUser,
+    NewNotifsExist,
+    updateNewNotifsExist,
+    MyNotifs,
+    updateMyNotifs,
+  } = useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
   //const {socket} = useContext(SocketContext)
   const navigate = useNavigate();
 
   // console.log("socket from top header------------>", socket);
 
-
-  
   /*On logout click,
   need to send info back to the log out handler
   and navigate to login page*/
@@ -103,7 +105,7 @@ function ContainerIcons() {
   //   updateNewNotifsExist(data)
   //   console.log("socket on message in notif bell --------->", data);
   // }
-  
+
   useEffect(() => {
     if (!NewNotifsExist) CheckNotifications();
 

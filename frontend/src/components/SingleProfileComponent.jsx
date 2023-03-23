@@ -26,7 +26,12 @@ const SingleProfileComponent = (props) => {
 
   const { updateChatNotifsOnLogin } = useContext(loggedInUserContext);
 
-  const { messages, updateChatMessages } = useContext(SocketContext);
+  const {
+    messages,
+    updateChatMessages,
+    socketChatNotif,
+    updateSocketChatNotifs,
+  } = useContext(SocketContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
@@ -191,6 +196,7 @@ const SingleProfileComponent = (props) => {
           if (!show) fetchChatHistory();
           setShow(true);
           setName(props.chatName);
+          updateSocketChatNotifs(false);
 
           console.log("props.id -> ", props.id);
           console.log("message struct --> ", messages);
@@ -213,6 +219,7 @@ const SingleProfileComponent = (props) => {
         </div>
         <p className="ChatName">
           {props.chatName} {props.notifier ? <span>**</span> : null}
+          {props.socketnotifier ? <span>++++</span> : null}
         </p>
       </div>
     );

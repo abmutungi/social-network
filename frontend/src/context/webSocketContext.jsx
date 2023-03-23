@@ -7,6 +7,8 @@ const SocketProvider = ({ children }) => {
   const [openSocket, setOpenSocket] = useState(false);
   //const [data, setData] = useState({});
   const [messages, setMessages] = useState([]);
+  const [socketChatNotif, setSocketChatNotif] = useState(false);
+  const [lastMsgSender, setLastMsgSender] = useState("");
 
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
@@ -22,9 +24,19 @@ const SocketProvider = ({ children }) => {
         console.log("newData check --> ", e.data);
 
         console.log("sent through ws **********");
+        console.log(
+          "last sender ==> ",
+          newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
+        );
 
         if (newData.tipo === "chatHistory") {
           updateChatMessages(newData.chatsfromgo);
+          updateSocketChatNotifs(true);
+          if (newData.chatsfromgo) {
+            updateLastSender(
+              newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
+            );
+          }
         }
       };
       return () => {
@@ -45,6 +57,14 @@ const SocketProvider = ({ children }) => {
     setMessages(() => data);
   };
 
+  const updateSocketChatNotifs = (bool) => {
+    setSocketChatNotif(bool);
+  };
+
+  const updateLastSender = (data) => {
+    setLastMsgSender(() => data);
+  };
+
   return (
     <SocketContext.Provider
       value={{
@@ -53,6 +73,9 @@ const SocketProvider = ({ children }) => {
         createSocket,
         messages,
         updateChatMessages,
+        socketChatNotif,
+        updateSocketChatNotifs,
+        lastMsgSender,
       }}
     >
       {children}
