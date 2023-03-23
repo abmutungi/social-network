@@ -8,10 +8,10 @@ import (
 	"strconv"
 
 	//"github.com/abmutungi/social-network/backend/pkg/chats"
+	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
-	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/gorilla/websocket"
 )
 
@@ -140,7 +140,6 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-
 		// for single chat messages
 
 		if f.Type == "newMessage" {
@@ -169,9 +168,6 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-
-
-
 		if f.Type == "groupNotifs" {
 
 			if !groups.GroupMemberCheck(s.Db, f.Group, f.User) {
@@ -191,14 +187,10 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		}
 
+		// if f.Type == "groupInviteNotifs" {
+		// 	// use channels
 
-
-
-
-		if f.Type == "groupInviteNotifs" {
-			// use channels
-
-		}
+		// }
 	}
 
 }
