@@ -9,10 +9,6 @@ const SingleNotificationComponent = ({ props }) => {
   const { LoggedInUserID, GroupID } = useContext(LowerHeaderContext);
   const { socket } = useContext(SocketContext);
 
-  console.log(
-    "socket from single notification component ------------>",
-    socket
-  );
   // socket.onmessage = (e) => {
   //   let data = JSON.parse(e.data)
   //   updateMyNotifs(data)

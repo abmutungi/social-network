@@ -22,10 +22,6 @@ const SocketProvider = ({ children }) => {
         console.log("newData check --> ", e.data);
 
         console.log("sent through ws **********");
-        console.log(
-          "Checking data type in single onmessage",
-          newData.chatsfromgo[4].message
-        );
 
         if (newData.tipo === "chatHistory") {
           updateChatMessages(newData.chatsfromgo);
@@ -55,7 +51,6 @@ const SocketProvider = ({ children }) => {
         socket,
         openSocket,
         createSocket,
-
         messages,
         updateChatMessages,
       }}

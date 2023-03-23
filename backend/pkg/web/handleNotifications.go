@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
@@ -28,6 +29,10 @@ type NewNotif struct {
 
 type Notifiyee struct {
 	UserID int `json:"loggedInUserID"`
+}
+
+type ChatNotifiers struct {
+	NotifiersArr []string `json:"notifiers"`
 }
 
 func sendNewNotif(w http.ResponseWriter, notifResp NotifResponse) {
@@ -178,10 +183,34 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 			relationships.DeleteRequest(s.Db, n.NotificationID)
 
 		} else {
-		
-			 notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
-			 relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
+
+			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+			relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
 			relationships.DeleteRequest(s.Db, n.NotificationID)
 		}
+	}
+}
+
+func (s *Server) HandleChatNotificationsOnLogin() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCors(&w)
+		err := r.ParseMultipartForm(10 << 20)
+
+		if err != nil {
+			fmt.Printf("error parsing userID form: %v", err)
+		}
+
+		loggedInIdInt, _ := strconv.Atoi((r.Form.Get("loggedInID")))
+
+		fmt.Println("Sanity check loggedInUserID --> ", loggedInIdInt)
+
+		var n ChatNotifiers
+
+		n.NotifiersArr = notifications.ReturnUserChatNotifications(s.Db, loggedInIdInt)
+		fmt.Println("Sanity check of notifiers arr/struct ========> ", n)
+
+		ntfrs, _ := json.Marshal(n)
+
+		w.Write(ntfrs)
 	}
 }

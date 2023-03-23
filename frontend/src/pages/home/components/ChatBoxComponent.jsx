@@ -15,54 +15,10 @@ import {
 
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
-// let dummyMessages = [
-//   {
-//     msgContent: "hi there",
-//     user: "Yonas",
-//     date: new Date().toDateString(),
-//     isCurrentUser: true,
-//   },
-//   {
-//     msgContent: "hola",
-//     user: "Messi",
-//     date: new Date().toDateString(),
-//     isCurrentUser: false,
-//   },
-//   {
-//     msgContent: "who's the best defender?",
-//     user: "Yonas",
-//     date: new Date().toDateString(),
-//     isCurrentUser: true,
-//   },
-//   {
-//     msgContent: "romero",
-//     user: "Messi",
-//     date: new Date().toDateString(),
-//     isCurrentUser: false,
-//   },
-// ];
-
-//  let chatBoxes = document.getElementsByClassName("chat-box-container");
-//  for (const cBox of chatBoxes) {
-//    if (cBox.id != name) {
-//      console.log("Name in loop -> ", name);
-//      console.log("cBox id -> ", cBox.id);
-//      console.log("cBox attr -> ", cBox.attributes);
-//    }
-//  }
-
 const ChatBox = ({ show, onClose, name, id, data }) => {
   const { socket, messages } = useContext(SocketContext);
 
   const [newMsg, setNewMsg] = useState("");
-
-  // const handleChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setChatFormValues({
-  //     ...chatFormValues,
-  //     [name]: value,
-  //   });
-  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -86,17 +42,6 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
     for (const v of storeMessageForm.values()) {
       console.log("v check -> ", v);
     }
-
-    // if (newMsg != "") {
-    //   setMessages([
-    //     ...messages,
-    //     {
-    //       msgContent: newMsg,
-    //       user: JSON.parse(localStorage.getItem("loggedInUser")).FName,
-    //       isCurrentUser: true,
-    //       date: new Date().toDateString(),
-    //     },
-    //   ]);
     setNewMsg("");
 
     // }
@@ -109,15 +54,6 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
   if (!show) {
     return null;
   }
-  // else if (socket != null) {
-  //   socket.onmessage = (e) => {
-  //     // console.log("check message for recipient", JSON.parse(e.data));
-
-  //     // set messages to the new data being sent
-
-  //     updateMessages(JSON.parse(e.data));
-  //   };
-  // }
 
   return (
     <>

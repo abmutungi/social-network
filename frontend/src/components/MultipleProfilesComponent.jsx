@@ -1,6 +1,47 @@
 import SingleProfileComponent from "./SingleProfileComponent";
+import { loggedInUserContext } from "../context/loggedInUserContext";
+import { useContext, useEffect } from "react";
 
 const MultipleProfilesComponent = ({ users, type }) => {
+  const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
+    useContext(loggedInUserContext);
+  // fetch chat history on chat user click
+  const fetchChatNotificationsForm = new FormData();
+  let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
+  fetchChatNotificationsForm.append("loggedInID", loggedInUser);
+
+  async function fetchChatNotificationOnLogin() {
+    const resp = await fetch("http://localhost:8080/chatnotificationsonlogin", {
+      method: "POST",
+      credentials: "include",
+      body: fetchChatNotificationsForm,
+    });
+    const data = await resp.json();
+    console.log("messages data", data);
+    updateChatNotifsOnLogin(data);
+
+    //function to check if name provided is in notifications
+  }
+  const checkUserForChatNotification = (notifier) => {
+    if (chatNotifsOnLogin.notifiers !== null) {
+      return chatNotifsOnLogin.notifiers.includes(notifier);
+    } else {
+      return;
+    }
+  };
+
+  // checkUserForChatNotification(chatNotifsOnLogin);
+
+  useEffect(() => {
+    fetchChatNotificationOnLogin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  console.log(
+    "chatNotifs should be the same as above ===> ",
+    chatNotifsOnLogin.notifiers
+  );
+
   if (type === "AllGroups") {
     return users?.map((user, index) => {
       return (
@@ -48,6 +89,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
           key={index}
           type={type}
           avatar={userPicPath}
+          notifier={checkUserForChatNotification(user.FName)}
           onClick={() => {
             console.log("chatbox clicked");
           }}

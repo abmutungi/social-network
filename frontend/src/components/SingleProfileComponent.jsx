@@ -186,6 +186,7 @@ const SingleProfileComponent = (props) => {
           if (!show) fetchChatHistory();
           setShow(true);
           setName(props.chatName);
+
           console.log("props.id -> ", props.id);
           console.log("message struct --> ", messages);
           // updateUserID(Number(e.currentTarget.id));
@@ -201,12 +202,12 @@ const SingleProfileComponent = (props) => {
           id={props.id}
           data={messages}
         />
+
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
         <p className="ChatName">
-          {props.chatName}
-          <small className="group-event-text">{props.eventText}</small>
+          {props.chatName} {props.notifier ? <span>**</span> : null}
         </p>
       </div>
     );

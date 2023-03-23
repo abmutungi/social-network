@@ -163,6 +163,7 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID, msgContent, senderIdInt, recipientIdInt)
 			// check if recipeint is in the socket map
+			notifications.StoreNotification(s.Db, "privateMessage", recipientIdInt, senderIdInt, 0)
 			var nc ChatsToSend
 			nc.Chats = chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID)
 			nc.Tipo = "chatHistory"
