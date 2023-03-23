@@ -200,7 +200,7 @@ func ReturnUserChatNotifications(db *sql.DB, notifyeeID int) []string {
 
 func CheckIfUserHasNotificationsFromUser(db *sql.DB, notifiyee, potentialNotifierID int) bool {
 	var count int
-	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND notifier = ?`, notifiyee, potentialNotifierID).Scan(&count)
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND notifier = ? AND notificationType="privateMessage"`, notifiyee, potentialNotifierID).Scan(&count)
 	if err != nil {
 		log.Println("Error from NotificationCheck fn():", err)
 		return false
@@ -215,7 +215,7 @@ func CheckIfUserHasNotificationsFromUser(db *sql.DB, notifiyee, potentialNotifie
 }
 
 func ReadChatNotification(db *sql.DB, notifiyeeID, notifierID int) {
-	result, err := db.Exec("UPDATE notifications SET read = 1 AND actioned=1 WHERE notifiyee =? AND notifier=?", notifiyeeID, notifierID)
+	result, err := db.Exec(`UPDATE notifications SET read = 1 WHERE notifiyee =? AND notifier=? AND notificationType="privateMessage"`, notifiyeeID, notifierID)
 	if err != nil {
 		log.Fatal(err)
 	}
