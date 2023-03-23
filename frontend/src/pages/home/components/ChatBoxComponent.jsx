@@ -6,11 +6,9 @@ import { SocketContext } from "../../../context/webSocketContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUserNinja,
-  faWindowMinimize,
   faXmark,
-  faImage,
-  faFaceSmile,
+  // faImage,
+  // faFaceSmile,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
@@ -51,7 +49,7 @@ import { loggedInUserContext } from "../../../context/loggedInUserContext";
 //    }
 //  }
 
-const ChatBox = ({ show, onClose, name, id, data }) => {
+const ChatBox = ({ show, onClose, name, id, data, avatar }) => {
   const { socket } = useContext(SocketContext);
 
   const { updateMessages } = useContext(loggedInUserContext);
@@ -111,7 +109,7 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
     return null;
   } else if (socket != null) {
     socket.onmessage = (e) => {
-      // console.log("check message for recipient", JSON.parse(e.data));
+      console.log("check message for recipient", JSON.parse(e.data));
 
       // set messages to the new data being sent
 
@@ -132,17 +130,9 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
             onClick={(e) => e.stopPropagation()}
             role="presentation"
           >
-            <FontAwesomeIcon
-              icon={faUserNinja}
-              className="chat-header-user-logo"
-              size="xl"
-            />
-            {currentUser}
-            <FontAwesomeIcon
-              icon={faWindowMinimize}
-              className="chat-header-minimize"
-              size="lg"
-            />
+            <img className="chat-box-av" src={avatar} alt="" />
+            <span className="chat-box-name">{currentUser}</span>
+
             <FontAwesomeIcon
               onClick={onClose}
               icon={faXmark}
@@ -155,22 +145,14 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
               <ChatBubble
                 key={index}
                 msgContent={message.message}
-                // need to add first name, of sender, currently sending back ids
-                user={message.chatsender}
+                user={message.senderName}
                 isCurrentUser={message.isCurrentUser}
                 date={message.chatDate}
               ></ChatBubble>
             ))}
           </div>
           <div className="chat-box-footer">
-            <FontAwesomeIcon
-              icon={faImage}
-              className="chat-footer-image-logo"
-              size="lg"
-            />
-            {/* <button><i><FontAwesomeIcon icon={faPaperPlane} className="msg-btn"size="xl" type="submit"/></i></button> */}
-            <form onSubmit={handleSubmit}>
-              {" "}
+            <form className="chat-box-form" onSubmit={handleSubmit}>
               <input
                 className="msg-input"
                 type="text"
@@ -182,11 +164,6 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
                 }}
               ></input>
             </form>
-            <FontAwesomeIcon
-              icon={faFaceSmile}
-              className="chat-footer-emoji-logo"
-              size="lg"
-            />
           </div>
         </div>
       </div>

@@ -22,15 +22,12 @@ type ChatExistsCheck struct {
 }
 
 type Chat struct {
-	ChatSender    string `json:"chatsender"`
-	ChatRecipient string `json:"chatrecipient"`
+	ChatSender    int    `json:"chatsender"`
+	ChatRecipient int    `json:"chatrecipient"`
 	ChatMessage   string `json:"message"`
 	MessageID     int    `json:"messageID"`
 	Date          string `json:"chatDate"`
-	// LastNotification notification.Notification `json:"livenotification"`
-	Tipo string `json:"tipo"`
-	// UsersWithChat    []Chat                    `json:"userswithchat"`
-	// AllUsers         []users.AllUsers          `json:"allUsers"`
+	SenderName    string `json:"senderName"`
 }
 
 // send all public users and users you are following for chat section
@@ -56,7 +53,7 @@ func GetChatUsers(db *sql.DB, userID int) []PotentialChats {
 			fmt.Printf("error with potentialChats scan: %v", err)
 		}
 
-	//	fmt.Println("LoggeduserID", userID, "pcUserId", pc.UserID)
+		//	fmt.Println("LoggeduserID", userID, "pcUserId", pc.UserID)
 		if pc.Privacy == 0 && pc.UserID != userID || relationships.FollowingYouCheck(db, pc.UserID, userID) {
 			chats = append(chats, pc)
 		}
@@ -133,10 +130,22 @@ func GetAllMessageHistoryFromChat(db *sql.DB, chatID int) []Chat {
 		var m Chat
 		err2 := rows.Scan(&m.MessageID, &m.ChatSender, &m.ChatRecipient, &m.ChatMessage, &m.Date)
 		// m.Tipo = "messagehistoryfromgo"
+		m.SenderName = getNameFromUserID(db, m.ChatSender)
 		messagedata = append(messagedata, m)
 		if err2 != nil {
 			fmt.Println(err2)
 		}
 	}
+
 	return messagedata
+}
+
+func getNameFromUserID(db *sql.DB, id int) string {
+	stmt := db.QueryRow(`SELECT firstName FROM users WHERE userID = ?`, id)
+
+	var firstName string
+
+	stmt.Scan(&firstName)
+
+	return firstName
 }

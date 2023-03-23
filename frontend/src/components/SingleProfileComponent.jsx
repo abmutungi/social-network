@@ -78,7 +78,7 @@ const SingleProfileComponent = (props) => {
 
       //console.log("response from fetchgroupinfo", data);
 
-     // console.log("response from fetchgroupinfo", data);
+      // console.log("response from fetchgroupinfo", data);
     } catch (e) {
       console.log("error fetching groupinfo", e);
     }
@@ -198,6 +198,7 @@ const SingleProfileComponent = (props) => {
           name={name}
           id={props.id}
           data={messages}
+          avatar={props.avatar}
         />
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />

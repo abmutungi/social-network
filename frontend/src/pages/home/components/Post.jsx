@@ -12,7 +12,6 @@ library.add(faThumbsUp, faMessage);
 
 // SinglePost takes the props that come from the database
 const SinglePost = (props) => {
-
   //console.log('form comments', props);
 
   // if there is an image add the img div

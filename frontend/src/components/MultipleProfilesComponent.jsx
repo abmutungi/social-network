@@ -48,9 +48,6 @@ const MultipleProfilesComponent = ({ users, type }) => {
           key={index}
           type={type}
           avatar={userPicPath}
-          onClick={() => {
-            console.log("chatbox clicked");
-          }}
         />
       );
     });
