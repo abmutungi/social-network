@@ -8,9 +8,7 @@ function LoggedInUserProvider({ children }) {
     return storedUser ? JSON.parse(storedUser) : {};
   });
 
-  const [NewNotifsExist, setNewNotifsExist] = useState(false);
-
-  const [MyNotifs, setMyNotifs] = useState([]);
+ 
 
   function updateLoggedInUser(user) {
     setLoggedInUser(user);
@@ -18,23 +16,14 @@ function LoggedInUserProvider({ children }) {
     localStorage.setItem("loggedInUser", JSON.stringify(user));
   }
 
-  const updateNewNotifsExist = (bool) => {
-    setNewNotifsExist(bool);
-  };
-
-  const updateMyNotifs = (data) => {
-    setMyNotifs(() => data);
-  };
+  
 
   return (
     <loggedInUserContext.Provider
       value={{
         loggedInUser,
         updateLoggedInUser,
-        NewNotifsExist,
-        updateNewNotifsExist,
-        MyNotifs,
-        updateMyNotifs,
+      
       }}
     >
       {children}

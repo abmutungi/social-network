@@ -12,7 +12,7 @@ import { NotificationsModal } from "../../../pages/home/components/notifications
 import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { SocketContext } from "../../../context/webSocketContext";
-// import { SocketContext } from "../../../context/webSocketContext";
+
 
 
 function ContainerLogo() {
@@ -24,10 +24,10 @@ function ContainerLogo() {
 }
 
 function ContainerIcons() {
-  const { loggedInUser, NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs } =
+  const { loggedInUser } =
     useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
-  //const {socket} = useContext(SocketContext)
+  const {NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs} = useContext(SocketContext)
   const navigate = useNavigate();
 
   // console.log("socket from top header------------>", socket);

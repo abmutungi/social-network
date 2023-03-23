@@ -7,7 +7,9 @@ const SocketProvider = ({ children }) => {
   const [openSocket, setOpenSocket] = useState(false);
   //const [data, setData] = useState({});
   const [messages, setMessages] = useState([]);
+ const [NewNotifsExist, setNewNotifsExist] = useState(false);
 
+  const [MyNotifs, setMyNotifs] = useState([]);
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
       // create and open socket when component mounts
@@ -22,14 +24,16 @@ const SocketProvider = ({ children }) => {
         console.log("newData check --> ", e.data);
 
         console.log("sent through ws **********");
-        console.log(
-          "Checking data type in single onmessage",
-          newData.chatsfromgo[4].message
-        );
-
+     
         if (newData.tipo === "chatHistory") {
           updateChatMessages(newData.chatsfromgo);
         }
+
+        if (newData.tipo == "allNotifs") {
+        updateMyNotifs(newData.allNotifs)
+        updateNewNotifsExist(newData)
+        console.log("socket on message in notif bell --------->", newData);
+      }
       };
       return () => {
         // close socket when component unmounts
@@ -49,6 +53,14 @@ const SocketProvider = ({ children }) => {
     setMessages(() => data);
   };
 
+  const updateNewNotifsExist = (bool) => {
+    setNewNotifsExist(bool);
+  };
+
+  const updateMyNotifs = (data) => {
+    setMyNotifs(() => data);
+  };
+
   return (
     <SocketContext.Provider
       value={{
@@ -58,6 +70,12 @@ const SocketProvider = ({ children }) => {
 
         messages,
         updateChatMessages,
+
+        NewNotifsExist,
+        MyNotifs,
+
+        updateNewNotifsExist,
+        updateMyNotifs
       }}
     >
       {children}

@@ -109,8 +109,7 @@ const SingleNotificationComponent = ({ props }) => {
 
 // notifications modal that holds single notifications
 const NotificationsModal = ({ show, onClose, data }) => {
-  const { MyNotifs, updateMyNotifs } = useContext(loggedInUserContext);
-  const { socket } = useContext(SocketContext);
+  const { socket, MyNotifs, updateMyNotifs } = useContext(SocketContext);
 
   // async function DisplayNotifications() {
   //   try {

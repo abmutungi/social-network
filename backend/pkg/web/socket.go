@@ -45,12 +45,18 @@ type TypeChecker struct {
 	Type string `json:"type"`
 }
 
+// struct for new message
+
 type ChatsToSend struct {
 	Chats []chats.Chat `json:"chatsfromgo"`
 	Tipo  string       `json:"tipo"`
 }
 
-// struct for new message
+
+type AllNotifs struct {
+	SendNotifs []notifications.Notification `json:"allNotifs"`
+	Tipo       string                       `json:"tipo"`
+}
 
 type NewMessage struct {
 	LoggedInUserID string `json:"loggedInUser"`
@@ -74,9 +80,9 @@ func (t *T) UnmarshalData(data []byte) error {
 	case "groupInviteNotifs":
 		t.InvitedToGroup = &InvitedToGroup{}
 		return json.Unmarshal(data, t.InvitedToGroup)
-	case "notifs":
-		t.Notification = &notifications.Notification{}
-		return json.Unmarshal(data, t.Notification)
+	// case "notifs":
+	// 	t.Notification = &notifications.Notification{}
+	// 	return json.Unmarshal(data, t.Notification)
 	case "newMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)
@@ -133,12 +139,14 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			}
 
 			fmt.Println("******************* ws notifs: followRequest ************************")
-			f.FollowerPrivateData.Tipo = "followNotifs"
 
 			for user, conn := range loggedInSockets {
 				if user == f.Notifiyee {
 					fmt.Printf("*********************** %v has new notifications ***********************************", user)
-					conn.WriteJSON(notifications.GetNotifications(s.Db, user))
+					var fn AllNotifs
+					fn.SendNotifs = notifications.GetNotifications(s.Db, user)
+					fn.Tipo = "allNotifs"
+					conn.WriteJSON(fn)
 				}
 			}
 			// broadcastChannelGroupNotifs <- notifications.GetNotifications()
@@ -183,12 +191,14 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Membership not added to the db as already part of group")
 			}
 			fmt.Println("******************* ws notifs: groupRequest ************************")
-			f.GroupData.Tipo = "groupNotifs"
 
 			for user, conn := range loggedInSockets {
 				if user == groups.GetCreator(s.Db, f.Group) {
 					fmt.Printf("*********************** %v has new notifications ***********************************", user)
-					conn.WriteJSON(notifications.GetNotifications(s.Db, user))
+					var gn AllNotifs
+					gn.SendNotifs = notifications.GetNotifications(s.Db, user)
+					gn.Tipo = "allNotifs"
+					conn.WriteJSON(gn)
 				}
 			}
 

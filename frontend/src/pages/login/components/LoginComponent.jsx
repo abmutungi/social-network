@@ -20,9 +20,9 @@ import "../../../assets/css/login.css";
 // };
 
 const Login = () => {
-  const { loggedInUser, updateLoggedInUser, updateNewNotifsExist } =
+  const { loggedInUser, updateLoggedInUser } =
     useContext(loggedInUserContext);
-  const { createSocket } = useContext(SocketContext);
+  const { createSocket, updateNewNotifsExist } = useContext(SocketContext);
   const {
     updateAboutText,
     updateUserID,
