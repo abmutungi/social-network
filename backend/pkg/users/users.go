@@ -7,55 +7,23 @@ import (
 )
 
 type User struct {
-	UserID    int
-	Email     string
-	Password  string
-	Firstname string
-	Lastname  string
-	DOB       string
-	Nickname  string
-	Avatar    string
-	AboutText string
-	Privacy   int
-	Created   string
-	Notifications bool 
+	UserID        int
+	Email         string
+	Password      string
+	Firstname     string
+	Lastname      string
+	DOB           string
+	Nickname      string
+	Avatar        string
+	AboutText     string
+	Privacy       int
+	Created       string
+	Notifications bool
 	Groups        []int
 
-	// Followers int
+	//Followers int
 	// Following int
 }
-
-// type User struct {
-// 	ID        int    `json:"UserID"`
-// 	Email     string `json:"UserEmail"`
-// 	FName     string `json:"UserFName"`
-// 	LName     string `json:"UserLName"`
-// 	DOB       string `json:"UserDOB"`
-// 	Avatar    string `json:"UserAvatar"`
-// 	Nickname  string `json:"UserNickname"`
-// 	AboutMe   string `json:"UserAboutMe"`
-// 	Privacy   string `json:"UserPrivacy"`
-// 	CreatedAt string `json:"UserCreatedAt"`
-// }
-
-// func ReturnAllUsers(db *sql.DB) []User {
-// 	rows, err := db.Query("SELECT userID, email, firstName, lastName, dateOfBirth, avatar, nickname, aboutMe, privacy, createdAT from users")
-// 	if err != nil {
-// 		fmt.Println("Error in getting all users from database: ", err)
-// 	}
-// 	var allUsers []User
-// 	defer rows.Close()
-// 	for rows.Next() {
-// 		var u User
-// 		err2 := rows.Scan(&u.ID, &u.Email, &u.FName, &u.LName, &u.DOB, &u.Avatar, &u.Nickname, &u.AboutMe, &u.Privacy, &u.CreatedAt)
-// 		allUsers = append(allUsers, u)
-// 		if err2 != nil {
-// 			fmt.Println("Error when looping through rows of users: ", err2)
-// 		}
-// 	}
-
-// 	return allUsers
-// }
 
 func ReturnSingleUser(db *sql.DB, email string) User {
 	userStmt := "SELECT  userID, email, firstName, lastName, dateOfBirth, avatar, nickname, aboutMe, privacy, createdAT from users WHERE email=?"

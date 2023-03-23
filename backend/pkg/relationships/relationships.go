@@ -73,13 +73,12 @@ func FollowRequestCheck(db *sql.DB, loggedInUser, userID int) bool {
 		return false
 	}
 	if count > 0 {
-	//	fmt.Println("I've sent this user a follow request, pending response")
+		//	fmt.Println("I've sent this user a follow request, pending response")
 		return true
 	}
 	//fmt.Println("I'm not awaiting response from follow request, I can send a request")
 	return false
 }
-
 
 func DeleteRequest(db *sql.DB, notifID int) {
 	result, err := db.Exec("DELETE FROM notifications WHERE notificationID =?", notifID)
@@ -92,7 +91,6 @@ func DeleteRequest(db *sql.DB, notifID int) {
 	}
 	fmt.Println(rows)
 }
-
 
 // function to get all followers of passed in user.
 func GetAllFollowers(db *sql.DB, userID int) []users.User {
@@ -121,7 +119,6 @@ func GetAllFollowers(db *sql.DB, userID int) []users.User {
 	return followers
 }
 
-
 // function to get all followers of passed in user.
 func GetFollowing(db *sql.DB, userID int) []users.User {
 	rows, err := db.Query(`SELECT users.userID, firstName,lastName 
@@ -147,4 +144,16 @@ func GetFollowing(db *sql.DB, userID int) []users.User {
 
 	}
 	return following
+}
+
+//get number fo followers for the profile bar
+func FollowerCount(db *sql.DB, userid int) int {
+
+	var count int
+	err := db.QueryRow(`SELECT  COUNT(*)  FROM relationships WHERE userID = ?;`, userid).Scan(&count)
+	if err != nil {
+		log.Println("Error from FollowerCount fn():", err)
+	}
+
+	return count
 }
