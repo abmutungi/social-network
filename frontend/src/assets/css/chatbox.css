@@ -52,7 +52,7 @@
 }
 
 .chat-box-body > * {
-  margin: 1rem 1.2em;
+  margin: 0.5rem 1.2em;
 }
 
 .chat-box-footer {
@@ -63,13 +63,6 @@
   align-items: center;
 }
 
-/* .chat-box-footer > input {
-  position: absolute;
-  border-radius: 15px;
-  width: 60%;
-  left: 7vw;
-} */
-
 .chat-box-form {
   width: 100%;
   display: flex;
@@ -78,45 +71,11 @@
   align-items: center;
 }
 
-/* .chat-header-user-logo {
-  display: block;
-  color: #1b74e4;
-  position: absolute;
-  left: 2vw;
-  top: 0.5vh;
-  cursor: pointer;
-} */
-
-/* .chat-header-minimize {
-  color: #1b74e4;
-  position: absolute;
-  cursor: pointer;
-  left: 20vw;
-} */
-
 .chat-header-close {
   color: #1b74e4;
   height: 30px;
   cursor: pointer;
 }
-
-/* .chat-footer-image-logo {
-  display: block;
-  color: #1b74e4;
-  position: absolute;
-  left: 1.5vw;
-  top: 0.4vh;
-  cursor: pointer;
-} */
-
-/* .chat-footer-emoji-logo {
-  display: block;
-  color: #1b74e4;
-  position: absolute;
-  left: 22vw;
-  top: 0.4vh;
-  cursor: pointer;
-} */
 
 .msg-input {
   width: 80%;
@@ -127,12 +86,20 @@
 }
 
 .chat-bubble-current-user {
-  /* color: red; */
+  color: #ffffff;
   align-self: flex-end;
+  border-radius: 10px;
+  padding: 0.5rem;
+  background: #0183ff;
+  width: fit-content;
 }
 
 .chat-bubble {
-  /* color: green; */
+  border-radius: 10px;
+  padding: 0.5rem;
+  background: #e4e6eb;
+  color: black;
+  width: fit-content;
 }
 
 #anchor {
