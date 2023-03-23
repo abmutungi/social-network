@@ -45,7 +45,7 @@ const [GroupEvents, setGroupEvents] = useState([]);
       ).Avatar;
       return storedAvatar != ""
         ? storedAvatar
-        : "../assets/img/ext/man-utd.png";
+        : "man-utd.png";
     }
   });
   const [LoggedInUserID, setLoggedInUserID] = useState(() => {
