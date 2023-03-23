@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/abmutungi/social-network/backend/pkg/chats"
+	"github.com/abmutungi/social-network/backend/pkg/notifications"
 )
 
 func (s *Server) HandleMyChatUsers() http.HandlerFunc {
@@ -45,6 +46,11 @@ func (s *Server) SendChatHistory() http.HandlerFunc {
 
 		senderIdInt, _ := strconv.Atoi((r.Form.Get("senderID")))
 		recipientIdInt, _ := strconv.Atoi(r.Form.Get("recipientID"))
+
+		//sender is logged in user
+		if notifications.CheckIfUserHasNotificationsFromUser(s.Db, senderIdInt, recipientIdInt) {
+			notifications.ReadChatNotification(s.Db, senderIdInt, recipientIdInt)
+		}
 
 		chatHistoryToSend, _ := json.Marshal(chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID))
 		w.Write(chatHistoryToSend)

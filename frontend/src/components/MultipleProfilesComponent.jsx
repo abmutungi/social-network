@@ -23,10 +23,13 @@ const MultipleProfilesComponent = ({ users, type }) => {
     //function to check if name provided is in notifications
   }
   const checkUserForChatNotification = (notifier) => {
-    if (chatNotifsOnLogin.notifiers !== null) {
+    if (
+      chatNotifsOnLogin.notifiers !== null &&
+      chatNotifsOnLogin.notifiers !== undefined
+    ) {
       return chatNotifsOnLogin.notifiers.includes(notifier);
     } else {
-      return;
+      return false;
     }
   };
 
@@ -89,7 +92,9 @@ const MultipleProfilesComponent = ({ users, type }) => {
           key={index}
           type={type}
           avatar={userPicPath}
-          notifier={checkUserForChatNotification(user.FName)}
+          notifier={
+            checkUserForChatNotification(user.FName) && chatNotifsOnLogin
+          }
           onClick={() => {
             console.log("chatbox clicked");
           }}

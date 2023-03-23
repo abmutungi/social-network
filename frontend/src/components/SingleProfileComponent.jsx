@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { followText, unfollowText, requestText } from "./UserRequestBtn";
 import { useNavigate } from "react-router-dom";
 import { ChatBox } from "../pages/home/components/ChatBoxComponent";
-//import { loggedInUserContext } from "../context/loggedInUserContext";
+import { loggedInUserContext } from "../context/loggedInUserContext";
 import { SocketContext } from "../context/webSocketContext";
 
 const SingleProfileComponent = (props) => {
@@ -23,6 +23,8 @@ const SingleProfileComponent = (props) => {
     updateisGroupMember,
     updateGroupRequested,
   } = useContext(LowerHeaderContext);
+
+  const { updateChatNotifsOnLogin } = useContext(loggedInUserContext);
 
   const { messages, updateChatMessages } = useContext(SocketContext);
   const [show, setShow] = useState(false);
@@ -122,6 +124,9 @@ const SingleProfileComponent = (props) => {
     console.log("messages data", data);
     // setMessages(data);
     updateChatMessages(data);
+    if (props.notifier) {
+      updateChatNotifsOnLogin(false);
+    }
   }
   // sendPrivateMessageInfo();
 

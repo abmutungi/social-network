@@ -167,7 +167,7 @@ func UserRequestedToJoin(db *sql.DB, groupID, userID int) bool {
 }
 
 func ReturnUserChatNotifications(db *sql.DB, notifyeeID int) []string {
-	rows, err := db.Query(`SELECT DISTINCT notifier FROM notifications WHERE notifiyee=? AND notificationType="privateMessage"`, notifyeeID)
+	rows, err := db.Query(`SELECT DISTINCT notifier FROM notifications WHERE notifiyee=? AND notificationType="privateMessage" AND read=0`, notifyeeID)
 	if err != nil {
 		fmt.Printf("Error when querying db for chat notifications: %v\n", err)
 	}
@@ -196,4 +196,32 @@ func ReturnUserChatNotifications(db *sql.DB, notifyeeID int) []string {
 	}
 
 	return result
+}
+
+func CheckIfUserHasNotificationsFromUser(db *sql.DB, notifiyee, potentialNotifierID int) bool {
+	var count int
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND notifier = ?`, notifiyee, potentialNotifierID).Scan(&count)
+	if err != nil {
+		log.Println("Error from NotificationCheck fn():", err)
+		return false
+	}
+
+	if count > 0 {
+		fmt.Printf("user has %d notifications", count)
+		return true
+	}
+	fmt.Println("user has 0 notifications")
+	return false
+}
+
+func ReadChatNotification(db *sql.DB, notifiyeeID, notifierID int) {
+	result, err := db.Exec("UPDATE notifications SET read = 1 AND actioned=1 WHERE notifiyee =? AND notifier=?", notifiyeeID, notifierID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	rows, err := result.RowsAffected()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(rows)
 }
