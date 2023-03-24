@@ -5,10 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import "../../../assets/css/Groups.css";
+import { SocketContext } from "../../../context/webSocketContext";
 
 const CreateEventModal = ({ show, onClose }) => {
   const { LoggedInUserID, GroupID } = useContext(LowerHeaderContext);
-
+  const { socket} = useContext(SocketContext)
   const [formValues, setFormValues] = useState({
     eventName: "",
     eventDescription: "",
@@ -25,33 +26,43 @@ const CreateEventModal = ({ show, onClose }) => {
     });
   };
 
-  async function CreateGroupEvent(fdata) {
-    try {
-      console.log("formvalues from group event", formValues);
-      const response = await fetch("http://localhost:8080/creategroupevent", {
-        method: "POST",
-        credentials: "include",
-        body: fdata,
-      });
+  // async function CreateGroupEvent(fdata) {
+  //   try {
+  //     console.log("formvalues from group event", formValues);
+  //     const response = await fetch("http://localhost:8080/creategroupevent", {
+  //       method: "POST",
+  //       credentials: "include",
+  //       body: fdata,
+  //     });
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      console.log("resp from creategroupevent", data);
-      onClose();
+  //     console.log("resp from creategroupevent", data);
+  //     onClose();
 
-      //responds with an array of group objects including the newly created group
-    } catch (e) {
-      console.log("Error with the creategroupevent fn", e);
-    }
-  }
+  //     //responds with an array of group objects including the newly created group
+  //   } catch (e) {
+  //     console.log("Error with the creategroupevent fn", e);
+  //   }
+  // }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
-    formData.append("creator", LoggedInUserID);
-    formData.append("GroupID", GroupID);
-    CreateGroupEvent(formData);
+
+    let eventDetails = {}
+
+    eventDetails.eventName = formData.eventName
+    eventDetails.eventDescription = formData.eventDescription
+    eventDetails.eventStartDate = formData.eventStartDate
+    eventDetails.creator = LoggedInUserID
+    eventDetails.groupID = GroupID
+    eventDetails.type = "eventInviteNotifs"
+    console.log("***** event invites******", JSON.stringify(eventDetails));
+    socket.send(JSON.stringify(eventDetails))
+    // CreateGroupEvent(formData);
+    onClose();
   };
 
   if (!show) {

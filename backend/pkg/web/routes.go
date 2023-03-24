@@ -23,7 +23,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/myposts", s.HandleSendUserPosts())
 	s.Router.HandleFunc("/creategroup", s.HandleCreateGroup())
 	s.Router.HandleFunc("/isgroupmember", s.IsGroupMember())
-	s.Router.HandleFunc("/creategroupevent", s.CreateGroupEvent())
+	// s.Router.HandleFunc("/creategroupevent", s.CreateGroupEvent())
 	s.Router.HandleFunc("/mychatusers", s.HandleMyChatUsers())
 	s.Router.HandleFunc("/sendprivatemessage", s.SendChatHistory())
 

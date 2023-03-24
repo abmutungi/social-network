@@ -1,11 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-// import { Login } from "../../../pages/login/components/LoginComponent";
-// import { Link, Route, Routes } from "react-router-dom";
-// import { currentUser } from "../../../pages/login/components/LoginComponent";
 import { useNavigate } from "react-router-dom";
-
-// import {  logoutUser } from "./ClickFuncs";
 import "../../../index.css";
 import { useContext, useState, useEffect } from "react";
 import { NotificationsModal } from "../../../pages/home/components/notificationsModal";
@@ -29,9 +24,6 @@ function ContainerIcons() {
   const { LoggedInUserID } = useContext(LowerHeaderContext);
   const {NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs} = useContext(SocketContext)
   const navigate = useNavigate();
-
-  // console.log("socket from top header------------>", socket);
-
 
   
   /*On logout click,
@@ -97,12 +89,6 @@ function ContainerIcons() {
       console.log("error sending notifications that have been read", e);
     }
   }
-
-  // socket.onmessage = (e) => {
-  //   let data = JSON.parse(e.data)
-  //   updateNewNotifsExist(data)
-  //   console.log("socket on message in notif bell --------->", data);
-  // }
   
   useEffect(() => {
     if (!NewNotifsExist) CheckNotifications();

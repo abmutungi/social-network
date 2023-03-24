@@ -170,7 +170,7 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 
 				groups.AddGroupMember(s.Db, n.NotificationGroupID, n.NotifiyeeID)
 				relationships.DeleteRequest(s.Db, n.NotificationID)
-				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)//should this happen?
+				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)//should this happen after delete? 
 			} else {
 				fmt.Println("NOOOOOOOO!", prettyPrint((n)))
 

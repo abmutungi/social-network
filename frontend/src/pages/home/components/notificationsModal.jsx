@@ -12,13 +12,6 @@ const SingleNotificationComponent = ({ props }) => {
     "socket from single notification component ------------>",
     socket
   );
-  // socket.onmessage = (e) => {
-  //   let data = JSON.parse(e.data)
-  //   updateMyNotifs(data)
-  //   console.log("socket on message--------->", data);
-  // }
-
-  // console.log("MyNotifs--------->", MyNotifs);
 
   let notifText = props.notifType;
 
@@ -33,7 +26,7 @@ const SingleNotificationComponent = ({ props }) => {
       notifText = "request to join your group: ";
       break;
     case "eventInvite":
-      notifText = "invitation to...";
+      notifText = "invitation to an event with: ";
       break;
     default:
   }
@@ -110,38 +103,10 @@ const SingleNotificationComponent = ({ props }) => {
 const NotificationsModal = ({ show, onClose, data }) => {
   const { socket, MyNotifs, updateNewNotifsExist } = useContext(SocketContext);
 
-  // async function DisplayNotifications() {
-  //   try {
-  //     const response = await fetch("http://localhost:8080/displayNotif", {
-  //       method: "POST",
-  //       credentials: "include",
-  //       body: JSON.stringify({
-  //         loggedInUserID: LoggedInUserID,
-  //       }),
-  //     });
-  //     const data = await response.json();
-  //     console.log("Notif data check on click ->", data);
-  //     setMyNotifs(data.AllNotifs);
-  //   } catch (e) {
-  //     console.log("error displaying notifications", e);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   DisplayNotifications();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // console.log(
-  //   "MyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifsMyNotifs",
-  //   MyNotifs
-  // );
   if (!show) {
     return null;
   } else {
     console.log("socket from notification modal ------------>", socket);
-
-
     updateNewNotifsExist(false)
     console.log("MyNotifs--------->", MyNotifs);
   }

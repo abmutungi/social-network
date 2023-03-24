@@ -1,66 +1,52 @@
 package web
 
-import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"strconv"
+// type GroupEvent struct {
+// 	Creator int `json:"creator"`
+// 	GroupID int `json:"groupID"`
 
-	"github.com/abmutungi/social-network/backend/pkg/groups"
-)
+// }
 
-type GroupEvent struct {
-	eventName        string
-	eventDescription string
-	eventStartDate   string
-	creator          int
-	GroupID          int
-}
+// Adds a new group event to the db (need to return this on the group's wall immediately)
+// func (s *Server) CreateGroupEvent() http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		enableCors(&w)
 
-//Adds a new group event to the db (need to return this on the group's wall immediately)
-func (s *Server) CreateGroupEvent() http.HandlerFunc {
+// 		err := r.ParseMultipartForm(10 << 20)
+// 		if err != nil {
+// 			fmt.Println("err parsing within creategroupevent", err)
+// 		}
 
-	return func(w http.ResponseWriter, r *http.Request) {
-		enableCors(&w)
+// 		// for key, value := range r.Form {
+// 		// 	fmt.Printf("%s = %s\n", key, value)
+// 		// }
 
-		err := r.ParseMultipartForm(10 << 20)
-		if err != nil {
-			fmt.Println("err parsing within creategroupevent", err)
-		}
+// 		groupid, err := strconv.Atoi(r.Form.Get("GroupID"))
+// 		if err != nil {
+// 			fmt.Println("Error converting string to int, CreateGroupEvent fn()")
+// 		}
 
-		// for key, value := range r.Form {
-		// 	fmt.Printf("%s = %s\n", key, value)
-		// }
+// 		creatorid, err := strconv.Atoi(r.Form.Get("creator"))
+// 		if err != nil {
+// 			fmt.Println("Error converting string to int, CreateGroupEvent fn()")
+// 		}
 
-		groupid, err := strconv.Atoi(r.Form.Get("GroupID"))
-		if err != nil {
-			fmt.Println("Error converting string to int, CreateGroupEvent fn()")
-		}
+// 		// get all group members then update the notifications table,
+// 		// then create entries within the notication table
+// 		allgroupmembers := groups.GetAllGroupMembers(s.Db, groupid)
+// 		fmt.Println("all-group-members", allgroupmembers)
 
-		creatorid, err := strconv.Atoi(r.Form.Get("creator"))
-		if err != nil {
-			fmt.Println("Error converting string to int, CreateGroupEvent fn()")
-		}
+// 		for _, member := range allgroupmembers {
+// 			groups.UpdateNotifcationTablePostEventCreation(s.Db, "eventInvite", member, creatorid, groupid)
+// 		}
 
-		//get all group members then update the notifications table,
-		//then create entries within the notication table
-		var allgroupmembers = groups.GetAllGroupMembers(s.Db, groupid)
-		fmt.Println("all-group-members", allgroupmembers)
+// 		groups.CreateGroupEvent(s.Db, groupid, creatorid, r.Form.Get("eventName"), r.Form.Get("eventDescription"), r.Form.Get("eventStartDate"))
 
-		for _, member := range allgroupmembers{
-
-			groups.UpdateNotifcationTablePostEventCreation(s.Db,"eventInvite",member,creatorid,groupid )
-		}
-		
-		groups.CreateGroupEvent(s.Db, groupid, creatorid, r.Form.Get("eventName"), r.Form.Get("eventDescription"), r.Form.Get("eventStartDate"))
-
-		var message = fmt.Sprintf("The Event %s has been added to the database", r.Form.Get("eventName"))
-		createGroupEventResponse, err := json.Marshal(message)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		w.Write([]byte(createGroupEventResponse))
-
-	}
-}
+// 		message := fmt.Sprintf("The Event %s has been added to the database", r.Form.Get("eventName"))
+// 		createGroupEventResponse, err := json.Marshal(message)
+// 		if err != nil {
+// 			http.Error(w, err.Error(), http.StatusInternalServerError)
+// 			return
+// 		}
+// 		w.Write([]byte(createGroupEventResponse))
+// 	}
+// }

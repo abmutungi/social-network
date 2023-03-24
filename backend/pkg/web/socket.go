@@ -15,11 +15,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var (
-	loggedInSockets = make(map[int]*websocket.Conn)
-	// broadcastChannelChats  = make(chan chats.Chat, 1)
-	broadcastChannelGroupNotifs = make(chan GroupMembers, 1)
-)
+var loggedInSockets = make(map[int]*websocket.Conn)
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -36,9 +32,18 @@ type InvitedToGroup struct {
 }
 
 type GroupData struct {
-	Group int `json:"groupID"`
-	User  int `json:"loggedInUserID"`
-	Tipo string `json:"tipo"`
+	Group int    `json:"groupID"`
+	User  int    `json:"loggedInUserID"`
+	Tipo  string `json:"tipo"`
+}
+
+type GroupEvent struct {
+	EventName        string `json:"eventName"`
+	EventDescription string `json:"eventDescription"`
+	EventStartDate   string `json:"eventStartDate"`
+	Creator          int    `json:"creator"`
+	GroupID          int    `json:"groupID"`
+	Tipo             string `json:"tipo"`
 }
 
 type GroupMembers struct {
@@ -63,6 +68,7 @@ type T struct {
 	// *chats.Chat
 	*NewMessage
 	*GroupMembers
+	*GroupEvent
 }
 
 type TypeChecker struct {
@@ -103,9 +109,9 @@ func (t *T) UnmarshalData(data []byte) error {
 	case "groupInviteNotifs":
 		t.GroupMembers = &GroupMembers{}
 		return json.Unmarshal(data, t.GroupMembers)
-	// case "notifs":
-	// 	t.Notification = &notifications.Notification{}
-	// 	return json.Unmarshal(data, t.Notification)
+	case "eventInviteNotifs":
+		t.GroupEvent = &GroupEvent{}
+		return json.Unmarshal(data, t.GroupEvent)
 	case "newMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)
@@ -259,9 +265,31 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
-			// for user, conn := range loggedInSockets {
+		}
 
-			// }
+		if f.Type == "eventInviteNotifs" {
+
+			// get all group members then update the notifications table,
+			// then create entries within the notication table
+			allgroupmembers := groups.GetAllGroupMembers(s.Db, f.GroupID)
+			fmt.Println("all-group-members", allgroupmembers)
+
+			for _, member := range allgroupmembers {
+				groups.UpdateNotifcationTablePostEventCreation(s.Db, "eventInvite", member, f.Creator, f.GroupID)
+			}
+
+			for _, member := range allgroupmembers {
+				for user, conn := range loggedInSockets {
+					if user != f.Creator && user == member {
+						var en AllNotifs
+						en.SendNotifs = notifications.GetNotifications(s.Db, user)
+						en.Tipo = "allNotifs"
+						conn.WriteJSON(en)
+					}
+				}
+			}
+			groups.CreateGroupEvent(s.Db, f.GroupID, f.Creator, f.EventName, f.EventDescription, f.EventStartDate)
+
 		}
 	}
 }

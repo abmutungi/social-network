@@ -5,7 +5,6 @@ export const SocketContext = createContext(null);
 const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [openSocket, setOpenSocket] = useState(false);
-  //const [data, setData] = useState({});
   const [messages, setMessages] = useState([]);
  const [NewNotifsExist, setNewNotifsExist] = useState(false);
 
