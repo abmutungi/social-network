@@ -219,7 +219,7 @@ const SingleProfileComponent = (props) => {
         onClick={(e) => {
           e.preventDefault();
           // if (!show) fetchChatHistory();
-          // setShow(true);
+          setShow(true);
           // setName(props.chatName);
           // console.log("props.id -> ", props.id);
           // updateUserID(Number(e.currentTarget.id));
