@@ -54,7 +54,7 @@ const AllChats = () => {
     });
 
     const data = await resp.json();
-
+    // console.log("group chats data", data);
     setGroupChats(data);
   }
 

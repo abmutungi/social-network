@@ -124,6 +124,8 @@ const SingleProfileComponent = (props) => {
   }
   // sendPrivateMessageInfo();
 
+  // fetch groupChathistory
+
   if (props.type === "AllUsers") {
     return (
       <div
@@ -203,15 +205,42 @@ const SingleProfileComponent = (props) => {
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
-        <p className="ChatName">
-          {props.chatName}
-          <small className="group-event-text">{props.eventText}</small>
-        </p>
+        <p className="ChatName">{props.chatName}</p>
       </div>
     );
   }
 
-  // if props.type == GroupChats
+  if (props.type == "GroupChats") {
+    return (
+      <div
+        className="SingleProfile"
+        role="presentation"
+        // id={props.id}
+        onClick={(e) => {
+          e.preventDefault();
+          // if (!show) fetchChatHistory();
+          // setShow(true);
+          // setName(props.chatName);
+          // console.log("props.id -> ", props.id);
+          // updateUserID(Number(e.currentTarget.id));
+          //updateDynamicID(e.currentTarget.id);
+        }}
+      >
+        <ChatBox
+          onClose={() => setShow(false)}
+          show={show}
+          name={name}
+          id={props.id}
+          data={messages}
+          avatar={props.avatar}
+        />
+        <div className="ChatPic">
+          <img src={props.avatar} width="25" height="25" alt="chat-pic" />
+        </div>
+        <p className="ChatName">{props.chatName}</p>
+      </div>
+    );
+  }
 };
 
 export default SingleProfileComponent;
