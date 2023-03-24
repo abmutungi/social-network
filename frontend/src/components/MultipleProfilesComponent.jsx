@@ -52,6 +52,8 @@ const MultipleProfilesComponent = ({ users, type }) => {
       );
     });
   }
+
+  // if type === GroupsChats
 };
 
 export { MultipleProfilesComponent };

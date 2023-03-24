@@ -30,6 +30,12 @@ type Chat struct {
 	SenderName    string `json:"senderName"`
 }
 
+type GroupChat struct {
+	GroupID   int    `json:"groupID"`
+	GroupName string `json:"groupName"`
+	Avatar    string `json:"groupAvatar"`
+}
+
 // send all public users and users you are following for chat section
 
 func GetChatUsers(db *sql.DB, userID int) []PotentialChats {
@@ -148,4 +154,33 @@ func getNameFromUserID(db *sql.DB, id int) string {
 	stmt.Scan(&firstName)
 
 	return firstName
+}
+
+func GetGroupChats(db *sql.DB, userID int) []GroupChat {
+	rows, err := db.Query(`SELECT groups.groupID, name, groups.avatar 
+	FROM groupMembers
+	INNER JOIN groups ON groups.groupID = groupMembers.groupID   
+	WHERE groupMembers.member = ?;`, userID)
+
+	if err != nil {
+		fmt.Printf("Error from GetGroupChats: %v", err)
+	}
+
+	defer rows.Close()
+
+	var gc []GroupChat
+
+	for rows.Next() {
+		var g GroupChat
+
+		err := rows.Scan(&g.GroupID, &g.GroupName, &g.Avatar)
+
+		if err != nil {
+			fmt.Printf("Error scanning rows in GetGroupChats: %v", err)
+		}
+
+		gc = append(gc, g)
+	}
+
+	return gc
 }

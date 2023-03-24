@@ -14,8 +14,8 @@ import (
 	uuid "github.com/gofrs/uuid"
 )
 
-type SendGroupPostsAndEvents struct{
-	Posts  []groups.GroupPost 
+type SendGroupPostsAndEvents struct {
+	Posts  []groups.GroupPost
 	Events []groups.EventInfo
 }
 
@@ -32,8 +32,6 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 		}
 
 		if r.Form.Has("groupID") {
-		
-
 
 			var newFileName string
 			// if file is added in form, create file for image and return filename
@@ -44,14 +42,11 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			groupIDToInt, _ := strconv.Atoi(r.Form.Get("groupID"))
 			GuserIDToInt, _ := strconv.Atoi(r.Form.Get("GuserID"))
 
-
 			// adding post to the db
 			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-			posts.CreateGroupPost(s.Db, groupIDToInt,GuserIDToInt, r.Form.Get("textContent"),newFileName)
+			posts.CreateGroupPost(s.Db, groupIDToInt, GuserIDToInt, r.Form.Get("textContent"), newFileName)
 
-	
-
-			sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db,groupIDToInt))
+			sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db, groupIDToInt))
 			if err != nil {
 				fmt.Println("error sending & marsalling group posts", sendPosts)
 			}
@@ -103,24 +98,25 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 	}
 }
 
-//pretty prints the structs
+// pretty prints the structs
 func prettyPrint(i interface{}) string {
-    s, _ := json.MarshalIndent(i, "", "\t")
-    return string(s)
+	s, _ := json.MarshalIndent(i, "", "\t")
+	return string(s)
 }
 
+// func (s *Server) TestDBfunctions() {
+// 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+// 	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
+// 	// fmt.Println(relationships.GetAllFollowers(s.Db, 3))
 
-func (s *Server) TestDBfunctions() {
-	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
-	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
-	// fmt.Println(relationships.GetAllFollowers(s.Db, 3))
+// 	// fmt.Println(posts.GetLastPostID(s.Db, 3))
 
-	// fmt.Println(posts.GetLastPostID(s.Db, 3))
+// 	// fmt.Println("checking clicked posts", posts.GetClickedProfilePosts(s.Db, 1, 4))
+// 	// fmt.Println("checking if user can view post", posts.PostAudienceCheck(s.Db, 5, 5))
+// 	// fmt.Printf("%+v\n",prettyPrint(groups.GetAllGroupPosts(s.Db, 1)))
 
-	fmt.Println("checking clicked posts", posts.GetClickedProfilePosts(s.Db, 1, 4))
-	// fmt.Println("checking if user can view post", posts.PostAudienceCheck(s.Db, 5, 5))
-	fmt.Printf("%+v\n",prettyPrint(groups.GetAllGroupPosts(s.Db, 1)))
-}
+// 	// fmt.Println("check group chats function", chats.GetGroupChats(s.Db, 2))
+// }
 
 func (s *Server) HandleImage(r *http.Request, formImageName string) string {
 	file, fileInfo, err := r.FormFile(formImageName)
@@ -180,7 +176,6 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 
 			fmt.Println("clicked USER ID =====>", userIdInt)
 
-
 			groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")))
 			fmt.Println("GROUPID -->>--", groupIdInt)
 			// getall posts from db
@@ -215,28 +210,24 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			userIdInt, _ := strconv.Atoi((r.Form.Get("GuserID")))
 			fmt.Println("GuserID -->>--", userIdInt)
 
+			// getall posts from db
+			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-	// getall posts from db
-	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			var postsToSend []groups.GroupPost = groups.GetAllGroupPosts(s.Db, groupIdInt)
+			var eventsToSend []groups.EventInfo = groups.GetEventInfo(s.Db, groupIdInt)
 
+			SendAll := SendGroupPostsAndEvents{
+				postsToSend,
+				eventsToSend,
+			}
 
-	var postsToSend []groups.GroupPost = groups.GetAllGroupPosts(s.Db, groupIdInt)
-	var eventsToSend []groups.EventInfo = groups.GetEventInfo(s.Db, groupIdInt )
+			fmt.Println("TOSEND IN HANDLEPOSTS! -- - ", SendAll)
+			marshalPosts, _ := json.Marshal(SendAll)
 
-	SendAll := SendGroupPostsAndEvents {
-		postsToSend,
-		eventsToSend,
-
-	}
-	
-	 fmt.Println("TOSEND IN HANDLEPOSTS! -- - ", SendAll)
-	marshalPosts, _ := json.Marshal(SendAll)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(marshalPosts)
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(marshalPosts)
 
 		}
 
 	}
 }
-

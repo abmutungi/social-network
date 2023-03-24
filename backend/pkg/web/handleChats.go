@@ -55,4 +55,25 @@ func (s *Server) SendChatHistory() http.HandlerFunc {
 	}
 }
 
-//function to get group chats would consist of just getting all groups logged in member is a part of
+// function to get group chats would consist of just getting all groups logged in member is a part of
+func (s *Server) HandleMyGroupChats() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCors(&w)
+
+		err := r.ParseMultipartForm(10 << 20)
+
+		if err != nil {
+			fmt.Printf("error parsing userID form: %v", err)
+		}
+
+		userIdInt, _ := strconv.Atoi((r.Form.Get("loggedInUserID")))
+
+		var groupChatsToSend []chats.GroupChat = chats.GetGroupChats(s.Db, userIdInt)
+
+		// fmt.Println("Are correct groups chats being sent??", groupChatsToSend)
+		marshalGroupChats, _ := json.Marshal(groupChatsToSend)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(marshalGroupChats)
+	}
+}

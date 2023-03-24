@@ -210,6 +210,8 @@ const SingleProfileComponent = (props) => {
       </div>
     );
   }
+
+  // if props.type == GroupChats
 };
 
 export default SingleProfileComponent;
