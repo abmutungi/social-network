@@ -22,6 +22,7 @@ body {
   display: flex;
   justify-content: center;
 }
+
 .login-form {
   background-color: #ffffff;
   width: fit-content;
@@ -41,14 +42,12 @@ body {
   width: 400px;
   height: 30px;
   text-align: center;
+  border-color:#1877f2;
 }
 
 input:focus {
-  caret-color: #1b74e4;
-  outline-color: #1b74e4;
-  border-color: #1b74e4;
-  /* border: #1b74e4 solid 1px; */
-  outline-color: #1b74e4;
+ 
+  outline-color: #036aef;
 }
 
 .login-button {
@@ -113,7 +112,7 @@ input:focus {
   font-weight: bold;
 }
 .logo-text {
-  color: blue;
+  color:#1877f2;;
   background-color: #ffffff;
   padding: 10px 20px;
   text-transform: uppercase;

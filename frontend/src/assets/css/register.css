@@ -1,25 +1,38 @@
 .register-container {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  width: 40vw;
-  height: 70vh;
-  left: 50vw;
-  top: 10vh;
-  border-radius: 5px;
 
+  /* height: 500px;
+  border-radius: 5px;
   background-color: #ffffff;
+  margin: auto;
+  width: 500px;
+  border: 3px solid #1877f2;
+  padding: 10px;
+  display: flex;
+  justify-content: center; */
+  height: 650px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin: auto;
+    width: 650px;
+    border: 3px solid #1877f2;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
 }
 .register-form {
   background-color: #ffffff;
-
+  width: fit-content;
+  text-align: center;
   display: flex;
   flex-direction: column;
+  height: fit-content;
+  position: fixed;
+  top: 27%;
 }
 
 .register-button {
   background-color: #42b72a;
-  height: 7vh;
+  height: 30px;
   color: white;
   font-weight: 600;
   font-size: larger;
@@ -31,7 +44,7 @@
 }
 
 .register-login-button {
-  height: 4vh;
+  height: 30px;
   background-color: #1877f2;
   color: white;
   border-radius: 5px;
@@ -40,26 +53,28 @@
   cursor: pointer;
   outline: none;
   border: none;
-  width: auto;
+  width: 100%;
 }
 
 .register-form > input {
-  height: 6vh;
   border-radius: 5px;
   padding-bottom: 5;
   margin-bottom: 10px;
   font-size: large;
-  color: #1d2129;
-  background-color: #f5f6f7;
+  width: 500px;
+  height: 30px;
+  text-align: center;
+  border-color:#1877f2;
 }
 
 .register-form > textarea {
-  height: 8vh;
+  height: 70px;
   border-radius: 5px;
   padding-bottom: 5;
   margin-bottom: 10px;
   font-size: large;
-  background-color: #f5f6f7;
+  text-align: center;
+  line-height: 60px;
 }
 
 .register-form > date {
@@ -76,10 +91,8 @@ input:focus {
 
 .errorMsg {
   color: red;
-  position: absolute;
-  left: 1000px;
-  top: 55px;
   font-size: large;
+  margin-top: 20px;
 }
 
 .successMsg {

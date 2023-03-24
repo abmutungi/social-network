@@ -9,7 +9,7 @@ const Register = () => {
   //State to hold errors
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [img, setImg] = useState(null);
+  const [ setImg] = useState(null);
   const [imgName, setImgName] = useState("");
   const navigate = useNavigate();
 
@@ -65,16 +65,15 @@ const Register = () => {
     sendRegistrationData();
   };
 
-  const printData = (data) => {
-    console.log(data);
-  };
+
 
   return (
     <>
-      <div className="login-logo">LOGO FOR THE SOCIAL NETWORK</div>
-      {errorMessage && <div className="errorMsg">{errorMessage}</div>}
-      {successMessage && <div className="successMsg">{successMessage}</div>}
+     
       <div className="register-container">
+      <div className="login-logo"><div className="logo-text">
+    <span>Connect</span>
+  </div></div>
         <form className="register-form" onSubmit={handleSubmit}>
           <input
             required
@@ -136,7 +135,7 @@ const Register = () => {
           />
 
           <label htmlFor="avatar">
-            Choose an image to be your avatar (Optional)
+          Upload (Optional)
           </label>
           <input
             type="file"
@@ -157,6 +156,8 @@ const Register = () => {
               Already have an account? Click here to log in
             </button>
           </Link>
+          {errorMessage && <div className="errorMsg">{errorMessage}</div>}
+      {successMessage && <div className="successMsg">{successMessage}</div>}
           <Routes>
             <Route path="/login" element={<Login />}></Route>
           </Routes>
