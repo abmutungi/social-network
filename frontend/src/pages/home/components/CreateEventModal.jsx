@@ -16,6 +16,7 @@ const CreateEventModal = ({ show, onClose }) => {
     eventStartDate: "",
     creator: LoggedInUserID,
     GroupID: GroupID,
+    type: "eventInviteNotifs",
   });
 
   const handleChange = (event) => {
@@ -50,17 +51,11 @@ const CreateEventModal = ({ show, onClose }) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
+    formData.append("creator", LoggedInUserID);
+    formData.append("groupID", GroupID);
+    console.log("***** event invites******", JSON.stringify(formValues));
 
-    let eventDetails = {}
-
-    eventDetails.eventName = formData.eventName
-    eventDetails.eventDescription = formData.eventDescription
-    eventDetails.eventStartDate = formData.eventStartDate
-    eventDetails.creator = LoggedInUserID
-    eventDetails.groupID = GroupID
-    eventDetails.type = "eventInviteNotifs"
-    console.log("***** event invites******", JSON.stringify(eventDetails));
-    socket.send(JSON.stringify(eventDetails))
+    socket.send(JSON.stringify(formValues))
     // CreateGroupEvent(formData);
     onClose();
   };
