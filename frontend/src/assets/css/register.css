@@ -102,3 +102,19 @@ input:focus {
   top: 60px;
   font-size: large;
 }
+
+.avatar-upload-btn{
+  background-color: pink;
+  height: 30px;
+  color: white;
+  font-weight: 600;
+  font-size: larger;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+
+
+
+}

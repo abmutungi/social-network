@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/css/register.css";
 import { Login } from "../../login/components/LoginComponent";
@@ -31,6 +31,11 @@ const Register = () => {
       ...formValues,
       [name]: value,
     });
+  };
+
+  const hiddenFileInput = React.useRef(null);
+  const handleFileClick = () => {
+    hiddenFileInput.current.click();
   };
 
   const handleSubmit = (event) => {
@@ -134,17 +139,20 @@ const Register = () => {
             onChange={handleChange}
           />
 
-          <label htmlFor="avatar">
-          Upload (Optional)
-          </label>
+          <button onClick={handleFileClick} className="avatar-upload-btn" htmlFor="avatar">
+          Upload An Avatar (Optional)
+          </button>
           <input
             type="file"
+            ref={hiddenFileInput}
+
             name="avatar"
             value={formValues.avatar}
             onChange={(e) => {
               setImg(e.target.files[0]);
               setImgName(e.target.files[0].name);
             }}
+            style={{display: 'none'}}
           />
 
           <button className="register-button" type="submit">
