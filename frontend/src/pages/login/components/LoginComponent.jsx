@@ -188,11 +188,12 @@ const Login = () => {
 
   return (
     <>
-      <div className="login-logo">LOGO FOR THE SOCIAL NETWORK</div>
-      {loginErrorMessage && (
-        <div className="loginErrorMsg">{loginErrorMessage}</div>
-      )}
+     
       <div className="login-container">
+      <div className="login-logo"><div className="logo-text">
+    <span>Connect</span>
+  </div></div>
+
         <form onSubmit={handleSubmit} className="login-form">
           <input
             required
@@ -224,6 +225,9 @@ const Login = () => {
           >
             <button className="login-register-button">Register</button>
           </Link>
+          {loginErrorMessage && (
+        <div className="loginErrorMsg">{loginErrorMessage}</div>
+      )}
           <Routes>
             <Route path="/register" element={<Register />}></Route>
           </Routes>
