@@ -184,3 +184,29 @@ func GetGroupChats(db *sql.DB, userID int) []GroupChat {
 
 	return gc
 }
+
+func GetGroupChatHistory(db *sql.DB, groupID int) []Chat {
+	rows, err := db.Query(`SELECT groupmessageID, messageContent, sender, createdAt FROM groupMessages WHERE groupChatID = ?`, groupID)
+
+	if err != nil {
+		fmt.Printf("error with getGroupChatHistory query: %v", err)
+	}
+
+	defer rows.Close()
+
+	var gm []Chat
+
+	for rows.Next() {
+		var m Chat
+
+		err := rows.Scan(&m.MessageID, &m.ChatMessage, &m.ChatSender, &m.Date)
+
+		if err != nil {
+			fmt.Printf("error with scanning rows in getGroupChatHistory: %v", err)
+		}
+
+		m.SenderName = getNameFromUserID(db, m.ChatSender)
+		gm = append(gm, m)
+	}
+	return gm
+}

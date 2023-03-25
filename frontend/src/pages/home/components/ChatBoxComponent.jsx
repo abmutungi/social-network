@@ -11,48 +11,12 @@ import {
   // faFaceSmile,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { loggedInUserContext } from "../../../context/loggedInUserContext";
-
-// let dummyMessages = [
-//   {
-//     msgContent: "hi there",
-//     user: "Yonas",
-//     date: new Date().toDateString(),
-//     isCurrentUser: true,
-//   },
-//   {
-//     msgContent: "hola",
-//     user: "Messi",
-//     date: new Date().toDateString(),
-//     isCurrentUser: false,
-//   },
-//   {
-//     msgContent: "who's the best defender?",
-//     user: "Yonas",
-//     date: new Date().toDateString(),
-//     isCurrentUser: true,
-//   },
-//   {
-//     msgContent: "romero",
-//     user: "Messi",
-//     date: new Date().toDateString(),
-//     isCurrentUser: false,
-//   },
-// ];
-
-//  let chatBoxes = document.getElementsByClassName("chat-box-container");
-//  for (const cBox of chatBoxes) {
-//    if (cBox.id != name) {
-//      console.log("Name in loop -> ", name);
-//      console.log("cBox id -> ", cBox.id);
-//      console.log("cBox attr -> ", cBox.attributes);
-//    }
-//  }
+// import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
 const ChatBox = ({ show, onClose, name, id, data, avatar }) => {
   const { socket } = useContext(SocketContext);
 
-  const { updateMessages } = useContext(loggedInUserContext);
+  // const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
 
   const handleSubmit = (e) => {
@@ -101,15 +65,14 @@ const ChatBox = ({ show, onClose, name, id, data, avatar }) => {
   if (!show) {
     return null;
   } else if (socket != null) {
-    socket.onmessage = (e) => {
-      console.log("check message for recipient", JSON.parse(e.data));
-
-      // set messages to the new data being sent
-
-      updateMessages(JSON.parse(e.data));
-    };
+    // socket.onmessage = (e) => {
+    //   console.log("check message for recipient", JSON.parse(e.data));
+    //   // set messages to the new data being sent
+    //   updateMessages(JSON.parse(e.data));
+    // };
   }
 
+  // console.log("checking group messages in chatbox", data);
   return (
     <>
       <div

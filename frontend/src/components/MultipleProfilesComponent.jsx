@@ -62,7 +62,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
       return (
         <SingleProfileComponent
           chatName={`${user.groupName}`}
-          id={user.groupID}
+          groupID={user.groupID}
           key={index}
           type={type}
           avatar={userPicPath}

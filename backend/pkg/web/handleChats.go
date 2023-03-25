@@ -63,7 +63,7 @@ func (s *Server) HandleMyGroupChats() http.HandlerFunc {
 		err := r.ParseMultipartForm(10 << 20)
 
 		if err != nil {
-			fmt.Printf("error parsing userID form: %v", err)
+			fmt.Printf("error parsing groupchats form: %v", err)
 		}
 
 		userIdInt, _ := strconv.Atoi((r.Form.Get("loggedInUserID")))
@@ -75,5 +75,25 @@ func (s *Server) HandleMyGroupChats() http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshalGroupChats)
+	}
+}
+
+func (s *Server) HandleSendGroupMessages() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCors(&w)
+
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+
+		err := r.ParseMultipartForm(10 << 20)
+		if err != nil {
+			fmt.Printf("error parsing groupID form form: %v", err)
+		}
+
+		groupID, _ := strconv.Atoi((r.Form.Get("groupID")))
+
+		// create function to get all messages that belong to groupID
+		groupMessages, _ := json.Marshal(chats.GetGroupChatHistory(s.Db, groupID))
+
+		w.Write(groupMessages)
 	}
 }

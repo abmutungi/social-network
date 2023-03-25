@@ -34,5 +34,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/getgroupinvitees", s.HandleGetGroupInvitees())
 
 	s.Router.HandleFunc("/mygroupchats", s.HandleMyGroupChats())
+	s.Router.HandleFunc("/sendgroupmessages", s.HandleSendGroupMessages())
+
 	// s.TestDBfunctions()
 }

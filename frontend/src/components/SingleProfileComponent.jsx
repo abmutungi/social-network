@@ -7,6 +7,7 @@ import { followText, unfollowText, requestText } from "./UserRequestBtn";
 import { useNavigate } from "react-router-dom";
 import { ChatBox } from "../pages/home/components/ChatBoxComponent";
 import { loggedInUserContext } from "../context/loggedInUserContext";
+import { SocketContext } from "../context/webSocketContext";
 
 const SingleProfileComponent = (props) => {
   const {
@@ -24,6 +25,8 @@ const SingleProfileComponent = (props) => {
   } = useContext(LowerHeaderContext);
 
   const { messages, updateMessages } = useContext(loggedInUserContext);
+
+  const { groupMessages, updateGroupMessages } = useContext(SocketContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
@@ -125,6 +128,20 @@ const SingleProfileComponent = (props) => {
   // sendPrivateMessageInfo();
 
   // fetch groupChathistory
+  const groupChatsForm = new FormData();
+  groupChatsForm.append("groupID", props.groupID);
+  // get the groupID from the click
+
+  async function fetchGroupMessages() {
+    const resp = await fetch("http://localhost:8080/sendgroupmessages", {
+      method: "POST",
+      credentials: "include",
+      body: groupChatsForm,
+    });
+    const data = await resp.json();
+    console.log("group messages data, lets see what it is", groupMessages);
+    updateGroupMessages(data);
+  }
 
   if (props.type === "AllUsers") {
     return (
@@ -218,9 +235,10 @@ const SingleProfileComponent = (props) => {
         // id={props.id}
         onClick={(e) => {
           e.preventDefault();
-          // if (!show) fetchChatHistory();
+          if (!show) fetchGroupMessages();
           setShow(true);
-          // setName(props.chatName);
+          setName(props.chatName);
+          // console.log("props.groupID???? ", props.groupID);
           // console.log("props.id -> ", props.id);
           // updateUserID(Number(e.currentTarget.id));
           //updateDynamicID(e.currentTarget.id);
@@ -231,7 +249,7 @@ const SingleProfileComponent = (props) => {
           show={show}
           name={name}
           id={props.id}
-          data={messages}
+          data={groupMessages}
           avatar={props.avatar}
         />
         <div className="ChatPic">

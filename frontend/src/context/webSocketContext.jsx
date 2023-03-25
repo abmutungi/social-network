@@ -5,6 +5,7 @@ export const SocketContext = createContext(null);
 const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [openSocket, setOpenSocket] = useState(false);
+  const [groupMessages, setGroupMessages] = useState([]);
 
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
@@ -12,18 +13,18 @@ const SocketProvider = ({ children }) => {
       const ws = new WebSocket("ws://localhost:8080/upgradesocket");
       setSocket(ws);
       ws.onopen = () => {
-          console.log("socket is open");
-      }
-      
+        console.log("socket is open");
+      };
+
       ws.onmessage = () => {
         console.log("sent through ws **********");
-      }
+      };
       return () => {
         // close socket when component unmounts
         ws.close();
         ws.onclose = () => {
           console.log("socket is closed");
-        }
+        };
       };
     }
   }, [openSocket]);
@@ -32,8 +33,19 @@ const SocketProvider = ({ children }) => {
     setOpenSocket(bool);
   };
 
+  const updateGroupMessages = (data) => {
+    setGroupMessages(data);
+  };
   return (
-    <SocketContext.Provider value={{ socket, openSocket, createSocket }}>
+    <SocketContext.Provider
+      value={{
+        socket,
+        openSocket,
+        createSocket,
+        groupMessages,
+        updateGroupMessages,
+      }}
+    >
       {children}
     </SocketContext.Provider>
   );
