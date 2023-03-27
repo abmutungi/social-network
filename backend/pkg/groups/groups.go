@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-
 	"strconv"
 
 	comment "github.com/abmutungi/social-network/backend/pkg/comments"
@@ -93,7 +92,6 @@ func GetAllGroupsData(db *sql.DB) []Group {
 // adds a new entry to the groupMember table
 func AddGroupMember(db *sql.DB, groupid int, memberid int) {
 	stmt, err := db.Prepare("INSERT INTO groupMembers (groupid, member, dateJoined) VALUES ( ?, ?, strftime('%H:%M %d/%m/%Y','now','localtime'))")
-
 	if err != nil {
 		fmt.Printf("error preparing within AddGroupMember fn: %v", err)
 	}
@@ -108,12 +106,10 @@ func AddGroupMember(db *sql.DB, groupid int, memberid int) {
 	LastIns, _ := res.LastInsertId()
 	fmt.Println("addgroupmember rows affected: ", rowsAff)
 	fmt.Println("addgroupmember last inserted id: ", LastIns)
-
 }
 
 // checking if loggedInUser is already in group
 func GroupMemberCheck(db *sql.DB, groupID, loggedInUser int) bool {
-
 	fmt.Println("GROUPDB FN", groupID, loggedInUser)
 	var count int
 	err := db.QueryRow(`SELECT  COUNT(*)  FROM groupMembers WHERE groupID = ? AND member = ?;`, groupID, loggedInUser).Scan(&count)
@@ -133,9 +129,8 @@ func GroupMemberCheck(db *sql.DB, groupID, loggedInUser int) bool {
 
 // add a new entry to the events table
 // **TODO - amend date fields within table only one needed**
-func CreateGroupEvent(db *sql.DB, groupID int, creatorid int, eventname string, desc string, date string) {
+func CreateGroupEvent(db *sql.DB, groupID int, creatorid int, eventname string, desc string, date string) int {
 	stmt, err := db.Prepare("INSERT INTO events (groupID, creator, eventTitle, description, dateStart) VALUES (?,?,?,?,?)")
-
 	if err != nil {
 		fmt.Printf("error preparing creategroupevent statement: %v", err)
 	}
@@ -151,6 +146,7 @@ func CreateGroupEvent(db *sql.DB, groupID int, creatorid int, eventname string, 
 	fmt.Println("groups rows affected: ", rowsAff)
 	fmt.Println("group last inserted id: ", LastIns)
 
+	return int(LastIns)
 }
 
 func GetCreator(db *sql.DB, groupID int) int {
@@ -198,7 +194,6 @@ func AddUserToGroup(db *sql.DB, groupID, loggedInUser int) {
 	LastIns, _ := res.LastInsertId()
 	fmt.Println("groups rows affected: ", rowsAff)
 	fmt.Println("group last inserted id: ", LastIns)
-
 }
 
 // returns an array of all groupmemberIDs against a given groupID
@@ -225,14 +220,13 @@ func GetAllGroupMembers(db *sql.DB, groupid int) []int {
 }
 
 // creates an entry within the notifcations table upon creation of an event
-func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string, notifyee, notifier, groupID int) {
-	stmt, err := db.Prepare("INSERT INTO notifications (notificationType, notifiyee, notifier, createdAt, groupID) VALUES ( ?, ?, ?,strftime('%H:%M %d/%m/%Y','now','localtime'), ?)")
-
+func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string, notifyee, notifier, groupID, eventID int) {
+	stmt, err := db.Prepare("INSERT INTO notifications (notificationType, notifiyee, notifier, createdAt, groupID, eventID) VALUES ( ?, ?, ?,strftime('%H:%M %d/%m/%Y','now','localtime'), ?, ?)")
 	if err != nil {
 		fmt.Printf("error preparing UpdateNotificationTablePostEventCreation fn: %v", err)
 	}
 
-	res, err2 := stmt.Exec(notifcationType, notifyee, notifier, groupID)
+	res, err2 := stmt.Exec(notifcationType, notifyee, notifier, groupID, eventID)
 
 	if err2 != nil {
 		fmt.Printf("error adding entry to notification table: %v", err2)
@@ -242,7 +236,6 @@ func UpdateNotifcationTablePostEventCreation(db *sql.DB, notifcationType string,
 	LastIns, _ := res.LastInsertId()
 	fmt.Println("addgroupmember rows affected: ", rowsAff)
 	fmt.Println("addgroupmember last inserted id: ", LastIns)
-
 }
 
 func GetNameFromID(db *sql.DB, UserID int) string {
@@ -254,7 +247,6 @@ func GetNameFromID(db *sql.DB, UserID int) string {
 	stmt.Scan(&name)
 
 	return name
-
 }
 
 // get all groupposts.
@@ -262,7 +254,6 @@ func GetAllGroupPosts(db *sql.DB, GroupID int) []GroupPost {
 	rows, err := db.Query(`SELECT groupPostID, userID, createdAt, textContent, imageContent
 	FROM groupPosts
 	WHERE groupID = ?`, GroupID)
-
 	if err != nil {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
 	}
@@ -279,7 +270,7 @@ func GetAllGroupPosts(db *sql.DB, GroupID int) []GroupPost {
 		}
 		p.FName = GetNameFromID(db, p.UserID)
 		p.Comments = comment.GetGroupPostComments(db, p.GroupPostID)
-		//p.Events = GetEventInfo(db, GroupID)
+		// p.Events = GetEventInfo(db, GroupID)
 		posts = append(posts, p)
 	}
 
@@ -291,7 +282,6 @@ func GetEventInfo(db *sql.DB, GroupID int) []EventInfo {
 	FROM events
 	WHERE groupID =
 	?`, GroupID)
-
 	if err != nil {
 		fmt.Printf("error getting Events data: %v", err)
 	}
@@ -316,14 +306,12 @@ func GetEventInfo(db *sql.DB, GroupID int) []EventInfo {
 	return event
 }
 
-//return userids with pending groupinvites where action = 0
+// return userids with pending groupinvites where action = 0
 func PendingGroupInvite(db *sql.DB, groupId int) []int {
-
 	rows, err := db.Query(`SELECT notifiyee
 	FROM notifications
 	WHERE groupID =
 	? AND actioned = ?`, groupId, 0)
-
 	if err != nil {
 		fmt.Printf("error from PendingGroupInvite(): %v", err)
 	}
@@ -343,5 +331,9 @@ func PendingGroupInvite(db *sql.DB, groupId int) []int {
 	}
 
 	return result
+}
 
+func UpdateAttending(db *sql.DB, eventID int) error {
+	_, err := db.Exec("UPDATE events SET attending = attending + 1 WHERE eventID = ?", eventID)
+	return err
 }

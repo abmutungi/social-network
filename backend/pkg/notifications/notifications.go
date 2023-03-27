@@ -19,6 +19,7 @@ type Notification struct {
 	NotificationDate      string `json:"notifDate"`
 	NotificationGroupID   int    `json:"notifGroupID"`
 	NotificationGroupName string `json:"notifGroupName"`
+	NotificationEventID   int    `json:"notifEventID"`
 	NotificationAccept    int    `json:"notifAccept"`
 	Tipo                  string `json:"tipo"`
 }
@@ -81,7 +82,7 @@ func ReadNotification(db *sql.DB, userID int) {
 
 func GetNotifications(db *sql.DB, userID int) []Notification {
 	rows, err := db.Query(`SELECT notificationID, notificationType, notifiyee, notifier, firstName, lastName, notifications.createdAt, 
-	notifications.groupID FROM notifications INNER JOIN users ON notifier=userID WHERE notifiyee = ? AND actioned=0`, userID)
+	notifications.groupID, notifications.eventID FROM notifications INNER JOIN users ON notifier=userID WHERE notifiyee = ? AND actioned=0`, userID)
 	if err != nil {
 		log.Println("Error from GetNotifications fn():", err)
 		return nil
@@ -91,7 +92,7 @@ func GetNotifications(db *sql.DB, userID int) []Notification {
 	var MyNotifs []Notification
 	for rows.Next() {
 		var n Notification
-		err := rows.Scan(&n.NotificationID, &n.NotificationType, &n.NotifiyeeID, &n.NotifierID, &n.NotifierFName, &n.NotifierLName, &n.NotificationDate, &n.NotificationGroupID)
+		err := rows.Scan(&n.NotificationID, &n.NotificationType, &n.NotifiyeeID, &n.NotifierID, &n.NotifierFName, &n.NotifierLName, &n.NotificationDate, &n.NotificationGroupID, &n.NotificationEventID)
 
 		// groupID, err := strconv.Atoi(g.Group)
 		// if err != nil {
@@ -100,6 +101,11 @@ func GetNotifications(db *sql.DB, userID int) []Notification {
 		fmt.Printf("n.NotificationGroupID----------->%v\ntype: %T\n", n.NotificationGroupID, n.NotificationGroupID)
 
 		n.NotificationGroupName = groups.GetGroupName(db, n.NotificationGroupID)
+
+		// if n.NotificationType == "eventInvite" {
+		// 	n.NotificationEventID = 
+		// }
+
 		if err != nil {
 			log.Println("Error scanning rows:", err)
 			continue

@@ -5,7 +5,7 @@ import { SocketContext } from "../../../context/webSocketContext";
 
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
-  const { LoggedInUserID, GroupID } = useContext(LowerHeaderContext);
+  const { LoggedInUserID } = useContext(LowerHeaderContext);
   const { socket} = useContext(SocketContext);
 
   console.log(
@@ -32,7 +32,7 @@ const SingleNotificationComponent = ({ props }) => {
   }
   console.log(notifText);
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     socket.send(
       JSON.stringify({
         loggedInUserID: LoggedInUserID,
@@ -47,7 +47,8 @@ const SingleNotificationComponent = ({ props }) => {
         notifID: props.id,
         notifierID: props.notifierID,
         notifiyeeID: LoggedInUserID,
-        notifGroupID: GroupID,
+        notifGroupID: Number(e.target.id),
+        notifEventID: Number(e.target.name),
         notifAccept: 1,
       }),
     });
@@ -55,7 +56,7 @@ const SingleNotificationComponent = ({ props }) => {
     notificationContainer.parentNode.removeChild(notificationContainer);
   };
 
-  const handleRemove = () => {
+  const handleRemove = (e) => {
     fetch("http://localhost:8080/actionNotif", {
       method: "POST",
       credentials: "include",
@@ -63,7 +64,8 @@ const SingleNotificationComponent = ({ props }) => {
         notifID: props.id,
         notifierID: props.notifierID,
         notifiyeeID: LoggedInUserID,
-        notifGroupID: GroupID,
+        notifGroupID: Number(e.target.id),
+        notifEventID: Number(e.target.name),
         notifAccept: 0,
       }),
     });
@@ -90,10 +92,10 @@ const SingleNotificationComponent = ({ props }) => {
         </div>
       </div>
       <div className="notifs-action">
-        <button onClick={handleClick} className="confirm-button">
+        <button id={props.groupID} name={props.eventID} onClick={handleClick} className="confirm-button">
           Confirm
         </button>
-        <button onClick={handleRemove}>Remove</button>
+        <button id={props.groupID}  name={props.eventID} onClick={handleRemove}>Remove</button>
       </div>
     </div>
   );
@@ -130,7 +132,9 @@ const NotificationsModal = ({ show, onClose, data }) => {
                 notifType: notif.notifType,
                 notifierID: notif.notifierID,
                 groupName: notif.notifGroupName,
+                groupID: notif.notifGroupID,
                 notifDate: notif.notifDate,
+                eventID: notif.notifEventID,
                 profileImgPath: "../assets/img/ext/man-utd.png",
               }}
             />

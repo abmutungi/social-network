@@ -146,6 +146,7 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 		fmt.Println(n.NotifiyeeID)
 		fmt.Println(n.NotifierID)
 		fmt.Println(n.NotificationAccept)
+		fmt.Println("n.NotificationGroupID------------->", n.NotificationGroupID)
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
@@ -156,9 +157,8 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 				relationships.DeleteRequest(s.Db, n.NotificationID)
 			} else {
 				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
-				//should you be able to join group if creator removes notif?
-				//relationships.DeleteRequest(s.Db, n.NotificationID)
-
+				// should you be able to join group if creator removes notif?
+				// relationships.DeleteRequest(s.Db, n.NotificationID)
 			}
 
 			// check if notification is event invitation
@@ -170,7 +170,7 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 
 				groups.AddGroupMember(s.Db, n.NotificationGroupID, n.NotifiyeeID)
 				relationships.DeleteRequest(s.Db, n.NotificationID)
-				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)//should this happen after delete? 
+				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID) // should this happen after delete?
 			} else {
 				fmt.Println("NOOOOOOOO!", prettyPrint((n)))
 
@@ -179,9 +179,13 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 
 			}
 		} else if notifications.GetNotificationType(s.Db, n.NotificationID) == "eventInvite" {
-			fmt.Println("EVENTTTTTT!", prettyPrint((n)))
-			relationships.DeleteRequest(s.Db, n.NotificationID)
-
+			if n.NotificationAccept == 1 {
+				fmt.Println("EVENTTTTTT!", prettyPrint((n)))
+				groups.UpdateAttending(s.Db, n.NotificationEventID)
+				relationships.DeleteRequest(s.Db, n.NotificationID)
+			} else {
+				relationships.DeleteRequest(s.Db, n.NotificationID)
+			}
 		} else {
 
 			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)

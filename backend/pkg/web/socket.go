@@ -269,13 +269,17 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		if f.Type == "eventInviteNotifs" {
 
+			eventID := groups.CreateGroupEvent(s.Db, f.GroupID, f.Creator, f.EventName, f.EventDescription, f.EventStartDate)
+
 			// get all group members then update the notifications table,
 			// then create entries within the notication table
 			allgroupmembers := groups.GetAllGroupMembers(s.Db, f.GroupID)
 			fmt.Println("all-group-members", allgroupmembers)
 
 			for _, member := range allgroupmembers {
-				groups.UpdateNotifcationTablePostEventCreation(s.Db, "eventInvite", member, f.Creator, f.GroupID)
+				if member != f.Creator {
+					groups.UpdateNotifcationTablePostEventCreation(s.Db, "eventInvite", member, f.Creator, f.GroupID, eventID)
+				}
 			}
 
 			for _, member := range allgroupmembers {
@@ -288,8 +292,6 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 			}
-			groups.CreateGroupEvent(s.Db, f.GroupID, f.Creator, f.EventName, f.EventDescription, f.EventStartDate)
-
 		}
 	}
 }
