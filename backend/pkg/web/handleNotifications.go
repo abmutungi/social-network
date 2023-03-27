@@ -192,10 +192,13 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 				relationships.DeleteRequest(s.Db, n.NotificationID)
 			}
 		} else {
-
-			notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
-			relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
-			relationships.DeleteRequest(s.Db, n.NotificationID)
+			if n.NotificationAccept == 1 {
+				notifications.ActionNotification(s.Db, n.NotificationID, n.NotifiyeeID, n.NotifierID)
+				relationships.StoreFollowing(s.Db, n.NotifiyeeID, n.NotifierID)
+				relationships.DeleteRequest(s.Db, n.NotificationID)
+			} else {
+				relationships.DeleteRequest(s.Db, n.NotificationID)
+			}
 		}
 	}
 }
@@ -204,7 +207,6 @@ func (s *Server) HandleChatNotificationsOnLogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 		err := r.ParseMultipartForm(10 << 20)
-
 		if err != nil {
 			fmt.Printf("error parsing userID form: %v", err)
 		}
