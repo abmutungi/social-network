@@ -239,9 +239,6 @@ const SingleProfileComponent = (props) => {
           setShow(true);
           setName(props.chatName);
           // console.log("props.groupID???? ", props.groupID);
-          // console.log("props.id -> ", props.id);
-          // updateUserID(Number(e.currentTarget.id));
-          //updateDynamicID(e.currentTarget.id);
         }}
       >
         <ChatBox
