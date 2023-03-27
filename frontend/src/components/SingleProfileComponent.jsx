@@ -30,6 +30,7 @@ const SingleProfileComponent = (props) => {
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
+  const [groupClicked, setGroupClicked] = useState(false);
   const navigate = useNavigate();
   // const handleClick = () => {
   async function FetchRelationship() {
@@ -204,6 +205,7 @@ const SingleProfileComponent = (props) => {
           if (!show) fetchChatHistory();
           setShow(true);
           setName(props.chatName);
+          setGroupClicked(false);
           console.log("props.id -> ", props.id);
           // updateUserID(Number(e.currentTarget.id));
           //updateDynamicID(e.currentTarget.id);
@@ -218,6 +220,7 @@ const SingleProfileComponent = (props) => {
           id={props.id}
           data={messages}
           avatar={props.avatar}
+          groupClicked={groupClicked}
         />
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />
@@ -232,22 +235,24 @@ const SingleProfileComponent = (props) => {
       <div
         className="SingleProfile"
         role="presentation"
-        // id={props.id}
+        // id={props.groupID}
         onClick={(e) => {
           e.preventDefault();
           if (!show) fetchGroupMessages();
           setShow(true);
           setName(props.chatName);
-          // console.log("props.groupID???? ", props.groupID);
+          setGroupClicked(true);
+          console.log("props.groupID???? ", props.groupID);
         }}
       >
         <ChatBox
           onClose={() => setShow(false)}
           show={show}
           name={name}
-          id={props.id}
+          id={props.groupID}
           data={groupMessages}
           avatar={props.avatar}
+          groupClicked={groupClicked}
         />
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />

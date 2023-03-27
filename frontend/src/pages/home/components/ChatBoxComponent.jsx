@@ -13,7 +13,7 @@ import {
 
 // import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
-const ChatBox = ({ show, onClose, name, id, data, avatar }) => {
+const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
   const { socket } = useContext(SocketContext);
 
   // const { updateMessages } = useContext(loggedInUserContext);
@@ -21,26 +21,41 @@ const ChatBox = ({ show, onClose, name, id, data, avatar }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const storeMessageForm = new FormData(e.target);
 
+    console.log("checking if group has been clicked", groupClicked);
+    const storeMessageForm = new FormData(e.target);
     storeMessageForm.append(
       "loggedInUser",
       JSON.parse(localStorage.getItem("loggedInUser")).ID
     );
-    storeMessageForm.append("recipientID", id);
-    storeMessageForm.append("type", "newMessage");
-
     var messageObject = {};
-    storeMessageForm.forEach((value, key) => (messageObject[key] = value));
 
-    console.log("checking message object", messageObject);
+    // this is for group messages
+    if (groupClicked) {
+      storeMessageForm.append("type", "newGroupMessage");
+      // console.log("checking group id", id);
+      storeMessageForm.append("groupID", id);
+      storeMessageForm.forEach((value, key) => (messageObject[key] = value));
 
-    // sending through the socket that a new message has been sent
-    socket.send(JSON.stringify(messageObject));
+      // send groupMessageObject through the socket
+      console.log("checking group message form", messageObject);
 
-    for (const v of storeMessageForm.values()) {
-      console.log("v check -> ", v);
+      socket.send(JSON.stringify(messageObject));
+    } else {
+      // this is for private messages
+
+      storeMessageForm.append("recipientID", id);
+      storeMessageForm.append("type", "newMessage");
+
+      storeMessageForm.forEach((value, key) => (messageObject[key] = value));
+
+      // sending through the socket that a new message has been sent
+      socket.send(JSON.stringify(messageObject));
     }
+
+    // for (const v of storeMessageForm.values()) {
+    //   console.log("v check -> ", v);
+    // }
 
     // if (newMsg != "") {
 
@@ -97,7 +112,7 @@ const ChatBox = ({ show, onClose, name, id, data, avatar }) => {
             />
           </div>
           <div className="chat-box-body">
-            {data.map((message, index) => (
+            {data?.map((message, index) => (
               <ChatBubble
                 key={index}
                 msgContent={message.message}

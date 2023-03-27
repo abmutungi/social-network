@@ -16,8 +16,15 @@ const SocketProvider = ({ children }) => {
         console.log("socket is open");
       };
 
-      ws.onmessage = () => {
+      ws.onmessage = (e) => {
+        const newData = JSON.parse(e.data);
+        console.log("newData check --> ", e.data);
         console.log("sent through ws **********");
+
+        if (newData.tipo === "newGroupMessage") {
+          // need to create a new struct on backend with a []chats and tipo == newgroupMessage
+          setGroupMessages(newData.groupMessages);
+        }
       };
       return () => {
         // close socket when component unmounts
