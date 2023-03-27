@@ -8,6 +8,8 @@ const SocketProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const [NewNotifsExist, setNewNotifsExist] = useState(false);
   const [groupMessages, setGroupMessages] = useState([]);
+  const [socketChatNotif, setSocketChatNotif] = useState(false);
+  const [lastMsgSender, setLastMsgSender] = useState("");
 
   const [MyNotifs, setMyNotifs] = useState([]);
   useEffect(() => {
@@ -26,7 +28,17 @@ const SocketProvider = ({ children }) => {
         console.log("sent through ws **********");
 
         if (newData.tipo === "chatHistory") {
+          console.log(
+            "last sender ==> ",
+            newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
+          );
           updateChatMessages(newData.chatsfromgo);
+          updateSocketChatNotifs(true);
+          if (newData.chatsfromgo) {
+            updateLastSender(
+              newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
+            );
+          }
         }
 
         if (newData.tipo == "allNotifs") {
@@ -70,13 +82,20 @@ const SocketProvider = ({ children }) => {
   const updateGroupMessages = (data) => {
     setGroupMessages(data);
   };
+  const updateSocketChatNotifs = (bool) => {
+    setSocketChatNotif(bool);
+  };
+
+  const updateLastSender = (data) => {
+    setLastMsgSender(() => data);
+  };
+
   return (
     <SocketContext.Provider
       value={{
         socket,
         openSocket,
         createSocket,
-
         messages,
         updateChatMessages,
 
@@ -87,6 +106,9 @@ const SocketProvider = ({ children }) => {
         updateMyNotifs,
         groupMessages,
         updateGroupMessages,
+        socketChatNotif,
+        updateSocketChatNotifs,
+        lastMsgSender,
       }}
     >
       {children}

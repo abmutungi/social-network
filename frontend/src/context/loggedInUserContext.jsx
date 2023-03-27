@@ -8,22 +8,24 @@ function LoggedInUserProvider({ children }) {
     return storedUser ? JSON.parse(storedUser) : {};
   });
 
- 
-
+  const [chatNotifsOnLogin, setChatNotifsOnLogin] = useState([]);
   function updateLoggedInUser(user) {
     setLoggedInUser(user);
 
     localStorage.setItem("loggedInUser", JSON.stringify(user));
   }
 
-  
+  const updateChatNotifsOnLogin = (data) => {
+    setChatNotifsOnLogin(() => data);
+  };
 
   return (
     <loggedInUserContext.Provider
       value={{
         loggedInUser,
         updateLoggedInUser,
-      
+        chatNotifsOnLogin,
+        updateChatNotifsOnLogin,
       }}
     >
       {children}

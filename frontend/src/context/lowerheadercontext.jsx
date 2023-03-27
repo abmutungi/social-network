@@ -16,7 +16,7 @@ export function LowerHeaderProvider({ children }) {
   const [DBAllUsers, setDBAllUsers] = useState([]);
   const [GroupID, setGroupID] = useState();
   const [AllGroupsData, setAllGroupsData] = useState([]);
-const [GroupEvents, setGroupEvents] = useState([]);
+  const [GroupEvents, setGroupEvents] = useState([]);
 
   const [DynamicID, setDynamicID] = useState(() => {
     if (localStorage.length > 0) {
@@ -43,9 +43,7 @@ const [GroupEvents, setGroupEvents] = useState([]);
       const storedAvatar = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).Avatar;
-      return storedAvatar != ""
-        ? storedAvatar
-        : "man-utd.png";
+      return storedAvatar != "" ? storedAvatar : "man-utd.png";
     }
   });
   const [LoggedInUserID, setLoggedInUserID] = useState(() => {
@@ -82,26 +80,21 @@ const [GroupEvents, setGroupEvents] = useState([]);
   const [JoinText, setJoinText] = useState(joinText);
   const [isGroupMember, setisGroupMember] = useState(false);
   const [groupNotUser, setgroupNotUser] = useState(false);
-  const [groupInvitees, setGroupInvitees]= useState([]);
- const[navData, setNavData] = useState([]);
-  const[navClicked, setNavClicked] = useState(false);
+  const [groupInvitees, setGroupInvitees] = useState([]);
+  const [navData, setNavData] = useState([]);
+  const [navClicked, setNavClicked] = useState(false);
 
+  const updateNavClicked = (data) => {
+    setNavClicked(data);
+  };
 
-const updateNavClicked = (data)=>{
-  setNavClicked(data)
-}
+  const updateNavData = (data) => {
+    setNavData(data);
+  };
 
-const updateNavData = (data)=>{
-setNavData(data)
-}
-
-
-
-
-  const updateGroupInvitees = (data)=>{
-    setGroupInvitees(data)
-  }
-
+  const updateGroupInvitees = (data) => {
+    setGroupInvitees(data);
+  };
 
   const updateUserID = (id) => {
     setUserID(() => id);
@@ -141,15 +134,15 @@ setNavData(data)
   };
 
   const updateJoinText = (str) => {
-    setJoinText(()=>str)
-  }
+    setJoinText(() => str);
+  };
   const updateRequested = (bool) => {
     setRequested(() => bool);
   };
 
   const updateGroupRequested = (bool) => {
-    setGroupRequested(()=>bool)
-  }
+    setGroupRequested(() => bool);
+  };
 
   const updateLoggedInUserID = (id) => {
     setLoggedInUserID(() => id);
@@ -170,19 +163,17 @@ setNavData(data)
     setGroupPosts(data);
   };
 
-
-  const updateisGroupMember= (data) => {
+  const updateisGroupMember = (data) => {
     setisGroupMember(data);
   };
-  
-  const updategroupNotUser = (data)=>{
-    setgroupNotUser(data)
-  }
 
-  const updateGroupEvents = (data) =>{
+  const updategroupNotUser = (data) => {
+    setgroupNotUser(data);
+  };
 
-    setGroupEvents(data)
-  }
+  const updateGroupEvents = (data) => {
+    setGroupEvents(data);
+  };
 
   return (
     <LowerHeaderContext.Provider
@@ -230,12 +221,11 @@ setNavData(data)
         updateGroupRequested,
         groupInvitees,
         updateGroupInvitees,
-        
+
         navClicked,
         updateNavClicked,
-        navData, 
-        updateNavData
-
+        navData,
+        updateNavData,
       }}
     >
       {children}

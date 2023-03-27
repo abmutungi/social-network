@@ -178,7 +178,7 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("******************* ws notifs: followRequest ************************")
 
 			for user, conn := range loggedInSockets {
-				if user == f.Notifiyee || user == 2 || user == 3 {
+				if user == f.Notifiyee {
 					fmt.Printf("*********************** %v has new notifications ***********************************", user)
 					var fn AllNotifs
 					fn.SendNotifs = notifications.GetNotifications(s.Db, user)
@@ -207,6 +207,7 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			chats.StorePrivateMessages(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID, msgContent, senderIdInt, recipientIdInt)
 			// check if recipeint is in the socket map
+			notifications.StoreNotification(s.Db, "privateMessage", recipientIdInt, senderIdInt, 0)
 			var nc ChatsToSend
 			nc.Chats = chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID)
 			nc.Tipo = "chatHistory"

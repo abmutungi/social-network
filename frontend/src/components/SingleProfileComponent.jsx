@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { followText, unfollowText, requestText } from "./UserRequestBtn";
 import { useNavigate } from "react-router-dom";
 import { ChatBox } from "../pages/home/components/ChatBoxComponent";
-//import { loggedInUserContext } from "../context/loggedInUserContext";
+import { loggedInUserContext } from "../context/loggedInUserContext";
 import { SocketContext } from "../context/webSocketContext";
 
 const SingleProfileComponent = (props) => {
@@ -25,10 +25,11 @@ const SingleProfileComponent = (props) => {
     updateNavClicked,
   } = useContext(LowerHeaderContext);
 
-  const { messages, updateChatMessages } = useContext(SocketContext);
-  // const { messages, updateMessages } = useContext(loggedInUserContext);
-
   const { groupMessages, updateGroupMessages } = useContext(SocketContext);
+  const { updateChatNotifsOnLogin } = useContext(loggedInUserContext);
+
+  const { messages, updateChatMessages, updateSocketChatNotifs } =
+    useContext(SocketContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
@@ -127,6 +128,9 @@ const SingleProfileComponent = (props) => {
     console.log("messages data", data);
     // setMessages(data);
     updateChatMessages(data);
+    if (props.notifier) {
+      updateChatNotifsOnLogin(false);
+    }
   }
 
   // fetch groupChathistory
@@ -203,6 +207,8 @@ const SingleProfileComponent = (props) => {
           setShow(true);
           setName(props.chatName);
           setGroupClicked(false);
+          updateSocketChatNotifs(false);
+
           console.log("props.id -> ", props.id);
           console.log("message struct --> ", messages);
           // updateUserID(Number(e.currentTarget.id));
@@ -220,10 +226,14 @@ const SingleProfileComponent = (props) => {
           avatar={props.avatar}
           groupClicked={groupClicked}
         />
+
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
-        <p className="ChatName">{props.chatName}</p>
+        <p className="ChatName">
+          {props.chatName} {props.notifier ? <span>**</span> : null}
+          {props.socketnotifier ? <span>++++</span> : null}
+        </p>
       </div>
     );
   }

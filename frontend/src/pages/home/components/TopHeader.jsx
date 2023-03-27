@@ -8,24 +8,23 @@ import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { SocketContext } from "../../../context/webSocketContext";
 
-
-
 function ContainerLogo() {
   return (
     <div className="ContainerLogo">
-      <span>facebook</span>
+      <span>connect</span>
     </div>
   );
 }
 
 function ContainerIcons() {
-  const { loggedInUser } =
-    useContext(loggedInUserContext);
+  const { loggedInUser } = useContext(loggedInUserContext);
   const { LoggedInUserID } = useContext(LowerHeaderContext);
-  const {NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs} = useContext(SocketContext)
+  const { NewNotifsExist, updateNewNotifsExist, MyNotifs, updateMyNotifs } =
+    useContext(SocketContext);
   const navigate = useNavigate();
 
-  
+  // console.log("socket from top header------------>", socket);
+
   /*On logout click,
   need to send info back to the log out handler
   and navigate to login page*/
@@ -89,7 +88,7 @@ function ContainerIcons() {
       console.log("error sending notifications that have been read", e);
     }
   }
-  
+
   useEffect(() => {
     if (!NewNotifsExist) CheckNotifications();
 

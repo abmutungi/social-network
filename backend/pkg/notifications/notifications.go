@@ -7,6 +7,7 @@ import (
 
 	// "github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/groups"
+	"github.com/abmutungi/social-network/backend/pkg/users"
 )
 
 type Notification struct {
@@ -54,7 +55,7 @@ func ActionNotification(db *sql.DB, notifID, userID, followerID int) {
 
 func NotificationCheck(db *sql.DB, loggedInUser int) bool {
 	var count int
-	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND actioned = 0`, loggedInUser).Scan(&count)
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND actioned = 0 AND NOT notificationType="privateMessage"`, loggedInUser).Scan(&count)
 	if err != nil {
 		log.Println("Error from NotificationCheck fn():", err)
 		return false
@@ -69,7 +70,7 @@ func NotificationCheck(db *sql.DB, loggedInUser int) bool {
 }
 
 func ReadNotification(db *sql.DB, userID int) {
-	result, err := db.Exec("UPDATE notifications SET read = 1 WHERE notifiyee =?", userID)
+	result, err := db.Exec("UPDATE notifications SET read = 1 WHERE notifiyee =? AND NOT notificationType='privateMessage'", userID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,7 +83,7 @@ func ReadNotification(db *sql.DB, userID int) {
 
 func GetNotifications(db *sql.DB, userID int) []Notification {
 	rows, err := db.Query(`SELECT notificationID, notificationType, notifiyee, notifier, firstName, lastName, notifications.createdAt, 
-	notifications.groupID, notifications.eventID FROM notifications INNER JOIN users ON notifier=userID WHERE notifiyee = ? AND actioned=0`, userID)
+	notifications.groupID, notifications.eventID FROM notifications INNER JOIN users ON notifier=userID WHERE notifiyee = ? AND actioned=0 AND NOT notificationType="privateMessage"`, userID)
 	if err != nil {
 		log.Println("Error from GetNotifications fn():", err)
 		return nil
@@ -103,7 +104,7 @@ func GetNotifications(db *sql.DB, userID int) []Notification {
 		n.NotificationGroupName = groups.GetGroupName(db, n.NotificationGroupID)
 
 		// if n.NotificationType == "eventInvite" {
-		// 	n.NotificationEventID = 
+		// 	n.NotificationEventID =
 		// }
 
 		if err != nil {
@@ -169,4 +170,64 @@ func UserRequestedToJoin(db *sql.DB, groupID, userID int) bool {
 	}
 	fmt.Printf("user: %v has NOT requested to join group: %v", userID, groupID)
 	return false
+}
+
+func ReturnUserChatNotifications(db *sql.DB, notifyeeID int) []string {
+	rows, err := db.Query(`SELECT DISTINCT notifier FROM notifications WHERE notifiyee=? AND notificationType="privateMessage" AND read=0`, notifyeeID)
+	if err != nil {
+		fmt.Printf("Error when querying db for chat notifications: %v\n", err)
+	}
+	defer rows.Close()
+	var notifiers []int
+
+	for rows.Next() {
+		var n int
+		err2 := rows.Scan(&n)
+		notifiers = append(notifiers, n)
+
+		if err2 != nil {
+			fmt.Printf("Error when scanning through rows for chat notifications: %v\n", err2)
+		}
+	}
+	var result []string
+
+	for _, ntfr := range notifiers {
+		fmt.Println("Checking ntfrs id --> ", ntfr)
+		result = append(result, users.ReturnSingleUser(db, users.GetEmailFromUserID(db, ntfr)).Firstname)
+	}
+
+	for _, r := range result {
+
+		fmt.Println("Checking array of names ==> ", r)
+	}
+
+	return result
+}
+
+func CheckIfUserHasNotificationsFromUser(db *sql.DB, notifiyee, potentialNotifierID int) bool {
+	var count int
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND notifier = ? AND notificationType="privateMessage"`, notifiyee, potentialNotifierID).Scan(&count)
+	if err != nil {
+		log.Println("Error from NotificationCheck fn():", err)
+		return false
+	}
+
+	if count > 0 {
+		fmt.Printf("user has %d notifications", count)
+		return true
+	}
+	fmt.Println("user has 0 notifications")
+	return false
+}
+
+func ReadChatNotification(db *sql.DB, notifiyeeID, notifierID int) {
+	result, err := db.Exec(`UPDATE notifications SET read = 1 WHERE notifiyee =? AND notifier=? AND notificationType="privateMessage"`, notifiyeeID, notifierID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	rows, err := result.RowsAffected()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(rows)
 }

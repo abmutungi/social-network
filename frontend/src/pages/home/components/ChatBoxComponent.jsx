@@ -53,12 +53,6 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
       socket.send(JSON.stringify(messageObject));
     }
 
-    // for (const v of storeMessageForm.values()) {
-    //   console.log("v check -> ", v);
-    // }
-
-    // if (newMsg != "") {
-
     // }
     setNewMsg("");
   };
@@ -80,15 +74,6 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
   if (!show) {
     return null;
   }
-  // else if (socket != null) {
-  //   socket.onmessage = (e) => {
-  //     // console.log("check message for recipient", JSON.parse(e.data));
-
-  //     // set messages to the new data being sent
-
-  //     updateMessages(JSON.parse(e.data));
-  //   };
-  // }
 
   // console.log("checking group messages in chatbox", data);
   return (
