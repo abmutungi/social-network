@@ -82,14 +82,25 @@ const [GroupEvents, setGroupEvents] = useState([]);
   const [JoinText, setJoinText] = useState(joinText);
   const [isGroupMember, setisGroupMember] = useState(false);
   const [groupNotUser, setgroupNotUser] = useState(false);
-  const [groupInvitees, setGroupInvitees]= useState([])
+  const [groupInvitees, setGroupInvitees]= useState([]);
+ const[navData, setNavData] = useState([]);
+  const[navClicked, setNavClicked] = useState(false);
+
+
+const updateNavClicked = (data)=>{
+  setNavClicked(data)
+}
+
+const updateNavData = (data)=>{
+setNavData(data)
+}
+
+
 
 
   const updateGroupInvitees = (data)=>{
     setGroupInvitees(data)
   }
-
-
 
 
   const updateUserID = (id) => {
@@ -218,7 +229,13 @@ const [GroupEvents, setGroupEvents] = useState([]);
         GroupRequested,
         updateGroupRequested,
         groupInvitees,
-        updateGroupInvitees
+        updateGroupInvitees,
+        
+        navClicked,
+        updateNavClicked,
+        navData, 
+        updateNavData
+
       }}
     >
       {children}

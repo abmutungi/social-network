@@ -7,12 +7,12 @@ import { useEffect, useContext } from "react";
 import "../../../assets/css/posts.css";
 import Comments from "./Comments";
 import EventBanner from "./EventBanner";
+import SingleProfileComponent from "../../../components/SingleProfileComponent";
 
 library.add(faThumbsUp, faMessage);
 
 // SinglePost takes the props that come from the database
 const SinglePost = (props) => {
-
   //console.log('form comments', props);
 
   // if there is an image add the img div
@@ -71,7 +71,11 @@ const PostsContainer = () => {
     isGroupMember,
     GroupEvents,
     updateGroupEvents,
+    navClicked,
+    navData,
   } = useContext(LowerHeaderContext);
+
+
 
   // fetch home posts for the logged in user
   const userForm = new FormData();
@@ -94,11 +98,10 @@ const PostsContainer = () => {
     userForm.append("GuserID", LoggedInUserID);
   }
 
-  console.log("groupifd -----***---  ", userForm.entries(), groupNotUser);
 
-  for (const entry of userForm.entries()) {
-    console.log("check ****", entry);
-  }
+  // for (const entry of userForm.entries()) {
+  //   console.log("check ****", entry);
+  // }
 
   async function fetchPosts() {
     const resp = await fetch("http://localhost:8080/myposts", {
@@ -142,7 +145,7 @@ const PostsContainer = () => {
     return commentsArr === null ? 0 : commentsArr.length;
   };
 
-  if (!groupNotUser) {
+  if (!groupNotUser & !navClicked) {
     return (
       <>
         <div className="posts-container">
@@ -164,7 +167,7 @@ const PostsContainer = () => {
     );
   }
 
-  if (groupNotUser && isGroupMember) {
+  if (groupNotUser && isGroupMember && !navClicked) {
     return (
       <>
         <div className="posts-container">
@@ -196,7 +199,45 @@ const PostsContainer = () => {
         </div>
       </>
     );
-  } else {
+  } else if (navClicked) {
+
+  
+    return (
+      <>
+      <div className="nav-bar-style">
+       
+        
+      {navData?.map((data) => (
+         
+         !data.hasOwnProperty('GroupID') ?
+        
+
+          <SingleProfileComponent
+          key = {data.UserID}
+          id = {data.UserID}
+          chatName = {data.Firstname + ' ' + data.Lastname}
+            headers="Nav"
+            childClass="AGroup"
+            type="Navbar"
+            avatar = {data.Avatar}
+          />
+          :
+          <SingleProfileComponent
+          key = {data.GroupID}
+          id = {data.GroupID}
+          chatName = {data.GroupName }
+            headers="Nav"
+            childClass="AGroup"
+            type="Navbar"
+            avatar = {data.Avatar}
+          />
+
+          
+
+       ) )}
+        </div>
+      </>
+ ); } else {
     return (
       <>
         <div className="posts-container">

@@ -12,49 +12,47 @@ body {
 }
 
 .login-container {
-  position: absolute;
-  width: 30vw;
-  height: 50vh;
-  left: 50vw;
-  top: 30vh;
+  height: 400px;
   border-radius: 5px;
-
   background-color: #ffffff;
+  margin: auto;
+  width: 400px;
+  border: 3px solid #1877f2;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
 }
+
 .login-form {
   background-color: #ffffff;
-  position: absolute;
-  left: 5vw;
-  top: 5vh;
   width: fit-content;
   text-align: center;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
-  width: 20vw;
-  height: 40vh;
+  height: fit-content;
+  position: fixed;
+  top: 39%
 }
 
 .login-form > input {
-  height: 8vh;
   border-radius: 5px;
   padding-bottom: 5;
   margin-bottom: 10px;
   font-size: large;
-  /* color: #1d2129; */
+  width: 400px;
+  height: 30px;
+  text-align: center;
+  border-color:#1877f2;
 }
 
 input:focus {
-  caret-color: #1b74e4;
-  outline-color: #1b74e4;
-  border-color: #1b74e4;
-  /* border: #1b74e4 solid 1px; */
-  outline-color: #1b74e4;
+ 
+  outline-color: #036aef;
 }
 
 .login-button {
   background-color: #1877f2;
-  height: 7vh;
+  height: 30px;
   color: white;
   font-weight: 600;
   font-size: larger;
@@ -74,21 +72,50 @@ input:focus {
   cursor: pointer;
   outline: none;
   border: none;
+  height: 30px;
+  width: 100%
+
 }
 
 .login-logo {
-  position: absolute;
-  left: 10vw;
-  top: 45vh;
-  font-weight: 900;
-  font-size: xx-large;
-  display: none;
+      position: relative;
+    font-weight: 900;
+    font-size: xx-large;
+    display: block;
+    width: 100%;
+    color: blue;
+    text-align: center;
+    margin-top: 5%;
 }
 
 .loginErrorMsg {
   color: red;
-  position: absolute;
-  left: 1000px;
-  top: 250px;
+  margin-top: 40px;
   font-size: large;
+}
+
+.logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to bottom right, blue, #0084ff);
+  color: #ffffff;
+  margin-right: 10px;
+  /* transform: rotate(-15deg); */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo-icon span {
+  font-size: 36px;
+  font-weight: bold;
+}
+.logo-text {
+  color:#1877f2;;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }

@@ -22,6 +22,7 @@ const SingleProfileComponent = (props) => {
     updateDynamicID,
     updateisGroupMember,
     updateGroupRequested,
+    updateNavClicked
   } = useContext(LowerHeaderContext);
 
   const { messages, updateChatMessages } = useContext(SocketContext);
@@ -123,15 +124,17 @@ const SingleProfileComponent = (props) => {
     // setMessages(data);
     updateChatMessages(data);
   }
-  // sendPrivateMessageInfo();
 
   if (props.type === "AllUsers") {
+   
+
     return (
       <div
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
 
+          updateNavClicked(false)
           updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
         }}
@@ -150,20 +153,21 @@ const SingleProfileComponent = (props) => {
   }
 
   if (props.type === "AllGroups") {
+    
     return (
       <div
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
+          updateNavClicked(false)
           updateGroupID(Number(e.currentTarget.id));
         }}
         className="SingleProfile"
         id={props.id}
-        // creatorid = {props.creator}   - custom html tags??
       >
         <div className="ChatPic">
           <img
-            src="https://www.facebook.com/images/fb_icon_325x325.png"
+            src={props.avatar}
             width="25"
             height="25"
             alt="chat-pic"
@@ -178,6 +182,7 @@ const SingleProfileComponent = (props) => {
   }
 
   if (props.type === "Chats") {
+    
     return (
       <div
         role="presentation"
@@ -207,6 +212,32 @@ const SingleProfileComponent = (props) => {
         <p className="ChatName">
           {props.chatName}
           <small className="group-event-text">{props.eventText}</small>
+        </p>
+      </div>
+    );
+  }
+
+
+  if (props.type === "Navbar") {
+ let PicPath =
+    props.avatar === ""
+      ? "../assets/img/ext/blue-placeholder.jpeg"
+      : `../assets/img/ext/${props.avatar}`;
+
+
+
+    return (
+      <div
+        role="presentation"
+     
+        className="Nav-SingleProfile"
+        id={props.id}
+      >
+        <div className="ChatPic">
+          <img src={PicPath} width="25" height="25" alt="chat-pic" />
+        </div>
+        <p className="ChatName">
+          {props.chatName}
         </p>
       </div>
     );

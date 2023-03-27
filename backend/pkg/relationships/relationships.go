@@ -47,10 +47,8 @@ func FollowingYouCheck(db *sql.DB, userID, loggedInUser int) bool {
 		// return false
 	}
 	if count > 0 {
-		//fmt.Println("******I already follow this user****")
 		return true
 	}
-	//fmt.Println("I'm not following this user")
 	return false
 }
 
@@ -75,13 +73,12 @@ func FollowRequestCheck(db *sql.DB, loggedInUser, userID int) bool {
 		return false
 	}
 	if count > 0 {
-	//	fmt.Println("I've sent this user a follow request, pending response")
+		//	fmt.Println("I've sent this user a follow request, pending response")
 		return true
 	}
 	//fmt.Println("I'm not awaiting response from follow request, I can send a request")
 	return false
 }
-
 
 func DeleteRequest(db *sql.DB, notifID int) {
 	result, err := db.Exec("DELETE FROM notifications WHERE notificationID =?", notifID)
@@ -94,10 +91,10 @@ func DeleteRequest(db *sql.DB, notifID int) {
 	}
 	fmt.Println(rows)
 }
-// function to get all followers of passed in user.
 
+// function to get all followers of passed in user.
 func GetAllFollowers(db *sql.DB, userID int) []users.User {
-	rows, err := db.Query(`SELECT users.userID, firstName 
+	rows, err := db.Query(`SELECT users.userID, firstName,lastName 
 	FROM users 
 	INNER JOIN relationships ON relationships.followerID = users.userID 
 	WHERE relationships.userID = ?`, userID)
@@ -112,7 +109,7 @@ func GetAllFollowers(db *sql.DB, userID int) []users.User {
 
 	for rows.Next() {
 		var f users.User
-		err2 := rows.Scan(&f.UserID, &f.Firstname)
+		err2 := rows.Scan(&f.UserID, &f.Firstname, &f.Lastname)
 		if err2 != nil {
 			fmt.Printf("error scanning rows for followers: %v,", err2)
 		}
@@ -122,33 +119,41 @@ func GetAllFollowers(db *sql.DB, userID int) []users.User {
 	return followers
 }
 
+// function to get all followers of passed in user.
+func GetFollowing(db *sql.DB, userID int) []users.User {
+	rows, err := db.Query(`SELECT users.userID, firstName,lastName 
+	FROM users 
+	INNER JOIN relationships ON relationships.userID = users.userID 
+	WHERE relationships.followerID = ?`, userID)
 
-// func FollowingYouCheck2(db *sql.DB, userID, loggedInUser int) bool {
-// 	var count int
-// 	err := db.QueryRow(`SELECT  COUNT(*)  FROM relationships WHERE userID = ? AND followerID = ?;`, userID, loggedInUser).Scan(&count)
-// 	if err != nil {
-// 		log.Println("Error from FollowingYouCheck fn():", err)
-// 		return false
-// 	}
-// 	if count > 0 {
-// 		//fmt.Println("******I already follow this user****")
-// 		return true
-// 	}
-// 	//fmt.Println("I'm not following this user")
-// 	return false
-// }
+	if err != nil {
+		fmt.Printf("error querying GetFollowing statement: %v ", err)
+	}
 
-// func FollowingYouCheck3(db *sql.DB, userID, loggedInUser int) bool {
-// 	var count int
-// 	err := db.QueryRow(`SELECT  COUNT(*)  FROM relationships WHERE userID = ? AND followerID = ?;`, userID, loggedInUser).Scan(&count)
-// 	if err != nil {
-// 		log.Println("Error from FollowingYouCheck fn():", err)
-// 		return false
-// 	}
-// 	if count > 0 {
-// 		//fmt.Println("******I already follow this user****")
-// 		return true
-// 	}
-// 	//fmt.Println("I'm not following this user")
-// 	return false
-// }
+	var following []users.User
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var f users.User
+		err2 := rows.Scan(&f.UserID, &f.Firstname, &f.Lastname)
+		if err2 != nil {
+			fmt.Printf("error scanning rows for getfollowing: %v,", err2)
+		}
+		following = append(following, f)
+
+	}
+	return following
+}
+
+//get number fo followers for the profile bar
+func FollowerCount(db *sql.DB, userid int) int {
+
+	var count int
+	err := db.QueryRow(`SELECT  COUNT(*)  FROM relationships WHERE userID = ?;`, userid).Scan(&count)
+	if err != nil {
+		log.Println("Error from FollowerCount fn():", err)
+	}
+
+	return count
+}

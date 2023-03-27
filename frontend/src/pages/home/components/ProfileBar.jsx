@@ -29,6 +29,8 @@ import { GroupInviteBtn } from "./GroupInviteBtn";
 import { GroupPostBtn } from "./GroupPostBtn";
 import { GroupCreateEventBtn } from "./GroupCreateEventBtn";
 
+
+
 // import { FetchRelationship } from "../../../components/SingleProfileComponent";
 const ProfileBar = () => {
   const {
@@ -43,29 +45,61 @@ const ProfileBar = () => {
     LoggedInUserID,
     updatePrivacyStatus,
     PrivacyStatus,
-    PrivacyBtnText,
     GroupRequested,
     Following,
     isGroupMember,
     groupNotUser,
     updategroupNotUser,
     updateProfilePhotoBackground,
-    setProfilePhotoBackground,
   } = useContext(LowerHeaderContext);
   const { loggedInUser } = useContext(loggedInUserContext);
-  // console.log("loggedInUser.ID", loggedInUser.ID);
-  // console.log("current userID", userID);
+
+
   const [firstName, setfirstName] = useState(loggedInUser.FName);
   const [lastName, setlastName] = useState(loggedInUser.LName);
   const [followers, setfollowers] = useState("10 Followers");
   const [following, setfollowing] = useState("8 Following");
-  //const [groupNotUser, setgroupNotUser] = useState(false);
 
-  /*
-{GroupID: 2, GroupName: '2011 Rashford Fan Club', CreatorID: 2, 
-AboutText: Array(1), Members: 2941}
+  async function GetFollowerCount(userid, type) {
+    const navForm = new FormData();
+    navForm.append("LIU", userid);
+    navForm.append("Type", type);
 
-*/
+    const resp = await fetch("http://localhost:8080/getnavdata", {
+      method: "POST",
+      body: navForm,
+    });
+
+    const data = await resp.json();
+
+    let count = getFollowCount(data)
+    let  text = count > 1 ? count + ' followers' : ''
+    setfollowers(text)
+   
+
+  }
+
+
+  async function GetFollowingCount(userid, type) {
+    const navForm = new FormData();
+    navForm.append("LIU", userid);
+    navForm.append("Type", type);
+
+    const resp = await fetch("http://localhost:8080/getnavdata", {
+      method: "POST",
+      body: navForm,
+    });
+
+    const data = await resp.json();
+    var fcount = getFollowCount(data) + ' following'
+    setfollowing(fcount )
+
+   // data.length >0 ?  setfollowing(data.length) : setfollowing('0 Following')
+
+  }
+
+
+
   const updateUserProfile = (userid) => {
     updategroupNotUser(false);
 
@@ -73,8 +107,8 @@ AboutText: Array(1), Members: 2941}
       if (obj.UserID == userid) {
         setfirstName(obj.Firstname);
         setlastName(obj.Lastname);
-        setfollowers(`${obj.Followers} ${"followers"}`);
-        setfollowing(`${obj.Following} ${"following"}`);
+        // setfollowers(`${obj.Followers} ${"followers"}`);
+        // setfollowing(`${obj.Following} ${"following"}`);
         updateAboutText(obj.AboutText);
         updatePrivacyStatus(obj.Privacy);
         obj.Avatar != ""
@@ -87,14 +121,13 @@ AboutText: Array(1), Members: 2941}
   };
 
   const updateGroupProfile = (groupid) => {
-    // if (GroupID > 0) {
     updategroupNotUser(true);
     for (const obj of AllGroupsData) {
       if (obj.GroupID == groupid) {
         setfirstName(obj.GroupName);
         setlastName("");
-        setfollowing(`${obj.Members} ${"members"}`);
-        setfollowers("");
+        // setfollowing(`${obj.Members} ${"members"}`);
+        // setfollowers("");
         obj.Avatar != ""
           ? updateProfilePhotoBackground(obj.Avatar)
           : updateProfilePhotoBackground("man-utd.png");
@@ -106,20 +139,19 @@ AboutText: Array(1), Members: 2941}
   };
 
   useEffect(() => {
+    GetFollowerCount(userID,'followers')
+    GetFollowingCount(userID,'following')
     if (userID > 0) updateUserProfile(userID);
-    // if (GroupID > 0) updateGroupProfile(GroupID);
-
-    //fetchRelationship(LoggedInUserID, userID);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
 
-  useEffect(() => {
-    if (GroupID > 0) updateGroupProfile(GroupID);
-    // fetchRelationship(LoggedInUserID, userID);
 
+  useEffect(() => {
+
+    if (GroupID > 0) updateGroupProfile(GroupID);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
+
 
   return (
     <>
@@ -163,5 +195,15 @@ AboutText: Array(1), Members: 2941}
     </>
   );
 };
+
+const getFollowCount = (arr)=>{
+  if(arr == null||arr == undefined) {
+   console.log('uiwegdfiuwegiwehdfwe');
+    return 0
+  }
+  let count = 0 
+ arr.forEach((elem)=> count+=1)
+  return count
+}
 
 export default ProfileBar;
