@@ -54,7 +54,7 @@ func ActionNotification(db *sql.DB, notifID, userID, followerID int) {
 
 func NotificationCheck(db *sql.DB, loggedInUser int) bool {
 	var count int
-	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND actioned = 0`, loggedInUser).Scan(&count)
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND actioned = 0 AND NOT notificationType="privateMessage"`, loggedInUser).Scan(&count)
 	if err != nil {
 		log.Println("Error from NotificationCheck fn():", err)
 		return false
@@ -69,7 +69,7 @@ func NotificationCheck(db *sql.DB, loggedInUser int) bool {
 }
 
 func ReadNotification(db *sql.DB, userID int) {
-	result, err := db.Exec("UPDATE notifications SET read = 1 WHERE notifiyee =?", userID)
+	result, err := db.Exec("UPDATE notifications SET read = 1 WHERE notifiyee =? AND NOT notificationType='privateMessage'", userID)
 	if err != nil {
 		log.Fatal(err)
 	}

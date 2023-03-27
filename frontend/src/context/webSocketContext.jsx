@@ -24,12 +24,12 @@ const SocketProvider = ({ children }) => {
         console.log("newData check --> ", e.data);
 
         console.log("sent through ws **********");
-        console.log(
-          "last sender ==> ",
-          newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
-        );
 
         if (newData.tipo === "chatHistory") {
+          console.log(
+            "last sender ==> ",
+            newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
+          );
           updateChatMessages(newData.chatsfromgo);
           updateSocketChatNotifs(true);
           if (newData.chatsfromgo) {
