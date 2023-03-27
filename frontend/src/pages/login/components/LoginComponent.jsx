@@ -20,8 +20,7 @@ import "../../../assets/css/login.css";
 // };
 
 const Login = () => {
-  const { loggedInUser, updateLoggedInUser } =
-    useContext(loggedInUserContext);
+  const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
   const { createSocket, updateNewNotifsExist } = useContext(SocketContext);
   const {
     updateAboutText,
@@ -173,9 +172,6 @@ const Login = () => {
         console.log("3RD PS CHECK ON LOGIN --> ", PrivacyStatus);
         console.log("4TH CHECK --> ", updatePrivacyStatus(currentUser.Privacy));
         createSocket(true);
-
-        // console.log(loggedInUser);
-        createSocket(true);
         navigate("/");
         // console.log("socket check => ", socket);
       }
@@ -186,11 +182,12 @@ const Login = () => {
 
   return (
     <>
-     
       <div className="login-container">
-      <div className="login-logo"><div className="logo-text">
-    <span>Connect</span>
-  </div></div>
+        <div className="login-logo">
+          <div className="logo-text">
+            <span>Connect</span>
+          </div>
+        </div>
 
         <form onSubmit={handleSubmit} className="login-form">
           <input
@@ -224,8 +221,8 @@ const Login = () => {
             <button className="login-register-button">Register</button>
           </Link>
           {loginErrorMessage && (
-        <div className="loginErrorMsg">{loginErrorMessage}</div>
-      )}
+            <div className="loginErrorMsg">{loginErrorMessage}</div>
+          )}
           <Routes>
             <Route path="/register" element={<Register />}></Route>
           </Routes>

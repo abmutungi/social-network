@@ -6,7 +6,7 @@ import { SocketContext } from "../../../context/webSocketContext";
 // single notifications component
 const SingleNotificationComponent = ({ props }) => {
   const { LoggedInUserID } = useContext(LowerHeaderContext);
-  const { socket} = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
 
   console.log(
     "socket from single notification component ------------>",
@@ -92,10 +92,17 @@ const SingleNotificationComponent = ({ props }) => {
         </div>
       </div>
       <div className="notifs-action">
-        <button id={props.groupID} name={props.eventID} onClick={handleClick} className="confirm-button">
+        <button
+          id={props.groupID}
+          name={props.eventID}
+          onClick={handleClick}
+          className="confirm-button"
+        >
           Confirm
         </button>
-        <button id={props.groupID}  name={props.eventID} onClick={handleRemove}>Remove</button>
+        <button id={props.groupID} name={props.eventID} onClick={handleRemove}>
+          Remove
+        </button>
       </div>
     </div>
   );
@@ -109,7 +116,7 @@ const NotificationsModal = ({ show, onClose, data }) => {
     return null;
   } else {
     console.log("socket from notification modal ------------>", socket);
-    updateNewNotifsExist(false)
+    updateNewNotifsExist(false);
     console.log("MyNotifs--------->", MyNotifs);
   }
   return (

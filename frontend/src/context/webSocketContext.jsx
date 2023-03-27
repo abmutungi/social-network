@@ -6,7 +6,8 @@ const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [openSocket, setOpenSocket] = useState(false);
   const [messages, setMessages] = useState([]);
- const [NewNotifsExist, setNewNotifsExist] = useState(false);
+  const [NewNotifsExist, setNewNotifsExist] = useState(false);
+  const [groupMessages, setGroupMessages] = useState([]);
 
   const [MyNotifs, setMyNotifs] = useState([]);
   useEffect(() => {
@@ -23,16 +24,22 @@ const SocketProvider = ({ children }) => {
         console.log("newData check --> ", e.data);
 
         console.log("sent through ws **********");
-     
+
         if (newData.tipo === "chatHistory") {
           updateChatMessages(newData.chatsfromgo);
         }
 
         if (newData.tipo == "allNotifs") {
-        updateMyNotifs(newData.allNotifs)
-        updateNewNotifsExist(newData)
-        console.log("socket on message in notif bell --------->", newData);
-      }
+          updateMyNotifs(newData.allNotifs);
+          updateNewNotifsExist(newData);
+          console.log("socket on message in notif bell --------->", newData);
+        }
+        console.log("sent through ws **********");
+
+        if (newData.tipo === "newGroupMessage") {
+          // need to create a new struct on backend with a []chats and tipo == newgroupMessage
+          setGroupMessages(newData.groupMessages);
+        }
       };
       return () => {
         // close socket when component unmounts
@@ -60,6 +67,9 @@ const SocketProvider = ({ children }) => {
     setMyNotifs(() => data);
   };
 
+  const updateGroupMessages = (data) => {
+    setGroupMessages(data);
+  };
   return (
     <SocketContext.Provider
       value={{
@@ -74,7 +84,9 @@ const SocketProvider = ({ children }) => {
         MyNotifs,
 
         updateNewNotifsExist,
-        updateMyNotifs
+        updateMyNotifs,
+        groupMessages,
+        updateGroupMessages,
       }}
     >
       {children}

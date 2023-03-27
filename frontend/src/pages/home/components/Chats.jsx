@@ -27,6 +27,8 @@ could/should use userID instead */
 const AllChats = () => {
   const [chatUsers, setChatUsers] = useState([]);
 
+  const [groupChats, setGroupChats] = useState([]);
+
   const userForm = new FormData();
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
 
@@ -43,12 +45,22 @@ const AllChats = () => {
 
     setChatUsers(data);
   }
-  console.log(
-    "chat data kjsndfkjsnkdjsndkjsndkfjndskfjsnkdfjnskdf=============> ",
-    chatUsers
-  );
+
+  async function fetchGroupChats() {
+    const resp = await fetch("http://localhost:8080/mygroupchats", {
+      method: "POST",
+      body: userForm,
+      credentials: "include",
+    });
+
+    const data = await resp.json();
+    // console.log("group chats data", data);
+    setGroupChats(data);
+  }
+
   useEffect(() => {
     fetchChatUsers();
+    fetchGroupChats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -76,7 +88,7 @@ const AllChats = () => {
       <SideProfileContainer
         parentClass="AllUsers"
         headers="Group Chats"
-        data={DBData.GroupChats}
+        data={groupChats}
         childClass={DBData.UsersClasses.child}
         type="GroupChats"
       />

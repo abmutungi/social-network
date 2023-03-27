@@ -22,13 +22,17 @@ const SingleProfileComponent = (props) => {
     updateDynamicID,
     updateisGroupMember,
     updateGroupRequested,
-    updateNavClicked
+    updateNavClicked,
   } = useContext(LowerHeaderContext);
 
   const { messages, updateChatMessages } = useContext(SocketContext);
+  // const { messages, updateMessages } = useContext(loggedInUserContext);
+
+  const { groupMessages, updateGroupMessages } = useContext(SocketContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
+  const [groupClicked, setGroupClicked] = useState(false);
   const navigate = useNavigate();
   // const handleClick = () => {
   async function FetchRelationship() {
@@ -125,16 +129,30 @@ const SingleProfileComponent = (props) => {
     updateChatMessages(data);
   }
 
-  if (props.type === "AllUsers") {
-   
+  // fetch groupChathistory
+  const groupChatsForm = new FormData();
+  groupChatsForm.append("groupID", props.groupID);
+  // get the groupID from the click
 
+  async function fetchGroupMessages() {
+    const resp = await fetch("http://localhost:8080/sendgroupmessages", {
+      method: "POST",
+      credentials: "include",
+      body: groupChatsForm,
+    });
+    const data = await resp.json();
+    console.log("group messages data, lets see what it is", groupMessages);
+    updateGroupMessages(data);
+  }
+
+  if (props.type === "AllUsers") {
     return (
       <div
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
 
-          updateNavClicked(false)
+          updateNavClicked(false);
           updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
         }}
@@ -153,25 +171,19 @@ const SingleProfileComponent = (props) => {
   }
 
   if (props.type === "AllGroups") {
-    
     return (
       <div
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
-          updateNavClicked(false)
+          updateNavClicked(false);
           updateGroupID(Number(e.currentTarget.id));
         }}
         className="SingleProfile"
         id={props.id}
       >
         <div className="ChatPic">
-          <img
-            src={props.avatar}
-            width="25"
-            height="25"
-            alt="chat-pic"
-          />
+          <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
         <p className="ChatName">
           {props.chatName}
@@ -182,7 +194,6 @@ const SingleProfileComponent = (props) => {
   }
 
   if (props.type === "Chats") {
-    
     return (
       <div
         role="presentation"
@@ -191,6 +202,7 @@ const SingleProfileComponent = (props) => {
           if (!show) fetchChatHistory();
           setShow(true);
           setName(props.chatName);
+          setGroupClicked(false);
           console.log("props.id -> ", props.id);
           console.log("message struct --> ", messages);
           // updateUserID(Number(e.currentTarget.id));
@@ -205,40 +217,61 @@ const SingleProfileComponent = (props) => {
           name={name}
           id={props.id}
           data={messages}
+          avatar={props.avatar}
+          groupClicked={groupClicked}
         />
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
-        <p className="ChatName">
-          {props.chatName}
-          <small className="group-event-text">{props.eventText}</small>
-        </p>
+        <p className="ChatName">{props.chatName}</p>
       </div>
     );
   }
 
-
-  if (props.type === "Navbar") {
- let PicPath =
-    props.avatar === ""
-      ? "../assets/img/ext/blue-placeholder.jpeg"
-      : `../assets/img/ext/${props.avatar}`;
-
-
-
+  if (props.type == "GroupChats") {
     return (
       <div
+        className="SingleProfile"
         role="presentation"
-     
-        className="Nav-SingleProfile"
-        id={props.id}
+        // id={props.groupID}
+        onClick={(e) => {
+          e.preventDefault();
+          if (!show) fetchGroupMessages();
+          setShow(true);
+          setName(props.chatName);
+          setGroupClicked(true);
+          console.log("props.groupID???? ", props.groupID);
+        }}
       >
+        <ChatBox
+          onClose={() => setShow(false)}
+          show={show}
+          name={name}
+          id={props.groupID}
+          data={groupMessages}
+          avatar={props.avatar}
+          groupClicked={groupClicked}
+        />
+        <div className="ChatPic">
+          <img src={props.avatar} width="25" height="25" alt="chat-pic" />
+        </div>
+        <p className="ChatName">{props.chatName}</p>
+      </div>
+    );
+  }
+
+  if (props.type === "Navbar") {
+    let PicPath =
+      props.avatar === ""
+        ? "../assets/img/ext/blue-placeholder.jpeg"
+        : `../assets/img/ext/${props.avatar}`;
+
+    return (
+      <div role="presentation" className="Nav-SingleProfile" id={props.id}>
         <div className="ChatPic">
           <img src={PicPath} width="25" height="25" alt="chat-pic" />
         </div>
-        <p className="ChatName">
-          {props.chatName}
-        </p>
+        <p className="ChatName">{props.chatName}</p>
       </div>
     );
   }

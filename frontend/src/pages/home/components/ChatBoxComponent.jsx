@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 
 import { ChatBubble } from "./ChatBubbleComponent";
 import "../../../assets/css/chatbox.css";
@@ -6,102 +6,73 @@ import { SocketContext } from "../../../context/webSocketContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUserNinja,
-  faWindowMinimize,
   faXmark,
-  faImage,
-  faFaceSmile,
+  // faImage,
+  // faFaceSmile,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { loggedInUserContext } from "../../../context/loggedInUserContext";
+// import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
-// let dummyMessages = [
-//   {
-//     msgContent: "hi there",
-//     user: "Yonas",
-//     date: new Date().toDateString(),
-//     isCurrentUser: true,
-//   },
-//   {
-//     msgContent: "hola",
-//     user: "Messi",
-//     date: new Date().toDateString(),
-//     isCurrentUser: false,
-//   },
-//   {
-//     msgContent: "who's the best defender?",
-//     user: "Yonas",
-//     date: new Date().toDateString(),
-//     isCurrentUser: true,
-//   },
-//   {
-//     msgContent: "romero",
-//     user: "Messi",
-//     date: new Date().toDateString(),
-//     isCurrentUser: false,
-//   },
-// ];
+const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
+  const { socket } = useContext(SocketContext);
 
-//  let chatBoxes = document.getElementsByClassName("chat-box-container");
-//  for (const cBox of chatBoxes) {
-//    if (cBox.id != name) {
-//      console.log("Name in loop -> ", name);
-//      console.log("cBox id -> ", cBox.id);
-//      console.log("cBox attr -> ", cBox.attributes);
-//    }
-//  }
-
-const ChatBox = ({ show, onClose, name, id, data }) => {
-  const { socket, messages } = useContext(SocketContext);
-
+  // const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
-
-  // const handleChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setChatFormValues({
-  //     ...chatFormValues,
-  //     [name]: value,
-  //   });
-  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const storeMessageForm = new FormData(e.target);
 
+    console.log("checking if group has been clicked", groupClicked);
+    const storeMessageForm = new FormData(e.target);
     storeMessageForm.append(
       "loggedInUser",
       JSON.parse(localStorage.getItem("loggedInUser")).ID
     );
-    storeMessageForm.append("recipientID", id);
-    storeMessageForm.append("type", "newMessage");
-
     var messageObject = {};
-    storeMessageForm.forEach((value, key) => (messageObject[key] = value));
 
-    console.log("checking message object", messageObject);
+    // this is for group messages
+    if (groupClicked) {
+      storeMessageForm.append("type", "newGroupMessage");
+      // console.log("checking group id", id);
+      storeMessageForm.append("groupID", id);
+      storeMessageForm.forEach((value, key) => (messageObject[key] = value));
 
-    // sending through the socket that a new message has been sent
-    socket.send(JSON.stringify(messageObject));
+      // send groupMessageObject through the socket
+      console.log("checking group message form", messageObject);
 
-    for (const v of storeMessageForm.values()) {
-      console.log("v check -> ", v);
+      socket.send(JSON.stringify(messageObject));
+    } else {
+      // this is for private messages
+
+      storeMessageForm.append("recipientID", id);
+      storeMessageForm.append("type", "newMessage");
+
+      storeMessageForm.forEach((value, key) => (messageObject[key] = value));
+
+      // sending through the socket that a new message has been sent
+      socket.send(JSON.stringify(messageObject));
     }
 
+    // for (const v of storeMessageForm.values()) {
+    //   console.log("v check -> ", v);
+    // }
+
     // if (newMsg != "") {
-    //   setMessages([
-    //     ...messages,
-    //     {
-    //       msgContent: newMsg,
-    //       user: JSON.parse(localStorage.getItem("loggedInUser")).FName,
-    //       isCurrentUser: true,
-    //       date: new Date().toDateString(),
-    //     },
-    //   ]);
-    setNewMsg("");
 
     // }
+    setNewMsg("");
   };
 
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    // scroll to bottom every time messages change
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [data]);
+
+  const currentUserCheck = (mess) => {
+    return JSON.parse(localStorage.getItem("loggedInUser")).FName == mess;
+  };
   let currentUser = name;
 
   console.log("name prop check --> ", name);
@@ -119,6 +90,7 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
   //   };
   // }
 
+  // console.log("checking group messages in chatbox", data);
   return (
     <>
       <div
@@ -132,17 +104,9 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
             onClick={(e) => e.stopPropagation()}
             role="presentation"
           >
-            <FontAwesomeIcon
-              icon={faUserNinja}
-              className="chat-header-user-logo"
-              size="xl"
-            />
-            {currentUser}
-            <FontAwesomeIcon
-              icon={faWindowMinimize}
-              className="chat-header-minimize"
-              size="lg"
-            />
+            <img className="chat-box-av" src={avatar} alt="" />
+            <span className="chat-box-name">{currentUser}</span>
+
             <FontAwesomeIcon
               onClick={onClose}
               icon={faXmark}
@@ -151,26 +115,19 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
             />
           </div>
           <div className="chat-box-body">
-            {data.map((message, index) => (
+            {data?.map((message, index) => (
               <ChatBubble
                 key={index}
                 msgContent={message.message}
-                // need to add first name, of sender, currently sending back ids
-                user={message.chatsender}
-                isCurrentUser={message.isCurrentUser}
+                user={message.senderName}
+                isCurrentUser={currentUserCheck(message.senderName)}
                 date={message.chatDate}
               ></ChatBubble>
             ))}
+            <div ref={bottomRef} />
           </div>
           <div className="chat-box-footer">
-            <FontAwesomeIcon
-              icon={faImage}
-              className="chat-footer-image-logo"
-              size="lg"
-            />
-            {/* <button><i><FontAwesomeIcon icon={faPaperPlane} className="msg-btn"size="xl" type="submit"/></i></button> */}
-            <form onSubmit={handleSubmit}>
-              {" "}
+            <form className="chat-box-form" onSubmit={handleSubmit}>
               <input
                 className="msg-input"
                 type="text"
@@ -182,11 +139,6 @@ const ChatBox = ({ show, onClose, name, id, data }) => {
                 }}
               ></input>
             </form>
-            <FontAwesomeIcon
-              icon={faFaceSmile}
-              className="chat-footer-emoji-logo"
-              size="lg"
-            />
           </div>
         </div>
       </div>

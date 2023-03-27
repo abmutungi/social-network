@@ -54,12 +54,28 @@ const MultipleProfilesComponent = ({ users, type }) => {
           key={index}
           type={type}
           avatar={userPicPath}
-          onClick={() => {
-            console.log("chatbox clicked");
-          }}
         />
       );
     });
+  }
+
+  if (type === "GroupChats") {
+    return users?.map((user, index) => {
+      let userPicPath =
+        user.groupAvatar === ""
+          ? "../assets/img/ext/man-utd.png"
+          : `../assets/img/ext/${user.groupAvatar}`;
+      return (
+        <SingleProfileComponent
+          chatName={`${user.groupName}`}
+          groupID={user.groupID}
+          key={index}
+          type={type}
+          avatar={userPicPath}
+        />
+      );
+    });
+    // console.log("checking group chats data", users);
   }
 };
 

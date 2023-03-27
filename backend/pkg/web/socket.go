@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strconv"
 
-	//"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/abmutungi/social-network/backend/pkg/chats"
 	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
@@ -91,7 +90,13 @@ type NewMessage struct {
 	LoggedInUserID string `json:"loggedInUser"`
 	RecipientID    string `json:"recipientID"`
 	MessageContent string `json:"msgContent"`
+	GroupID        string `json:"groupID"`
 	Tipo           string `json:"tipo"`
+}
+
+type GroupMessages struct {
+	GroupM []chats.Chat `json:"groupMessages"`
+	Tipo   string       `json:"tipo"`
 }
 
 func (t *T) UnmarshalData(data []byte) error {
@@ -113,6 +118,9 @@ func (t *T) UnmarshalData(data []byte) error {
 		t.GroupEvent = &GroupEvent{}
 		return json.Unmarshal(data, t.GroupEvent)
 	case "newMessage":
+		t.NewMessage = &NewMessage{}
+		return json.Unmarshal(data, t.NewMessage)
+	case "newGroupMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)
 	default:
@@ -211,6 +219,29 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		}
 
+		if f.Type == "newGroupMessage" {
+			// fmt.Println("checking whats in f in group message", f.MessageContent)
+
+			senderIdInt, _ := strconv.Atoi(f.LoggedInUserID)
+			groupIdInt, _ := strconv.Atoi(f.NewMessage.GroupID)
+
+			// store group message in the database
+			chats.StoreGroupMessage(s.Db, groupIdInt, f.MessageContent, senderIdInt)
+
+			// f.NewMessage.Tipo = "newGroupMessage"
+
+			for id, conn := range loggedInSockets {
+				// need to check if the id is a member of a group
+				if groups.GroupMemberCheck(s.Db, groupIdInt, id) {
+					var gm GroupMessages
+					gm.GroupM = chats.GetGroupChatHistory(s.Db, groupIdInt)
+					gm.Tipo = "newGroupMessage"
+					conn.WriteJSON(gm)
+				}
+			}
+
+		}
+
 		if f.Type == "groupNotifs" {
 
 			if !groups.GroupMemberCheck(s.Db, f.Group, f.User) {
@@ -269,16 +300,16 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 		if f.Type == "eventInviteNotifs" {
 
-			eventID := groups.CreateGroupEvent(s.Db, f.GroupID, f.Creator, f.EventName, f.EventDescription, f.EventStartDate)
+			eventID := groups.CreateGroupEvent(s.Db, f.GroupEvent.GroupID, f.Creator, f.EventName, f.EventDescription, f.EventStartDate)
 
 			// get all group members then update the notifications table,
 			// then create entries within the notication table
-			allgroupmembers := groups.GetAllGroupMembers(s.Db, f.GroupID)
+			allgroupmembers := groups.GetAllGroupMembers(s.Db, f.GroupEvent.GroupID)
 			fmt.Println("all-group-members", allgroupmembers)
 
 			for _, member := range allgroupmembers {
 				if member != f.Creator {
-					groups.UpdateNotifcationTablePostEventCreation(s.Db, "eventInvite", member, f.Creator, f.GroupID, eventID)
+					groups.UpdateNotifcationTablePostEventCreation(s.Db, "eventInvite", member, f.Creator, f.GroupEvent.GroupID, eventID)
 				}
 			}
 
