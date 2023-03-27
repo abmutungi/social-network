@@ -51,7 +51,13 @@ type NewMessage struct {
 	LoggedInUserID string `json:"loggedInUser"`
 	RecipientID    string `json:"recipientID"`
 	MessageContent string `json:"msgContent"`
+	GroupID        string `json:"groupID"`
 	Tipo           string `json:"tipo"`
+}
+
+type GroupMessages struct {
+	GroupM []chats.Chat `json:"groupMessages"`
+	Tipo   string       `json:"tipo"`
 }
 
 func (t *T) UnmarshalData(data []byte) error {
@@ -73,6 +79,9 @@ func (t *T) UnmarshalData(data []byte) error {
 		t.Notification = &notifications.Notification{}
 		return json.Unmarshal(data, t.Notification)
 	case "newMessage":
+		t.NewMessage = &NewMessage{}
+		return json.Unmarshal(data, t.NewMessage)
+	case "newGroupMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)
 	default:
@@ -163,6 +172,29 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			for id, conn := range loggedInSockets {
 				if recipientIdInt == id || senderIdInt == id {
 					conn.WriteJSON(chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID))
+				}
+			}
+
+		}
+
+		if f.Type == "newGroupMessage" {
+			// fmt.Println("checking whats in f in group message", f.MessageContent)
+
+			senderIdInt, _ := strconv.Atoi(f.LoggedInUserID)
+			groupIdInt, _ := strconv.Atoi(f.NewMessage.GroupID)
+
+			// store group message in the database
+			chats.StoreGroupMessage(s.Db, groupIdInt, f.MessageContent, senderIdInt)
+
+			// f.NewMessage.Tipo = "newGroupMessage"
+
+			for id, conn := range loggedInSockets {
+				// need to check if the id is a member of a group
+				if groups.GroupMemberCheck(s.Db, groupIdInt, id) {
+					var gm GroupMessages
+					gm.GroupM = chats.GetGroupChatHistory(s.Db, groupIdInt)
+					gm.Tipo = "newGroupMessage"
+					conn.WriteJSON(gm)
 				}
 			}
 

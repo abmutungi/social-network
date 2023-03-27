@@ -210,3 +210,19 @@ func GetGroupChatHistory(db *sql.DB, groupID int) []Chat {
 	}
 	return gm
 }
+
+func StoreGroupMessage(db *sql.DB, groupID int, messageContent string, senderID int) {
+	stmt, err := db.Prepare(`INSERT INTO groupMessages (groupChatID, messageContent, sender, createdAt) VALUES (?,?,?, strftime('%H:%M %d/%m/%Y','now', 'localtime'))`)
+
+	if err != nil {
+		fmt.Printf("Error with StoreGroupMessage prepare statement :%v", err)
+	}
+
+	result, _ := stmt.Exec(groupID, messageContent, senderID)
+
+	rowsAff, _ := result.RowsAffected()
+	LastIns, _ := result.LastInsertId()
+	fmt.Println("StoreGroupMessage rows affected: ", rowsAff)
+	fmt.Println("StoreGroupMessage last inserted: ", LastIns)
+
+}
