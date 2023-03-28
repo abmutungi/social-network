@@ -1,4 +1,7 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMessage } from "@fortawesome/free-solid-svg-icons";
+
 import "../assets/css/AllChats.css";
 import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
@@ -231,8 +234,11 @@ const SingleProfileComponent = (props) => {
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
         <p className="ChatName">
-          {props.chatName} {props.notifier ? <span>**</span> : null}
-          {props.socketnotifier ? <span>++++</span> : null}
+          {props.chatName}{" "}
+          {props.notifier || props.socketnotifier ? (
+            <FontAwesomeIcon icon={faMessage} className="chatNotifIcon" />
+          ) : null}
+          {/* {props.socketnotifier ? <span>++++</span> : null} */}
         </p>
       </div>
     );
