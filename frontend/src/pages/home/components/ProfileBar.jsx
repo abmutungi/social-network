@@ -197,12 +197,12 @@ const ProfileBar = () => {
 };
 
 const getFollowCount = (arr)=>{
+  
   if(arr == null||arr == undefined) {
     return 0
   }
-  let count = 0 
- arr.forEach((elem)=> count+=1)
-  return count
+  return arr.length
+
 }
 
 export default ProfileBar;

@@ -35,6 +35,9 @@ const SingleProfileComponent = (props) => {
 
   const [groupClicked, setGroupClicked] = useState(false);
   const navigate = useNavigate();
+
+  const[shouldFetch, setShouldFetch]= useState(false)
+
   // const handleClick = () => {
   async function FetchRelationship() {
     try {
@@ -63,6 +66,8 @@ const SingleProfileComponent = (props) => {
         navigate("/login");
         return;
       }
+      setShouldFetch(false)
+
     } catch (e) {
       console.log("error fetching relationshiip", e);
     }
@@ -82,6 +87,8 @@ const SingleProfileComponent = (props) => {
       const data = await response.json();
       updateisGroupMember(data.ismember);
       updateGroupRequested(data.requested);
+      setShouldFetch(false)
+
 
     
     } catch (e) {
@@ -90,14 +97,15 @@ const SingleProfileComponent = (props) => {
   }
 
   useEffect(() => {
-    if (userID > 0) FetchRelationship();
+    
+    if (userID > 0 && shouldFetch) FetchRelationship();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
 
 
 
   useEffect(() => {
-    if (GroupID > 0) FetchGroupInfo();
+    if (GroupID > 0 && shouldFetch) FetchGroupInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
 
@@ -152,10 +160,11 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
-
+          setShouldFetch(true)
           updateNavClicked(false);
           updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
+
         }}
         className="SingleProfile"
         id={props.id}
@@ -177,6 +186,7 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
+          setShouldFetch(true);
           updateNavClicked(false);
           updateGroupID(Number(e.currentTarget.id));
         }}
@@ -205,6 +215,7 @@ const SingleProfileComponent = (props) => {
           setName(props.chatName);
           setGroupClicked(false);
           updateSocketChatNotifs(false);
+
 
           console.log("props.id -> ", props.id);
           console.log("message struct --> ", messages);

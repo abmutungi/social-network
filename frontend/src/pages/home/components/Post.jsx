@@ -75,8 +75,6 @@ const PostsContainer = () => {
     navData,
   } = useContext(LowerHeaderContext);
 
-
-
   // fetch home posts for the logged in user
   const userForm = new FormData();
 
@@ -97,7 +95,6 @@ const PostsContainer = () => {
   if (groupNotUser) {
     userForm.append("GuserID", LoggedInUserID);
   }
-
 
   // for (const entry of userForm.entries()) {
   //   console.log("check ****", entry);
@@ -200,44 +197,36 @@ const PostsContainer = () => {
       </>
     );
   } else if (navClicked) {
-
-  
     return (
       <>
-      <div className="nav-bar-style">
-       
-        
-      {navData?.map((data) => (
-         
-         !data.hasOwnProperty('GroupID') ?
-        
-
-          <SingleProfileComponent
-          key = {data.UserID}
-          id = {data.UserID}
-          chatName = {data.Firstname + ' ' + data.Lastname}
-            headers="Nav"
-            childClass="AGroup"
-            type="Navbar"
-            avatar = {data.Avatar}
-          />
-          :
-          <SingleProfileComponent
-          key = {data.GroupID}
-          id = {data.GroupID}
-          chatName = {data.GroupName }
-            headers="Nav"
-            childClass="AGroup"
-            type="Navbar"
-            avatar = {data.Avatar}
-          />
-
-          
-
-       ) )}
+        <div className="nav-bar-style">
+          {navData?.map((data) =>
+            !Object.prototype.hasOwnProperty.call(data, "GroupID") ? (
+              <SingleProfileComponent
+                key={data.UserID}
+                id={data.UserID}
+                chatName={data.Firstname + " " + data.Lastname}
+                headers="Nav"
+                childClass="AGroup"
+                type="Navbar"
+                avatar={data.Avatar}
+              />
+            ) : (
+              <SingleProfileComponent
+                key={data.GroupID}
+                id={data.GroupID}
+                chatName={data.GroupName}
+                headers="Nav"
+                childClass="AGroup"
+                type="Navbar"
+                avatar={data.Avatar}
+              />
+            )
+          )}
         </div>
       </>
- ); } else {
+    );
+  } else {
     return (
       <>
         <div className="posts-container">
