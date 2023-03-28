@@ -281,7 +281,7 @@ func GetEventInfo(db *sql.DB, GroupID int) []EventInfo {
 	rows, err := db.Query(`SELECT eventID, eventTitle, description, attending, dateStart, creator
 	FROM events
 	WHERE groupID =
-	?`, GroupID)
+	? ORDER BY eventID DESC`, GroupID)
 	if err != nil {
 		fmt.Printf("error getting Events data: %v", err)
 	}
