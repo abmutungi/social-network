@@ -53,7 +53,7 @@ const CreateEventModal = ({ show, onClose }) => {
     const formData = new FormData(form);
     formData.append("creator", LoggedInUserID);
     formData.append("groupID", GroupID);
-    console.log("***** event invites******", JSON.stringify(formValues));
+    //console.log("***** event invites******", JSON.stringify(formValues));
 
     socket.send(JSON.stringify(formValues))
     // CreateGroupEvent(formData);

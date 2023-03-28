@@ -198,7 +198,6 @@ const ProfileBar = () => {
 
 const getFollowCount = (arr)=>{
   if(arr == null||arr == undefined) {
-   console.log('uiwegdfiuwegiwehdfwe');
     return 0
   }
   let count = 0 
