@@ -73,12 +73,18 @@ const SingleNotificationComponent = ({ props }) => {
     notificationContainer.parentNode.removeChild(notificationContainer);
   };
 
+  const handleProfilePicImgPath = (strImgPath) => {
+    return strImgPath === ""
+      ? `../assets/img/ext/babyblue-placeholder.jpeg`
+      : `../assets/img/ext/${strImgPath}`;
+  };
+
   return (
     <div id={props.id} className="notification-container">
       <div className="notifs-profile-content">
         <img
           className="notifs-profile cp-profile-pic"
-          src="../assets/img/ext/man-utd.png"
+          src={handleProfilePicImgPath(props.profileImg)}
           alt="img"
         />
         <div className="notifs-content-date">
@@ -142,7 +148,7 @@ const NotificationsModal = ({ show, onClose, data }) => {
                 groupID: notif.notifGroupID,
                 notifDate: notif.notifDate,
                 eventID: notif.notifEventID,
-                profileImgPath: "../assets/img/ext/man-utd.png",
+                profileImg: notif.notifAvatar,
               }}
             />
           ))}

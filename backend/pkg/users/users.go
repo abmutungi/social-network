@@ -21,7 +21,7 @@ type User struct {
 	Notifications bool
 	Groups        []int
 
-	//Followers int
+	// Followers int
 	// Following int
 }
 
@@ -94,7 +94,6 @@ func GetAUsersGroups(db *sql.DB, userid int) []int {
 	}
 
 	return Groups
-
 }
 
 // update users set privacy = 1 where userID = 1;
@@ -108,4 +107,15 @@ func UpdatePrivacy(db *sql.DB, privacy, userID int) {
 	LastIns, _ := res.LastInsertId()
 	fmt.Println("rows affected:", rowsAff)
 	fmt.Println("last inserted:", LastIns)
+}
+
+func GetAvatar(db *sql.DB, userID int) string {
+	userStmt := "SELECT avatar FROM  users WHERE userID = ?"
+	userRow := db.QueryRow(userStmt, userID)
+	var avatar string
+	err := userRow.Scan(&avatar)
+	if err != nil {
+		fmt.Printf("Error in getting the groupName for this groupID(%d): %v", userID, err)
+	}
+	return avatar
 }

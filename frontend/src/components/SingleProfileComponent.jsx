@@ -2,7 +2,7 @@ import React from "react";
 import "../assets/css/AllChats.css";
 import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { followText, unfollowText, requestText } from "./UserRequestBtn";
 import { useNavigate } from "react-router-dom";
 import { ChatBox } from "../pages/home/components/ChatBoxComponent";
@@ -35,77 +35,79 @@ const SingleProfileComponent = (props) => {
 
   const [groupClicked, setGroupClicked] = useState(false);
   const navigate = useNavigate();
-   const handleClick = async () => {
-    // async function FetchRelationship() {
-      try {
-        const response = await fetch("http://localhost:8080/followCheck", {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify({
-            loggedInUserID: LoggedInUserID,
-            userID: userID,
-          }),
-        });
-        const data = await response.json();
 
-        if (data.canFollow) {
-          updateFollowing(false);
-          updateFollowText(followText);
-        } else if (data.following) {
-          updateFollowing(true);
-          updateFollowText(unfollowText);
-        } else if (data.requested) {
-          updateRequested(true);
-          updateFollowText(requestText);
-        } else {
-          updateFollowText(followText);
-        }
+  const[shouldFetch, setShouldFetch]= useState(false)
 
-        if (data.msg) {
-          navigate("/login");
-          return;
-        }
-      } catch (e) {
-        console.log("error fetching relationshiip", e);
+  // const handleClick = () => {
+  async function FetchRelationship() {
+    try {
+      const response = await fetch("http://localhost:8080/followCheck", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          loggedInUserID: LoggedInUserID,
+          userID: userID,
+        }),
+      });
+      const data = await response.json();
+
+      if (data.canFollow) {
+        updateFollowing(false);
+        updateFollowText(followText);
+      } else if (data.following) {
+        updateFollowing(true);
+        updateFollowText(unfollowText);
+      } else if (data.requested) {
+        updateRequested(true);
+        updateFollowText(requestText);
       }
-    
-  }
-  const handleGroupClick = async () => {
-    // async function FetchGroupInfo() {
-      //updateGroupRequested(false)
-      try {
-        const response = await fetch("http://localhost:8080/isgroupmember", {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify({
-            loggedInUserID: LoggedInUserID,
-            groupID: GroupID,
-          }),
-        });
-        const data = await response.json();
-        updateisGroupMember(data.ismember);
-        updateGroupRequested(data.requested);
 
-        //console.log("response from fetchgroupinfo", data);
-
-        // console.log("response from fetchgroupinfo", data);
-      } catch (e) {
-        console.log("error fetching groupinfo", e);
+      if (data.msg) {
+        navigate("/login");
+        return;
       }
+      setShouldFetch(false)
+
+    } catch (e) {
+      console.log("error fetching relationshiip", e);
     }
-  
-  // useEffect(() => {
-  //   if (userID > 0) FetchRelationship();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [userID]);
+  }
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [userID]);
+  async function FetchGroupInfo() {
+    //updateGroupRequested(false)
+    try {
+      const response = await fetch("http://localhost:8080/isgroupmember", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          loggedInUserID: LoggedInUserID,
+          groupID: GroupID,
+        }),
+      });
+      const data = await response.json();
+      updateisGroupMember(data.ismember);
+      updateGroupRequested(data.requested);
+      setShouldFetch(false)
 
-  // useEffect(() => {
-  //   if (GroupID > 0) FetchGroupInfo();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [GroupID]);
+
+    
+    } catch (e) {
+      console.log("error fetching groupinfo", e);
+    }
+  }
+
+  useEffect(() => {
+    
+    if (userID > 0 && shouldFetch) FetchRelationship();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userID]);
+
+
+
+  useEffect(() => {
+    if (GroupID > 0 && shouldFetch) FetchGroupInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [GroupID]);
 
   // fetch chat history on chat user click
   const fetchChatsForm = new FormData();
@@ -158,11 +160,11 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
-
+          setShouldFetch(true)
           updateNavClicked(false);
           updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
-          handleClick()
+          console.log("onclick user -------------->", userID);
         }}
         className="SingleProfile"
         id={props.id}
@@ -184,10 +186,10 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
+          setShouldFetch(true);
           updateNavClicked(false);
           updateGroupID(Number(e.currentTarget.id));
-          handleGroupClick()
-
+          console.log("onclick group -------------->", GroupID);
         }}
         className="SingleProfile"
         id={props.id}
@@ -214,6 +216,7 @@ const SingleProfileComponent = (props) => {
           setName(props.chatName);
           setGroupClicked(false);
           updateSocketChatNotifs(false);
+
 
           console.log("props.id -> ", props.id);
           console.log("message struct --> ", messages);

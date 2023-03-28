@@ -70,20 +70,23 @@ const MultipleProfilesComponent = ({ users, type }) => {
 
   if (type === "AllUsers") {
     return users?.map((user, index) => {
-      let userPicPath =
-        user.Avatar === ""
-          ? "../assets/img/ext/babyblue-placeholder.jpeg"
-          : `../assets/img/ext/${user.Avatar}`;
+      if (user.UserID != loggedInUser) {
+        ;
+        let userPicPath =
+          user.Avatar === ""
+            ? "../assets/img/ext/babyblue-placeholder.jpeg"
+            : `../assets/img/ext/${user.Avatar}`;
 
-      return (
-        <SingleProfileComponent
-          chatName={`${user.Firstname}`}
-          id={user.UserID}
-          key={index}
-          type={type}
-          avatar={userPicPath}
-        />
-      );
+        return (
+          <SingleProfileComponent
+            chatName={`${user.Firstname}`}
+            id={user.UserID}
+            key={index}
+            type={type}
+            avatar={userPicPath}
+          />
+        );
+      }
     });
   }
 

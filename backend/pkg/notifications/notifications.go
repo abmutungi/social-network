@@ -21,6 +21,7 @@ type Notification struct {
 	NotificationGroupID   int    `json:"notifGroupID"`
 	NotificationGroupName string `json:"notifGroupName"`
 	NotificationEventID   int    `json:"notifEventID"`
+	NotificationAvatar    string `json:"notifAvatar"`
 	NotificationAccept    int    `json:"notifAccept"`
 	Tipo                  string `json:"tipo"`
 }
@@ -102,7 +103,7 @@ func GetNotifications(db *sql.DB, userID int) []Notification {
 		fmt.Printf("n.NotificationGroupID----------->%v\ntype: %T\n", n.NotificationGroupID, n.NotificationGroupID)
 
 		n.NotificationGroupName = groups.GetGroupName(db, n.NotificationGroupID)
-
+		n.NotificationAvatar = users.GetAvatar(db, n.NotifierID)
 		// if n.NotificationType == "eventInvite" {
 		// 	n.NotificationEventID =
 		// }
@@ -197,7 +198,6 @@ func ReturnUserChatNotifications(db *sql.DB, notifyeeID int) []string {
 	}
 
 	for _, r := range result {
-
 		fmt.Println("Checking array of names ==> ", r)
 	}
 
