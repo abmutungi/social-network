@@ -2,11 +2,14 @@ import SingleProfileComponent from "./SingleProfileComponent";
 import { loggedInUserContext } from "../context/loggedInUserContext";
 import { useContext, useEffect } from "react";
 import { SocketContext } from "../context/webSocketContext";
+import { LowerHeaderContext } from "../context/lowerheadercontext";
 
 const MultipleProfilesComponent = ({ users, type }) => {
   const { socketChatNotif, lastMsgSender } = useContext(SocketContext);
   const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
     useContext(loggedInUserContext);
+  const { LoggedInUserID } = useContext(LowerHeaderContext);
+
   // fetch chat history on chat user click
   const fetchChatNotificationsForm = new FormData();
   let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
@@ -69,7 +72,10 @@ const MultipleProfilesComponent = ({ users, type }) => {
   }
 
   if (type === "AllUsers") {
-    return users?.map((user, index) => {
+    //omit loggedinuser
+    const filteredUsers = users?.filter((user) => user.UserID !== LoggedInUserID);
+
+    return filteredUsers?.map((user, index) => {
       let userPicPath =
         user.Avatar === ""
           ? "../assets/img/ext/babyblue-placeholder.jpeg"

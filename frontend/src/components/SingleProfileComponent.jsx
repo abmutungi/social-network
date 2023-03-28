@@ -83,9 +83,7 @@ const SingleProfileComponent = (props) => {
       updateisGroupMember(data.ismember);
       updateGroupRequested(data.requested);
 
-      //console.log("response from fetchgroupinfo", data);
-
-      // console.log("response from fetchgroupinfo", data);
+    
     } catch (e) {
       console.log("error fetching groupinfo", e);
     }
@@ -96,8 +94,7 @@ const SingleProfileComponent = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [userID]);
+
 
   useEffect(() => {
     if (GroupID > 0) FetchGroupInfo();
