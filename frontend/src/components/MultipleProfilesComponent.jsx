@@ -108,6 +108,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
             user.userID == lastMsgSender &&
             loggedInUser !== lastMsgSender
           }
+          notifierID={lastMsgSender}
           onClick={() => {
             console.log("chatbox clicked");
           }}

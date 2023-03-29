@@ -228,6 +228,8 @@ const SingleProfileComponent = (props) => {
           data={messages}
           avatar={props.avatar}
           groupClicked={groupClicked}
+          chatNotifExists={props.socketnotifier}
+          notifierID={props.notifierID}
         />
 
         <div className="ChatPic">

@@ -13,8 +13,18 @@ import {
 
 // import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
-const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
-  const { socket } = useContext(SocketContext);
+const ChatBox = ({
+  show,
+  onClose,
+  name,
+  id,
+  data,
+  avatar,
+  groupClicked,
+  chatNotifExists,
+  notifierID,
+}) => {
+  const { socket, updateSocketChatNotifs } = useContext(SocketContext);
 
   // const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
@@ -71,6 +81,17 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
 
   console.log("name prop check --> ", name);
 
+  const deleteNotif = () => {
+    if (chatNotifExists && notifierID === id) {
+      updateSocketChatNotifs(false);
+    }
+  };
+
+  const combinedClickHandler = () => {
+    onClose();
+    deleteNotif();
+  };
+
   if (!show) {
     return null;
   }
@@ -93,7 +114,7 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
             <span className="chat-box-name">{currentUser}</span>
 
             <FontAwesomeIcon
-              onClick={onClose}
+              onClick={combinedClickHandler}
               icon={faXmark}
               className="chat-header-close"
               size="lg"
