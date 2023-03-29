@@ -29,7 +29,8 @@ const SingleProfileComponent = (props) => {
   } = useContext(LowerHeaderContext);
 
   const { groupMessages, updateGroupMessages } = useContext(SocketContext);
-  const { updateChatNotifsOnLogin } = useContext(loggedInUserContext);
+  const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
+    useContext(loggedInUserContext);
 
   const { messages, updateChatMessages, updateSocketChatNotifs } =
     useContext(SocketContext);
@@ -132,7 +133,11 @@ const SingleProfileComponent = (props) => {
     // setMessages(data);
     updateChatMessages(data);
     if (props.notifier) {
-      updateChatNotifsOnLogin(false);
+      chatNotifsOnLogin.notifiers = chatNotifsOnLogin.notifiers.filter(
+        (item) => item !== props.chatName
+      );
+      console.log("cnl check  --> ", chatNotifsOnLogin.notifiers);
+      // updateChatNotifsOnLogin([]);
     }
   }
 

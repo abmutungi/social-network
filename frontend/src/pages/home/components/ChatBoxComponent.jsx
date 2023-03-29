@@ -81,16 +81,16 @@ const ChatBox = ({
 
   console.log("name prop check --> ", name);
 
-  const deleteNotif = () => {
-    if (chatNotifExists && notifierID === id) {
-      updateSocketChatNotifs(false);
-    }
-  };
+  // const deleteNotif = () => {
+  //   if (chatNotifExists && notifierID === id) {
+  //     updateSocketChatNotifs(false);
+  //   }
+  // };
 
-  const combinedClickHandler = () => {
-    onClose();
-    deleteNotif();
-  };
+  // const combinedClickHandler = () => {
+  //   onClose();
+  //   deleteNotif();
+  // };
 
   if (!show) {
     return null;
@@ -114,7 +114,7 @@ const ChatBox = ({
             <span className="chat-box-name">{currentUser}</span>
 
             <FontAwesomeIcon
-              onClick={combinedClickHandler}
+              onClick={onClose}
               icon={faXmark}
               className="chat-header-close"
               size="lg"
