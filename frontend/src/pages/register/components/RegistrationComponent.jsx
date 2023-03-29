@@ -33,8 +33,10 @@ const Register = () => {
     });
   };
 
-  const hiddenFileInput = React.useRef(null);
-  const handleFileClick = () => {
+  const hiddenFileInput = useRef(null);
+
+  const handleFileClick = (e) => {
+    e.preventDefault();
     hiddenFileInput.current.click();
   };
 
@@ -142,6 +144,7 @@ const Register = () => {
           <button onClick={handleFileClick} className="avatar-upload-btn" htmlFor="avatar">
           Upload An Avatar (Optional)
           </button>
+         
           <input
             type="file"
             ref={hiddenFileInput}
