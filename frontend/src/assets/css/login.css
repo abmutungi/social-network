@@ -92,6 +92,22 @@ input:focus {
   height: 50px;
 }
 
+
+.register-logo {
+   
+  font-weight: 900;
+  font-size: xx-large;
+  display: block;
+  width: 100%;
+  color: blue;
+  text-align: center;
+  margin-top: 5%;
+  right: 200px;
+  position: relative;
+  left: 0px;
+  height: 50px;
+}
+
 .loginErrorMsg {
   color: red;
   margin-top: 40px;

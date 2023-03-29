@@ -76,7 +76,7 @@ const Register = () => {
     <>
      
       <div className="register-container">
-      <div className="login-logo"><div className="logo-text">
+      <div className="register-logo"><div className="logo-text">
     <span>Connect</span>
   </div></div>
         <form className="register-form" onSubmit={handleSubmit}>
