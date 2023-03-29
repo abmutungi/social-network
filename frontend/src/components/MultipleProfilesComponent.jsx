@@ -45,16 +45,16 @@ const MultipleProfilesComponent = ({ users, type }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(
-    "chatNotifs should be the same as above ===> ",
-    chatNotifsOnLogin.notifiers
-  );
+  // console.log(
+  //   "chatNotifs should be the same as above ===> ",
+  //   chatNotifsOnLogin.notifiers
+  // );
 
   if (type === "AllGroups") {
     return users?.map((user, index) => {
       let userPicPath =
         user.Avatar === ""
-          ? "../assets/img/ext/babyblue-placeholder.jpeg"
+          ? "../assets/img/ext/creategroupposticonone.png"
           : `../assets/img/ext/${user.Avatar}`;
 
       return (
@@ -78,7 +78,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
     return filteredUsers?.map((user, index) => {
       let userPicPath =
         user.Avatar === ""
-          ? "../assets/img/ext/babyblue-placeholder.jpeg"
+          ? "../assets/img/ext/userdefaulttwo.png"
           : `../assets/img/ext/${user.Avatar}`;
 
       return (
@@ -97,7 +97,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
     return users?.map((user, index) => {
       let userPicPath =
         user.avatar === ""
-          ? "../assets/img/ext/babyblue-placeholder.jpeg"
+          ? "../assets/img/ext/userdefaulttwo.png"
           : `../assets/img/ext/${user.avatar}`;
       return (
         <SingleProfileComponent
@@ -126,7 +126,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
     return users?.map((user, index) => {
       let userPicPath =
         user.groupAvatar === ""
-          ? "../assets/img/ext/man-utd.png"
+          ? "../assets/img/ext/creategroupposticonone.png"
           : `../assets/img/ext/${user.groupAvatar}`;
       return (
         <SingleProfileComponent

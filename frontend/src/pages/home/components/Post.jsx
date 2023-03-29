@@ -39,7 +39,7 @@ const SinglePost = (props) => {
           {props.commentsCount} comments
         </button>
       </div>
-      <div className="post-actions">
+      {/* <div className="post-actions">
         <button className="post-action-button">
           <FontAwesomeIcon
             icon="fa-regular fa-thumbs-up"
@@ -51,7 +51,7 @@ const SinglePost = (props) => {
           <FontAwesomeIcon icon="fa-regular fa-message" className="post-icon" />
           <span>Comment</span>
         </button>
-      </div>
+      </div> */}
       <Comments comments={commentsToPass} postID={props.postID} />
     </div>
   );

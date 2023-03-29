@@ -107,13 +107,12 @@ const ProfileBar = () => {
       if (obj.UserID == userid) {
         setfirstName(obj.Firstname);
         setlastName(obj.Lastname);
-        // setfollowers(`${obj.Followers} ${"followers"}`);
-        // setfollowing(`${obj.Following} ${"following"}`);
+
         updateAboutText(obj.AboutText);
         updatePrivacyStatus(obj.Privacy);
         obj.Avatar != ""
           ? updateProfilePhotoBackground(obj.Avatar)
-          : updateProfilePhotoBackground("man-utd.png");
+          : updateProfilePhotoBackground("userdefaulttwo.png");
       }
       updateGroupID(0);
     }
@@ -126,14 +125,14 @@ const ProfileBar = () => {
       if (obj.GroupID == groupid) {
         setfirstName(obj.GroupName);
         setlastName("");
-        // setfollowing(`${obj.Members} ${"members"}`);
-        // setfollowers("");
-        obj.Avatar != ""
-          ? updateProfilePhotoBackground(obj.Avatar)
-          : updateProfilePhotoBackground("man-utd.png");
+        
+      obj.Avatar != ""
+          ? updateProfilePhotoBackground(obj.Avatar) 
+          : updateProfilePhotoBackground("creategroupposticonone.png");
         updateAboutText(obj.AboutText);
+        
       }
-      //  }
+     
     }
     updateUserID(0);
   };
@@ -168,8 +167,7 @@ const ProfileBar = () => {
         />
         <div className="ProfileBtnContainer">
           {userID === LoggedInUserID && !groupNotUser ? <PrivateBtn /> : null}
-          {/* {console.log("PrivacyBtnText****", PrivacyBtnText)}
-          {console.log("PrivacyStatus****", PrivacyStatus)} */}
+      
 
           {userID === LoggedInUserID && !groupNotUser ? (
             <ProfilePostBtn />
