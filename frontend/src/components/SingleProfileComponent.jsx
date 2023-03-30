@@ -31,8 +31,14 @@ const SingleProfileComponent = (props) => {
   const { groupMessages, updateGroupMessages } = useContext(SocketContext);
   const { chatNotifsOnLogin } = useContext(loggedInUserContext);
 
-  const { messages, updateChatMessages, updateSocketChatNotifs } =
-    useContext(SocketContext);
+  const {
+    messages,
+    updateChatMessages,
+    updateSocketChatNotifs,
+    newSocketGroupMessageIcon,
+    setNewSocketGroupMessageIcon,
+    newSocketMessageGroupID,
+  } = useContext(SocketContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
@@ -148,13 +154,14 @@ const SingleProfileComponent = (props) => {
   const [groupMessageIcon, setGroupMessageIcon] = useState(
     props.newGroupMessage
   );
+
   async function fetchGroupMessages() {
     groupChatsForm.append("hasMessageIcon", groupMessageIcon);
     groupChatsForm.append(
       "loggedInUser",
       JSON.parse(localStorage.getItem("loggedInUser")).ID
     );
-    console.log("newGroupMessageForm: ", groupChatsForm);
+    // console.log("newGroupMessageForm: ", groupChatsForm);
     const resp = await fetch("http://localhost:8080/sendgroupmessages", {
       method: "POST",
       credentials: "include",
@@ -272,6 +279,7 @@ const SingleProfileComponent = (props) => {
           setName(props.chatName);
           setGroupClicked(true);
           setGroupMessageIcon(false);
+          setNewSocketGroupMessageIcon(false);
         }}
       >
         <ChatBox
@@ -288,7 +296,9 @@ const SingleProfileComponent = (props) => {
         </div>
         <p className="ChatName">
           {props.chatName}{" "}
-          {groupMessageIcon ? (
+          {groupMessageIcon ||
+          (newSocketGroupMessageIcon &&
+            newSocketMessageGroupID == props.groupID) ? (
             <FontAwesomeIcon icon={faMessage} className="chatNotifIcon" />
           ) : null}
         </p>

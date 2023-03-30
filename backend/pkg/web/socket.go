@@ -95,8 +95,10 @@ type NewMessage struct {
 }
 
 type GroupMessages struct {
-	GroupM []chats.Chat `json:"groupMessages"`
-	Tipo   string       `json:"tipo"`
+	GroupM   []chats.Chat `json:"groupMessages"`
+	Tipo     string       `json:"tipo"`
+	NewNotif string       `json:"newNotif"`
+	GroupID  int          `json:"groupID"`
 }
 
 func (t *T) UnmarshalData(data []byte) error {
@@ -238,10 +240,13 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			for id, conn := range loggedInSockets {
 				// need to check if the id is a member of a group
+				var gm GroupMessages
+				if id != senderIdInt {
+					gm.NewNotif = "true"
+					gm.GroupID = groupIdInt
+				}
 
 				if groups.GroupMemberCheck(s.Db, groupIdInt, id) {
-
-					var gm GroupMessages
 					gm.GroupM = chats.GetGroupChatHistory(s.Db, groupIdInt)
 					gm.Tipo = "newGroupMessage"
 					conn.WriteJSON(gm)

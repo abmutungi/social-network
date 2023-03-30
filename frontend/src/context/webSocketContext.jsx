@@ -10,7 +10,9 @@ const SocketProvider = ({ children }) => {
   const [groupMessages, setGroupMessages] = useState([]);
   const [socketChatNotif, setSocketChatNotif] = useState(false);
   const [lastMsgSender, setLastMsgSender] = useState("");
-
+  const [newSocketGroupMessageIcon, setNewSocketGroupMessageIcon] =
+    useState(false);
+  const [newSocketMessageGroupID, setNewSocketMessageGroupID] = useState(0);
   const [MyNotifs, setMyNotifs] = useState([]);
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
@@ -51,6 +53,11 @@ const SocketProvider = ({ children }) => {
         if (newData.tipo === "newGroupMessage") {
           // need to create a new struct on backend with a []chats and tipo == newgroupMessage
           setGroupMessages(newData.groupMessages);
+          if (newData.newNotif === "true") {
+            setNewSocketGroupMessageIcon(true);
+            // console.log("checking groupID in the socket?", newData.groupID);
+            setNewSocketMessageGroupID(newData.groupID);
+          }
         }
       };
       return () => {
@@ -109,6 +116,9 @@ const SocketProvider = ({ children }) => {
         socketChatNotif,
         updateSocketChatNotifs,
         lastMsgSender,
+        newSocketGroupMessageIcon,
+        setNewSocketGroupMessageIcon,
+        newSocketMessageGroupID,
       }}
     >
       {children}
