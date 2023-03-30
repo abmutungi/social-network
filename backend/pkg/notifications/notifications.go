@@ -269,3 +269,14 @@ func GetGroupChatNotifs(db *sql.DB, userID int) []int {
 	return groupIDs
 
 }
+
+func ReadGroupChatNotif(db *sql.DB, userID int, groupID int) {
+	_, err := db.Exec(`UPDATE notifications SET read = 1 
+	WHERE notifiyee = ? 
+	AND groupID = ? 
+	AND notificationType="groupMessage"`, userID, groupID)
+	if err != nil {
+		fmt.Printf("Error update group chat message to read : %v", err)
+	}
+
+}

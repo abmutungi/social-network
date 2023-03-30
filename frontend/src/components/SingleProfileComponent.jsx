@@ -145,7 +145,16 @@ const SingleProfileComponent = (props) => {
   groupChatsForm.append("groupID", props.groupID);
   // get the groupID from the click
 
+  const [groupMessageIcon, setGroupMessageIcon] = useState(
+    props.newGroupMessage
+  );
   async function fetchGroupMessages() {
+    groupChatsForm.append("hasMessageIcon", groupMessageIcon);
+    groupChatsForm.append(
+      "loggedInUser",
+      JSON.parse(localStorage.getItem("loggedInUser")).ID
+    );
+    console.log("newGroupMessageForm: ", groupChatsForm);
     const resp = await fetch("http://localhost:8080/sendgroupmessages", {
       method: "POST",
       credentials: "include",
@@ -262,7 +271,7 @@ const SingleProfileComponent = (props) => {
           setShow(true);
           setName(props.chatName);
           setGroupClicked(true);
-          console.log("props.groupID???? ", props.groupID);
+          setGroupMessageIcon(false);
         }}
       >
         <ChatBox
@@ -279,7 +288,7 @@ const SingleProfileComponent = (props) => {
         </div>
         <p className="ChatName">
           {props.chatName}{" "}
-          {props.newGroupMessage ? (
+          {groupMessageIcon ? (
             <FontAwesomeIcon icon={faMessage} className="chatNotifIcon" />
           ) : null}
         </p>

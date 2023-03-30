@@ -96,7 +96,15 @@ func (s *Server) HandleSendGroupMessages() http.HandlerFunc {
 		}
 
 		groupID, _ := strconv.Atoi((r.Form.Get("groupID")))
+		loggedInUserId, _ := strconv.Atoi((r.Form.Get("loggedInUser")))
+		hasMessageIcon := (r.Form.Get("hasMessageIcon"))
+		// fmt.Printf("loggedInUser : %v, and has new messageIcon: %v ", loggedInUserId, (r.Form.Get("hasMessageIcon")))
 
+		// if loggedInUser has new message icon, on click set the value read to 1
+		if hasMessageIcon == "true" {
+			// db function to set read to 1
+			notifications.ReadGroupChatNotif(s.Db, loggedInUserId, groupID)
+		}
 		// create function to get all messages that belong to groupID
 		groupMessages, _ := json.Marshal(chats.GetGroupChatHistory(s.Db, groupID))
 
