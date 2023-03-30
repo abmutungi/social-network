@@ -8,8 +8,9 @@ import "../../../assets/css/posts.css";
 import Comments from "./Comments";
 import EventBanner from "./EventBanner";
 import SingleProfileComponent from "../../../components/SingleProfileComponent";
-
-library.add(faThumbsUp, faMessage);
+import { faLock, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+library.add(faThumbsUp, faMessage, faLock, faUsers);
 
 // SinglePost takes the props that come from the database
 const SinglePost = (props) => {
@@ -73,6 +74,8 @@ const PostsContainer = () => {
     updateGroupEvents,
     navClicked,
     navData,
+    PrivacyStatus,
+    Following
   } = useContext(LowerHeaderContext);
 
 
@@ -145,7 +148,13 @@ const PostsContainer = () => {
     return commentsArr === null ? 0 : commentsArr.length;
   };
 
-  if (!groupNotUser & !navClicked) {
+  if (
+    (!groupNotUser & !navClicked && !PrivacyStatus)|| 
+    (!groupNotUser & !navClicked && PrivacyStatus && Following) ||
+    (!groupNotUser & !navClicked &&
+      PrivacyStatus &&
+      DynamicID === LoggedInUserID)
+  ) {
     return (
       <>
         <div className="posts-container">
@@ -162,6 +171,26 @@ const PostsContainer = () => {
               postID={post.postID}
             />
           ))}
+        </div>
+      </>
+    );
+  } else if (!groupNotUser & !navClicked && PrivacyStatus && !Following) {
+    return (
+      <>
+        <div className="posts-container">
+          <div className="not-a-member">
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <FontAwesomeIcon icon="fa-solid fa-lock" />
+            <br></br>
+            <br></br>
+            This account is private
+                        <br></br>
+            Follow this account to see their posts and info.
+            <br></br>
+          </div>
         </div>
       </>
     );
@@ -244,7 +273,14 @@ const PostsContainer = () => {
           <div className="not-a-member">
             <br></br>
             <br></br>
-            This page is for members only!
+            <br></br>
+            <br></br>
+            <FontAwesomeIcon icon="fa-solid fa-lock" />
+            <br></br>
+            <br></br>
+            This group is private
+                        <br></br>
+            Join this group to see their posts and events.
             <br></br>
           </div>
         </div>

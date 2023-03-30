@@ -60,8 +60,8 @@ const ProfileBar = () => {
 
   const [firstName, setfirstName] = useState(loggedInUser.FName);
   const [lastName, setlastName] = useState(loggedInUser.LName);
-  const [followers, setfollowers] = useState("10 Followers");
-  const [following, setfollowing] = useState("8 Following");
+  const [followers, setfollowers] = useState();
+  const [following, setfollowing] = useState();
 
   async function GetFollowerCount(userid, type) {
     const navForm = new FormData();

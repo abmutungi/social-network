@@ -1,10 +1,13 @@
-import React from "react";
+import {React, useContext} from "react";
 import "../../../assets/css/about.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAddressCard } from '@fortawesome/free-regular-svg-icons';
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 
-function AboutMe({text, email, dob, nickname}) {
+function AboutMe({ text, email, dob, nickname }) {
+    
+    const { Following } = useContext(LowerHeaderContext);
 
     return(
         <div className="about-container">
@@ -17,13 +20,13 @@ function AboutMe({text, email, dob, nickname}) {
                     {text}
                     </div>
                      <div>
-                    {email}
+                    {Following ? email: ""}
                     </div>
                      <div>
-                    {`Birthday: ${dob}`}
+                    {Following ? `Birthday: ${dob}`: ""}
                     </div>
                      <div>
-                    {nickname}
+                    {Following ? nickname: ""}
                     </div>
             </div>
             </div>
