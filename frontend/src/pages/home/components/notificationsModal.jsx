@@ -135,7 +135,7 @@ const NotificationsModal = ({ show, onClose, data }) => {
         <div className="notifs-modal-header"></div>
         <div className="notifs-modal-title">Notifications</div>
         <div className="notifs-modal-body">
-          {data.sort((a, b) => b.notifID - a.notifID).map((notif) => (
+          {data.sort((a, b) => b.notifID - a.notifID)?.map((notif) => (
             <SingleNotificationComponent
             key={notif.notifID}
             props={{

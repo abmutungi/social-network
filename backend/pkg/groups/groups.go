@@ -251,11 +251,12 @@ func GetNameFromID(db *sql.DB, UserID int) string {
 
 // get all groupposts.
 func GetAllGroupPosts(db *sql.DB, GroupID int) []GroupPost {
-	rows, err := db.Query(`SELECT groupPostID, userID, createdAt, textContent, imageContent
+	rows, err := db.Query(`SELECT groupPostID, groupPosts.userID, groupPosts.createdAt, textContent, imageContent,users.avatar
 	FROM groupPosts
+	INNER JOIN users ON users.userID = groupPosts.userID
 	WHERE groupID = ?`, GroupID)
 	if err != nil {
-		fmt.Printf("error querying getAllUserPosts statement: %v", err)
+		fmt.Printf("error querying GetAllGroupPosts statement: %v", err)
 	}
 
 	posts := []GroupPost{}
@@ -264,7 +265,7 @@ func GetAllGroupPosts(db *sql.DB, GroupID int) []GroupPost {
 	defer rows.Close()
 	for rows.Next() {
 		var p GroupPost
-		err2 := rows.Scan(&p.GroupPostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath)
+		err2 := rows.Scan(&p.GroupPostID, &p.UserID, &p.CreatedAt, &p.TextContent, &p.ImagePath, &p.UserProfilePic)
 		if err2 != nil {
 			fmt.Printf("error scanning rows for groupposts: %v", err2)
 		}
@@ -281,7 +282,7 @@ func GetEventInfo(db *sql.DB, GroupID int) []EventInfo {
 	rows, err := db.Query(`SELECT eventID, eventTitle, description, attending, dateStart, creator
 	FROM events
 	WHERE groupID =
-	?`, GroupID)
+	? ORDER BY eventID DESC`, GroupID)
 	if err != nil {
 		fmt.Printf("error getting Events data: %v", err)
 	}
@@ -365,11 +366,3 @@ func GetMyGroups(db *sql.DB, groupID int) []Group {
 	return groups
 }
 
-// type Group struct {
-// 	GroupID   int
-// 	GroupName string
-// 	CreatorID int
-// 	Avatar    interface{}
-// 	AboutText string
-// 	Members   int
-// }

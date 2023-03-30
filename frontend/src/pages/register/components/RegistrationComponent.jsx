@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/css/register.css";
 import { Login } from "../../login/components/LoginComponent";
@@ -9,7 +9,7 @@ const Register = () => {
   //State to hold errors
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [ setImg] = useState(null);
+  const [ img, setImg] = useState(null);
   const [imgName, setImgName] = useState("");
   const navigate = useNavigate();
 
@@ -33,8 +33,10 @@ const Register = () => {
     });
   };
 
-  const hiddenFileInput = React.useRef(null);
-  const handleFileClick = () => {
+  const hiddenFileInput = useRef(null);
+
+  const handleFileClick = (e) => {
+    e.preventDefault();
     hiddenFileInput.current.click();
   };
 
@@ -76,7 +78,7 @@ const Register = () => {
     <>
      
       <div className="register-container">
-      <div className="login-logo"><div className="logo-text">
+      <div className="register-logo"><div className="logo-text">
     <span>Connect</span>
   </div></div>
         <form className="register-form" onSubmit={handleSubmit}>
@@ -142,6 +144,7 @@ const Register = () => {
           <button onClick={handleFileClick} className="avatar-upload-btn" htmlFor="avatar">
           Upload An Avatar (Optional)
           </button>
+         
           <input
             type="file"
             ref={hiddenFileInput}

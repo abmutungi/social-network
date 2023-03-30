@@ -164,7 +164,6 @@ const SingleProfileComponent = (props) => {
           updateNavClicked(false);
           updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
-          console.log("onclick user -------------->", userID);
         }}
         className="SingleProfile"
         id={props.id}

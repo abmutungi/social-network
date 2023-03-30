@@ -106,15 +106,16 @@ const Comments = (props) => {
   };
   const handleProfilePicImgPath = (strImgPath) => {
     return strImgPath === ""
-      ? `../assets/img/ext/man-utd.png`
+      ? `../assets/img/ext/userdefaulttwo.png`
       : `../assets/img/ext/${strImgPath}`;
   };
 
   const storedAvatar = JSON.parse(localStorage.getItem("loggedInUser")).Avatar;
-  let profilePic =
-    storedAvatar != ""
-      ? `../assets/img/ext/${storedAvatar}`
-      : "../assets/img/ext/man-utd.png";
+  // let profilePic =
+  //   storedAvatar != ""
+  //     ? `../assets/img/ext/${storedAvatar}`
+  //     : "../assets/img/ext/userdefaultone.png";
+  let profilePic = "../assets/img/ext/userdefaultone.png";
 
   return (
     <>

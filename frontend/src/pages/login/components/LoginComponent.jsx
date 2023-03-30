@@ -88,7 +88,7 @@ const Login = () => {
 
       currentUser.Avatar != ""
         ? updateProfilePhotoBackground(currentUser.Avatar)
-        : updateProfilePhotoBackground("man-utd.png");
+        : updateProfilePhotoBackground("userdefaulttwo.png");
       // updateDynamicID(currentUser.ID);
       if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
       if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
@@ -175,7 +175,7 @@ const Login = () => {
 
         currentUser.Avatar != ""
           ? updateProfilePhotoBackground(currentUser.Avatar)
-          : updateProfilePhotoBackground("man-utd.png");
+          : updateProfilePhotoBackground("userdefaulttwo.png");
 
         if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
         if (!PrivacyStatus) updatePrivacyBtnText(PublicText);

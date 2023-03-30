@@ -40,19 +40,7 @@ const SinglePost = (props) => {
           {props.commentsCount} comments
         </button>
       </div>
-      {/* <div className="post-actions">
-        <button className="post-action-button">
-          <FontAwesomeIcon
-            icon="fa-regular fa-thumbs-up"
-            className="post-icon"
-          />
-          <span>Like</span>
-        </button>
-        <button className="post-action-button">
-          <FontAwesomeIcon icon="fa-regular fa-message" className="post-icon" />
-          <span>Comment</span>
-        </button>
-      </div> */}
+    
       <Comments comments={commentsToPass} postID={props.postID} />
     </div>
   );
@@ -78,8 +66,6 @@ const PostsContainer = () => {
     Following
   } = useContext(LowerHeaderContext);
 
-
-
   // fetch home posts for the logged in user
   const userForm = new FormData();
 
@@ -101,10 +87,6 @@ const PostsContainer = () => {
     userForm.append("GuserID", LoggedInUserID);
   }
 
-
-  // for (const entry of userForm.entries()) {
-  //   console.log("check ****", entry);
-  // }
 
   async function fetchPosts() {
     const resp = await fetch("http://localhost:8080/myposts", {
@@ -128,11 +110,7 @@ const PostsContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickedValue]);
 
-  // make a network request on component render.
-  // useEffect(() => {
-  //   fetchPosts();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [GroupID]);
+ 
 
   // if there is no image return "" else return img path as prop
   const handlePostImgPath = (strImgPath) => {
@@ -140,7 +118,7 @@ const PostsContainer = () => {
   };
   const handleProfilePicImgPath = (strImgPath) => {
     return strImgPath === ""
-      ? `../assets/img/ext/man-utd.png`
+      ? `../assets/img/ext/userdefaulttwo.png`
       : `../assets/img/ext/${strImgPath}`;
   };
 
@@ -212,7 +190,8 @@ const PostsContainer = () => {
               />
             ))}
           </div>
-          {posts?.map((post) => (
+          {posts?.map((post) =>   (
+            
             <SinglePost
               key={post.grouppostID}
               profileImgPath={handleProfilePicImgPath(post.profilePic)}
@@ -229,44 +208,36 @@ const PostsContainer = () => {
       </>
     );
   } else if (navClicked) {
-
-  
     return (
       <>
-      <div className="nav-bar-style">
-       
-        
-      {navData?.map((data) => (
-         
-         !data.hasOwnProperty('GroupID') ?
-        
-
-          <SingleProfileComponent
-          key = {data.UserID}
-          id = {data.UserID}
-          chatName = {data.Firstname + ' ' + data.Lastname}
-            headers="Nav"
-            childClass="AGroup"
-            type="Navbar"
-            avatar = {data.Avatar}
-          />
-          :
-          <SingleProfileComponent
-          key = {data.GroupID}
-          id = {data.GroupID}
-          chatName = {data.GroupName }
-            headers="Nav"
-            childClass="AGroup"
-            type="Navbar"
-            avatar = {data.Avatar}
-          />
-
-          
-
-       ) )}
+        <div className="nav-bar-style">
+          {navData?.map((data) =>
+            !Object.prototype.hasOwnProperty.call(data, "GroupID") ? (
+              <SingleProfileComponent
+                key={data.UserID}
+                id={data.UserID}
+                chatName={data.Firstname + " " + data.Lastname}
+                headers="Nav"
+                childClass="AGroup"
+                type="Navbar"
+                avatar={data.Avatar}
+              />
+            ) : (
+              <SingleProfileComponent
+                key={data.GroupID}
+                id={data.GroupID}
+                chatName={data.GroupName}
+                headers="Nav"
+                childClass="AGroup"
+                type="Navbar"
+                avatar={data.Avatar}
+              />
+            )
+          )}
         </div>
       </>
- ); } else {
+    );
+  } else {
     return (
       <>
         <div className="posts-container">

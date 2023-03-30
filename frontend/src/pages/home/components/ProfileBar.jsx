@@ -108,6 +108,7 @@ const ProfileBar = () => {
 
     for (const obj of DBAllUsers) {
       if (obj.UserID == userid) {
+        console.log('FROM LOOP--->', obj);
         setfirstName(obj.Firstname);
         setlastName(obj.Lastname);
         updateEmail(obj.Email);
@@ -119,7 +120,7 @@ const ProfileBar = () => {
         updatePrivacyStatus(obj.Privacy);
         obj.Avatar != ""
           ? updateProfilePhotoBackground(obj.Avatar)
-          : updateProfilePhotoBackground("man-utd.png");
+          : updateProfilePhotoBackground("userdefaulttwo.png");
       }
       updateGroupID(0);
     }
@@ -132,14 +133,14 @@ const ProfileBar = () => {
       if (obj.GroupID == groupid) {
         setfirstName(obj.GroupName);
         setlastName("");
-        // setfollowing(`${obj.Members} ${"members"}`);
-        // setfollowers("");
-        obj.Avatar != ""
-          ? updateProfilePhotoBackground(obj.Avatar)
-          : updateProfilePhotoBackground("man-utd.png");
+        
+      obj.Avatar != ""
+          ? updateProfilePhotoBackground(obj.Avatar) 
+          : updateProfilePhotoBackground("creategroupposticonone.png");
         updateAboutText(obj.AboutText);
+        
       }
-      //  }
+     
     }
     updateUserID(0);
   };
@@ -174,8 +175,7 @@ const ProfileBar = () => {
         />
         <div className="ProfileBtnContainer">
           {userID === LoggedInUserID && !groupNotUser ? <PrivateBtn /> : null}
-          {/* {console.log("PrivacyBtnText****", PrivacyBtnText)}
-          {console.log("PrivacyStatus****", PrivacyStatus)} */}
+      
 
           {userID === LoggedInUserID && !groupNotUser ? (
             <ProfilePostBtn />
@@ -203,13 +203,12 @@ const ProfileBar = () => {
 };
 
 const getFollowCount = (arr)=>{
+  
   if(arr == null||arr == undefined) {
-   console.log('uiwegdfiuwegiwehdfwe');
     return 0
   }
-  let count = 0 
- arr.forEach((elem)=> count+=1)
-  return count
+  return arr.length
+
 }
 
 export default ProfileBar;
