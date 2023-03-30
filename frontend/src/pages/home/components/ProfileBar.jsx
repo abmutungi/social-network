@@ -41,6 +41,9 @@ const ProfileBar = () => {
     GroupID,
     updateGroupID,
     updateAboutText,
+    updateNickname,
+    updateDOB,
+    updateEmail,
     ProfilePhotoBackground,
     LoggedInUserID,
     updatePrivacyStatus,
@@ -107,9 +110,12 @@ const ProfileBar = () => {
       if (obj.UserID == userid) {
         setfirstName(obj.Firstname);
         setlastName(obj.Lastname);
+        updateEmail(obj.Email);
         // setfollowers(`${obj.Followers} ${"followers"}`);
         // setfollowing(`${obj.Following} ${"following"}`);
         updateAboutText(obj.AboutText);
+        updateNickname(obj.Nickname);
+        updateDOB(obj.DOB);
         updatePrivacyStatus(obj.Privacy);
         obj.Avatar != ""
           ? updateProfilePhotoBackground(obj.Avatar)

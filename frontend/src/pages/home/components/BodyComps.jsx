@@ -46,6 +46,9 @@ const LeftBodyDiv = () => {
     AllGroupsData,
     updateAllGroupsData,
     AboutText,
+    Email,
+    Nickname,
+    DOB
   } = useContext(LowerHeaderContext);
 
   async function fetchUsers() {
@@ -83,8 +86,7 @@ const LeftBodyDiv = () => {
   return (
     <>
       <div className="left-side">
-        <AboutMe text={AboutText} />
-
+        <AboutMe text={AboutText} email={Email} nickname={Nickname} dob ={DOB} />
         <SideProfileContainer
           headers="Users"
           data={DBAllUsers}

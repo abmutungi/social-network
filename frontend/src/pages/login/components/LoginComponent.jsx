@@ -24,6 +24,9 @@ const Login = () => {
   const { createSocket, updateNewNotifsExist } = useContext(SocketContext);
   const {
     updateAboutText,
+    updateEmail,
+    updateNickname,
+    updateDOB,
     updateUserID,
     updateLoggedInUserID,
     updatePrivacyStatus,
@@ -69,14 +72,20 @@ const Login = () => {
         Privacy: data.User.Privacy,
         Avatar: data.User.Avatar,
         Notifications: data.User.Notifications,
+        DOB: data.User.DOB,
+        Nickname: data.User.Nickname,
       };
       console.log(currentUser);
       updateLoggedInUser(currentUser);
-      updateAboutText(currentUser.AboutText);
       updateUserID(currentUser.ID);
+      updateAboutText(currentUser.AboutText);
+      updateEmail(currentUser.Email);
+      updateDOB(currentUser.DOB);
+      updateNickname(currentUser.Nickname);
       updateLoggedInUserID(currentUser.ID);
       updatePrivacyStatus(currentUser.Privacy);
       updateNewNotifsExist(currentUser.Notifications);
+
       currentUser.Avatar != ""
         ? updateProfilePhotoBackground(currentUser.Avatar)
         : updateProfilePhotoBackground("man-utd.png");
@@ -148,11 +157,16 @@ const Login = () => {
           Privacy: data.User.Privacy,
           Avatar: data.User.Avatar,
           Notifications: data.User.Notifications,
+          DOB: data.User.DOB,
+          Nickname: data.User.Nickname,
         };
         console.log(currentUser);
         updateLoggedInUser(currentUser);
-        updateAboutText(currentUser.AboutText);
         updateUserID(currentUser.ID);
+        updateAboutText(currentUser.AboutText);
+        updateEmail(currentUser.Email);
+        updateDOB(currentUser.DOB);
+        updateNickname(currentUser.Nickname);
         updateLoggedInUserID(currentUser.ID);
         updatePrivacyStatus(currentUser.Privacy);
         updateNewNotifsExist(currentUser.Notifications);

@@ -34,9 +34,39 @@ export function LowerHeaderProvider({ children }) {
       const storedAboutText = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).AboutText;
-      return storedAboutText ? storedAboutText : "loggedInUser.AboutText";
+      return storedAboutText ? storedAboutText : "";
     }
   });
+
+  const [Email, setEmail] = useState(() => {
+    if (localStorage.length > 0) {
+      const storedEmail = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).Email;
+      return storedEmail ? storedEmail : "";
+    }
+  });
+
+  const [Nickname, setNickname] = useState(() => {
+    if (localStorage.length > 0) {
+      const storedNickname = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).Nickname;
+      return storedNickname ? storedNickname : "";
+    }
+  });
+
+   const [DOB, setDOB] = useState(() => {
+    if (localStorage.length > 0) {
+      const storedDOB = JSON.parse(
+        localStorage.getItem("loggedInUser")
+      ).DOB;
+      return storedDOB ? storedDOB : "";
+    }
+  });
+
+
+  
 
   const [ProfilePhotoBackground, setProfilePhotoBackground] = useState(() => {
     if (localStorage.length > 0) {
@@ -175,6 +205,16 @@ export function LowerHeaderProvider({ children }) {
     setGroupEvents(data);
   };
 
+    const updateEmail = (data) => {
+    setEmail(() => data);
+    };
+  
+   const updateNickname = (data) => {
+    setNickname(() => data);
+   };
+   const updateDOB = (data) => {
+    setDOB(() => data);
+  };
   return (
     <LowerHeaderContext.Provider
       value={{
@@ -226,6 +266,12 @@ export function LowerHeaderProvider({ children }) {
         updateNavClicked,
         navData,
         updateNavData,
+        Email,
+        updateEmail,
+        Nickname,
+        updateNickname,
+        DOB,
+        updateDOB,
       }}
     >
       {children}
