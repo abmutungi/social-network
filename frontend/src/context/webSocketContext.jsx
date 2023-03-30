@@ -8,10 +8,14 @@ const SocketProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const [NewNotifsExist, setNewNotifsExist] = useState(false);
   const [groupMessages, setGroupMessages] = useState([]);
-  const [socketChatNotif, setSocketChatNotif] = useState(false);
+  const [socketChatNotif, setSocketChatNotif] = useState([]);
   const [lastMsgSender, setLastMsgSender] = useState("");
 
   const [MyNotifs, setMyNotifs] = useState([]);
+  let loggedInUser;
+  if (localStorage.length > 0) {
+    loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
+  }
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
       // create and open socket when component mounts
@@ -32,8 +36,16 @@ const SocketProvider = ({ children }) => {
             "last sender ==> ",
             newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
           );
+          if (
+            newData.chatsfromgo[newData.chatsfromgo.length - 1].chatrecipient ==
+            loggedInUser
+          ) {
+            console.log("THIS IS THE RECIPIENT CLIENT!!");
+          }
+          console.log(newData.socketnotifiers);
           updateChatMessages(newData.chatsfromgo);
-          updateSocketChatNotifs(true);
+          updateSocketChatNotifs(newData);
+          console.log("checking sCN --> ", socketChatNotif.socketnotifiers);
           if (newData.chatsfromgo) {
             updateLastSender(
               newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
@@ -82,8 +94,8 @@ const SocketProvider = ({ children }) => {
   const updateGroupMessages = (data) => {
     setGroupMessages(data);
   };
-  const updateSocketChatNotifs = (bool) => {
-    setSocketChatNotif(bool);
+  const updateSocketChatNotifs = (data) => {
+    setSocketChatNotif(() => data);
   };
 
   const updateLastSender = (data) => {

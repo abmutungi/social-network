@@ -77,8 +77,9 @@ type TypeChecker struct {
 // struct for new message
 
 type ChatsToSend struct {
-	Chats []chats.Chat `json:"chatsfromgo"`
-	Tipo  string       `json:"tipo"`
+	Chats              []chats.Chat `json:"chatsfromgo"`
+	SocketNotifiersArr []string     `json:"socketnotifiers"`
+	Tipo               string       `json:"tipo"`
 }
 
 type AllNotifs struct {
@@ -211,6 +212,8 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			var nc ChatsToSend
 			nc.Chats = chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID)
 			nc.Tipo = "chatHistory"
+			nc.SocketNotifiersArr = notifications.ReturnUserChatNotifications(s.Db, recipientIdInt)
+			fmt.Println("sanity check for sna arr ==> ", nc.SocketNotifiersArr)
 
 			for id, conn := range loggedInSockets {
 				if recipientIdInt == id || senderIdInt == id {

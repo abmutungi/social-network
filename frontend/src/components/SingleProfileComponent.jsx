@@ -28,7 +28,8 @@ const SingleProfileComponent = (props) => {
     updateNavClicked,
   } = useContext(LowerHeaderContext);
 
-  const { groupMessages, updateGroupMessages } = useContext(SocketContext);
+  const { groupMessages, updateGroupMessages, lastMsgSender, socketChatNotif } =
+    useContext(SocketContext);
   const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
     useContext(loggedInUserContext);
 
@@ -139,6 +140,13 @@ const SingleProfileComponent = (props) => {
       console.log("cnl check  --> ", chatNotifsOnLogin.notifiers);
       // updateChatNotifsOnLogin([]);
     }
+
+    if (props.socketnotifier) {
+      socketChatNotif.socketnotifiers = socketChatNotif.socketnotifiers.filter(
+        (item) => item !== props.chatName
+      );
+      console.log("snf check  --> ", socketChatNotif.socketnotifiers);
+    }
   }
 
   // fetch groupChathistory
@@ -215,7 +223,6 @@ const SingleProfileComponent = (props) => {
           setShow(true);
           setName(props.chatName);
           setGroupClicked(false);
-          updateSocketChatNotifs(false);
 
           console.log("props.id -> ", props.id);
           console.log("message struct --> ", messages);

@@ -24,17 +24,15 @@ const MultipleProfilesComponent = ({ users, type }) => {
 
     //function to check if name provided is in notifications
   }
-  const checkUserForChatNotification = (notifier) => {
-    if (
-      chatNotifsOnLogin.notifiers !== null &&
-      chatNotifsOnLogin.notifiers !== undefined
-    ) {
-      return chatNotifsOnLogin.notifiers.includes(notifier);
+  const checkUserForChatNotification = (arr, notifier) => {
+    if (arr !== null && arr !== undefined) {
+      return arr.includes(notifier);
     } else {
       return false;
     }
   };
 
+  console.log("scn check in mpc ==> ", socketChatNotif.socketnotifiers);
   // checkUserForChatNotification(chatNotifsOnLogin);
 
   useEffect(() => {
@@ -101,13 +99,15 @@ const MultipleProfilesComponent = ({ users, type }) => {
           type={type}
           avatar={userPicPath}
           notifier={
-            checkUserForChatNotification(user.FName) && chatNotifsOnLogin
+            checkUserForChatNotification(
+              chatNotifsOnLogin.notifiers,
+              user.FName
+            ) && chatNotifsOnLogin
           }
-          socketnotifier={
-            socketChatNotif &&
-            user.userID == lastMsgSender &&
-            loggedInUser !== lastMsgSender
-          }
+          socketnotifier={checkUserForChatNotification(
+            socketChatNotif.socketnotifiers,
+            user.FName
+          )}
           notifierID={lastMsgSender}
           onClick={() => {
             console.log("chatbox clicked");
