@@ -13,18 +13,8 @@ import {
 
 // import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
-const ChatBox = ({
-  show,
-  onClose,
-  name,
-  id,
-  data,
-  avatar,
-  groupClicked,
-  chatNotifExists,
-  notifierID,
-}) => {
-  const { socket, updateSocketChatNotifs } = useContext(SocketContext);
+const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
+  const { socket } = useContext(SocketContext);
 
   // const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");

@@ -228,12 +228,19 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			// store group message in the database
 			chats.StoreGroupMessage(s.Db, groupIdInt, f.MessageContent, senderIdInt)
+			allgroupmembers := groups.GetAllGroupMembers(s.Db, groupIdInt)
 
-			// f.NewMessage.Tipo = "newGroupMessage"
+			for _, memberID := range allgroupmembers {
+				if senderIdInt != memberID {
+					notifications.StoreNotification(s.Db, "groupMessage", memberID, senderIdInt, groupIdInt)
+				}
+			}
 
 			for id, conn := range loggedInSockets {
 				// need to check if the id is a member of a group
+
 				if groups.GroupMemberCheck(s.Db, groupIdInt, id) {
+
 					var gm GroupMessages
 					gm.GroupM = chats.GetGroupChatHistory(s.Db, groupIdInt)
 					gm.Tipo = "newGroupMessage"

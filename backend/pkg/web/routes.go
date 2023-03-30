@@ -36,5 +36,6 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/mygroupchats", s.GeneralSessionChecker(s.HandleMyGroupChats()))
 	s.Router.HandleFunc("/sendgroupmessages", s.GeneralSessionChecker(s.HandleSendGroupMessages()))
 
+	s.Router.HandleFunc("/groupchatnotifs", s.GeneralSessionChecker(s.HandleGroupChatNotifsOnLogin()))
 	// s.TestDBfunctions()
 }

@@ -29,8 +29,7 @@ const SingleProfileComponent = (props) => {
   } = useContext(LowerHeaderContext);
 
   const { groupMessages, updateGroupMessages } = useContext(SocketContext);
-  const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
-    useContext(loggedInUserContext);
+  const { chatNotifsOnLogin } = useContext(loggedInUserContext);
 
   const { messages, updateChatMessages, updateSocketChatNotifs } =
     useContext(SocketContext);
@@ -278,7 +277,12 @@ const SingleProfileComponent = (props) => {
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
-        <p className="ChatName">{props.chatName}</p>
+        <p className="ChatName">
+          {props.chatName}{" "}
+          {props.newGroupMessage ? (
+            <FontAwesomeIcon icon={faMessage} className="chatNotifIcon" />
+          ) : null}
+        </p>
       </div>
     );
   }
