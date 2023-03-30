@@ -135,23 +135,23 @@ const NotificationsModal = ({ show, onClose, data }) => {
         <div className="notifs-modal-header"></div>
         <div className="notifs-modal-title">Notifications</div>
         <div className="notifs-modal-body">
-          {data?.map((notif) => (
+          {data.sort((a, b) => b.notifID - a.notifID).map((notif) => (
             <SingleNotificationComponent
-              key={notif.notifID}
-              props={{
-                id: notif.notifID,
-                firstName: notif.notifFName,
-                lastName: notif.notifLName,
-                notifType: notif.notifType,
-                notifierID: notif.notifierID,
-                groupName: notif.notifGroupName,
-                groupID: notif.notifGroupID,
-                notifDate: notif.notifDate,
-                eventID: notif.notifEventID,
-                profileImg: notif.notifAvatar,
-              }}
+            key={notif.notifID}
+            props={{
+              id: notif.notifID,
+              firstName: notif.notifFName,
+              lastName: notif.notifLName,
+              notifType: notif.notifType,
+              notifierID: notif.notifierID,
+              groupName: notif.notifGroupName,
+              groupID: notif.notifGroupID,
+              notifDate: notif.notifDate,
+              eventID: notif.notifEventID,
+              profileImg: notif.notifAvatar,
+            }}
             />
-          ))}
+            ))}
         </div>
       </div>
     </div>
