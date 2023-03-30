@@ -105,6 +105,7 @@ const ProfileBar = () => {
 
     for (const obj of DBAllUsers) {
       if (obj.UserID == userid) {
+        console.log('FROM LOOP--->', obj);
         setfirstName(obj.Firstname);
         setlastName(obj.Lastname);
 

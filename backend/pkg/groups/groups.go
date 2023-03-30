@@ -365,11 +365,3 @@ func GetMyGroups(db *sql.DB, groupID int) []Group {
 	return groups
 }
 
-// type Group struct {
-// 	GroupID   int
-// 	GroupName string
-// 	CreatorID int
-// 	Avatar    interface{}
-// 	AboutText string
-// 	Members   int
-// }

@@ -80,6 +80,7 @@ const CreatePostModal = (props) => {
 
   async function fetchFollowers() {
     const form = new FormData();
+    
     form.append("userID", LoggedInUserID);
     const resp = await fetch("http://localhost:8080/myfollowers", {
       method: "POST",

@@ -43,7 +43,7 @@ export function LowerHeaderProvider({ children }) {
       const storedAvatar = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).Avatar;
-      return storedAvatar != "" ? storedAvatar : "man-utd.png";
+      return storedAvatar != "" ? storedAvatar : "userdefaulttwo.png";
     }
   });
   const [LoggedInUserID, setLoggedInUserID] = useState(() => {

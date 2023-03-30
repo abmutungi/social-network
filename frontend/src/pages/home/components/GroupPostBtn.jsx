@@ -1,37 +1,35 @@
 import React, { useState, useContext, useEffect } from "react";
 import CreatePostModal from "./CreatePost";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 const GroupPostBtn = () => {
   const [show, setShow] = useState(false);
   const [imgPath, setimgPath] = useState("")
   const {
-    AllGroupsData,
     GroupID,
 
   } = useContext(LowerHeaderContext);
 
-  const GetImgPath = (gid)=>{
+  const {
+    loggedInUser
 
-    for (const obj of AllGroupsData) {
-      if (obj.GroupID == gid) {
-      
-      obj.Avatar != ""
-          ? setimgPath(obj.Avatar) 
-          : setimgPath("creategroupposticonone.png");
-        
-      }
-     
-    }
+  } = useContext(loggedInUserContext);
+
+ const GetImgPath = ()=>{
+    loggedInUser.Avatar == "" || loggedInUser.Avatar == undefined? setimgPath("userdefaulttwo.png") : setimgPath(loggedInUser.Avatar);
+
   }
 
-  console.log('IMAGE PATH FROM GP', imgPath);
+ 
+
+ console.log('IMAGE PATH FROM GP', imgPath,'\n', loggedInUser);
 
 
   useEffect(() => {
 
-    if (GroupID > 0) GetImgPath(GroupID);
+    if (GroupID > 0) GetImgPath();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
 
@@ -45,6 +43,8 @@ const GroupPostBtn = () => {
       <CreatePostModal
 name={JSON.parse(localStorage.getItem("loggedInUser")).FName}
         profileImg={`../assets/img/ext/${imgPath}`}
+       // profileImg= {`../assets/img/ext/${props.background}`}
+
         onClose={() => setShow(false)}
         show={show}
       />
