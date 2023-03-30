@@ -214,6 +214,14 @@ const SingleProfileComponent = (props) => {
   }
 
   if (props.type === "Chats") {
+    const checkUser = () => {
+      if (
+        (messages.length > 0 && show && messages[0].chatsender == props.id) ||
+        (messages.length > 0 && show && messages[0].chatrecipient == props.id)
+      ) {
+        return messages;
+      }
+    };
     return (
       <div
         role="presentation"
@@ -221,6 +229,7 @@ const SingleProfileComponent = (props) => {
           e.preventDefault();
           if (!show) fetchChatHistory();
           setShow(true);
+          //if show is true, check if the last sender/recipient is the person in the chatbox
           setName(props.chatName);
           setGroupClicked(false);
 
@@ -237,7 +246,7 @@ const SingleProfileComponent = (props) => {
           show={show}
           name={name}
           id={props.id}
-          data={messages}
+          data={checkUser()}
           avatar={props.avatar}
           groupClicked={groupClicked}
           chatNotifExists={props.socketnotifier}
