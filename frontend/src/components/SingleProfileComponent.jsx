@@ -36,6 +36,7 @@ const SingleProfileComponent = (props) => {
     messages,
     updateChatMessages,
     socketChatNotif,
+    updateClickedName,
   } = useContext(SocketContext);
   const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
     useContext(loggedInUserContext);
@@ -225,6 +226,7 @@ const SingleProfileComponent = (props) => {
         onClick={(e) => {
           e.preventDefault();
           updateLastClickedUser(props.id);
+          updateClickedName(props.chatName);
           if (!show) fetchChatHistory();
           setShow(true);
           //if show is true, check if the last sender/recipient is the person in the chatbox

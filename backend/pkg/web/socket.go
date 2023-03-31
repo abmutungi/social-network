@@ -69,6 +69,7 @@ type T struct {
 	*NewMessage
 	*GroupMembers
 	*GroupEvent
+	*RemoveChatNotif
 }
 
 type TypeChecker struct {
@@ -104,6 +105,13 @@ type NewMessage struct {
 	Tipo           string `json:"tipo"`
 }
 
+type RemoveChatNotif struct {
+	RecID     string `json:"loggedInUser"`
+	ClickedID string `json:"recipientID"`
+	Msg       string `json:"msg"`
+	Tipo      string `json:"tipo"`
+}
+
 type GroupMessages struct {
 	GroupM []chats.Chat `json:"groupMessages"`
 	Tipo   string       `json:"tipo"`
@@ -133,6 +141,10 @@ func (t *T) UnmarshalData(data []byte) error {
 	case "newGroupMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)
+	case "removeChatNotifs":
+		t.RemoveChatNotif = &RemoveChatNotif{}
+		return json.Unmarshal(data, t.RemoveChatNotif)
+
 	default:
 		return fmt.Errorf("unrecognized type value %q", t.Type)
 
@@ -346,6 +358,28 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 						en.Tipo = "allNotifs"
 						conn.WriteJSON(en)
 					}
+				}
+			}
+		}
+
+		if f.Type == "removeChatNotifs" {
+			loggedInIdInt, _ := strconv.Atoi(f.RecID)
+
+			clickedIdInt, _ := strconv.Atoi(f.ClickedID)
+
+			fmt.Printf("LoggedIN = %v & clicked = %v", loggedInIdInt, clickedIdInt)
+
+			//if notifications.CheckIfUserHasNotificationsFromUser(s.Db, loggedInIdInt, clickedIdInt) {
+			notifications.ReadChatNotification(s.Db, loggedInIdInt, clickedIdInt)
+			//}
+
+			var rcn RemoveChatNotif
+
+			rcn.Msg = "Removed the chat notif when x clicked"
+			rcn.Tipo = "removedChatNotif"
+			for s, cs := range loggedInSockets {
+				if s == loggedInIdInt {
+					cs.WriteJSON(rcn)
 				}
 			}
 		}

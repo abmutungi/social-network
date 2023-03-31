@@ -11,6 +11,7 @@ const SocketProvider = ({ children }) => {
   const [socketChatNotif, setSocketChatNotif] = useState([]);
   const [lastMsgSender, setLastMsgSender] = useState("");
   const [lastClickedUser, setLastClickedUser] = useState(0);
+  const [clickedName, setClickedName] = useState("");
 
   const [MyNotifs, setMyNotifs] = useState([]);
   let loggedInUser;
@@ -100,6 +101,11 @@ const SocketProvider = ({ children }) => {
         }
 
         if (lastClickedUser > 0 && newData.sendID !== lastClickedUser) {
+          console.log("Clciked name ===> ", clickedName);
+          socketNotifObj.socketnotifiers =
+            socketNotifObj.socketnotifiers.filter(
+              (item) => item !== clickedName
+            );
           setSocketChatNotif(socketNotifObj);
         }
       }
@@ -149,6 +155,10 @@ const SocketProvider = ({ children }) => {
     setLastClickedUser(() => id);
   };
 
+  const updateClickedName = (name) => {
+    setClickedName(() => name);
+  };
+
   return (
     <SocketContext.Provider
       value={{
@@ -157,7 +167,7 @@ const SocketProvider = ({ children }) => {
         createSocket,
         messages,
         updateChatMessages,
-
+        updateClickedName,
         NewNotifsExist,
         MyNotifs,
         updateLastClickedUser,

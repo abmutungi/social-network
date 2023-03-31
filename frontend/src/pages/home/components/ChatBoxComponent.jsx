@@ -24,8 +24,12 @@ const ChatBox = ({
   chatNotifExists,
   notifierID,
 }) => {
-  const { socket, updateSocketChatNotifs, updateLastClickedUser } =
-    useContext(SocketContext);
+  const {
+    socket,
+    updateSocketChatNotifs,
+    updateLastClickedUser,
+    updateClickedName,
+  } = useContext(SocketContext);
 
   // const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
@@ -82,6 +86,28 @@ const ChatBox = ({
 
   console.log("name prop check --> ", name);
 
+  // let object = {};
+  // fetchChatsForm.forEach(function (value, key) {
+  //   object[key] = value;
+  // });
+
+  function removeOpenChatNotifs() {
+    const storeMessageForm = new FormData();
+
+    storeMessageForm.append(
+      "loggedInUser",
+      JSON.parse(localStorage.getItem("loggedInUser")).ID
+    );
+    var messageObject = {};
+    storeMessageForm.append("recipientID", id);
+    storeMessageForm.append("type", "removeChatNotifs");
+
+    storeMessageForm.forEach((value, key) => (messageObject[key] = value));
+
+    // sending through the socket that a new message has been sent
+    socket.send(JSON.stringify(messageObject));
+  }
+
   // const deleteNotif = () => {
   //   if (chatNotifExists && notifierID === id) {
   //     updateSocketChatNotifs(false);
@@ -118,12 +144,8 @@ const ChatBox = ({
               onClick={() => {
                 onClose();
                 updateLastClickedUser(0);
-                if (props.socketnotifier) {
-                  socketChatNotif.socketnotifiers =
-                    socketChatNotif.socketnotifiers.filter(
-                      (item) => item !== name
-                    );
-                }
+                updateClickedName("");
+                removeOpenChatNotifs();
               }}
               icon={faXmark}
               className="chat-header-close"
