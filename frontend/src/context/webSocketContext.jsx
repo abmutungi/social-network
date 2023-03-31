@@ -12,7 +12,7 @@ const SocketProvider = ({ children }) => {
   const [lastMsgSender, setLastMsgSender] = useState("");
   const [newSocketGroupMessageIcon, setNewSocketGroupMessageIcon] =
     useState(false);
-  const [newSocketMessageGroupID, setNewSocketMessageGroupID] = useState(0);
+  const [newSocketMessageGroupID, setNewSocketMessageGroupID] = useState([]);
   const [MyNotifs, setMyNotifs] = useState([]);
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
@@ -25,7 +25,7 @@ const SocketProvider = ({ children }) => {
 
       ws.onmessage = (e) => {
         const newData = JSON.parse(e.data);
-        console.log("newData check --> ", e.data);
+        // console.log("newData check --> ", e.data);
 
         console.log("sent through ws **********");
 
@@ -55,8 +55,15 @@ const SocketProvider = ({ children }) => {
           setGroupMessages(newData.groupMessages);
           if (newData.newNotif === "true") {
             setNewSocketGroupMessageIcon(true);
-            // console.log("checking groupID in the socket?", newData.groupID);
-            setNewSocketMessageGroupID(newData.groupID);
+
+            // setNewSocketMessageGroupID(
+            //   newSocketMessageGroupID.push(newData.groupID)
+            // );
+            updateSocketGroupIDs(newData.groupID);
+            console.log(
+              "checking if this is correct array of groupIDS??",
+              newSocketMessageGroupID
+            );
           }
         }
       };
@@ -95,6 +102,10 @@ const SocketProvider = ({ children }) => {
 
   const updateLastSender = (data) => {
     setLastMsgSender(() => data);
+  };
+
+  const updateSocketGroupIDs = (data) => {
+    setNewSocketMessageGroupID(newSocketMessageGroupID.push(data));
   };
 
   return (

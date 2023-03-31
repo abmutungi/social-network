@@ -37,7 +37,6 @@ const SingleProfileComponent = (props) => {
     updateSocketChatNotifs,
     newSocketGroupMessageIcon,
     setNewSocketGroupMessageIcon,
-    newSocketMessageGroupID,
   } = useContext(SocketContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
@@ -297,8 +296,7 @@ const SingleProfileComponent = (props) => {
         <p className="ChatName">
           {props.chatName}{" "}
           {groupMessageIcon ||
-          (newSocketGroupMessageIcon &&
-            newSocketMessageGroupID == props.groupID) ? (
+          (newSocketGroupMessageIcon && props.newSocketGroupMessage) ? (
             <FontAwesomeIcon icon={faMessage} className="chatNotifIcon" />
           ) : null}
         </p>
