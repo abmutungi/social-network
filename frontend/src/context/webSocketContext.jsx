@@ -10,6 +10,7 @@ const SocketProvider = ({ children }) => {
   const [groupMessages, setGroupMessages] = useState([]);
   const [socketChatNotif, setSocketChatNotif] = useState(false);
   const [lastMsgSender, setLastMsgSender] = useState("");
+  const [groupEventSocket, updateGroupEventsSocket]= useState([])
 
   const [MyNotifs, setMyNotifs] = useState([]);
   useEffect(() => {
@@ -46,7 +47,13 @@ const SocketProvider = ({ children }) => {
           updateNewNotifsExist(newData);
           console.log("socket on message in notif bell --------->", newData);
         }
-        console.log("sent through ws **********");
+       
+       if (newData.tipo === "groupEvents") {
+        console.log('EVENTS??? --->', newData.groupEvents);
+        updateGroupEventsSocket(newData.groupEvents)
+        // need to create a new struct on backend with a []chats and tipo == newgroupMessage
+        setGroupMessages(newData.groupMessages);
+      }
 
         if (newData.tipo === "newGroupMessage") {
           // need to create a new struct on backend with a []chats and tipo == newgroupMessage
@@ -101,6 +108,7 @@ const SocketProvider = ({ children }) => {
 
         NewNotifsExist,
         MyNotifs,
+        groupEventSocket,
 
         updateNewNotifsExist,
         updateMyNotifs,

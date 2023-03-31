@@ -86,6 +86,11 @@ type AllNotifs struct {
 	Tipo       string                       `json:"tipo"`
 }
 
+type UpdateEvents struct {
+	GroupEvents []groups.EventInfo`json:"groupEvents"`
+	Tipo        string                `json:"tipo"`
+}
+
 type NewMessage struct {
 	LoggedInUserID string `json:"loggedInUser"`
 	RecipientID    string `json:"recipientID"`
@@ -298,6 +303,7 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			}
 
 		}
+	
 
 		if f.Type == "eventInviteNotifs" {
 
@@ -311,6 +317,12 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			for _, member := range allgroupmembers {
 				if member != f.Creator {
 					groups.UpdateNotifcationTablePostEventCreation(s.Db, "eventInvite", member, f.Creator, f.GroupEvent.GroupID, eventID)
+				} else {
+					var g UpdateEvents
+					g.Tipo = "groupEvents"
+					g.GroupEvents = groups.GetEventInfo(s.Db, f.GroupEvent.GroupID)
+
+					loggedInSockets[member].WriteJSON(g)
 				}
 			}
 
