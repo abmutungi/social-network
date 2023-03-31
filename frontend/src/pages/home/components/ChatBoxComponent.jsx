@@ -118,6 +118,12 @@ const ChatBox = ({
               onClick={() => {
                 onClose();
                 updateLastClickedUser(0);
+                if (props.socketnotifier) {
+                  socketChatNotif.socketnotifiers =
+                    socketChatNotif.socketnotifiers.filter(
+                      (item) => item !== name
+                    );
+                }
               }}
               icon={faXmark}
               className="chat-header-close"

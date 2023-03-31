@@ -79,21 +79,28 @@ const SocketProvider = ({ children }) => {
         // );
         console.log("lcu in scN cond ==> ", lastClickedUser);
         if (lastClickedUser === 0 && newData.recID === loggedInUser) {
-          updateSocketChatNotifs(newData);
+          updateSocketChatNotifs(socketNotifObj);
         }
 
         if (lastClickedUser > 0 && newData.sendID === lastClickedUser) {
-          console.log("BEFORE DEL WHEN SAME ==> ", newData.socketnotifiers);
+          console.log("Sent Name ==> ", newData.sendName);
+          console.log(
+            "BEFORE DEL WHEN SAME ==> ",
+            socketNotifObj.socketnotifiers
+          );
           socketNotifObj.socketnotifiers =
             socketNotifObj.socketnotifiers.filter(
-              (item) => item !== lastClickedUser
+              (item) => item !== newData.sendName
             );
-          console.log("AFTER DEL WHEN SAME ==> ", newData.socketnotifiers);
-          //updateSocketChatNotifs(socketNotifObj);
+          console.log(
+            "AFTER DEL WHEN SAME ==> ",
+            socketNotifObj.socketnotifiers
+          );
+          setSocketChatNotif(socketNotifObj);
         }
 
         if (lastClickedUser > 0 && newData.sendID !== lastClickedUser) {
-          updateSocketChatNotifs(socketNotifObj);
+          setSocketChatNotif(socketNotifObj);
         }
       }
 

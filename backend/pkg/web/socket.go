@@ -11,6 +11,7 @@ import (
 	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
+	"github.com/abmutungi/social-network/backend/pkg/users"
 	"github.com/gorilla/websocket"
 )
 
@@ -86,6 +87,7 @@ type ChatSocketNotif struct {
 	SocketNotifiersArr []string `json:"socketnotifiers"`
 	RecipientID        int      `json:"recID"`
 	SenderID           int      `json:"sendID"`
+	SenderName         string   `json:"sendName"`
 	Tipo               string   `json:"tipo"`
 }
 
@@ -225,6 +227,7 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			nt.SocketNotifiersArr = notifications.ReturnUserChatNotifications(s.Db, recipientIdInt)
 			nt.RecipientID = recipientIdInt
 			nt.SenderID = senderIdInt
+			nt.SenderName = users.ReturnSingleUser(s.Db, users.GetEmailFromUserID(s.Db, senderIdInt)).Firstname
 			fmt.Println("sanity check for sna arr ==> ", nt.SocketNotifiersArr)
 
 			for id, conn := range loggedInSockets {
