@@ -7,7 +7,7 @@ import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 
 function AboutMe({ text, email, dob, nickname }) {
     
-    const { Following } = useContext(LowerHeaderContext);
+    const { PrivacyStatus, Following } = useContext(LowerHeaderContext);
 
     return(
         <div className="about-container">
@@ -20,13 +20,13 @@ function AboutMe({ text, email, dob, nickname }) {
                     {text}
                     </div>
                      <div>
-                    {Following ? email: ""}
+                    {!PrivacyStatus || Following ? email: ""}
                     </div>
                      <div>
-                    {Following ? `Birthday: ${dob}`: ""}
+                    {!PrivacyStatus || Following ? `Birthday: ${dob}`: ""}
                     </div>
                      <div>
-                    {Following ? nickname: ""}
+                    {!PrivacyStatus || Following ? nickname: ""}
                     </div>
             </div>
             </div>
