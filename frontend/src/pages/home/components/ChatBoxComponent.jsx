@@ -13,8 +13,23 @@ import {
 
 // import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
-const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
-  const { socket } = useContext(SocketContext);
+const ChatBox = ({
+  show,
+  onClose,
+  name,
+  id,
+  data,
+  avatar,
+  groupClicked,
+  chatNotifExists,
+  notifierID,
+}) => {
+  const {
+    socket,
+    updateSocketChatNotifs,
+    updateLastClickedUser,
+    updateClickedName,
+  } = useContext(SocketContext);
 
   // const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
@@ -71,6 +86,39 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
 
   console.log("name prop check --> ", name);
 
+  // let object = {};
+  // fetchChatsForm.forEach(function (value, key) {
+  //   object[key] = value;
+  // });
+
+  function removeOpenChatNotifs() {
+    const storeMessageForm = new FormData();
+
+    storeMessageForm.append(
+      "loggedInUser",
+      JSON.parse(localStorage.getItem("loggedInUser")).ID
+    );
+    var messageObject = {};
+    storeMessageForm.append("recipientID", id);
+    storeMessageForm.append("type", "removeChatNotifs");
+
+    storeMessageForm.forEach((value, key) => (messageObject[key] = value));
+
+    // sending through the socket that a new message has been sent
+    socket.send(JSON.stringify(messageObject));
+  }
+
+  // const deleteNotif = () => {
+  //   if (chatNotifExists && notifierID === id) {
+  //     updateSocketChatNotifs(false);
+  //   }
+  // };
+
+  // const combinedClickHandler = () => {
+  //   onClose();
+  //   deleteNotif();
+  // };
+
   if (!show) {
     return null;
   }
@@ -93,7 +141,12 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
             <span className="chat-box-name">{currentUser}</span>
 
             <FontAwesomeIcon
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                updateLastClickedUser(0);
+                updateClickedName("");
+                removeOpenChatNotifs();
+              }}
               icon={faXmark}
               className="chat-header-close"
               size="lg"

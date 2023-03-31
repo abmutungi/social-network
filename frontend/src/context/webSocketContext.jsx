@@ -8,10 +8,16 @@ const SocketProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const [NewNotifsExist, setNewNotifsExist] = useState(false);
   const [groupMessages, setGroupMessages] = useState([]);
-  const [socketChatNotif, setSocketChatNotif] = useState(false);
+  const [socketChatNotif, setSocketChatNotif] = useState([]);
   const [lastMsgSender, setLastMsgSender] = useState("");
+  const [lastClickedUser, setLastClickedUser] = useState(0);
+  const [clickedName, setClickedName] = useState("");
 
   const [MyNotifs, setMyNotifs] = useState([]);
+  let loggedInUser;
+  if (localStorage.length > 0) {
+    loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
+  }
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
       // create and open socket when component mounts
@@ -21,38 +27,6 @@ const SocketProvider = ({ children }) => {
         console.log("socket is open");
       };
 
-      ws.onmessage = (e) => {
-        const newData = JSON.parse(e.data);
-        console.log("newData check --> ", e.data);
-
-        console.log("sent through ws **********");
-
-        if (newData.tipo === "chatHistory") {
-          console.log(
-            "last sender ==> ",
-            newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
-          );
-          updateChatMessages(newData.chatsfromgo);
-          updateSocketChatNotifs(true);
-          if (newData.chatsfromgo) {
-            updateLastSender(
-              newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
-            );
-          }
-        }
-
-        if (newData.tipo == "allNotifs") {
-          updateMyNotifs(newData.allNotifs);
-          updateNewNotifsExist(newData);
-          console.log("socket on message in notif bell --------->", newData);
-        }
-        console.log("sent through ws **********");
-
-        if (newData.tipo === "newGroupMessage") {
-          // need to create a new struct on backend with a []chats and tipo == newgroupMessage
-          setGroupMessages(newData.groupMessages);
-        }
-      };
       return () => {
         // close socket when component unmounts
         ws.close();
@@ -62,6 +36,93 @@ const SocketProvider = ({ children }) => {
       };
     }
   }, [openSocket]);
+
+  if (!!socket) {
+    socket.onmessage = (e) => {
+      const newData = JSON.parse(e.data);
+      console.log("newData check --> ", e.data);
+
+      console.log("sent through ws **********");
+
+      if (newData.tipo === "chatHistory") {
+        console.log(
+          "last sender ==> ",
+          newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
+        );
+        if (
+          newData.chatsfromgo[newData.chatsfromgo.length - 1].chatrecipient ==
+          loggedInUser
+        ) {
+          console.log("THIS IS THE RECIPIENT CLIENT!!");
+        }
+        console.log("LAST CLICKED USER IN SOCKET ==> ", lastClickedUser);
+        // console.log(newData.socketnotifiers);
+
+        if (
+          (lastClickedUser > 0 &&
+            newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender ===
+              lastClickedUser) ||
+          (lastClickedUser > 0 &&
+            newData.chatsfromgo[newData.chatsfromgo.length - 1]
+              .chatrecipient === lastClickedUser)
+        ) {
+          updateChatMessages(newData.chatsfromgo);
+        }
+      }
+      if (newData.tipo === "socketChatNotif") {
+        let socketNotifObj = {
+          socketnotifiers: [],
+        };
+        socketNotifObj.socketnotifiers = newData.socketnotifiers;
+        console.log("checking sCN --> ", socketChatNotif.socketnotifiers);
+        // newData.socketnotifiers = newData.socketnotifiers.filter(
+        //   (item) => item !== lastClickedUser
+        // );
+        console.log("lcu in scN cond ==> ", lastClickedUser);
+        if (lastClickedUser === 0 && newData.recID === loggedInUser) {
+          updateSocketChatNotifs(socketNotifObj);
+        }
+
+        if (lastClickedUser > 0 && newData.sendID === lastClickedUser) {
+          console.log("Sent Name ==> ", newData.sendName);
+          console.log(
+            "BEFORE DEL WHEN SAME ==> ",
+            socketNotifObj.socketnotifiers
+          );
+          socketNotifObj.socketnotifiers =
+            socketNotifObj.socketnotifiers.filter(
+              (item) => item !== newData.sendName
+            );
+          console.log(
+            "AFTER DEL WHEN SAME ==> ",
+            socketNotifObj.socketnotifiers
+          );
+          setSocketChatNotif(socketNotifObj);
+        }
+
+        if (lastClickedUser > 0 && newData.sendID !== lastClickedUser) {
+          console.log("Clciked name ===> ", clickedName);
+          socketNotifObj.socketnotifiers =
+            socketNotifObj.socketnotifiers.filter(
+              (item) => item !== clickedName
+            );
+          setSocketChatNotif(socketNotifObj);
+        }
+      }
+
+      if (newData.tipo == "allNotifs") {
+        updateMyNotifs(newData.allNotifs);
+        updateNewNotifsExist(newData);
+        console.log("socket on message in notif bell --------->", newData);
+      }
+      console.log("sent through ws **********");
+
+      if (newData.tipo === "newGroupMessage") {
+        // need to create a new struct on backend with a []chats and tipo == newgroupMessage
+        setGroupMessages(newData.groupMessages);
+      }
+    };
+  }
 
   const createSocket = (bool) => {
     setOpenSocket(bool);
@@ -82,12 +143,18 @@ const SocketProvider = ({ children }) => {
   const updateGroupMessages = (data) => {
     setGroupMessages(data);
   };
-  const updateSocketChatNotifs = (bool) => {
-    setSocketChatNotif(bool);
+  const updateSocketChatNotifs = (data) => {
+    setSocketChatNotif(() => data);
   };
 
-  const updateLastSender = (data) => {
-    setLastMsgSender(() => data);
+  
+
+  const updateLastClickedUser = (id) => {
+    setLastClickedUser(() => id);
+  };
+
+  const updateClickedName = (name) => {
+    setClickedName(() => name);
   };
 
   return (
@@ -98,10 +165,10 @@ const SocketProvider = ({ children }) => {
         createSocket,
         messages,
         updateChatMessages,
-
+        updateClickedName,
         NewNotifsExist,
         MyNotifs,
-
+        updateLastClickedUser,
         updateNewNotifsExist,
         updateMyNotifs,
         groupMessages,

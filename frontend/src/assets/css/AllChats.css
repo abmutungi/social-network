@@ -66,7 +66,7 @@
   overflow: auto;
 }
 
-.group-event-text{
+.group-event-text {
   color: gray;
   margin-left: 0.4em;
 }
@@ -81,16 +81,19 @@
   overflow: auto;
 }
 
-
-.UserChatsContainer{
+.UserChatsContainer {
   background-color: white;
   height: 40%;
   border-radius: 10px;
 }
 
-
-.GroupChatsContainer{
+.GroupChatsContainer {
   background-color: white;
   height: 40%;
   border-radius: 10px;
+}
+
+.chatNotifIcon {
+  color: #1877f2;
+  padding-left: 10px;
 }

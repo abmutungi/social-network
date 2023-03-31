@@ -9,7 +9,7 @@ const Register = () => {
   //State to hold errors
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [ img, setImg] = useState(null);
+  const [img, setImg] = useState(null);
   const [imgName, setImgName] = useState("");
   const navigate = useNavigate();
 
@@ -72,11 +72,8 @@ const Register = () => {
     sendRegistrationData();
   };
 
-
-
   return (
     <>
-     
       <div className="register-container">
       <div className="register-logo"><div className="logo-text">
     <span>Connect</span>
@@ -141,21 +138,24 @@ const Register = () => {
             onChange={handleChange}
           />
 
-          <button onClick={handleFileClick} className="avatar-upload-btn" htmlFor="avatar">
-          Upload An Avatar (Optional)
+          <button
+            onClick={handleFileClick}
+            className="avatar-upload-btn"
+            htmlFor="avatar"
+          >
+            Upload An Avatar (Optional)
           </button>
          
           <input
             type="file"
             ref={hiddenFileInput}
-
             name="avatar"
             value={formValues.avatar}
             onChange={(e) => {
               setImg(e.target.files[0]);
               setImgName(e.target.files[0].name);
             }}
-            style={{display: 'none'}}
+            style={{ display: "none" }}
           />
 
           <button className="register-button" type="submit">
@@ -168,7 +168,7 @@ const Register = () => {
             </button>
           </Link>
           {errorMessage && <div className="errorMsg">{errorMessage}</div>}
-      {successMessage && <div className="successMsg">{successMessage}</div>}
+          {successMessage && <div className="successMsg">{successMessage}</div>}
           <Routes>
             <Route path="/login" element={<Login />}></Route>
           </Routes>

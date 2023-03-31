@@ -1,4 +1,7 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMessage } from "@fortawesome/free-solid-svg-icons";
+
 import "../assets/css/AllChats.css";
 import "../assets/css/Users.css";
 import { LowerHeaderContext } from "../context/lowerheadercontext";
@@ -25,11 +28,19 @@ const SingleProfileComponent = (props) => {
     updateNavClicked,
   } = useContext(LowerHeaderContext);
 
-  const { groupMessages, updateGroupMessages } = useContext(SocketContext);
-  const { updateChatNotifsOnLogin } = useContext(loggedInUserContext);
+  const {
+    updateLastClickedUser,
+    lastClickedUser,
+    groupMessages,
+    updateGroupMessages,
+    messages,
+    updateChatMessages,
+    socketChatNotif,
+    updateClickedName,
+  } = useContext(SocketContext);
+  const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
+    useContext(loggedInUserContext);
 
-  const { messages, updateChatMessages, updateSocketChatNotifs } =
-    useContext(SocketContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
@@ -134,7 +145,18 @@ const SingleProfileComponent = (props) => {
     // setMessages(data);
     updateChatMessages(data);
     if (props.notifier) {
-      updateChatNotifsOnLogin(false);
+      chatNotifsOnLogin.notifiers = chatNotifsOnLogin.notifiers.filter(
+        (item) => item !== props.chatName
+      );
+      console.log("cnl check  --> ", chatNotifsOnLogin.notifiers);
+      // updateChatNotifsOnLogin([]);
+    }
+
+    if (props.socketnotifier) {
+      socketChatNotif.socketnotifiers = socketChatNotif.socketnotifiers.filter(
+        (item) => item !== props.chatName
+      );
+      console.log("snf check  --> ", socketChatNotif.socketnotifiers);
     }
   }
 
@@ -210,14 +232,18 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
+          updateLastClickedUser(props.id);
+          updateClickedName(props.chatName);
           if (!show) fetchChatHistory();
           setShow(true);
+          //if show is true, check if the last sender/recipient is the person in the chatbox
           setName(props.chatName);
           setGroupClicked(false);
-          updateSocketChatNotifs(false);
 
 
           console.log("props.id -> ", props.id);
+          console.log("LAST CLICKED USER IN SPC -> ", lastClickedUser);
+
           console.log("message struct --> ", messages);
           // updateUserID(Number(e.currentTarget.id));
           //updateDynamicID(e.currentTarget.id);
@@ -233,14 +259,19 @@ const SingleProfileComponent = (props) => {
           data={messages}
           avatar={props.avatar}
           groupClicked={groupClicked}
+          chatNotifExists={props.socketnotifier}
+          notifierID={props.notifierID}
         />
 
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
         <p className="ChatName">
-          {props.chatName} {props.notifier ? <span>**</span> : null}
-          {props.socketnotifier ? <span>++++</span> : null}
+          {props.chatName}{" "}
+          {props.notifier || props.socketnotifier ? (
+            <FontAwesomeIcon icon={faMessage} className="chatNotifIcon" />
+          ) : null}
+          {/* {props.socketnotifier ? <span>++++</span> : null} */}
         </p>
       </div>
     );
@@ -262,7 +293,9 @@ const SingleProfileComponent = (props) => {
         }}
       >
         <ChatBox
-          onClose={() => setShow(false)}
+          onClose={() => {
+            setShow(false);
+          }}
           show={show}
           name={name}
           id={props.groupID}

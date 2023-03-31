@@ -11,6 +11,7 @@ import (
 	"github.com/abmutungi/social-network/backend/pkg/groups"
 	"github.com/abmutungi/social-network/backend/pkg/notifications"
 	"github.com/abmutungi/social-network/backend/pkg/relationships"
+	"github.com/abmutungi/social-network/backend/pkg/users"
 	"github.com/gorilla/websocket"
 )
 
@@ -68,6 +69,7 @@ type T struct {
 	*NewMessage
 	*GroupMembers
 	*GroupEvent
+	*RemoveChatNotif
 }
 
 type TypeChecker struct {
@@ -78,7 +80,16 @@ type TypeChecker struct {
 
 type ChatsToSend struct {
 	Chats []chats.Chat `json:"chatsfromgo"`
-	Tipo  string       `json:"tipo"`
+
+	Tipo string `json:"tipo"`
+}
+
+type ChatSocketNotif struct {
+	SocketNotifiersArr []string `json:"socketnotifiers"`
+	RecipientID        int      `json:"recID"`
+	SenderID           int      `json:"sendID"`
+	SenderName         string   `json:"sendName"`
+	Tipo               string   `json:"tipo"`
 }
 
 type AllNotifs struct {
@@ -92,6 +103,13 @@ type NewMessage struct {
 	MessageContent string `json:"msgContent"`
 	GroupID        string `json:"groupID"`
 	Tipo           string `json:"tipo"`
+}
+
+type RemoveChatNotif struct {
+	RecID     string `json:"loggedInUser"`
+	ClickedID string `json:"recipientID"`
+	Msg       string `json:"msg"`
+	Tipo      string `json:"tipo"`
 }
 
 type GroupMessages struct {
@@ -123,6 +141,10 @@ func (t *T) UnmarshalData(data []byte) error {
 	case "newGroupMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)
+	case "removeChatNotifs":
+		t.RemoveChatNotif = &RemoveChatNotif{}
+		return json.Unmarshal(data, t.RemoveChatNotif)
+
 	default:
 		return fmt.Errorf("unrecognized type value %q", t.Type)
 
@@ -209,12 +231,26 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			// check if recipeint is in the socket map
 			notifications.StoreNotification(s.Db, "privateMessage", recipientIdInt, senderIdInt, 0)
 			var nc ChatsToSend
+			var nt ChatSocketNotif
 			nc.Chats = chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID)
 			nc.Tipo = "chatHistory"
+			nt.Tipo = "socketChatNotif"
+
+			nt.SocketNotifiersArr = notifications.ReturnUserChatNotifications(s.Db, recipientIdInt)
+			nt.RecipientID = recipientIdInt
+			nt.SenderID = senderIdInt
+			nt.SenderName = users.ReturnSingleUser(s.Db, users.GetEmailFromUserID(s.Db, senderIdInt)).Firstname
+			fmt.Println("sanity check for sna arr ==> ", nt.SocketNotifiersArr)
 
 			for id, conn := range loggedInSockets {
 				if recipientIdInt == id || senderIdInt == id {
 					conn.WriteJSON(nc)
+				}
+			}
+
+			for sid, cx := range loggedInSockets {
+				if recipientIdInt == sid {
+					cx.WriteJSON(nt)
 				}
 			}
 
@@ -322,6 +358,28 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 						en.Tipo = "allNotifs"
 						conn.WriteJSON(en)
 					}
+				}
+			}
+		}
+
+		if f.Type == "removeChatNotifs" {
+			loggedInIdInt, _ := strconv.Atoi(f.RecID)
+
+			clickedIdInt, _ := strconv.Atoi(f.ClickedID)
+
+			fmt.Printf("LoggedIN = %v & clicked = %v", loggedInIdInt, clickedIdInt)
+
+			//if notifications.CheckIfUserHasNotificationsFromUser(s.Db, loggedInIdInt, clickedIdInt) {
+			notifications.ReadChatNotification(s.Db, loggedInIdInt, clickedIdInt)
+			//}
+
+			var rcn RemoveChatNotif
+
+			rcn.Msg = "Removed the chat notif when x clicked"
+			rcn.Tipo = "removedChatNotif"
+			for s, cs := range loggedInSockets {
+				if s == loggedInIdInt {
+					cs.WriteJSON(rcn)
 				}
 			}
 		}
