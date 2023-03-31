@@ -99,7 +99,7 @@ const Login = () => {
       // );
       // updateDynamicID(currentUser.ID);
       console.log(loggedInUser);
-      navigate("/");
+      navigate("/home");
     } else {
       return;
     }
@@ -143,7 +143,7 @@ const Login = () => {
       if (data.error && data.loginMsg === "User is already logged in") {
         setLoginErrorMessage(data.loginMsg);
         setTimeout(() => {
-          navigate("/");
+          navigate("/home");
         }, 3000);
       } else if (data.error) {
         setLoginErrorMessage(data.loginMsg);
@@ -186,7 +186,7 @@ const Login = () => {
         console.log("3RD PS CHECK ON LOGIN --> ", PrivacyStatus);
         console.log("4TH CHECK --> ", updatePrivacyStatus(currentUser.Privacy));
         createSocket(true);
-        navigate("/");
+        navigate("/home");
         // console.log("socket check => ", socket);
       }
     }

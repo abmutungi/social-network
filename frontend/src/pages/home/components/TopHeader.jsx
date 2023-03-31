@@ -43,7 +43,7 @@ function ContainerIcons() {
     const data = await response.json();
     console.log("Data check -> ", data);
     if (data.success) {
-      navigate("/login");
+      navigate("/");
 
       location.reload();
       localStorage.clear();
