@@ -28,13 +28,18 @@ const SingleProfileComponent = (props) => {
     updateNavClicked,
   } = useContext(LowerHeaderContext);
 
-  const { groupMessages, updateGroupMessages, lastMsgSender, socketChatNotif } =
-    useContext(SocketContext);
+  const {
+    updateLastClickedUser,
+    lastClickedUser,
+    groupMessages,
+    updateGroupMessages,
+    messages,
+    updateChatMessages,
+    socketChatNotif,
+  } = useContext(SocketContext);
   const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
     useContext(loggedInUserContext);
 
-  const { messages, updateChatMessages, updateSocketChatNotifs } =
-    useContext(SocketContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
@@ -227,6 +232,7 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
+          updateLastClickedUser(props.id);
           if (!show) fetchChatHistory();
           setShow(true);
           //if show is true, check if the last sender/recipient is the person in the chatbox
@@ -234,6 +240,8 @@ const SingleProfileComponent = (props) => {
           setGroupClicked(false);
 
           console.log("props.id -> ", props.id);
+          console.log("LAST CLICKED USER IN SPC -> ", lastClickedUser);
+
           console.log("message struct --> ", messages);
           // updateUserID(Number(e.currentTarget.id));
           //updateDynamicID(e.currentTarget.id);
