@@ -283,7 +283,9 @@ const SingleProfileComponent = (props) => {
         }}
       >
         <ChatBox
-          onClose={() => setShow(false)}
+          onClose={() => {
+            setShow(false);
+          }}
           show={show}
           name={name}
           id={props.groupID}

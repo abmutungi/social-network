@@ -24,7 +24,8 @@ const ChatBox = ({
   chatNotifExists,
   notifierID,
 }) => {
-  const { socket, updateSocketChatNotifs } = useContext(SocketContext);
+  const { socket, updateSocketChatNotifs, updateLastClickedUser } =
+    useContext(SocketContext);
 
   // const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
@@ -114,7 +115,10 @@ const ChatBox = ({
             <span className="chat-box-name">{currentUser}</span>
 
             <FontAwesomeIcon
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                updateLastClickedUser(0);
+              }}
               icon={faXmark}
               className="chat-header-close"
               size="lg"

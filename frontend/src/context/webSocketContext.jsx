@@ -55,7 +55,7 @@ const SocketProvider = ({ children }) => {
           console.log("THIS IS THE RECIPIENT CLIENT!!");
         }
         console.log("LAST CLICKED USER IN SOCKET ==> ", lastClickedUser);
-        console.log(newData.socketnotifiers);
+        // console.log(newData.socketnotifiers);
 
         if (
           (lastClickedUser > 0 &&
@@ -67,12 +67,33 @@ const SocketProvider = ({ children }) => {
         ) {
           updateChatMessages(newData.chatsfromgo);
         }
-        updateSocketChatNotifs(newData);
+      }
+      if (newData.tipo === "socketChatNotif") {
+        let socketNotifObj = {
+          socketnotifiers: [],
+        };
+        socketNotifObj.socketnotifiers = newData.socketnotifiers;
         console.log("checking sCN --> ", socketChatNotif.socketnotifiers);
-        if (newData.chatsfromgo) {
-          updateLastSender(
-            newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
-          );
+        // newData.socketnotifiers = newData.socketnotifiers.filter(
+        //   (item) => item !== lastClickedUser
+        // );
+        console.log("lcu in scN cond ==> ", lastClickedUser);
+        if (lastClickedUser === 0 && newData.recID === loggedInUser) {
+          updateSocketChatNotifs(newData);
+        }
+
+        if (lastClickedUser > 0 && newData.sendID === lastClickedUser) {
+          console.log("BEFORE DEL WHEN SAME ==> ", newData.socketnotifiers);
+          socketNotifObj.socketnotifiers =
+            socketNotifObj.socketnotifiers.filter(
+              (item) => item !== lastClickedUser
+            );
+          console.log("AFTER DEL WHEN SAME ==> ", newData.socketnotifiers);
+          //updateSocketChatNotifs(socketNotifObj);
+        }
+
+        if (lastClickedUser > 0 && newData.sendID !== lastClickedUser) {
+          updateSocketChatNotifs(socketNotifObj);
         }
       }
 

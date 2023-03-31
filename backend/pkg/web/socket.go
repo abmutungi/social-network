@@ -77,9 +77,16 @@ type TypeChecker struct {
 // struct for new message
 
 type ChatsToSend struct {
-	Chats              []chats.Chat `json:"chatsfromgo"`
-	SocketNotifiersArr []string     `json:"socketnotifiers"`
-	Tipo               string       `json:"tipo"`
+	Chats []chats.Chat `json:"chatsfromgo"`
+
+	Tipo string `json:"tipo"`
+}
+
+type ChatSocketNotif struct {
+	SocketNotifiersArr []string `json:"socketnotifiers"`
+	RecipientID        int      `json:"recID"`
+	SenderID           int      `json:"sendID"`
+	Tipo               string   `json:"tipo"`
 }
 
 type AllNotifs struct {
@@ -210,14 +217,25 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			// check if recipeint is in the socket map
 			notifications.StoreNotification(s.Db, "privateMessage", recipientIdInt, senderIdInt, 0)
 			var nc ChatsToSend
+			var nt ChatSocketNotif
 			nc.Chats = chats.GetAllMessageHistoryFromChat(s.Db, chats.ChatHistoryValidation(s.Db, senderIdInt, recipientIdInt).ChatID)
 			nc.Tipo = "chatHistory"
-			nc.SocketNotifiersArr = notifications.ReturnUserChatNotifications(s.Db, recipientIdInt)
-			fmt.Println("sanity check for sna arr ==> ", nc.SocketNotifiersArr)
+			nt.Tipo = "socketChatNotif"
+
+			nt.SocketNotifiersArr = notifications.ReturnUserChatNotifications(s.Db, recipientIdInt)
+			nt.RecipientID = recipientIdInt
+			nt.SenderID = senderIdInt
+			fmt.Println("sanity check for sna arr ==> ", nt.SocketNotifiersArr)
 
 			for id, conn := range loggedInSockets {
 				if recipientIdInt == id || senderIdInt == id {
 					conn.WriteJSON(nc)
+				}
+			}
+
+			for sid, cx := range loggedInSockets {
+				if recipientIdInt == sid {
+					cx.WriteJSON(nt)
 				}
 			}
 
