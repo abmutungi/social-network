@@ -10,8 +10,7 @@ const SocketProvider = ({ children }) => {
   const [groupMessages, setGroupMessages] = useState([]);
   const [socketChatNotif, setSocketChatNotif] = useState(false);
   const [lastMsgSender, setLastMsgSender] = useState("");
-  const [newSocketGroupMessageIcon, setNewSocketGroupMessageIcon] =
-    useState(false);
+  const [newSocketGroupMessage, setNewSocketGroupMessage] = useState(false);
   const [socketGroupIDs, setSocketGroupIDs] = useState([]);
   const [MyNotifs, setMyNotifs] = useState([]);
   useEffect(() => {
@@ -54,12 +53,7 @@ const SocketProvider = ({ children }) => {
           // need to create a new struct on backend with a []chats and tipo == newgroupMessage
           setGroupMessages(newData.groupMessages);
           if (newData.newNotif === "true") {
-            setNewSocketGroupMessageIcon(true);
-
-            // setNewSocketMessageGroupID(
-            //   newSocketMessageGroupID.push(newData.groupID)
-            // );
-
+            setNewSocketGroupMessage(true);
             setSocketGroupIDs(newData.groupIDs);
           }
         }
@@ -124,9 +118,10 @@ const SocketProvider = ({ children }) => {
         socketChatNotif,
         updateSocketChatNotifs,
         lastMsgSender,
-        newSocketGroupMessageIcon,
-        setNewSocketGroupMessageIcon,
+        newSocketGroupMessage,
+        setNewSocketGroupMessage,
         socketGroupIDs,
+        setSocketGroupIDs,
       }}
     >
       {children}

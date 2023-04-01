@@ -28,15 +28,19 @@ const SingleProfileComponent = (props) => {
     updateNavClicked,
   } = useContext(LowerHeaderContext);
 
-  const { groupMessages, updateGroupMessages } = useContext(SocketContext);
+  const {
+    groupMessages,
+    updateGroupMessages,
+    socketGroupIDs,
+    setSocketGroupIDs,
+  } = useContext(SocketContext);
   const { chatNotifsOnLogin } = useContext(loggedInUserContext);
 
   const {
     messages,
     updateChatMessages,
     updateSocketChatNotifs,
-    newSocketGroupMessageIcon,
-    setNewSocketGroupMessageIcon,
+    // newSocketGroupMessage,
   } = useContext(SocketContext);
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
@@ -154,20 +158,27 @@ const SingleProfileComponent = (props) => {
     props.newGroupMessage
   );
 
+  const removeSocketIcon = () => {
+    if (props.newSocketGroupMessage) {
+      setSocketGroupIDs(socketGroupIDs.filter((id) => id !== props.groupID));
+    }
+  };
   async function fetchGroupMessages() {
     groupChatsForm.append("hasMessageIcon", groupMessageIcon);
+    groupChatsForm.append("hasSocketMessageIcon", props.newSocketGroupMessage);
+
     groupChatsForm.append(
       "loggedInUser",
       JSON.parse(localStorage.getItem("loggedInUser")).ID
     );
-    // console.log("newGroupMessageForm: ", groupChatsForm);
+
     const resp = await fetch("http://localhost:8080/sendgroupmessages", {
       method: "POST",
       credentials: "include",
       body: groupChatsForm,
     });
     const data = await resp.json();
-    console.log("group messages data, lets see what it is", groupMessages);
+
     updateGroupMessages(data);
   }
 
@@ -278,7 +289,7 @@ const SingleProfileComponent = (props) => {
           setName(props.chatName);
           setGroupClicked(true);
           setGroupMessageIcon(false);
-          setNewSocketGroupMessageIcon(false);
+          removeSocketIcon();
         }}
       >
         <ChatBox
@@ -295,8 +306,7 @@ const SingleProfileComponent = (props) => {
         </div>
         <p className="ChatName">
           {props.chatName}{" "}
-          {groupMessageIcon ||
-          (newSocketGroupMessageIcon && props.newSocketGroupMessage) ? (
+          {groupMessageIcon || props.newSocketGroupMessage ? (
             <FontAwesomeIcon icon={faMessage} className="chatNotifIcon" />
           ) : null}
         </p>
