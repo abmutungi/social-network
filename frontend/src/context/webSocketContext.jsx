@@ -52,6 +52,8 @@ const SocketProvider = ({ children }) => {
         if (newData.tipo === "newGroupMessage") {
           // need to create a new struct on backend with a []chats and tipo == newgroupMessage
           setGroupMessages(newData.groupMessages);
+
+          // only for the message receivers
           if (newData.newNotif === "true") {
             setNewSocketGroupMessage(true);
             setSocketGroupIDs(newData.groupIDs);

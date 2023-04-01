@@ -14,7 +14,8 @@ import {
 // import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
 const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
-  const { socket } = useContext(SocketContext);
+  const { socket, socketGroupIDs, setSocketGroupIDs } =
+    useContext(SocketContext);
 
   // const { updateMessages } = useContext(loggedInUserContext);
   const [newMsg, setNewMsg] = useState("");
@@ -77,10 +78,23 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
   //   }
   // };
 
-  // const combinedClickHandler = () => {
-  //   onClose();
-  //   deleteNotif();
-  // };
+  // onchatbox click set groupChatNotification to read for groupMember
+
+  const groupChatRead = () => {
+    setSocketGroupIDs(socketGroupIDs.filter((groupID) => groupID !== id));
+  };
+
+  const setGroupMessageToRead = () => {
+    const messageToRead = {};
+
+    messageToRead["loggedInUser"] = JSON.parse(
+      localStorage.getItem("loggedInUser")
+    ).ID;
+    messageToRead["groupID"] = id;
+    messageToRead["type"] = "groupChatboxOpened";
+
+    console.log("checking message to Read", messageToRead);
+  };
 
   if (!show) {
     return null;
@@ -104,7 +118,11 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
             <span className="chat-box-name">{currentUser}</span>
 
             <FontAwesomeIcon
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                groupChatRead();
+                // setGroupMessageToRead();
+              }}
               icon={faXmark}
               className="chat-header-close"
               size="lg"
