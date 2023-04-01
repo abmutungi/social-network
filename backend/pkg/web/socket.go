@@ -98,7 +98,7 @@ type GroupMessages struct {
 	GroupM   []chats.Chat `json:"groupMessages"`
 	Tipo     string       `json:"tipo"`
 	NewNotif string       `json:"newNotif"`
-	GroupID  int          `json:"groupID"`
+	GroupIDs []int        `json:"groupIDs"`
 }
 
 func (t *T) UnmarshalData(data []byte) error {
@@ -243,7 +243,8 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 				var gm GroupMessages
 				if id != senderIdInt {
 					gm.NewNotif = "true"
-					gm.GroupID = groupIdInt
+					gm.GroupIDs = notifications.GetGroupChatNotifs(s.Db, id)
+					fmt.Println("new Messages from this groupID", gm.GroupIDs)
 				}
 
 				if groups.GroupMemberCheck(s.Db, groupIdInt, id) {

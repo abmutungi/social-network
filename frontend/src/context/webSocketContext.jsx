@@ -12,7 +12,7 @@ const SocketProvider = ({ children }) => {
   const [lastMsgSender, setLastMsgSender] = useState("");
   const [newSocketGroupMessageIcon, setNewSocketGroupMessageIcon] =
     useState(false);
-  const [newSocketMessageGroupID, setNewSocketMessageGroupID] = useState([]);
+  const [socketGroupIDs, setSocketGroupIDs] = useState([]);
   const [MyNotifs, setMyNotifs] = useState([]);
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
@@ -59,11 +59,8 @@ const SocketProvider = ({ children }) => {
             // setNewSocketMessageGroupID(
             //   newSocketMessageGroupID.push(newData.groupID)
             // );
-            updateSocketGroupIDs(newData.groupID);
-            console.log(
-              "checking if this is correct array of groupIDS??",
-              newSocketMessageGroupID
-            );
+
+            setSocketGroupIDs(newData.groupIDs);
           }
         }
       };
@@ -104,9 +101,9 @@ const SocketProvider = ({ children }) => {
     setLastMsgSender(() => data);
   };
 
-  const updateSocketGroupIDs = (data) => {
-    setNewSocketMessageGroupID(newSocketMessageGroupID.push(data));
-  };
+  // const updateSocketGroupIDs = (data) => {
+  //   setNewSocketMessageGroupID(newSocketMessageGroupID.push(data));
+  // };
 
   return (
     <SocketContext.Provider
@@ -129,7 +126,7 @@ const SocketProvider = ({ children }) => {
         lastMsgSender,
         newSocketGroupMessageIcon,
         setNewSocketGroupMessageIcon,
-        newSocketMessageGroupID,
+        socketGroupIDs,
       }}
     >
       {children}

@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../context/webSocketContext";
 
 const MultipleProfilesComponent = ({ users, type }) => {
-  const { socketChatNotif, lastMsgSender, newSocketMessageGroupID } =
+  const { socketChatNotif, lastMsgSender, socketGroupIDs } =
     useContext(SocketContext);
   const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
     useContext(loggedInUserContext);
@@ -57,11 +57,10 @@ const MultipleProfilesComponent = ({ users, type }) => {
   };
 
   const groupMessageSocketCheck = (groupID) => {
-    console.log(
-      "checking newSocketMessageGroupID in groupMessageSocketCheck: ",
-      newSocketMessageGroupID
-    );
-    // return newSocketMessageGroupID.includes(groupID);
+    if (socketGroupIDs !== null) {
+      return socketGroupIDs.includes(groupID);
+    }
+    return false;
   };
   // checkUserForChatNotification(chatNotifsOnLogin);
 
