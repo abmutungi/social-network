@@ -57,6 +57,11 @@ type FollowerPrivateData struct {
 	Tipo             string `json:"tipo"`
 }
 
+type GroupChatRead struct {
+	LoggedInUser int `json:"loggedInUser"`
+	GroupID      int `json:"groupID"`
+}
+
 type T struct {
 	TypeChecker
 	*notifications.Notification
@@ -68,6 +73,7 @@ type T struct {
 	*NewMessage
 	*GroupMembers
 	*GroupEvent
+	*GroupChatRead
 }
 
 type TypeChecker struct {
@@ -99,6 +105,7 @@ type GroupMessages struct {
 	Tipo     string       `json:"tipo"`
 	NewNotif string       `json:"newNotif"`
 	GroupIDs []int        `json:"groupIDs"`
+	GroupID  int          `json:"groupID"`
 }
 
 func (t *T) UnmarshalData(data []byte) error {
@@ -125,6 +132,9 @@ func (t *T) UnmarshalData(data []byte) error {
 	case "newGroupMessage":
 		t.NewMessage = &NewMessage{}
 		return json.Unmarshal(data, t.NewMessage)
+	case "groupChatboxClosed":
+		t.GroupChatRead = &GroupChatRead{}
+		return json.Unmarshal(data, t.GroupChatRead)
 	default:
 		return fmt.Errorf("unrecognized type value %q", t.Type)
 
@@ -250,10 +260,15 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 				if groups.GroupMemberCheck(s.Db, groupIdInt, id) {
 					gm.GroupM = chats.GetGroupChatHistory(s.Db, groupIdInt)
 					gm.Tipo = "newGroupMessage"
+					gm.GroupID = groupIdInt
 					conn.WriteJSON(gm)
 				}
 			}
 
+		}
+
+		if f.Type == "groupChatboxClosed" {
+			notifications.ReadGroupChatNotif(s.Db, f.GroupChatRead.LoggedInUser, f.GroupChatRead.LoggedInUser)
 		}
 
 		if f.Type == "groupNotifs" {

@@ -13,6 +13,7 @@ const SocketProvider = ({ children }) => {
   const [newSocketGroupMessage, setNewSocketGroupMessage] = useState(false);
   const [socketGroupIDs, setSocketGroupIDs] = useState([]);
   const [MyNotifs, setMyNotifs] = useState([]);
+  const [clickedGroupID, setClickedGroupID] = useState(0);
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
       // create and open socket when component mounts
@@ -22,44 +23,6 @@ const SocketProvider = ({ children }) => {
         console.log("socket is open");
       };
 
-      ws.onmessage = (e) => {
-        const newData = JSON.parse(e.data);
-        // console.log("newData check --> ", e.data);
-
-        console.log("sent through ws **********");
-
-        if (newData.tipo === "chatHistory") {
-          console.log(
-            "last sender ==> ",
-            newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
-          );
-          updateChatMessages(newData.chatsfromgo);
-          updateSocketChatNotifs(true);
-          if (newData.chatsfromgo) {
-            updateLastSender(
-              newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
-            );
-          }
-        }
-
-        if (newData.tipo == "allNotifs") {
-          updateMyNotifs(newData.allNotifs);
-          updateNewNotifsExist(newData);
-          console.log("socket on message in notif bell --------->", newData);
-        }
-        console.log("sent through ws **********");
-
-        if (newData.tipo === "newGroupMessage") {
-          // need to create a new struct on backend with a []chats and tipo == newgroupMessage
-          setGroupMessages(newData.groupMessages);
-
-          // only for the message receivers
-          if (newData.newNotif === "true") {
-            setNewSocketGroupMessage(true);
-            setSocketGroupIDs(newData.groupIDs);
-          }
-        }
-      };
       return () => {
         // close socket when component unmounts
         ws.close();
@@ -69,6 +32,56 @@ const SocketProvider = ({ children }) => {
       };
     }
   }, [openSocket]);
+
+  if (!!socket) {
+    socket.onmessage = (e) => {
+      const newData = JSON.parse(e.data);
+      // console.log("newData check --> ", e.data);
+
+      if (newData.tipo === "chatHistory") {
+        console.log(
+          "last sender ==> ",
+          newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
+        );
+        updateChatMessages(newData.chatsfromgo);
+        updateSocketChatNotifs(true);
+        if (newData.chatsfromgo) {
+          updateLastSender(
+            newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
+          );
+        }
+      }
+
+      if (newData.tipo == "allNotifs") {
+        updateMyNotifs(newData.allNotifs);
+        updateNewNotifsExist(newData);
+        console.log("socket on message in notif bell --------->", newData);
+      }
+
+      if (newData.tipo === "newGroupMessage") {
+        // only update if the opened chat box is same group id as the incoming group ID
+        // console.log("before removing through socket", socketGroupIDs);
+        if (clickedGroupID > 0 && clickedGroupID == newData.groupID) {
+          console.log("checking clicked group", clickedGroupID);
+
+          // console.log("after removing through socket", socketGroupIDs);
+          setGroupMessages(newData.groupMessages);
+        }
+
+        // only for the message receivers
+        if (newData.newNotif === "true") {
+          setNewSocketGroupMessage(true);
+          setSocketGroupIDs(newData.groupIDs);
+
+          // if (clickedGroupID > 0 && clickedGroupID == newData.groupID) {
+          //   setSocketGroupIDs(
+          //     socketGroupIDs.filter((groupID) => groupID !== clickedGroupID)
+          //   );
+          // }
+        }
+      }
+    };
+  }
 
   const createSocket = (bool) => {
     setOpenSocket(bool);
@@ -97,9 +110,9 @@ const SocketProvider = ({ children }) => {
     setLastMsgSender(() => data);
   };
 
-  // const updateSocketGroupIDs = (data) => {
-  //   setNewSocketMessageGroupID(newSocketMessageGroupID.push(data));
-  // };
+  const updateClickedGroupID = (data) => {
+    setClickedGroupID(() => data);
+  };
 
   return (
     <SocketContext.Provider
@@ -124,6 +137,8 @@ const SocketProvider = ({ children }) => {
         setNewSocketGroupMessage,
         socketGroupIDs,
         setSocketGroupIDs,
+        clickedGroupID,
+        updateClickedGroupID,
       }}
     >
       {children}

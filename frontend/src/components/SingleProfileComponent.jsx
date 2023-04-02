@@ -33,15 +33,14 @@ const SingleProfileComponent = (props) => {
     updateGroupMessages,
     socketGroupIDs,
     setSocketGroupIDs,
-  } = useContext(SocketContext);
-  const { chatNotifsOnLogin } = useContext(loggedInUserContext);
-
-  const {
+    updateClickedGroupID,
+    clickedGroupID,
     messages,
     updateChatMessages,
     updateSocketChatNotifs,
-    // newSocketGroupMessage,
   } = useContext(SocketContext);
+  const { chatNotifsOnLogin } = useContext(loggedInUserContext);
+
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
 
@@ -163,6 +162,7 @@ const SingleProfileComponent = (props) => {
       setSocketGroupIDs(socketGroupIDs.filter((id) => id !== props.groupID));
     }
   };
+
   async function fetchGroupMessages() {
     groupChatsForm.append("hasMessageIcon", groupMessageIcon);
     groupChatsForm.append("hasSocketMessageIcon", props.newSocketGroupMessage);
@@ -290,7 +290,9 @@ const SingleProfileComponent = (props) => {
           setGroupClicked(true);
           setGroupMessageIcon(false);
           removeSocketIcon();
+          updateClickedGroupID(props.groupID);
         }}
+        id={props.id}
       >
         <ChatBox
           onClose={() => setShow(false)}

@@ -57,7 +57,7 @@ const MultipleProfilesComponent = ({ users, type }) => {
   };
 
   const groupMessageSocketCheck = (groupID) => {
-    if (socketGroupIDs !== null) {
+    if (socketGroupIDs !== null && socketGroupIDs !== undefined) {
       return socketGroupIDs.includes(groupID);
     }
     return false;
@@ -70,10 +70,10 @@ const MultipleProfilesComponent = ({ users, type }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(
-    "chatNotifs should be the same as above ===> ",
-    chatNotifsOnLogin.notifiers
-  );
+  // console.log(
+  //   "chatNotifs should be the same as above ===> ",
+  //   chatNotifsOnLogin.notifiers
+  // );
 
   if (type === "AllGroups") {
     return users?.map((user, index) => {

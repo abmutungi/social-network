@@ -14,7 +14,7 @@ import {
 // import { loggedInUserContext } from "../../../context/loggedInUserContext";
 
 const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
-  const { socket, socketGroupIDs, setSocketGroupIDs } =
+  const { socket, socketGroupIDs, setSocketGroupIDs, updateClickedGroupID } =
     useContext(SocketContext);
 
   // const { updateMessages } = useContext(loggedInUserContext);
@@ -70,7 +70,7 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
   };
   let currentUser = name;
 
-  console.log("name prop check --> ", name);
+  // console.log("name prop check --> ", name);
 
   // const deleteNotif = () => {
   //   if (chatNotifExists && notifierID === id) {
@@ -79,11 +79,12 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
   // };
 
   // onchatbox click set groupChatNotification to read for groupMember
-
+  // remove them from groupChatID notifs array
   const groupChatRead = () => {
     setSocketGroupIDs(socketGroupIDs.filter((groupID) => groupID !== id));
   };
 
+  // after closing chatbox, set the notifcation to read
   const setGroupMessageToRead = () => {
     const messageToRead = {};
 
@@ -91,16 +92,14 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
       localStorage.getItem("loggedInUser")
     ).ID;
     messageToRead["groupID"] = id;
-    messageToRead["type"] = "groupChatboxOpened";
-
-    console.log("checking message to Read", messageToRead);
+    messageToRead["type"] = "groupChatboxClosed";
+    socket.send(JSON.stringify(messageToRead));
   };
 
   if (!show) {
     return null;
   }
 
-  // console.log("checking group messages in chatbox", data);
   return (
     <>
       <div
@@ -121,7 +120,8 @@ const ChatBox = ({ show, onClose, name, id, data, avatar, groupClicked }) => {
               onClick={() => {
                 onClose();
                 groupChatRead();
-                // setGroupMessageToRead();
+                setGroupMessageToRead();
+                updateClickedGroupID(0);
               }}
               icon={faXmark}
               className="chat-header-close"
