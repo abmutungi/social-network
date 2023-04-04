@@ -73,11 +73,22 @@ const SocketProvider = ({ children }) => {
           setNewSocketGroupMessage(true);
           setSocketGroupIDs(newData.groupIDs);
 
-          // if (clickedGroupID > 0 && clickedGroupID == newData.groupID) {
-          //   setSocketGroupIDs(
-          //     socketGroupIDs.filter((groupID) => groupID !== clickedGroupID)
-          //   );
-          // }
+          if (clickedGroupID > 0 && clickedGroupID == newData.groupID) {
+            setSocketGroupIDs(
+              socketGroupIDs.filter((groupID) => groupID !== clickedGroupID)
+            );
+            // set the message to read through the socket, if the chatbox is open
+            const messageToRead = {};
+
+            messageToRead["loggedInUser"] = JSON.parse(
+              localStorage.getItem("loggedInUser")
+            ).ID;
+            messageToRead["groupID"] = clickedGroupID;
+            messageToRead["type"] = "groupChatboxClosed";
+            socket.send(JSON.stringify(messageToRead));
+
+            setNewSocketGroupMessage(false);
+          }
         }
       }
     };

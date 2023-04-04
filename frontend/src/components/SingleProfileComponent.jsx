@@ -34,7 +34,6 @@ const SingleProfileComponent = (props) => {
     socketGroupIDs,
     setSocketGroupIDs,
     updateClickedGroupID,
-    clickedGroupID,
     messages,
     updateChatMessages,
     updateSocketChatNotifs,

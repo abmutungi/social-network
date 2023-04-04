@@ -268,7 +268,7 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if f.Type == "groupChatboxClosed" {
-			notifications.ReadGroupChatNotif(s.Db, f.GroupChatRead.LoggedInUser, f.GroupChatRead.LoggedInUser)
+			notifications.ReadGroupChatNotif(s.Db, f.GroupChatRead.LoggedInUser, f.GroupChatRead.GroupID)
 		}
 
 		if f.Type == "groupNotifs" {
