@@ -8,6 +8,8 @@ import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 function AboutMe({ text, email, dob, nickname }) {
     
     const { PrivacyStatus, Following } = useContext(LowerHeaderContext);
+    const { groupNotUser, DynamicID } = useContext(LowerHeaderContext)
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
 
     return(
         <div className="about-container">
@@ -20,13 +22,13 @@ function AboutMe({ text, email, dob, nickname }) {
                     {text}
                     </div>
                      <div>
-                    {!PrivacyStatus || Following ? email: ""}
+                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser|| Following ? email: ""}
                     </div>
                      <div>
-                    {!PrivacyStatus || Following ? `Birthday: ${dob}`: ""}
+                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser|| Following ? `Birthday: ${dob}`: ""}
                     </div>
                      <div>
-                    {!PrivacyStatus || Following ? nickname: ""}
+                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser || Following ? nickname: ""}
                     </div>
             </div>
             </div>
