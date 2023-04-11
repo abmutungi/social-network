@@ -12,6 +12,7 @@ const SocketProvider = ({ children }) => {
   const [lastMsgSender, setLastMsgSender] = useState("");
   const [lastClickedUser, setLastClickedUser] = useState(0);
   const [clickedName, setClickedName] = useState("");
+  const [groupEventSocket, updateGroupEventsSocket] = useState([]);
 
   const [MyNotifs, setMyNotifs] = useState([]);
   let loggedInUser;
@@ -124,6 +125,12 @@ const SocketProvider = ({ children }) => {
         updateNewNotifsExist(newData);
         console.log("socket on message in notif bell --------->", newData);
       }
+      if (newData.tipo === "groupEvents") {
+        console.log("EVENTS??? --->", newData.groupEvents);
+        updateGroupEventsSocket(newData.groupEvents);
+        // need to create a new struct on backend with a []chats and tipo == newgroupMessage
+        setGroupMessages(newData.groupMessages);
+      }
 
       if (newData.tipo === "newGroupMessage") {
         // only update if the opened chat box is same group id as the incoming group ID
@@ -207,6 +214,8 @@ const SocketProvider = ({ children }) => {
         NewNotifsExist,
         MyNotifs,
         updateLastClickedUser,
+        groupEventSocket,
+
         updateNewNotifsExist,
         updateMyNotifs,
         groupMessages,

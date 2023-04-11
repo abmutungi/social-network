@@ -1,5 +1,4 @@
 .register-container {
-
   /* height: 500px;
   border-radius: 5px;
   background-color: #ffffff;
@@ -10,14 +9,14 @@
   display: flex;
   justify-content: center; */
   height: 650px;
-    border-radius: 5px;
-    background-color: #ffffff;
-    margin: auto;
-    width: 650px;
-    border: 3px solid #1877f2;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
+  border-radius: 5px;
+  background-color: #ffffff;
+  margin: auto;
+  width: 650px;
+  border: 3px solid #1877f2;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
 }
 .register-form {
   background-color: #ffffff;
@@ -64,7 +63,7 @@
   width: 500px;
   height: 30px;
   text-align: center;
-  border-color:#1877f2;
+  border-color: #1877f2;
 }
 
 .register-form > textarea {
@@ -75,6 +74,7 @@
   font-size: large;
   text-align: center;
   line-height: 60px;
+  resize: none;
 }
 
 .register-form > date {
@@ -103,7 +103,7 @@ input:focus {
   font-size: large;
 }
 
-.avatar-upload-btn{
+.avatar-upload-btn {
   background-color: pink;
   height: 30px;
   color: white;
@@ -114,7 +114,4 @@ input:focus {
   cursor: pointer;
   outline: none;
   border: none;
-
-
-
 }

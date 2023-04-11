@@ -3,6 +3,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { SocketContext } from "../../../context/webSocketContext";
 import { useEffect, useContext } from "react";
 import "../../../assets/css/posts.css";
 import Comments from "./Comments";
@@ -66,6 +67,10 @@ const PostsContainer = () => {
     Following
   } = useContext(LowerHeaderContext);
 
+  const {
+    groupEventSocket
+  } = useContext(SocketContext);
+
   // fetch home posts for the logged in user
   const userForm = new FormData();
 
@@ -109,6 +114,12 @@ const PostsContainer = () => {
     fetchPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickedValue]);
+
+   // make a network request on component render.
+   useEffect(() => {
+    updateGroupEvents(groupEventSocket)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groupEventSocket]);
 
  
 

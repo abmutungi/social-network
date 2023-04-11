@@ -57,8 +57,8 @@
 
 .cg-modal-header {
   display: flex;
-
-  padding: 10px;
+align-items: center;
+  padding: 5px;
   position: relative;
   justify-content: space-evenly;
   color: black;
@@ -70,6 +70,7 @@
   padding: 10px;
   border-top: 1px solid #eee;
   border-bottom: #eee;
+  align-items: center;
 }
 
 .cg-modal-footer {
@@ -84,11 +85,16 @@
   flex-direction: column;
 }
 
-.cg-form > input {
-  height: 40px;
-}
+
 
 .cg-form > input:focus {
+  caret-color: #1b74e4;
+  outline-color: #1b74e4;
+  border-color: #1b74e4;
+  /* border: #1b74e4 solid 1px; */
+  outline-color: #1b74e4;
+}
+.cg-textarea:focus {
   caret-color: #1b74e4;
   outline-color: #1b74e4;
   border-color: #1b74e4;
@@ -148,4 +154,29 @@
   align-items: center;
   width: fit-content;
   cursor: pointer;
+}
+
+.cg-modal-titles{
+  font-weight: 900;
+  padding-bottom: 8px;
+}
+
+.cg-input{
+  height: 35px;
+  width: 99%;
+  text-align: center;
+
+}
+
+.cg-textarea{
+  height: 40px;
+  width: 99%;
+  text-align: center;
+  padding-top: 20px;
+
+}
+
+.event-form-group{
+  font-weight: 900;
+
 }

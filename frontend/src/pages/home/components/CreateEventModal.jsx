@@ -27,25 +27,6 @@ const CreateEventModal = ({ show, onClose }) => {
     });
   };
 
-  // async function CreateGroupEvent(fdata) {
-  //   try {
-  //     console.log("formvalues from group event", formValues);
-  //     const response = await fetch("http://localhost:8080/creategroupevent", {
-  //       method: "POST",
-  //       credentials: "include",
-  //       body: fdata,
-  //     });
-
-  //     const data = await response.json();
-
-  //     console.log("resp from creategroupevent", data);
-  //     onClose();
-
-  //     //responds with an array of group objects including the newly created group
-  //   } catch (e) {
-  //     console.log("Error with the creategroupevent fn", e);
-  //   }
-  // }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,6 +34,7 @@ const CreateEventModal = ({ show, onClose }) => {
     const formData = new FormData(form);
     formData.append("creator", LoggedInUserID);
     formData.append("groupID", GroupID);
+    setFormValues("")
     //console.log("***** event invites******", JSON.stringify(formValues));
 
     socket.send(JSON.stringify(formValues))
@@ -75,12 +57,14 @@ const CreateEventModal = ({ show, onClose }) => {
           <div className="cg-modal-header">
             <div></div>
             <h3>Create Event</h3>
+            <div className="closeicon">
             <FontAwesomeIcon
               onClick={onClose}
               icon={faXmark}
               className="cg-modal-close"
-              size="lg"
+              size="xs"
             />
+            </div>
           </div>
           <form
             id="createGroupEvent"
@@ -88,7 +72,7 @@ const CreateEventModal = ({ show, onClose }) => {
             onSubmit={handleSubmit}
           >
             <div className="cg-modal-body">
-              <div className="modal-titles">Event Name</div>
+              <div className="cg-modal-titles">Event Name</div>
               <input
                 name="eventName"
                 value={formValues.eventName}
@@ -101,13 +85,13 @@ const CreateEventModal = ({ show, onClose }) => {
 
               <br></br>
 
-              <div className="modal-titles">Event Description</div>
+              <div className="cg-modal-titles">Event Description</div>
               <textarea
                 name="eventDescription"
                 style={{ resize: "none" }}
                 value={formValues.eventDescription}
                 onChange={handleChange}
-                className="cg-input"
+                className="cg-textarea"
                 placeholder="what's it about?"
                 required
               />

@@ -75,9 +75,11 @@ const Register = () => {
   return (
     <>
       <div className="register-container">
-      <div className="register-logo"><div className="logo-text">
-    <span>Connect</span>
-  </div></div>
+        <div className="register-logo">
+          <div className="logo-text">
+            <span>Connect</span>
+          </div>
+        </div>
         <form className="register-form" onSubmit={handleSubmit}>
           <input
             required
@@ -145,7 +147,7 @@ const Register = () => {
           >
             Upload An Avatar (Optional)
           </button>
-         
+
           <input
             type="file"
             ref={hiddenFileInput}
@@ -162,7 +164,7 @@ const Register = () => {
             Create Account
           </button>
 
-          <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
             <button className="register-login-button" type="submit">
               Already have an account? Click here to log in
             </button>
