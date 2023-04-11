@@ -1,9 +1,7 @@
 .chat-box-container {
   position: absolute;
-  /* left: 50vw;
-  top: 41vh; */
-  bottom: 1vh;
-  right: 28vh;
+  bottom: 2vh;
+  right: 40vh;
   width: 320px;
   height: 450px;
   border-radius: 10px;

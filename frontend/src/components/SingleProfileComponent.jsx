@@ -37,9 +37,13 @@ const SingleProfileComponent = (props) => {
     updateChatMessages,
     socketChatNotif,
     updateClickedName,
+
+    socketGroupIDs,
+    setSocketGroupIDs,
+    updateClickedGroupID,
   } = useContext(SocketContext);
-  const { chatNotifsOnLogin, updateChatNotifsOnLogin } =
-    useContext(loggedInUserContext);
+
+  const { chatNotifsOnLogin } = useContext(loggedInUserContext);
 
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
@@ -47,7 +51,7 @@ const SingleProfileComponent = (props) => {
   const [groupClicked, setGroupClicked] = useState(false);
   const navigate = useNavigate();
 
-  const[shouldFetch, setShouldFetch]= useState(false)
+  const [shouldFetch, setShouldFetch] = useState(false);
 
   // const handleClick = () => {
   async function FetchRelationship() {
@@ -77,8 +81,7 @@ const SingleProfileComponent = (props) => {
         navigate("/login");
         return;
       }
-      setShouldFetch(false)
-
+      setShouldFetch(false);
     } catch (e) {
       console.log("error fetching relationshiip", e);
     }
@@ -98,22 +101,16 @@ const SingleProfileComponent = (props) => {
       const data = await response.json();
       updateisGroupMember(data.ismember);
       updateGroupRequested(data.requested);
-      setShouldFetch(false)
-
-
-    
+      setShouldFetch(false);
     } catch (e) {
       console.log("error fetching groupinfo", e);
     }
   }
 
   useEffect(() => {
-    
     if (userID > 0 && shouldFetch) FetchRelationship();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
-
-
 
   useEffect(() => {
     if (GroupID > 0 && shouldFetch) FetchGroupInfo();
@@ -165,14 +162,32 @@ const SingleProfileComponent = (props) => {
   groupChatsForm.append("groupID", props.groupID);
   // get the groupID from the click
 
+  const [groupMessageIcon, setGroupMessageIcon] = useState(
+    props.newGroupMessage
+  );
+
+  const removeSocketIcon = () => {
+    if (props.newSocketGroupMessage) {
+      setSocketGroupIDs(socketGroupIDs.filter((id) => id !== props.groupID));
+    }
+  };
+
   async function fetchGroupMessages() {
+    groupChatsForm.append("hasMessageIcon", groupMessageIcon);
+    groupChatsForm.append("hasSocketMessageIcon", props.newSocketGroupMessage);
+
+    groupChatsForm.append(
+      "loggedInUser",
+      JSON.parse(localStorage.getItem("loggedInUser")).ID
+    );
+
     const resp = await fetch("http://localhost:8080/sendgroupmessages", {
       method: "POST",
       credentials: "include",
       body: groupChatsForm,
     });
     const data = await resp.json();
-    console.log("group messages data, lets see what it is", groupMessages);
+
     updateGroupMessages(data);
   }
 
@@ -182,7 +197,7 @@ const SingleProfileComponent = (props) => {
         role="presentation"
         onClick={(e) => {
           e.preventDefault();
-          setShouldFetch(true)
+          setShouldFetch(true);
           updateNavClicked(false);
           updateUserID(Number(e.currentTarget.id));
           updateDynamicID(e.currentTarget.id);
@@ -240,7 +255,6 @@ const SingleProfileComponent = (props) => {
           setName(props.chatName);
           setGroupClicked(false);
 
-
           console.log("props.id -> ", props.id);
           console.log("LAST CLICKED USER IN SPC -> ", lastClickedUser);
 
@@ -289,8 +303,11 @@ const SingleProfileComponent = (props) => {
           setShow(true);
           setName(props.chatName);
           setGroupClicked(true);
-          console.log("props.groupID???? ", props.groupID);
+          setGroupMessageIcon(false);
+          removeSocketIcon();
+          updateClickedGroupID(props.groupID);
         }}
+        id={props.id}
       >
         <ChatBox
           onClose={() => {
@@ -306,7 +323,12 @@ const SingleProfileComponent = (props) => {
         <div className="ChatPic">
           <img src={props.avatar} width="25" height="25" alt="chat-pic" />
         </div>
-        <p className="ChatName">{props.chatName}</p>
+        <p className="ChatName">
+          {props.chatName}{" "}
+          {groupMessageIcon || props.newSocketGroupMessage ? (
+            <FontAwesomeIcon icon={faMessage} className="chatNotifIcon" />
+          ) : null}
+        </p>
       </div>
     );
   }

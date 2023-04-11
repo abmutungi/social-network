@@ -58,6 +58,11 @@ type FollowerPrivateData struct {
 	Tipo             string `json:"tipo"`
 }
 
+type GroupChatRead struct {
+	LoggedInUser int `json:"loggedInUser"`
+	GroupID      int `json:"groupID"`
+}
+
 type T struct {
 	TypeChecker
 	*notifications.Notification
@@ -70,6 +75,7 @@ type T struct {
 	*GroupMembers
 	*GroupEvent
 	*RemoveChatNotif
+	*GroupChatRead
 }
 
 type TypeChecker struct {
@@ -113,8 +119,11 @@ type RemoveChatNotif struct {
 }
 
 type GroupMessages struct {
-	GroupM []chats.Chat `json:"groupMessages"`
-	Tipo   string       `json:"tipo"`
+	GroupM   []chats.Chat `json:"groupMessages"`
+	Tipo     string       `json:"tipo"`
+	NewNotif string       `json:"newNotif"`
+	GroupIDs []int        `json:"groupIDs"`
+	GroupID  int          `json:"groupID"`
 }
 
 func (t *T) UnmarshalData(data []byte) error {
@@ -145,6 +154,9 @@ func (t *T) UnmarshalData(data []byte) error {
 		t.RemoveChatNotif = &RemoveChatNotif{}
 		return json.Unmarshal(data, t.RemoveChatNotif)
 
+	case "groupChatboxClosed":
+		t.GroupChatRead = &GroupChatRead{}
+		return json.Unmarshal(data, t.GroupChatRead)
 	default:
 		return fmt.Errorf("unrecognized type value %q", t.Type)
 
@@ -264,19 +276,35 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			// store group message in the database
 			chats.StoreGroupMessage(s.Db, groupIdInt, f.MessageContent, senderIdInt)
+			allgroupmembers := groups.GetAllGroupMembers(s.Db, groupIdInt)
 
-			// f.NewMessage.Tipo = "newGroupMessage"
+			for _, memberID := range allgroupmembers {
+				if senderIdInt != memberID {
+					notifications.StoreNotification(s.Db, "groupMessage", memberID, senderIdInt, groupIdInt)
+				}
+			}
 
 			for id, conn := range loggedInSockets {
 				// need to check if the id is a member of a group
+				var gm GroupMessages
+				if id != senderIdInt {
+					gm.NewNotif = "true"
+					gm.GroupIDs = notifications.GetGroupChatNotifs(s.Db, id)
+					fmt.Println("new Messages from this groupID", gm.GroupIDs)
+				}
+
 				if groups.GroupMemberCheck(s.Db, groupIdInt, id) {
-					var gm GroupMessages
 					gm.GroupM = chats.GetGroupChatHistory(s.Db, groupIdInt)
 					gm.Tipo = "newGroupMessage"
+					gm.GroupID = groupIdInt
 					conn.WriteJSON(gm)
 				}
 			}
 
+		}
+
+		if f.Type == "groupChatboxClosed" {
+			notifications.ReadGroupChatNotif(s.Db, f.GroupChatRead.LoggedInUser, f.GroupChatRead.GroupID)
 		}
 
 		if f.Type == "groupNotifs" {

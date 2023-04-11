@@ -35,6 +35,10 @@ type ChatNotifiers struct {
 	NotifiersArr []string `json:"notifiers"`
 }
 
+type GroupChatNotifs struct {
+	GroupIDs []int `json:"groupIDs"`
+}
+
 func sendNewNotif(w http.ResponseWriter, notifResp NotifResponse) {
 	resp, err := json.Marshal(notifResp)
 	if err != nil {
@@ -223,5 +227,28 @@ func (s *Server) HandleChatNotificationsOnLogin() http.HandlerFunc {
 		ntfrs, _ := json.Marshal(n)
 
 		w.Write(ntfrs)
+	}
+}
+
+func (s *Server) HandleGroupChatNotifsOnLogin() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCors(&w)
+
+		err := r.ParseMultipartForm(10 << 20)
+
+		if err != nil {
+			fmt.Printf("error parsing userID form: %v\n", err)
+		}
+
+		loggedInIdInt, _ := strconv.Atoi((r.Form.Get("loggedInID")))
+
+		var gcn GroupChatNotifs
+
+		gcn.GroupIDs = notifications.GetGroupChatNotifs(s.Db, loggedInIdInt)
+
+		fmt.Println("checking if correct groupIDs are being sent", gcn.GroupIDs)
+		gcnMarshalled, _ := json.Marshal(gcn)
+		w.Write(gcnMarshalled)
+
 	}
 }

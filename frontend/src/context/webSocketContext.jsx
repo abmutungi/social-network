@@ -18,6 +18,10 @@ const SocketProvider = ({ children }) => {
   if (localStorage.length > 0) {
     loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
   }
+  const [newSocketGroupMessage, setNewSocketGroupMessage] = useState(false);
+  const [socketGroupIDs, setSocketGroupIDs] = useState([]);
+
+  const [clickedGroupID, setClickedGroupID] = useState(0);
   useEffect(() => {
     if (openSocket || performance.navigation.TYPE_RELOAD) {
       // create and open socket when component mounts
@@ -40,9 +44,7 @@ const SocketProvider = ({ children }) => {
   if (!!socket) {
     socket.onmessage = (e) => {
       const newData = JSON.parse(e.data);
-      console.log("newData check --> ", e.data);
-
-      console.log("sent through ws **********");
+      // console.log("newData check --> ", e.data);
 
       if (newData.tipo === "chatHistory") {
         console.log(
@@ -107,6 +109,13 @@ const SocketProvider = ({ children }) => {
               (item) => item !== clickedName
             );
           setSocketChatNotif(socketNotifObj);
+          // updateChatMessages(newData.chatsfromgo);
+          // updateSocketChatNotifs(true);
+          // if (newData.chatsfromgo) {
+          //   updateLastSender(
+          //     newData.chatsfromgo[newData.chatsfromgo.length - 1].chatsender
+          //   );
+          // }
         }
       }
 
@@ -115,15 +124,42 @@ const SocketProvider = ({ children }) => {
         updateNewNotifsExist(newData);
         console.log("socket on message in notif bell --------->", newData);
       }
-      console.log("sent through ws **********");
 
       if (newData.tipo === "newGroupMessage") {
-        // need to create a new struct on backend with a []chats and tipo == newgroupMessage
-        setGroupMessages(newData.groupMessages);
+        // only update if the opened chat box is same group id as the incoming group ID
+        // console.log("before removing through socket", socketGroupIDs);
+        if (clickedGroupID > 0 && clickedGroupID == newData.groupID) {
+          console.log("checking clicked group", clickedGroupID);
+
+          // console.log("after removing through socket", socketGroupIDs);
+          setGroupMessages(newData.groupMessages);
+        }
+
+        // only for the message receivers
+        if (newData.newNotif === "true") {
+          setNewSocketGroupMessage(true);
+          setSocketGroupIDs(newData.groupIDs);
+
+          if (clickedGroupID > 0 && clickedGroupID == newData.groupID) {
+            setSocketGroupIDs(
+              socketGroupIDs.filter((groupID) => groupID !== clickedGroupID)
+            );
+            // set the message to read through the socket, if the chatbox is open
+            const messageToRead = {};
+
+            messageToRead["loggedInUser"] = JSON.parse(
+              localStorage.getItem("loggedInUser")
+            ).ID;
+            messageToRead["groupID"] = clickedGroupID;
+            messageToRead["type"] = "groupChatboxClosed";
+            socket.send(JSON.stringify(messageToRead));
+
+            setNewSocketGroupMessage(false);
+          }
+        }
       }
     };
   }
-
   const createSocket = (bool) => {
     setOpenSocket(bool);
   };
@@ -147,14 +183,16 @@ const SocketProvider = ({ children }) => {
     setSocketChatNotif(() => data);
   };
 
-  
-
   const updateLastClickedUser = (id) => {
     setLastClickedUser(() => id);
   };
 
   const updateClickedName = (name) => {
     setClickedName(() => name);
+  };
+
+  const updateClickedGroupID = (data) => {
+    setClickedGroupID(() => data);
   };
 
   return (
@@ -176,6 +214,12 @@ const SocketProvider = ({ children }) => {
         socketChatNotif,
         updateSocketChatNotifs,
         lastMsgSender,
+        newSocketGroupMessage,
+        setNewSocketGroupMessage,
+        socketGroupIDs,
+        setSocketGroupIDs,
+        clickedGroupID,
+        updateClickedGroupID,
       }}
     >
       {children}

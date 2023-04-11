@@ -29,6 +29,9 @@ const ChatBox = ({
     updateSocketChatNotifs,
     updateLastClickedUser,
     updateClickedName,
+    socketGroupIDs,
+    setSocketGroupIDs,
+    updateClickedGroupID,
   } = useContext(SocketContext);
 
   // const { updateMessages } = useContext(loggedInUserContext);
@@ -84,7 +87,7 @@ const ChatBox = ({
   };
   let currentUser = name;
 
-  console.log("name prop check --> ", name);
+  // console.log("name prop check --> ", name);
 
   // let object = {};
   // fetchChatsForm.forEach(function (value, key) {
@@ -114,16 +117,28 @@ const ChatBox = ({
   //   }
   // };
 
-  // const combinedClickHandler = () => {
-  //   onClose();
-  //   deleteNotif();
-  // };
+  // onchatbox click set groupChatNotification to read for groupMember
+  // remove them from groupChatID notifs array
+  const groupChatRead = () => {
+    setSocketGroupIDs(socketGroupIDs.filter((groupID) => groupID !== id));
+  };
+
+  // after closing chatbox, set the notifcation to read
+  const setGroupMessageToRead = () => {
+    const messageToRead = {};
+
+    messageToRead["loggedInUser"] = JSON.parse(
+      localStorage.getItem("loggedInUser")
+    ).ID;
+    messageToRead["groupID"] = id;
+    messageToRead["type"] = "groupChatboxClosed";
+    socket.send(JSON.stringify(messageToRead));
+  };
 
   if (!show) {
     return null;
   }
 
-  // console.log("checking group messages in chatbox", data);
   return (
     <>
       <div
@@ -146,6 +161,9 @@ const ChatBox = ({
                 updateLastClickedUser(0);
                 updateClickedName("");
                 removeOpenChatNotifs();
+                groupChatRead();
+                setGroupMessageToRead();
+                updateClickedGroupID(0);
               }}
               icon={faXmark}
               className="chat-header-close"

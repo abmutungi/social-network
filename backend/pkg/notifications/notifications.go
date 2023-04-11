@@ -56,7 +56,10 @@ func ActionNotification(db *sql.DB, notifID, userID, followerID int) {
 
 func NotificationCheck(db *sql.DB, loggedInUser int) bool {
 	var count int
-	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? AND read=0 AND actioned = 0 AND NOT notificationType="privateMessage"`, loggedInUser).Scan(&count)
+	err := db.QueryRow(`SELECT COUNT (*) FROM notifications where notifiyee = ? 
+	AND read=0 AND actioned = 0 
+	AND NOT notificationType="privateMessage" 
+	AND NOT notificationType="groupMessage"`, loggedInUser).Scan(&count)
 	if err != nil {
 		log.Println("Error from NotificationCheck fn():", err)
 		return false
@@ -71,7 +74,9 @@ func NotificationCheck(db *sql.DB, loggedInUser int) bool {
 }
 
 func ReadNotification(db *sql.DB, userID int) {
-	result, err := db.Exec("UPDATE notifications SET read = 1 WHERE notifiyee =? AND NOT notificationType='privateMessage'", userID)
+	result, err := db.Exec(`UPDATE notifications SET read = 1 WHERE notifiyee =? 
+	AND NOT notificationType="privateMessage"
+	AND NOT notificationType="groupMessage"`, userID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,7 +89,11 @@ func ReadNotification(db *sql.DB, userID int) {
 
 func GetNotifications(db *sql.DB, userID int) []Notification {
 	rows, err := db.Query(`SELECT notificationID, notificationType, notifiyee, notifier, firstName, lastName, notifications.createdAt, 
-	notifications.groupID, notifications.eventID FROM notifications INNER JOIN users ON notifier=userID WHERE notifiyee = ? AND actioned=0 AND NOT notificationType="privateMessage"`, userID)
+	notifications.groupID, notifications.eventID FROM notifications 
+	INNER JOIN users ON notifier=userID WHERE notifiyee = ? 
+	AND actioned=0 
+	AND NOT notificationType="privateMessage"
+	AND NOT notificationType="groupMessage"`, userID)
 	if err != nil {
 		log.Println("Error from GetNotifications fn():", err)
 		return nil
@@ -230,4 +239,44 @@ func ReadChatNotification(db *sql.DB, notifiyeeID, notifierID int) {
 		log.Fatal(err)
 	}
 	fmt.Println(rows)
+}
+
+// return all groupIDs that you have a chat from
+func GetGroupChatNotifs(db *sql.DB, userID int) []int {
+	rows, err := db.Query(`SELECT DISTINCT groupID from notifications 
+	WHERE notifiyee = ? AND read = 0 AND notificationType = "groupMessage"`, userID)
+
+	if err != nil {
+		fmt.Printf("Error when querying db for group chat notifications: %v\n", err)
+	}
+
+	defer rows.Close()
+
+	var groupIDs []int
+
+	for rows.Next() {
+		var groupID int
+
+		err := rows.Scan(&groupID)
+
+		if err != nil {
+			fmt.Printf("Error when scanning through rows for group IDs: %v\n", err)
+		}
+
+		groupIDs = append(groupIDs, groupID)
+	}
+
+	return groupIDs
+
+}
+
+func ReadGroupChatNotif(db *sql.DB, userID int, groupID int) {
+	_, err := db.Exec(`UPDATE notifications SET read = 1 
+	WHERE notifiyee = ? 
+	AND groupID = ? 
+	AND notificationType="groupMessage"`, userID, groupID)
+	if err != nil {
+		fmt.Printf("Error update group chat message to read : %v", err)
+	}
+
 }
