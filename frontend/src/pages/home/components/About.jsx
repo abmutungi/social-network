@@ -22,13 +22,13 @@ function AboutMe({ text, email, dob, nickname }) {
                     {text}
                     </div>
                      <div>
-                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser|| Following ? email: ""}
+                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser|| Following && !groupNotUser ? email: ""}
                     </div>
                      <div>
-                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser|| Following ? `Birthday: ${dob}`: ""}
+                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser|| Following  && !groupNotUser ? `Birthday: ${dob}`: ""}
                     </div>
                      <div>
-                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser || Following ? nickname: ""}
+                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser || Following && !groupNotUser ? nickname: ""}
                     </div>
             </div>
             </div>

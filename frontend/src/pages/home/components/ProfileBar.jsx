@@ -94,9 +94,9 @@ const ProfileBar = () => {
     });
 
     const data = await resp.json();
-    var fcount = getFollowCount(data) + ' following'
-    setfollowing(fcount )
-
+    let fcount = getFollowCount(data)
+    let ftext = fcount > 1 ? fcount + ' following':''
+    setfollowing(ftext )
    // data.length >0 ?  setfollowing(data.length) : setfollowing('0 Following')
 
   }
@@ -127,6 +127,18 @@ const ProfileBar = () => {
     //}
   };
 
+  const GroupMembers = () => {
+    
+    const members = AllGroupsData.filter((count) => count.GroupID == GroupID)
+
+    let groupMemberText = members[0].Members + ' members'
+    
+    setfollowing(groupMemberText)
+
+    console.log(members);
+
+  }
+
   const updateGroupProfile = (groupid) => {
     updategroupNotUser(true);
     for (const obj of AllGroupsData) {
@@ -147,7 +159,8 @@ const ProfileBar = () => {
 
   useEffect(() => {
     GetFollowerCount(userID,'followers')
-    GetFollowingCount(userID,'following')
+    GetFollowingCount(userID, 'following')
+    
     if (userID > 0) updateUserProfile(userID);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
@@ -155,7 +168,10 @@ const ProfileBar = () => {
 
   useEffect(() => {
 
-    if (GroupID > 0) updateGroupProfile(GroupID);
+    if (GroupID > 0) {
+      updateGroupProfile(GroupID);
+      GroupMembers()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
 
