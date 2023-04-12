@@ -132,16 +132,15 @@ const ProfileBar = () => {
     const members = AllGroupsData.filter((count) => count.GroupID == GroupID)
 
     let groupMemberText = members[0].Members + ' members'
+    return groupMemberText
     
-    setfollowing(groupMemberText)
 
-    console.log(members);
+  
 
   }
-
   const updateGroupProfile = (groupid) => {
     updategroupNotUser(true);
-    for (const obj of AllGroupsData) {
+    for (const obj of AllGroupsData) { 
       if (obj.GroupID == groupid) {
         setfirstName(obj.GroupName);
         setlastName("");
@@ -170,7 +169,7 @@ const ProfileBar = () => {
 
     if (GroupID > 0) {
       updateGroupProfile(GroupID);
-      GroupMembers()
+      
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
@@ -187,7 +186,7 @@ const ProfileBar = () => {
         <ProfileInfo
           ProfileName={`${firstName}${" "}${lastName}`}
           Followers={followers}
-          Following={following}
+          Following={ !groupNotUser ? following : GroupMembers()}
         />
         <div className="ProfileBtnContainer">
           {userID === LoggedInUserID && !groupNotUser ? <PrivateBtn /> : null}

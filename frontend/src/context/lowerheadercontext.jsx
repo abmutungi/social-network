@@ -136,6 +136,7 @@ export function LowerHeaderProvider({ children }) {
 
   const updateGroupID = (id) => {
     setGroupID(() => id);
+    
   };
 
   const updateAllGroupsData = (data) => {
