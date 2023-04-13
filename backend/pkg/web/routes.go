@@ -2,7 +2,7 @@ package web
 
 func (s *Server) Routes() {
 	// s.Router.HandleFunc("/", s.Home)
-	s.Router.HandleFunc("/register", s.HandleRegister())
+	s.Router.HandleFunc("/register", s.LogInPageSessionChecker(s.HandleRegister()))
 	s.Router.HandleFunc("/follow", s.GeneralSessionChecker(s.HandlePublicFollow()))
 	s.Router.HandleFunc("/followCheck", s.GeneralSessionChecker(s.HandleFollowCheck()))
 	s.Router.HandleFunc("/unfollow", s.GeneralSessionChecker(s.HandleUnfollow()))
@@ -30,7 +30,7 @@ func (s *Server) Routes() {
 
 	s.Router.HandleFunc("/myfollowers", s.GeneralSessionChecker(s.HandleUserFollowers()))
 	s.Router.HandleFunc("/groupinvite", s.GeneralSessionChecker(s.HandleGroupInvite()))
-	s.Router.HandleFunc("/getgroupinvitees", s.GeneralSessionChecker(s.HandleGetGroupInvitees()))
+	s.Router.HandleFunc("/getgroupinvitees", s.HandleGetGroupInvitees())
 	s.Router.HandleFunc("/getnavdata", s.HandleGetNavData())
 
 	s.Router.HandleFunc("/mygroupchats", s.GeneralSessionChecker(s.HandleMyGroupChats()))

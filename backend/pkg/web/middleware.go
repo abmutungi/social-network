@@ -21,7 +21,7 @@ func (s Session) isExpired() bool {
 	return s.Expiry.Before(time.Now())
 }
 
-func LogInPageSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
+func (s *Server) LogInPageSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var lr LoginResponse
 		// data, _ := io.ReadAll(r.Body)
@@ -30,10 +30,13 @@ func LogInPageSessionChecker(HandlerFunc http.HandlerFunc) http.HandlerFunc {
 		if len(r.Cookies()) == 0 {
 
 			HandlerFunc.ServeHTTP(w, r)
+			fmt.Println("There are no cookies here")
 		} else {
 			//lr.User = CurrentUser
+			fmt.Println("There is a cookie, should redirect back to home")
+
 			sendLoginMessage(w, lr, true, "User is already logged in")
-			http.Redirect(w, r, "http://localhost:5173/", http.StatusSeeOther)
+			http.Redirect(w, r, "http://localhost:5173/home", http.StatusSeeOther)
 		}
 
 	}
