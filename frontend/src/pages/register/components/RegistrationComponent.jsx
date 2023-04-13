@@ -1,17 +1,107 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/css/register.css";
 import { Login } from "../../login/components/LoginComponent";
 import { Link, Route, Routes } from "react-router-dom";
+import { SocketContext } from "../../../context/webSocketContext";
+import { loggedInUserContext } from "../../../context/loggedInUserContext";
+import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { PublicText, PrivateText } from "../../home/components/PrivateBtn";
+
 
 const Register = () => {
+  const navigate = useNavigate();
+
+  const { loggedInUser, updateLoggedInUser } = useContext(loggedInUserContext);
+  const { createSocket, updateNewNotifsExist } = useContext(SocketContext);
+  const {
+    updateAboutText,
+    updateEmail,
+    updateNickname,
+    updateDOB,
+    updateUserID,
+    updateLoggedInUserID,
+    updatePrivacyStatus,
+    PrivacyStatus,
+    updatePrivacyBtnText,
+    updateDynamicID,
+    updateProfilePhotoBackground,
+  } = useContext(LowerHeaderContext);
+
+  async function loginRCheck() {
+    console.log("cookie check => ", document.cookie);
+    console.log(
+      "cookie id check => ",
+      document.cookie.slice(document.cookie.indexOf("=") + 1)
+    );
+
+    let userCookie = {
+      CookieID: document.cookie.slice(document.cookie.indexOf("=") + 1),
+    };
+    console.log("CURRENT USER CHECK -> ", loggedInUser);
+    const response = await fetch("http://localhost:8080/frontendreg", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(userCookie),
+
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    const data = await response.json();
+    console.log("Data check -> ", data);
+    if (!data.success) {
+      const currentUser = {
+        ID: data.User.UserID,
+        Email: data.User.Email,
+        FName: data.User.Firstname,
+        LName: data.User.Lastname,
+        AboutText: data.User.AboutText,
+        Privacy: data.User.Privacy,
+        Avatar: data.User.Avatar,
+        Notifications: data.User.Notifications,
+        DOB: data.User.DOB,
+        Nickname: data.User.Nickname,
+      };
+      console.log(currentUser);
+      updateLoggedInUser(currentUser);
+      updateUserID(currentUser.ID);
+      updateAboutText(currentUser.AboutText);
+      updateEmail(currentUser.Email);
+      updateDOB(currentUser.DOB);
+      updateNickname(currentUser.Nickname);
+      updateLoggedInUserID(currentUser.ID);
+      updatePrivacyStatus(currentUser.Privacy);
+      updateNewNotifsExist(currentUser.Notifications);
+
+      currentUser.Avatar != ""
+        ? updateProfilePhotoBackground(currentUser.Avatar)
+        : updateProfilePhotoBackground("userdefaulttwo.png");
+      // updateDynamicID(currentUser.ID);
+      if (PrivacyStatus) updatePrivacyBtnText(PrivateText);
+      if (!PrivacyStatus) updatePrivacyBtnText(PublicText);
+
+      // console.log(
+      //   "CURRENT USER ID BEING PASSED TO UPDATE DYNAMIC =====>",
+      //   currentUser.ID
+      // );
+      // updateDynamicID(currentUser.ID);
+      console.log(loggedInUser);
+      navigate("/home");
+    } else {
+      return;
+    }
+  }
+  if (document.cookie !== "") loginRCheck();
+  
   //State to hold errors
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [img, setImg] = useState(null);
   const [imgName, setImgName] = useState("");
-  const navigate = useNavigate();
 
   // State to store form values
   const [formValues, setFormValues] = useState({

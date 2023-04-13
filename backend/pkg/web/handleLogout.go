@@ -100,3 +100,32 @@ func (s *Server) frontendLogin() http.HandlerFunc {
 		}
 	}
 }
+
+func (s *Server) frontendRegister() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCors(&w)
+		var lrData LogoutInfo
+
+		c, err := r.Cookie("session_cookie")
+		if err != nil {
+			if err == http.ErrNoCookie {
+				lrData.Success = true
+				r, errM := json.Marshal(lrData)
+				if errM != nil {
+					fmt.Println("Error when marshalling response for successful visit to log in: ", errM)
+				}
+				w.Write(r)
+			}
+		} else {
+
+			lrData.Success = false
+			//Use the cookie vlaue which is the uuid to get the email from the map
+			email := users.GetEmailFromUserID(s.Db, SessionsStructMap[c.Value].UserID)
+			lrData.User = users.ReturnSingleUser(s.Db, email)
+			fmt.Println("Checking lrData struct in feLogin: ", lrData)
+			r, _ := json.Marshal(lrData)
+			w.Write(r)
+			fmt.Println("Logged in user went to register in frontend check")
+		}
+	}
+}

@@ -18,6 +18,7 @@ func (s *Server) Routes() {
 	s.Router.HandleFunc("/login", (s.HandleLogin()))
 	s.Router.HandleFunc("/logout", s.HandleLogout())
 	s.Router.HandleFunc("/frontendlogin", s.frontendLogin())
+	s.Router.HandleFunc("/frontendreg", s.frontendRegister())
 	s.Router.HandleFunc("/createpost", s.GeneralSessionChecker(s.HandleCreatePost()))
 	s.Router.HandleFunc("/storecomment", (s.handleComment()))
 	s.Router.HandleFunc("/myposts", s.HandleSendUserPosts())
