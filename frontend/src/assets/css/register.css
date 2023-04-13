@@ -97,9 +97,9 @@ input:focus {
 
 .successMsg {
   color: green;
-  position: absolute;
+  /* position: absolute;
   left: 1000px;
-  top: 60px;
+  top: 60px; */
   font-size: large;
 }
 

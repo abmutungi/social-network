@@ -20,7 +20,6 @@ const followText = (
   </>
 );
 
-
 const joinText = (
   <>
     <FontAwesomeIcon icon={faUserGroup} />
@@ -55,9 +54,8 @@ const UserRequestBtn = () => {
     updateRequested,
   } = useContext(LowerHeaderContext);
 
-  const {socket} = useContext(SocketContext)
+  const { socket } = useContext(SocketContext);
   const handleClick = () => {
-
     if (!PrivacyStatus) {
       if (FollowText === followText) {
         fetch("http://localhost:8080/follow", {
@@ -87,18 +85,20 @@ const UserRequestBtn = () => {
       }
     } else {
       if (FollowText == followText) {
-        updateFollowText(requestText);
-   
-        socket.send(JSON.stringify({
-          notificationType: "followRequest",
-          notifiyee: userID,
-          notifier: LoggedInUserID,
-          type: "followNotifs"
-        }))
-        
+        // updateFollowText(requestText);
+
+        socket.send(
+          JSON.stringify({
+            notificationType: "followRequest",
+            notifiyee: userID,
+            notifier: LoggedInUserID,
+            type: "followNotifs",
+          })
+        );
+
         updateFollowText(requestText);
         updateRequested(true);
-        //updateFollowing(false);
+        updateFollowing(false);
         console.log(`...follow request sent to ${userID}`);
       } else if (FollowText === unfollowText) {
         updateFollowText(followText);

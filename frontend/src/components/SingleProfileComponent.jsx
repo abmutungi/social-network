@@ -67,6 +67,7 @@ const SingleProfileComponent = (props) => {
       const data = await response.json();
 
       if (data.canFollow) {
+        // updatePrivacyStatus(false);
         updateFollowing(false);
         updateFollowText(followText);
       } else if (data.following) {
@@ -75,16 +76,18 @@ const SingleProfileComponent = (props) => {
       } else if (data.requested) {
         updateRequested(true);
         updateFollowText(requestText);
+        updateFollowing(false);
       }
 
       if (data.msg) {
-        navigate("/login");
+        navigate("/");
         return;
       }
       setShouldFetch(false);
     } catch (e) {
       console.log("error fetching relationshiip", e);
     }
+    console.log("FETCH RELATIONSHIP FUNCTION");
   }
 
   async function FetchGroupInfo() {

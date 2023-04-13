@@ -41,7 +41,7 @@ const SinglePost = (props) => {
           {props.commentsCount} comments
         </button>
       </div>
-    
+
       <Comments comments={commentsToPass} postID={props.postID} />
     </div>
   );
@@ -64,12 +64,10 @@ const PostsContainer = () => {
     navClicked,
     navData,
     PrivacyStatus,
-    Following
+    Following,
   } = useContext(LowerHeaderContext);
 
-  const {
-    groupEventSocket
-  } = useContext(SocketContext);
+  const { groupEventSocket } = useContext(SocketContext);
 
   // fetch home posts for the logged in user
   const userForm = new FormData();
@@ -91,7 +89,6 @@ const PostsContainer = () => {
   if (groupNotUser) {
     userForm.append("GuserID", LoggedInUserID);
   }
-
 
   async function fetchPosts() {
     const resp = await fetch("http://localhost:8080/myposts", {
@@ -115,13 +112,11 @@ const PostsContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickedValue]);
 
-   // make a network request on component render.
-   useEffect(() => {
-    updateGroupEvents(groupEventSocket)
+  // make a network request on component render.
+  useEffect(() => {
+    updateGroupEvents(groupEventSocket);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupEventSocket]);
-
- 
 
   // if there is no image return "" else return img path as prop
   const handlePostImgPath = (strImgPath) => {
@@ -138,7 +133,7 @@ const PostsContainer = () => {
   };
 
   if (
-    (!groupNotUser & !navClicked && !PrivacyStatus)|| 
+    (!groupNotUser & !navClicked && !PrivacyStatus) ||
     (!groupNotUser & !navClicked && PrivacyStatus && Following) ||
     (!groupNotUser & !navClicked &&
       PrivacyStatus &&
@@ -176,7 +171,7 @@ const PostsContainer = () => {
             <br></br>
             <br></br>
             This account is private
-                        <br></br>
+            <br></br>
             Follow this account to see their posts and info.
             <br></br>
           </div>
@@ -201,8 +196,7 @@ const PostsContainer = () => {
               />
             ))}
           </div>
-          {posts?.map((post) =>   (
-            
+          {posts?.map((post) => (
             <SinglePost
               key={post.grouppostID}
               profileImgPath={handleProfilePicImgPath(post.profilePic)}
@@ -218,7 +212,11 @@ const PostsContainer = () => {
         </div>
       </>
     );
-  } else if (navClicked) {
+  } else if (
+    (navClicked && Following) ||
+    (navClicked && !PrivacyStatus) ||
+    (PrivacyStatus && LoggedInUserID === DynamicID)
+  ) {
     return (
       <>
         <div className="nav-bar-style">
@@ -260,9 +258,9 @@ const PostsContainer = () => {
             <FontAwesomeIcon icon="fa-solid fa-lock" />
             <br></br>
             <br></br>
-            This group is private
-                        <br></br>
-            Join this group to see their posts and events.
+            This page is private
+            <br></br>
+            Join this group / follow this user to see their profile.
             <br></br>
           </div>
         </div>

@@ -29,8 +29,6 @@ import { GroupInviteBtn } from "./GroupInviteBtn";
 import { GroupPostBtn } from "./GroupPostBtn";
 import { GroupCreateEventBtn } from "./GroupCreateEventBtn";
 
-
-
 // import { FetchRelationship } from "../../../components/SingleProfileComponent";
 const ProfileBar = () => {
   const {
@@ -57,7 +55,6 @@ const ProfileBar = () => {
   } = useContext(LowerHeaderContext);
   const { loggedInUser } = useContext(loggedInUserContext);
 
-
   const [firstName, setfirstName] = useState(loggedInUser.FName);
   const [lastName, setlastName] = useState(loggedInUser.LName);
   const [followers, setfollowers] = useState();
@@ -75,13 +72,10 @@ const ProfileBar = () => {
 
     const data = await resp.json();
 
-    let count = getFollowCount(data)
-    let  text = count > 1 ? count + ' followers' : ''
-    setfollowers(text)
-   
-
+    let count = getFollowCount(data);
+    let text = count > 0 ? count + " followers" : "";
+    setfollowers(text);
   }
-
 
   async function GetFollowingCount(userid, type) {
     const navForm = new FormData();
@@ -94,21 +88,18 @@ const ProfileBar = () => {
     });
 
     const data = await resp.json();
-    let fcount = getFollowCount(data)
-    let ftext = fcount > 1 ? fcount + ' following':''
-    setfollowing(ftext )
-   // data.length >0 ?  setfollowing(data.length) : setfollowing('0 Following')
-
+    let fcount = getFollowCount(data);
+    let ftext = fcount > 0 ? fcount + " following" : "";
+    setfollowing(ftext);
+    // data.length >0 ?  setfollowing(data.length) : setfollowing('0 Following')
   }
-
-
 
   const updateUserProfile = (userid) => {
     updategroupNotUser(false);
 
     for (const obj of DBAllUsers) {
       if (obj.UserID == userid) {
-        console.log('FROM LOOP--->', obj);
+        console.log("FROM LOOP--->", obj);
         setfirstName(obj.Firstname);
         setlastName(obj.Lastname);
         updateEmail(obj.Email);
@@ -128,52 +119,41 @@ const ProfileBar = () => {
   };
 
   const GroupMembers = () => {
-    
-    const members = AllGroupsData.filter((count) => count.GroupID == GroupID)
+    const members = AllGroupsData.filter((count) => count.GroupID == GroupID);
 
-    let groupMemberText = members[0].Members + ' members'
-    return groupMemberText
-    
-
-  
-
-  }
+    let groupMemberText = members[0].Members + " members";
+    return groupMemberText;
+  };
   const updateGroupProfile = (groupid) => {
     updategroupNotUser(true);
-    for (const obj of AllGroupsData) { 
+    for (const obj of AllGroupsData) {
       if (obj.GroupID == groupid) {
         setfirstName(obj.GroupName);
         setlastName("");
-        
-      obj.Avatar != ""
-          ? updateProfilePhotoBackground(obj.Avatar) 
+
+        obj.Avatar != ""
+          ? updateProfilePhotoBackground(obj.Avatar)
           : updateProfilePhotoBackground("creategroupposticonone.png");
         updateAboutText(obj.AboutText);
-        
       }
-     
     }
     updateUserID(0);
   };
 
   useEffect(() => {
-    GetFollowerCount(userID,'followers')
-    GetFollowingCount(userID, 'following')
-    
+    GetFollowerCount(userID, "followers");
+    GetFollowingCount(userID, "following");
+
     if (userID > 0) updateUserProfile(userID);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
 
-
   useEffect(() => {
-
     if (GroupID > 0) {
       updateGroupProfile(GroupID);
-      
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [GroupID]);
-
 
   return (
     <>
@@ -186,11 +166,10 @@ const ProfileBar = () => {
         <ProfileInfo
           ProfileName={`${firstName}${" "}${lastName}`}
           Followers={followers}
-          Following={ !groupNotUser ? following : GroupMembers()}
+          Following={!groupNotUser ? following : GroupMembers()}
         />
         <div className="ProfileBtnContainer">
           {userID === LoggedInUserID && !groupNotUser ? <PrivateBtn /> : null}
-      
 
           {userID === LoggedInUserID && !groupNotUser ? (
             <ProfilePostBtn />
@@ -203,7 +182,9 @@ const ProfileBar = () => {
           {/* {console.log("**FOLOWING IS**", Following)} */}
           <ProfileEventBtn />
           {groupNotUser && !isGroupMember ? (
-            <GroupRequestBtn hasRequested={GroupRequested ? requestText : joinText}/>
+            <GroupRequestBtn
+              hasRequested={GroupRequested ? requestText : joinText}
+            />
           ) : null}
           {userID != LoggedInUserID && !groupNotUser ? (
             <StaticBtn status={!PrivacyStatus ? "Public" : "Private"} />
@@ -217,13 +198,11 @@ const ProfileBar = () => {
   );
 };
 
-const getFollowCount = (arr)=>{
-  
-  if(arr == null||arr == undefined) {
-    return 0
+const getFollowCount = (arr) => {
+  if (arr == null || arr == undefined) {
+    return 0;
   }
-  return arr.length
-
-}
+  return arr.length;
+};
 
 export default ProfileBar;

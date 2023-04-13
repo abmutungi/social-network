@@ -1,9 +1,9 @@
 import "../../../assets/css/navbar.css";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
-import {  useContext } from "react";
+import { useContext } from "react";
 
 const NavBar = () => {
-  const { updateNavData, updateNavClicked, LoggedInUserID } =
+  const { updateNavData, updateNavClicked, LoggedInUserID, DynamicID } =
     useContext(LowerHeaderContext);
 
   function handleClick(data) {
@@ -43,7 +43,7 @@ const NavBar = () => {
 
   async function GetNavBarData(type) {
     const navForm = new FormData();
-    navForm.append("LIU", LoggedInUserID);
+    navForm.append("LIU", DynamicID);
     navForm.append("Type", type);
 
     const resp = await fetch("http://localhost:8080/getnavdata", {

@@ -60,7 +60,8 @@ func GetChatUsers(db *sql.DB, userID int) []PotentialChats {
 		}
 
 		//	fmt.Println("LoggeduserID", userID, "pcUserId", pc.UserID)
-		if pc.Privacy == 0 && pc.UserID != userID || relationships.FollowingYouCheck(db, pc.UserID, userID) {
+		// pc.Privacy == 0 && pc.UserID != userID ||
+		if relationships.FollowingYouCheck(db, pc.UserID, userID) {
 			chats = append(chats, pc)
 		}
 	}
