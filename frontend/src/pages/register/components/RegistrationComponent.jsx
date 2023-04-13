@@ -64,7 +64,7 @@ const Register = () => {
           "You have successfully registered and are now being redirected to the log in page!"
         );
         setTimeout(() => {
-          navigate("/login");
+          navigate("/");
         }, 3000);
       }
     }
