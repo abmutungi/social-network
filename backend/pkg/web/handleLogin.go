@@ -60,6 +60,7 @@ func (s *Server) HandleLogin() http.HandlerFunc {
 			fmt.Println(err)
 		}
 
+		fmt.Println("This is loginData from form : ", string(loginData))
 		var ld LoginData
 
 		json.Unmarshal(loginData, &ld)

@@ -3,20 +3,25 @@ package login
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 // check email exists
 func EmailExists(db *sql.DB, email string) bool {
-	userStmt := "SELECT userID FROM users WHERE email = ?"
-	userRow := db.QueryRow(userStmt, email)
-	var uIDs string
-	error := userRow.Scan(&uIDs)
-	if error != sql.ErrNoRows {
-		fmt.Println("email already exists, err:", error)
+	var count int
+	err := db.QueryRow(`SELECT COUNT (*) FROM users WHERE email=?`, email).Scan(&count)
+	if err != nil {
+		log.Println("Error when checking email exists: ", err)
+	}
+
+	if count > 0 {
+		log.Printf("Email: [%s] exists already!", email)
 		return true
 	}
+
+	log.Printf("Email: [%v] doesn't exist!", email)
 	return false
 }
 

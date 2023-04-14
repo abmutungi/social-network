@@ -1,7 +1,6 @@
 package web
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -43,7 +42,7 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			GuserIDToInt, _ := strconv.Atoi(r.Form.Get("GuserID"))
 
 			// adding post to the db
-			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 			posts.CreateGroupPost(s.Db, groupIDToInt, GuserIDToInt, r.Form.Get("textContent"), newFileName)
 
 			sendPosts, err := json.Marshal(groups.GetAllGroupPosts(s.Db, groupIDToInt))
@@ -64,7 +63,7 @@ func (s *Server) HandleCreatePost() http.HandlerFunc {
 			userIDToInt, _ := strconv.Atoi(r.Form.Get("userID"))
 
 			// adding post to the db
-			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 			posts.CreatePost(s.Db, userIDToInt, r.Form.Get("textContent"), r.Form.Get("privacyOption"), newFileName)
 
 			// if custom is chosen
@@ -105,7 +104,7 @@ func prettyPrint(i interface{}) string {
 }
 
 // func (s *Server) TestDBfunctions() {
-// 	s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+// 	//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 // 	// fmt.Println(posts.GetAllUserPosts(s.Db, 1))
 // 	// fmt.Println(relationships.GetAllFollowers(s.Db, 3))
 
@@ -179,7 +178,7 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			groupIdInt, _ := strconv.Atoi((r.Form.Get("groupID")))
 			fmt.Println("GROUPID -->>--", groupIdInt)
 			// getall posts from db
-			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 			if userIdInt == loggedInID {
 
 				var postsToSend []posts.Post = posts.GetAllUserPosts(s.Db, userIdInt)
@@ -211,7 +210,7 @@ func (s *Server) HandleSendUserPosts() http.HandlerFunc {
 			fmt.Println("GuserID -->>--", userIdInt)
 
 			// getall posts from db
-			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 			var postsToSend []groups.GroupPost = groups.GetAllGroupPosts(s.Db, groupIdInt)
 			var eventsToSend []groups.EventInfo = groups.GetEventInfo(s.Db, groupIdInt)

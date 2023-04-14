@@ -8,7 +8,9 @@ import (
 )
 
 func main() {
-	err := db.RunMigrationScript(db.CreateDB("connect-db.db"))
+
+	dataBase := db.CreateDB("connect-db.db")
+	err := db.RunMigrationScript(dataBase)
 	if err != nil {
 		log.Fatalf("failed to run migrations: %s", err)
 	}
@@ -22,7 +24,7 @@ func main() {
 
 	var s web.Server
 
-	s.OpenServer()
+	s.OpenServer(dataBase)
 
 	//s.TestDBfunctions()
 

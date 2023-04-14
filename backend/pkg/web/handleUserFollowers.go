@@ -1,7 +1,6 @@
 package web
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -26,7 +25,7 @@ func (s *Server) HandleUserFollowers() http.HandlerFunc {
 		// conver id to int
 		userIdInt, _ := strconv.Atoi((r.Form.Get("userID")))
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 		var followers []users.User = relationships.GetAllFollowers(s.Db, userIdInt)
 
 		marshalFollowers, _ := json.Marshal(followers)

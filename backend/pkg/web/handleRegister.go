@@ -1,7 +1,6 @@
 package web
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -38,7 +37,7 @@ func enableCors(w *http.ResponseWriter) {
 func (s *Server) HandleRegister() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 		var regResp RegistrationResponse
 		err := r.ParseMultipartForm(10 << 20)
 		if err != nil {

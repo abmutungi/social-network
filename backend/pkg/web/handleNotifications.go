@@ -65,7 +65,7 @@ func (s *Server) HandleNotifCheck() http.HandlerFunc {
 
 		fmt.Println(n.UserID)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		notifications.ReadNotification(s.Db, n.UserID)
 
@@ -123,7 +123,7 @@ func (s *Server) HandleNotifDisplay() http.HandlerFunc {
 
 		fmt.Println(n.UserID)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		notifications.ReadNotification(s.Db, n.UserID)
 
@@ -157,7 +157,7 @@ func (s *Server) HandleActionNotif() http.HandlerFunc {
 		fmt.Println(n.NotificationAccept)
 		fmt.Println("n.NotificationGroupID------------->", n.NotificationGroupID)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		// check notification is a group request
 		if notifications.GetNotificationType(s.Db, n.NotificationID) == "groupRequest" {
