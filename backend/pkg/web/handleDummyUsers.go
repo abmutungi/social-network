@@ -1,7 +1,6 @@
 package web
 
 import (
-	"database/sql"
 	"encoding/json"
 	"net/http"
 
@@ -74,7 +73,7 @@ func (s *Server) HandleDummyUsers() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		databaseusers := users.GetAllUserData(s.Db)
 

@@ -1,7 +1,6 @@
 package web
 
 import (
-	"database/sql"
 	"encoding/json"
 	"io"
 	"log"
@@ -11,7 +10,7 @@ import (
 )
 
 type FollowStatusCheck struct {
-	User     int `json:"loggedInUserID"`
+	User           int `json:"loggedInUserID"`
 	UserOfInterest int `json:"userID"`
 }
 
@@ -34,12 +33,11 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 
 		json.Unmarshal(data, &f)
 
-
 		//.Printf("****LOGGED IN USER: %v\n****USER TO FOLLOW:%v\n", f.User, f.UserOfInterest)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
-		if !relationships.FollowingYouCheck(s.Db,f.UserOfInterest, f.User) && !relationships.FollowRequestCheck(s.Db, f.User, f.UserOfInterest) {
+		if !relationships.FollowingYouCheck(s.Db, f.UserOfInterest, f.User) && !relationships.FollowRequestCheck(s.Db, f.User, f.UserOfInterest) {
 			var s FollowStatus
 			s.CanFollow = true
 			s.Following = false
@@ -72,7 +70,7 @@ func (s *Server) HandleFollowCheck() http.HandlerFunc {
 			w.Write(sendFollowStatus)
 			return
 		} else if relationships.FollowingYouCheck(s.Db, f.UserOfInterest, f.User) {
-			
+
 			var s FollowStatus
 
 			s.Following = true

@@ -1,7 +1,6 @@
 package web
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -36,7 +35,7 @@ func (s *Server) HandleMyChatUsers() http.HandlerFunc {
 func (s *Server) SendChatHistory() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		err := r.ParseMultipartForm(10 << 20)
 
@@ -88,7 +87,7 @@ func (s *Server) HandleSendGroupMessages() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		err := r.ParseMultipartForm(10 << 20)
 		if err != nil {

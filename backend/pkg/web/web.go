@@ -16,11 +16,15 @@ func (s *Server) OpenServer() {
 			Addr:    ":8080",
 			Handler: &s.Router,
 		},
+		// Db: db.CreateDB("connect-db.db"),
 	}
 
+	// err := db.RunMigrationScript(srv.Db)
+	// if err != nil {
+	// 	log.Fatalf("failed to run migrations: %s", err)
+	// }
 	s.Routes()
 
 	srv.Serve.ListenAndServe()
 
 }
-

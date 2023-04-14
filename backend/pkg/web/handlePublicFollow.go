@@ -1,7 +1,6 @@
 package web
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -35,7 +34,7 @@ func (s *Server) HandlePublicFollow() http.HandlerFunc {
 		fmt.Println("logged in user from followBtn:", f.Follower)
 		fmt.Println("user to follow from followBtn", f.User)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 
 		if !relationships.FollowingYouCheck(s.Db, f.User, f.Follower) {
 			relationships.StoreFollowing(s.Db, f.User, f.Follower)

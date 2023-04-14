@@ -1,7 +1,6 @@
 package web
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -35,7 +34,7 @@ func (s *Server) handleComment() http.HandlerFunc {
 
 			textContent := r.Form.Get("textContent")
 
-			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 			comment.StoreGroupPostComment(s.Db, groupPostIDToInt, userIDToInt, textContent, newFileName)
 
 			fmt.Println("aaa", userIDToInt, groupIDToInt)
@@ -61,7 +60,7 @@ func (s *Server) handleComment() http.HandlerFunc {
 			commenterIDToInt, _ := strconv.Atoi(r.Form.Get("commenterID"))
 			userIDToInt, _ := strconv.Atoi(r.Form.Get("userID"))
 
-			s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+			//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 			comment.StoreComment(s.Db, postIDtoInt, commenterIDToInt, r.Form.Get("textContent"), newFileName)
 
 			if userIDToInt == commenterIDToInt {
