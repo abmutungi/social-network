@@ -1,12 +1,14 @@
 package web
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 
+	"github.com/abmutungi/social-network/backend/pkg/login"
 	"github.com/abmutungi/social-network/backend/pkg/register"
 )
 
@@ -37,7 +39,7 @@ func enableCors(w *http.ResponseWriter) {
 func (s *Server) HandleRegister() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
-		//s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
 		var regResp RegistrationResponse
 		err := r.ParseMultipartForm(10 << 20)
 		if err != nil {
@@ -76,8 +78,8 @@ func (s *Server) HandleRegister() http.HandlerFunc {
 		fmt.Println(rd.AboutMe)
 		fmt.Println(rd.Avatar)
 
-		fmt.Println("Checking if email exists --> ", register.CheckEmailExists(s.Db, rd.Email))
-		if register.CheckEmailExists(s.Db, rd.Email) {
+		fmt.Println("Checking if email exists --> ", login.EmailExists(s.Db, rd.Email))
+		if login.EmailExists(s.Db, rd.Email) {
 			sendRegistrationMessage(w, regResp, true, "Email already exists, please log in using it!")
 			return
 		}
