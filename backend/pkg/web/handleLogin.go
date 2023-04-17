@@ -53,7 +53,7 @@ func (s *Server) HandleLogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db?_journal_mode=WAL")
 		var loginResponse LoginResponse
 		loginData, err := io.ReadAll(r.Body)
 		if err != nil {

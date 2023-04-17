@@ -11,7 +11,7 @@ import (
 )
 
 func CreateDB(dbName string) *sql.DB {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open("sqlite3", dbName+"?_journal_mode=WAL")
 	if err != nil {
 		fmt.Printf("error creating database: %v", err)
 		return nil

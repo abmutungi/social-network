@@ -39,7 +39,7 @@ func enableCors(w *http.ResponseWriter) {
 func (s *Server) HandleRegister() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
-		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+		s.Db, _ = sql.Open("sqlite3", "connect-db.db?_journal_mode=WAL")
 		var regResp RegistrationResponse
 		err := r.ParseMultipartForm(10 << 20)
 		if err != nil {

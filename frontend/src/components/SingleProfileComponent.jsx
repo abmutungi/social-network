@@ -227,8 +227,8 @@ const SingleProfileComponent = (props) => {
           e.preventDefault();
           setShouldFetch(true);
           updateNavClicked(false);
-          updateGroupID(Number(e.currentTarget.id));
           console.log("onclick group -------------->", GroupID);
+          updateGroupID(Number(e.currentTarget.id));
         }}
         className="SingleProfile"
         id={props.id}
