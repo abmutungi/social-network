@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faXmark,} from "@fortawesome/free-solid-svg-icons";
@@ -32,7 +32,16 @@ const CreateGroupModal = ({show, onClose}) => {
     }
 
   }
+
+  const hiddenFileInput = useRef(null);
+
+  const handleFileClick = (e) => {
+    e.preventDefault();
+    hiddenFileInput.current.click();
+  };
+
     const handleSubmit = (e) => {
+
 
       e.preventDefault();
 const form = e.target
@@ -67,29 +76,41 @@ console.log('AGD', AllGroupsData);
             </div>
                 <form className="cg-form" onSubmit={handleSubmit}>
             <div className="cg-modal-body">
+            <div className="cg-modal-titles">Group Name</div>
+
                     <input name="groupName"
             //value={formValues.groupName}
            // onChange={handleChange} 
-            className="cg-input" type="text" placeholder="enter group name" required></input>
+            className="cg-input" type="text" placeholder="what's your group called?" required></input>
+            <br></br>
+            <div className="cg-modal-titles">Group Description</div>
+
                     <input name="groupDescription"
            // value={formValues.groupDescription}
             //onChange={handleChange} 
-            className="cg-input" type="text" placeholder="enter group description" required></input>
-                         <label htmlFor="avatar">
+            className="cg-input" type="text" placeholder="what's your group about?" required></input>
+                         {/* <label htmlFor="avatar">
             Choose an image 
-          </label>
+          </label> */}
+<br></br>
+          <button
+            onClick={handleFileClick}
+            className="creategroup-imgupload-btn"
+            htmlFor="avatar"
+          >
+            Upload An Image (Optional)
+          </button>
           <input
             type="file"
+            ref={hiddenFileInput}
+
             name="group-avatar"
             onChange ={(e)=>{
               setimgName(e.target.files[0].name)
-            }
+            } }
+            style={{ display: "none" }}
 
-            }
-  
-            
-           
-          />
+            />
             </div>
             <div className="cg-modal-footer">
                     <button  className="cg-submit-button" type="submit">Submit</button>

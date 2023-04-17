@@ -52,8 +52,10 @@ func (lr *LoginResponse) PopulateLoginDataResponse(db *sql.DB, email string) {
 func (s *Server) HandleLogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
+		
 
 		s.Db, _ = sql.Open("sqlite3", "connect-db.db")
+
 		var loginResponse LoginResponse
 		loginData, err := io.ReadAll(r.Body)
 		if err != nil {

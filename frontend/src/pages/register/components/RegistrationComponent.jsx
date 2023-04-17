@@ -46,8 +46,8 @@ const Register = () => {
     registrationFormData.append("imgName", imgName);
 
     console.log(registrationFormData);
-    //console.log(formValues);
-    //JSON.stringify(formValues)
+   
+    
     async function sendRegistrationData() {
       const response = await fetch("http://localhost:8080/register", {
         method: "POST",
