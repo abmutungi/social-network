@@ -215,7 +215,7 @@ const PostsContainer = () => {
   } else if (
     (navClicked && Following) ||
     (navClicked && !PrivacyStatus) ||
-    (PrivacyStatus && LoggedInUserID === DynamicID)
+    (navClicked && PrivacyStatus && LoggedInUserID === DynamicID)
   ) {
     return (
       <>
