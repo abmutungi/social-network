@@ -104,8 +104,8 @@ type AllNotifs struct {
 }
 
 type UpdateEvents struct {
-	GroupEvents []groups.EventInfo`json:"groupEvents"`
-	Tipo        string                `json:"tipo"`
+	GroupEvents []groups.EventInfo `json:"groupEvents"`
+	Tipo        string             `json:"tipo"`
 }
 
 type NewMessage struct {
@@ -367,7 +367,6 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			}
 
 		}
-	
 
 		if f.Type == "eventInviteNotifs" {
 
@@ -379,20 +378,20 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("all-group-members", allgroupmembers)
 
 			for _, member := range allgroupmembers {
-				if member != f.Creator {
-					groups.UpdateNotifcationTablePostEventCreation(s.Db, "eventInvite", member, f.Creator, f.GroupEvent.GroupID, eventID)
-				} else {
-					var g UpdateEvents
-					g.Tipo = "groupEvents"
-					g.GroupEvents = groups.GetEventInfo(s.Db, f.GroupEvent.GroupID)
+				// if member != f.Creator {
+				groups.UpdateNotifcationTablePostEventCreation(s.Db, "eventInvite", member, f.Creator, f.GroupEvent.GroupID, eventID)
+				// } else {
+				var g UpdateEvents
+				g.Tipo = "groupEvents"
+				g.GroupEvents = groups.GetEventInfo(s.Db, f.GroupEvent.GroupID)
 
-					loggedInSockets[member].WriteJSON(g)
-				}
+				loggedInSockets[member].WriteJSON(g)
+				//
 			}
 
 			for _, member := range allgroupmembers {
 				for user, conn := range loggedInSockets {
-					if user != f.Creator && user == member {
+					if user == member {
 						var en AllNotifs
 						en.SendNotifs = notifications.GetNotifications(s.Db, user)
 						en.Tipo = "allNotifs"
@@ -409,7 +408,7 @@ func (s *Server) UpgradeConnection(w http.ResponseWriter, r *http.Request) {
 
 			fmt.Printf("LoggedIN = %v & clicked = %v", loggedInIdInt, clickedIdInt)
 
-			//if notifications.CheckIfUserHasNotificationsFromUser(s.Db, loggedInIdInt, clickedIdInt) {
+			// if notifications.CheckIfUserHasNotificationsFromUser(s.Db, loggedInIdInt, clickedIdInt) {
 			notifications.ReadChatNotification(s.Db, loggedInIdInt, clickedIdInt)
 			//}
 

@@ -12,7 +12,7 @@ return (
             {props.eventname}
         </div>
         <div className="event-body-attendance">
-            <div className="event-body-going">{props.attending}{" going"}</div><div className="event-body-notgoing">{props.notattending}{" can't go"}</div>
+            <div className="event-body-going">{props.attending}{" going"}</div><div className="event-body-notgoing">{props.notattending}{" not going"}</div>
         </div>
 
     </div>

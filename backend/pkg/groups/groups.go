@@ -130,7 +130,7 @@ func GroupMemberCheck(db *sql.DB, groupID, loggedInUser int) bool {
 // add a new entry to the events table
 // **TODO - amend date fields within table only one needed**
 func CreateGroupEvent(db *sql.DB, groupID int, creatorid int, eventname string, desc string, date string) int {
-	stmt, err := db.Prepare("INSERT INTO events (groupID, creator, eventTitle, description, dateStart, attending) VALUES (?,?,?,?,?,1)")
+	stmt, err := db.Prepare("INSERT INTO events (groupID, creator, eventTitle, description, dateStart, attending) VALUES (?,?,?,?,?,0)")
 	if err != nil {
 		fmt.Printf("error preparing creategroupevent statement: %v", err)
 	}
