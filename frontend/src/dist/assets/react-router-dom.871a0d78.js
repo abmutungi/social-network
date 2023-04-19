@@ -1,0 +1,10 @@
+import{r as u}from"./react.f5894862.js";import{j as R,R as b,u as g,a as x,b as C,c as L}from"./react-router.c128959e.js";import{c as P,b as h}from"./@remix-run.ee6daad3.js";/**
+ * React Router DOM v6.6.0
+ *
+ * Copyright (c) Remix Software Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ *
+ * @license MIT
+ */function w(e,o){if(e==null)return{};var n={},a=Object.keys(e),r,t;for(t=0;t<a.length;t++)r=a[t],!(o.indexOf(r)>=0)&&(n[r]=e[r]);return n}function K(e){return!!(e.metaKey||e.altKey||e.ctrlKey||e.shiftKey)}function U(e,o){return e.button===0&&(!o||o==="_self")&&!K(e)}const j=["onClick","relative","reloadDocument","replace","state","target","to","preventScrollReset"];function E(e){let{basename:o,children:n,window:a}=e,r=u.exports.useRef();r.current==null&&(r.current=P({window:a,v5Compat:!0}));let t=r.current,[i,l]=u.exports.useState({action:t.action,location:t.location});return u.exports.useLayoutEffect(()=>t.listen(l),[t]),R(b,{basename:o,children:n,location:i.location,navigationType:i.action,navigator:t})}const H=u.exports.forwardRef(function(o,n){let{onClick:a,relative:r,reloadDocument:t,replace:i,state:l,target:s,to:c,preventScrollReset:f}=o,p=w(o,j),k=g(c,{relative:r}),y=F(c,{replace:i,state:l,target:s,preventScrollReset:f,relative:r});function S(d){a&&a(d),d.defaultPrevented||y(d)}return R("a",{...p,href:k,onClick:t?a:S,ref:n,target:s})});var m;(function(e){e.UseScrollRestoration="useScrollRestoration",e.UseSubmitImpl="useSubmitImpl",e.UseFetcher="useFetcher"})(m||(m={}));var v;(function(e){e.UseFetchers="useFetchers",e.UseScrollRestoration="useScrollRestoration"})(v||(v={}));function F(e,o){let{target:n,replace:a,state:r,preventScrollReset:t,relative:i}=o===void 0?{}:o,l=x(),s=C(),c=L(e,{relative:i});return u.exports.useCallback(f=>{if(U(f,n)){f.preventDefault();let p=a!==void 0?a:h(s)===h(c);l(e,{replace:p,state:r,preventScrollReset:t,relative:i})}},[s,l,c,a,r,n,e,t,i])}export{E as B,H as L};
