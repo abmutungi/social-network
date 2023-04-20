@@ -18,4 +18,4 @@ RUN npm run build
 EXPOSE 5173
 
 # Start the frontend server
-CMD ["npm","run", "preview"]
+CMD ["npm","run", "dev"]
