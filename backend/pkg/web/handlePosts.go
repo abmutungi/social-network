@@ -132,7 +132,7 @@ func (s *Server) HandleImage(r *http.Request, formImageName string) string {
 
 	randomIDToString := randomID.String()[:10]
 
-	dst, err := os.Create("../frontend/src/assets/img/ext/" + randomIDToString + "-" + fileInfo.Filename)
+	dst, err := os.Create("../social-network/frontend/src/assets/img/ext/" + randomIDToString + "-" + fileInfo.Filename)
 
 	newFileName := randomIDToString + "-" + fileInfo.Filename
 	if err != nil {

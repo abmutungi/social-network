@@ -9,6 +9,8 @@ COPY . .
 # Build the server
 RUN go build -o main .
 
+
+
 # Expose the server port
 EXPOSE 8080
 

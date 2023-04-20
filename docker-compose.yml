@@ -4,9 +4,16 @@ services:
     build: ./backend
     ports:
       - "8080:8080"
+    volumes:
+      - images-volume:/social-network/frontend/src/assets/img/ext
   client:
     build: ./frontend
     ports:
       - "5173:5173"
     depends_on:
       - server
+    volumes:
+      - images-volume:/social-network/src/assets/img/ext
+
+volumes:
+  images-volume:
