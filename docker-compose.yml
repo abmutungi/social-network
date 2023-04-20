@@ -1,14 +1,12 @@
 version: '3'
 services:
   server:
-    build:
-      context: ./
-      dockerfile: Dockerfile.go
+    build: ./backend
     ports:
       - "8080:8080"
   client:
-    build:
-      context: ./
-      dockerfile: Dockerfile.frontend
+    build: ./frontend
     ports:
       - "5173:5173"
+    depends_on:
+      - server
