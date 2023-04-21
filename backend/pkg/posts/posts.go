@@ -67,7 +67,8 @@ func GetAllUserPosts(db *sql.DB, userID int) []Post {
 	rows, err := db.Query(`SELECT wallPostID, wallPosts.userID, wallPosts.createdAt, textContent, imagePath, wallPosts.privacy, users.firstName, users.avatar
 	FROM wallPosts
 	INNER JOIN users ON users.userID = wallPosts.userID 
-	WHERE wallPosts.userID = ?`, userID)
+	WHERE wallPosts.userID = ?
+	ORDER BY wallPosts.wallPostID DESC`, userID)
 
 	if err != nil {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
@@ -95,7 +96,8 @@ func GetClickedProfilePosts(db *sql.DB, clickedUserId int, loggedInUserID int) [
 	rows, err := db.Query(`SELECT wallPostID, wallPosts.userID, wallPosts.createdAt, textContent, imagePath, wallPosts.privacy, users.firstName, users.avatar
 	FROM wallPosts
 	INNER JOIN users ON users.userID = wallPosts.userID 
-	WHERE wallPosts.userID = ?`, clickedUserId)
+	WHERE wallPosts.userID = ?
+	ORDER BY wallPosts.wallPostID DESC`, clickedUserId)
 
 	if err != nil {
 		fmt.Printf("error querying getAllUserPosts statement: %v", err)
