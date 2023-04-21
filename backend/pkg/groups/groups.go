@@ -254,7 +254,8 @@ func GetAllGroupPosts(db *sql.DB, GroupID int) []GroupPost {
 	rows, err := db.Query(`SELECT groupPostID, groupPosts.userID, groupPosts.createdAt, textContent, imageContent,users.avatar
 	FROM groupPosts
 	INNER JOIN users ON users.userID = groupPosts.userID
-	WHERE groupID = ?`, GroupID)
+	WHERE groupID = ?
+	ORDER BY groupPosts.groupPostID DESC`, GroupID)
 	if err != nil {
 		fmt.Printf("error querying GetAllGroupPosts statement: %v", err)
 	}
