@@ -19,7 +19,7 @@ function AboutMe({ text, email, dob, nickname }) {
             <FontAwesomeIcon icon={faAddressCard} /> 
                 <div className="about-description">
                     <div>
-                    {text}
+                    {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser|| Following && !groupNotUser ? text: ""}
                     </div>
                      <div>
                     {(DynamicID == loggedInUser && !groupNotUser) || !PrivacyStatus && !groupNotUser|| Following && !groupNotUser ? email: ""}
