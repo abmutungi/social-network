@@ -149,6 +149,13 @@ const SingleProfileComponent = (props) => {
     const data = await resp.json();
     console.log("messages data", data);
     // setMessages(data);
+
+    if (data.msg) {
+      navigate("/");
+      location.reload();
+      localStorage.clear();
+      return;
+    }
     updateChatMessages(data);
     if (props.notifier) {
       chatNotifsOnLogin.notifiers = chatNotifsOnLogin.notifiers.filter(
@@ -196,7 +203,11 @@ const SingleProfileComponent = (props) => {
       body: groupChatsForm,
     });
     const data = await resp.json();
-
+    if (data.msg) {
+      navigate("/");
+      location.reload();
+      localStorage.clear();
+    }
     updateGroupMessages(data);
   }
 

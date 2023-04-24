@@ -86,6 +86,8 @@ const Comments = (props) => {
         console.log("FROM COMMENTS??", data);
         if (data.msg) {
           navigate("/");
+          location.reload();
+          localStorage.clear();
           return;
         }
         updatePosts(data);
