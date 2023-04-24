@@ -121,6 +121,7 @@ const ProfileBar = () => {
   const GroupMembers = () => {
     const members = AllGroupsData.filter((count) => count.GroupID == GroupID);
 
+    console.log("checking group id", GroupID);
     let groupMemberText = members[0].Members + " members";
     return groupMemberText;
   };

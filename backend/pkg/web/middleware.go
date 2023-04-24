@@ -48,6 +48,7 @@ func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.Handle
 		// for _, c := range r.Cookies() {
 		// 	fmt.Println("COOKIE LOOP -> ", c)
 		// }
+		fmt.Println("GENERAL SESSION CHECKER FUNCTION RUNNING")
 		c, err := r.Cookie("session_cookie")
 		if err != nil {
 			// if err == http.ErrNoCookie {
@@ -66,6 +67,8 @@ func (s *Server) GeneralSessionChecker(HandlerFunc http.HandlerFunc) http.Handle
 		// fmt.Println("UserID from cookie --> ", userSession.UserID)
 		if !exists {
 			//handle there not being a session
+			fmt.Println("NO SESSION, SEND BACK TO LOGIN")
+
 			var cm ClientMessage
 			cm.Msg = "Invalid session, send back to login"
 			c = &http.Cookie{

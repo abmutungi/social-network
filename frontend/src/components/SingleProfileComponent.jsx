@@ -102,6 +102,12 @@ const SingleProfileComponent = (props) => {
         }),
       });
       const data = await response.json();
+      if (data.msg) {
+        navigate("/");
+        location.reload();
+        localStorage.clear();
+        return;
+      }
       updateisGroupMember(data.ismember);
       updateGroupRequested(data.requested);
       setShouldFetch(false);

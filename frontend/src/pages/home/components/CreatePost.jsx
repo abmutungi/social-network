@@ -6,6 +6,8 @@ import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import "../../../assets/css/posts.css";
 import { useState, useContext } from "react";
 import DropdownCheckBox from "../../../components/DropdownCheckbox";
+import { useNavigate } from "react-router-dom";
+
 library.add(faImage, faXmark);
 
 // All classNames start with cp(short for createpost)
@@ -17,12 +19,14 @@ const CreatePostModal = (props) => {
   // state for when image is uploaded
   const [imgName, setImgName] = useState("");
 
-  const { LoggedInUserID, updatePosts, GroupID, groupNotUser,DynamicID } = useContext(LowerHeaderContext);
+  const { LoggedInUserID, updatePosts, GroupID, groupNotUser, DynamicID } =
+    useContext(LowerHeaderContext);
   // set state for custom (users) dropdown
   const [dropdown, setDropdown] = useState(false);
 
   const [followers, setFollowers] = useState([]);
 
+  const navigate = useNavigate();
 
   // for displaying the modal
   if (!props.show) {
@@ -33,23 +37,19 @@ const CreatePostModal = (props) => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-
     const formData = new FormData(e.target);
     formData.append("imgName", imgName);
     formData.append("userID", LoggedInUserID);
 
+    let clickedValue = groupNotUser ? GroupID : DynamicID;
 
+    groupNotUser
+      ? formData.append("groupID", clickedValue)
+      : formData.append("userID", clickedValue);
 
-
-  let clickedValue = groupNotUser ? GroupID : DynamicID;
-
-  groupNotUser
-    ? formData.append("groupID", clickedValue)
-    : formData.append("userID", clickedValue);
-
-  if (groupNotUser){
-    formData.append("GuserID", LoggedInUserID)
-  }    
+    if (groupNotUser) {
+      formData.append("GuserID", LoggedInUserID);
+    }
     // get all ids of private user
     const checkboxValues = formData.getAll("post-viewer");
 
@@ -64,6 +64,12 @@ const CreatePostModal = (props) => {
     })
       .then((response) => response.json())
       .then((data) => {
+        if (data.msg) {
+          navigate("/");
+          location.reload();
+          localStorage.clear();
+          return;
+        }
         updatePosts([]);
 
         updatePosts(data);
@@ -80,7 +86,7 @@ const CreatePostModal = (props) => {
 
   async function fetchFollowers() {
     const form = new FormData();
-    
+
     form.append("userID", LoggedInUserID);
     const resp = await fetch("http://localhost:8080/myfollowers", {
       method: "POST",

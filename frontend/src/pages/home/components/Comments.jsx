@@ -3,6 +3,8 @@ import { useContext, useState } from "react";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { LowerHeaderContext } from "../../../context/lowerheadercontext";
+import { useNavigate } from "react-router-dom";
+
 library.add(faImage);
 
 // This component returns a single comment.
@@ -38,16 +40,16 @@ const Comments = (props) => {
   const [img, setImg] = useState(null);
   const [imgName, setImgName] = useState("");
 
-  const { updatePosts, DynamicID, groupNotUser, GroupID} =
+  const { updatePosts, DynamicID, groupNotUser, GroupID } =
     useContext(LowerHeaderContext);
-
-    // function to handle form submission
+  const navigate = useNavigate();
+  // function to handle form submission
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     const form = e.target.form;
     const formData = new FormData(form);
 
-     //let clickedValue = groupNotUser ? GroupID : null;
+    //let clickedValue = groupNotUser ? GroupID : null;
 
     // groupNotUser
     // ? formData.append("groupID", clickedValue)
@@ -55,7 +57,7 @@ const Comments = (props) => {
 
     // console.log('CHECKDATAGROUPID --' , props);
 
-    if (!groupNotUser){
+    if (!groupNotUser) {
       formData.append("postID", props.postID);
       formData.append("imgName", imgName);
       formData.append("userID", DynamicID);
@@ -63,8 +65,7 @@ const Comments = (props) => {
         "commenterID",
         JSON.parse(localStorage.getItem("loggedInUser")).ID
       );
-
-    }else{
+    } else {
       formData.append("grouppostID", props.postID);
       formData.append("imgName", imgName);
       formData.append("groupID", GroupID);
@@ -73,10 +74,7 @@ const Comments = (props) => {
         "commenterID",
         JSON.parse(localStorage.getItem("loggedInUser")).ID
       );
-
-
-
-      }
+    }
 
     fetch("http://localhost:8080/storecomment", {
       credentials: "include",
@@ -85,7 +83,11 @@ const Comments = (props) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('FROM COMMENTS??', data);
+        console.log("FROM COMMENTS??", data);
+        if (data.msg) {
+          navigate("/");
+          return;
+        }
         updatePosts(data);
       });
     setCommentInput("");

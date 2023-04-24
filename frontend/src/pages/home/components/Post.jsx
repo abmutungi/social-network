@@ -11,6 +11,7 @@ import EventBanner from "./EventBanner";
 import SingleProfileComponent from "../../../components/SingleProfileComponent";
 import { faLock, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 library.add(faThumbsUp, faMessage, faLock, faUsers);
 
 // SinglePost takes the props that come from the database
