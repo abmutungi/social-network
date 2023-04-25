@@ -3,6 +3,7 @@ import { LowerHeaderContext } from "../../../context/lowerheadercontext";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faLock, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 library.add(faLock, faUsers);
 
 const PrivateText = (
@@ -27,6 +28,7 @@ const PrivateBtn = () => {
     updatePrivacyStatus,
     LoggedInUserID,
   } = useContext(LowerHeaderContext);
+  const navigate = useNavigate();
 
   let lu = JSON.parse(localStorage.getItem("loggedInUser"));
   const handleClick = () => {
@@ -45,7 +47,16 @@ const PrivateBtn = () => {
           loggedInUserID: LoggedInUserID,
           privacyStatus: false,
         }),
-      });
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.msg) {
+            navigate("/");
+            location.reload();
+            localStorage.clear();
+            return;
+          }
+        });
     }
     if (!PrivacyStatus) {
       console.log("Button clicked to make it private!");
@@ -61,7 +72,16 @@ const PrivateBtn = () => {
           loggedInUserID: LoggedInUserID,
           privacyStatus: true,
         }),
-      });
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.msg) {
+            navigate("/");
+            location.reload();
+            localStorage.clear();
+            return;
+          }
+        });
     }
   };
 
