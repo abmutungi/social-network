@@ -16,7 +16,7 @@ const SocketProvider = ({ children }) => {
 
   const [MyNotifs, setMyNotifs] = useState([]);
   let loggedInUser;
-  if (localStorage.length > 0) {
+  if (localStorage.getItem("loggedInUser") !== null) {
     loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")).ID;
   }
   const [newSocketGroupMessage, setNewSocketGroupMessage] = useState(false);

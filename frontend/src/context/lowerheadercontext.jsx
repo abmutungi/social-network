@@ -8,7 +8,7 @@ export const LowerHeaderContext = createContext();
 export function LowerHeaderProvider({ children }) {
   // const { loggedInUser } = useContext(loggedInUserContext);
   const [userID, setUserID] = useState(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.getItem("loggedInUser") !== null) {
       const storedUserID = JSON.parse(localStorage.getItem("loggedInUser")).ID;
       return storedUserID ? storedUserID : 0;
     }
@@ -19,7 +19,7 @@ export function LowerHeaderProvider({ children }) {
   const [GroupEvents, setGroupEvents] = useState([]);
 
   const [DynamicID, setDynamicID] = useState(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.getItem("loggedInUser") !== null) {
       const storedDynamicID = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).ID;
@@ -30,7 +30,7 @@ export function LowerHeaderProvider({ children }) {
   const [groupPosts, setGroupPosts] = useState([]);
 
   const [AboutText, setAboutText] = useState(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.getItem("loggedInUser") !== null) {
       const storedAboutText = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).AboutText;
@@ -39,7 +39,7 @@ export function LowerHeaderProvider({ children }) {
   });
 
   const [Email, setEmail] = useState(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.getItem("loggedInUser") !== null) {
       const storedEmail = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).Email;
@@ -48,7 +48,7 @@ export function LowerHeaderProvider({ children }) {
   });
 
   const [Nickname, setNickname] = useState(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.getItem("loggedInUser") !== null) {
       const storedNickname = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).Nickname;
@@ -56,20 +56,15 @@ export function LowerHeaderProvider({ children }) {
     }
   });
 
-   const [DOB, setDOB] = useState(() => {
-    if (localStorage.length > 0) {
-      const storedDOB = JSON.parse(
-        localStorage.getItem("loggedInUser")
-      ).DOB;
+  const [DOB, setDOB] = useState(() => {
+    if (localStorage.getItem("loggedInUser") !== null) {
+      const storedDOB = JSON.parse(localStorage.getItem("loggedInUser")).DOB;
       return storedDOB ? storedDOB : "";
     }
   });
 
-
-  
-
   const [ProfilePhotoBackground, setProfilePhotoBackground] = useState(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.getItem("loggedInUser") !== null) {
       const storedAvatar = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).Avatar;
@@ -77,7 +72,7 @@ export function LowerHeaderProvider({ children }) {
     }
   });
   const [LoggedInUserID, setLoggedInUserID] = useState(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.getItem("loggedInUser") !== null) {
       const storedLoggedInUserID = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).ID;
@@ -85,7 +80,7 @@ export function LowerHeaderProvider({ children }) {
     }
   });
   const [PrivacyBtnText, setPrivacyBtnText] = useState(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.getItem("loggedInUser") !== null) {
       let storedPrivacyStatus = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).Privacy;
@@ -94,7 +89,7 @@ export function LowerHeaderProvider({ children }) {
     }
   });
   const [PrivacyStatus, setPrivacyStatus] = useState(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.getItem("loggedInUser") !== null) {
       let storedPrivacyStatus = JSON.parse(
         localStorage.getItem("loggedInUser")
       ).Privacy;
@@ -136,7 +131,6 @@ export function LowerHeaderProvider({ children }) {
 
   const updateGroupID = (id) => {
     setGroupID(() => id);
-    
   };
 
   const updateAllGroupsData = (data) => {
@@ -206,14 +200,14 @@ export function LowerHeaderProvider({ children }) {
     setGroupEvents(data);
   };
 
-    const updateEmail = (data) => {
+  const updateEmail = (data) => {
     setEmail(() => data);
-    };
-  
-   const updateNickname = (data) => {
+  };
+
+  const updateNickname = (data) => {
     setNickname(() => data);
-   };
-   const updateDOB = (data) => {
+  };
+  const updateDOB = (data) => {
     setDOB(() => data);
   };
   return (
