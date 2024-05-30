@@ -2,6 +2,8 @@
 
 A comprehensive Facebook-like social network with a frontend and backend, incorporating authentication, real-time communication, and robust data management.
 
+![](./connectscreenshot.png)
+
 ## Features
 
 ### Followers
